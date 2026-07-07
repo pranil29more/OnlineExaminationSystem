@@ -1,0 +1,81 @@
+.page-container {
+
+  max-width: 700px;
+
+  margin: 40px auto;
+
+  padding: 20px;
+
+}
+
+.page-title {
+
+  text-align: center;
+
+  margin-bottom: 30px;
+
+}
+
+.profile-card {
+
+  background: #1e293b;
+
+  border: 1px solid #334155;
+
+  border-radius: 16px;
+
+  padding: 30px;
+
+  box-shadow:
+    0 12px 24px rgba(
+      0,
+      0,
+      0,
+      0.3
+    );
+
+}
+
+.profile-info {
+
+  margin-bottom: 18px;
+
+  font-size: 18px;
+
+}
+
+.profile-label {
+
+  font-weight: bold;
+
+  color: #94a3b8;
+
+}
+
+.logout-btn {
+
+  margin-top: 25px;
+
+  background: #ef4444;
+
+  color: white;
+
+  border: none;
+
+  padding: 12px 24px;
+
+  border-radius: 10px;
+
+  cursor: pointer;
+
+  font-size: 16px;
+
+  font-weight: 600;
+
+}
+
+.logout-btn:hover {
+
+  background: #dc2626;
+
+}

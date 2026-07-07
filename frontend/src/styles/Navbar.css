@@ -1,0 +1,59 @@
+.navbar {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  background: #1e293b;
+
+  padding: 16px 30px;
+
+  border-bottom: 1px solid #334155;
+
+  position: sticky;
+
+  top: 0;
+
+  z-index: 1000;
+
+}
+
+.logo {
+
+  font-size: 22px;
+
+  font-weight: bold;
+
+  color: #f8fafc;
+
+}
+
+.nav-links {
+
+  display: flex;
+
+  gap: 25px;
+
+  align-items: center;
+
+}
+
+.nav-links a {
+
+  color: #cbd5e1;
+
+  text-decoration: none;
+
+  font-weight: 600;
+
+  transition: 0.3s;
+
+}
+
+.nav-links a:hover {
+
+  color: #3b82f6;
+
+}

@@ -1,0 +1,412 @@
+/* =====================================================
+   Dashboard Container
+===================================================== */
+
+.dashboard-container {
+
+    width: 100%;
+
+    padding: 40px;
+
+}
+
+/* =====================================================
+   Dashboard Title
+===================================================== */
+
+.page-title {
+
+    color: white;
+
+    font-size: 42px;
+
+    font-weight: 700;
+
+    text-align: center;
+
+    margin-bottom: 40px;
+
+}
+
+/* =====================================================
+   Wrapper
+===================================================== */
+
+.dashboard-wrapper {
+
+    width: 100%;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+}
+
+/* =====================================================
+   Dashboard Circle
+===================================================== */
+
+.dashboard-circle {
+
+    position: relative;
+
+    width: 580px;
+
+    height: 580px;
+
+    margin: 0 auto;
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    grid-template-rows: 1fr 1fr;
+
+    border-radius: 50%;
+
+    overflow: hidden;
+
+    border: 3px solid #334155;
+
+    background: #111827;
+
+    box-shadow:
+        0 0 35px rgba(59,130,246,.12);
+
+}
+
+/* =====================================================
+   Divider Lines
+===================================================== */
+
+.dashboard-circle::before,
+.dashboard-circle::after {
+
+    content: "";
+
+    position: absolute;
+
+    background: rgba(148,163,184,.28);
+
+    z-index: 15;
+
+    box-shadow:
+        0 0 8px rgba(59,130,246,.20);
+
+}
+
+/* Vertical Divider */
+
+.dashboard-circle::before {
+
+    width: 2px;
+
+    height: 100%;
+
+    left: 50%;
+
+    top: 0;
+
+    transform: translateX(-50%);
+
+}
+
+/* Horizontal Divider */
+
+.dashboard-circle::after {
+
+    width: 100%;
+
+    height: 2px;
+
+    left: 0;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+}
+
+/* =====================================================
+   Quarter Cards
+===================================================== */
+
+.dashboard-quarter {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    cursor: pointer;
+
+    position: relative;
+
+    transition:
+        transform .3s ease,
+        background .3s ease;
+
+}
+
+/* =====================================================
+   Quarter Shapes
+===================================================== */
+
+.users {
+
+    background: #1e293b;
+
+    clip-path:
+        ellipse(100% 100% at 100% 100%);
+
+}
+
+.exams {
+
+    background: #223245;
+
+    clip-path:
+        ellipse(100% 100% at 0% 100%);
+
+}
+
+.questions {
+
+    background: #1b2736;
+
+    clip-path:
+        ellipse(100% 100% at 100% 0%);
+
+}
+
+.submissions {
+
+    background: #243446;
+
+    clip-path:
+        ellipse(100% 100% at 0% 0%);
+
+}
+
+/* =====================================================
+   Hover
+===================================================== */
+
+.dashboard-quarter:hover {
+
+    transform: scale(1.03);
+
+    filter: brightness(1.08);
+
+    z-index: 5;
+
+}
+
+/* =====================================================
+   Quarter Content
+===================================================== */
+
+.quarter-content {
+
+    text-align: center;
+
+    color: white;
+
+    position: relative;
+
+}
+
+/* =====================================================
+   Move Content Towards Center
+===================================================== */
+
+.users .quarter-content {
+
+    transform: translate(35px,35px);
+
+}
+
+.exams .quarter-content {
+
+    transform: translate(-35px,35px);
+
+}
+
+.questions .quarter-content {
+
+    transform: translate(35px,-35px);
+
+}
+
+.submissions .quarter-content {
+
+    transform: translate(-35px,-35px);
+
+}
+
+/* =====================================================
+   Quarter Text
+===================================================== */
+
+.quarter-label {
+
+    font-size: 20px;
+
+    letter-spacing: 2px;
+
+    opacity: .85;
+
+    margin-bottom: 18px;
+
+    color: #e2e8f0;
+
+}
+
+.quarter-number {
+
+    font-size: 72px;
+
+    font-weight: bold;
+
+    color: #3b82f6 !important;
+
+    text-shadow:
+        0 0 10px rgba(59,130,246,.35);
+
+    transition:
+        color .3s ease,
+        transform .3s ease;
+
+}
+
+.dashboard-quarter:hover .quarter-number {
+
+    color: #60a5fa !important;
+
+    transform: scale(1.08);
+
+}
+
+/* =====================================================
+   Center Circle
+===================================================== */
+
+.dashboard-center {
+
+    position: absolute;
+
+    left: 50%;
+
+    top: 50%;
+
+    transform: translate(-50%,-50%);
+
+    width: 100px;
+
+    height: 100px;
+
+    border-radius: 50%;
+
+    background: #111827;
+
+    border: 6px solid #475569;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    z-index: 20;
+
+    box-shadow:
+        0 0 20px rgba(59,130,246,.25);
+
+}
+
+.dashboard-center span {
+
+    color: white;
+
+    font-size: 24px;
+
+    font-weight: bold;
+
+    letter-spacing: 3px;
+
+}
+
+/* =====================================================
+   Tablet
+===================================================== */
+
+@media (max-width:850px) {
+
+    .dashboard-circle {
+
+        width: 500px;
+
+        height: 500px;
+
+    }
+
+    .dashboard-center {
+
+        width: 90px;
+
+        height: 90px;
+
+    }
+
+    .quarter-number {
+
+        font-size: 54px;
+
+    }
+
+}
+
+/* =====================================================
+   Mobile
+===================================================== */
+
+@media (max-width:600px) {
+
+    .dashboard-circle {
+
+        width: 360px;
+
+        height: 360px;
+
+    }
+
+    .dashboard-center {
+
+        width: 70px;
+
+        height: 70px;
+
+    }
+
+    .dashboard-center span {
+
+        font-size: 18px;
+
+    }
+
+    .quarter-number {
+
+        font-size: 34px;
+
+    }
+
+    .quarter-label {
+
+        font-size: 12px;
+
+    }
+
+}
