@@ -15,7 +15,7 @@ app.config["MYSQL_PASSWORD"] = Config.MYSQL_PASSWORD
 app.config["MYSQL_DB"] = Config.MYSQL_DB
 app.config["MYSQL_PORT"] = Config.MYSQL_PORT
 app.config["MYSQL_SSL_MODE"] = "REQUIRED"
-app.config["MYSQL_SSL_CA"] = r"C:\users\ADMIN\Downloads\ca.pem"
+app.config["MYSQL_SSL_CA"] = "ca.pem"
 app.config["JWT_SECRET_KEY"] = Config.JWT_SECRET_KEY
 
 mysql.init_app(app)
