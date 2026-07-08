@@ -190,6 +190,11 @@ function ExamDetailsPage() {
         const sessionData =
           await sessionResponse.json();
 
+          console.log("Raw Session:", sessionData);
+console.log("Start Time String:", sessionData.start_time);
+console.log("Parsed Timestamp:", new Date(sessionData.start_time).getTime());
+console.log("Current Timestamp:", Date.now());
+
         if (
           sessionData.status ===
           "Not Started"

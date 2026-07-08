@@ -113,10 +113,13 @@ def start_exam():
         %s,
         %s,
         0,
-        NOW(),
+        CONVERT_TZ(NOW(), '+00:00', '+05:30'),
         'In Progress'
     )
     """
+    from datetime import datetime
+
+    print("Python Time:", datetime.now())
 
     cur.execute(
         insert_query,
