@@ -534,13 +534,13 @@ def submit_exam():
                 total_score += marks[0]
 
     update_submission_query = """
-    UPDATE submissions
+UPDATE submissions
 SET
     score = %s,
     status = 'Completed',
     submitted_at = NOW()
 WHERE submission_id = %s
-    """
+"""
 
     cur.execute(
         update_submission_query,
