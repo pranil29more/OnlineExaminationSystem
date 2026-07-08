@@ -538,7 +538,7 @@ UPDATE submissions
 SET
     score = %s,
     status = 'Completed',
-    submitted_at = NOW()
+    submitted_at = DATE_ADD(UTC_TIMESTAMP(), INTERVAL 5 HOUR 30 MINUTE)
 WHERE submission_id = %s
 """
 
