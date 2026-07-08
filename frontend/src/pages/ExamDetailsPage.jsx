@@ -231,20 +231,20 @@ function ExamDetailsPage() {
            Resume Timer
         ========================== */
 
-        const examEndTime =
-  new Date(
-    sessionData.start_time
-  ).getTime()
+        const start =
+  new Date(sessionData.start_time).getTime();
 
-+
+const end =
+  start + (sessionData.duration * 60 * 1000);
 
-(
-  sessionData.duration *
-  60 *
-  1000
-);
+console.log("Session Data:", sessionData);
+console.log("Start Time:", sessionData.start_time);
+console.log("Parsed Start:", start);
+console.log("Current Time:", Date.now());
+console.log("End Time:", end);
+console.log("Remaining:", end - Date.now());
 
-setEndTime(examEndTime);
+setEndTime(end);
 
       }
 
