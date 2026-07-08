@@ -535,10 +535,11 @@ def submit_exam():
 
     update_submission_query = """
     UPDATE submissions
-    SET
-        score = %s,
-        status = 'Completed'
-    WHERE submission_id = %s
+SET
+    score = %s,
+    status = 'Completed',
+    submitted_at = NOW()
+WHERE submission_id = %s
     """
 
     cur.execute(
