@@ -11,7 +11,7 @@ ai_bp = Blueprint(
 )
 
 client = genai.Client(
-    api_key=os.getenv("AQ.Ab8RN6IXQRb08ePA3tODrsx7XYis00yeaxj6vnwdNSswDEgrOQ")
+    api_key=os.getenv("GEMINI_API_KEY")
 )
 
 
