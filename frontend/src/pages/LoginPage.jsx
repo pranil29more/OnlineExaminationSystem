@@ -50,17 +50,22 @@ function LoginPage() {
         );
 
         const profileData =
-          await profileResponse.json();
+  await profileResponse.json();
 
-        if (profileData.role === "Admin") {
+localStorage.setItem(
+  "userEmail",
+  profileData.email
+);
 
-          navigate("/dashboard");
+if (profileData.role === "Admin") {
 
-        } else {
+  navigate("/dashboard");
 
-          navigate("/exams");
+} else {
 
-        }
+  navigate("/exams");
+
+}
 
       } else {
 

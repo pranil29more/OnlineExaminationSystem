@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import {
+  FaUser,
+  FaEnvelope,
+  FaUserShield
+} from "react-icons/fa";
+
 import API_BASE_URL from "../services/api";
 
 import Navbar from "../components/Navbar";
@@ -26,19 +32,28 @@ function ProfilePage() {
       const token = localStorage.getItem("token");
 
       const response = await fetch(
+
         `${API_BASE_URL}/profile`,
+
         {
+
           headers: {
+
             Authorization: `Bearer ${token}`
+
           }
+
         }
+
       );
 
       const data = await response.json();
 
       setProfile(data);
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
       console.error(error);
 
@@ -49,6 +64,8 @@ function ProfilePage() {
   const handleLogout = () => {
 
     localStorage.removeItem("token");
+
+    localStorage.removeItem("userEmail");
 
     navigate("/");
 
@@ -69,52 +86,111 @@ function ProfilePage() {
       <div className="page-container">
 
         <h1 className="page-title">
+
           My Profile
+
         </h1>
 
         <div className="profile-card">
 
-          <div className="profile-info">
+          <div className="profile-avatar">
 
-            <span className="profile-label">
-              Name:
-            </span>
+            {profile.name.charAt(0).toUpperCase()}
 
-            {" "}
+          </div>
+
+          <h2 className="profile-name">
 
             {profile.name}
 
-          </div>
+          </h2>
 
-          <div className="profile-info">
-
-            <span className="profile-label">
-              Email:
-            </span>
-
-            {" "}
-
-            {profile.email}
-
-          </div>
-
-          <div className="profile-info">
-
-            <span className="profile-label">
-              Role:
-            </span>
-
-            {" "}
+          <span className="profile-role-badge">
 
             {profile.role}
+
+          </span>
+
+          <div className="profile-details">
+
+            <div className="profile-item">
+
+              <FaUser className="profile-icon" />
+
+              <div>
+
+                <p className="profile-item-title">
+
+                  Full Name
+
+                </p>
+
+                <p className="profile-item-value">
+
+                  {profile.name}
+
+                </p>
+
+              </div>
+
+            </div>
+
+            <div className="profile-item">
+
+              <FaEnvelope className="profile-icon" />
+
+              <div>
+
+                <p className="profile-item-title">
+
+                  Email Address
+
+                </p>
+
+                <p className="profile-item-value">
+
+                  {profile.email}
+
+                </p>
+
+              </div>
+
+            </div>
+
+            <div className="profile-item">
+
+              <FaUserShield className="profile-icon" />
+
+              <div>
+
+                <p className="profile-item-title">
+
+                  Role
+
+                </p>
+
+                <p className="profile-item-value">
+
+                  {profile.role}
+
+                </p>
+
+              </div>
+
+            </div>
 
           </div>
 
           <button
+
             className="logout-btn"
+
             onClick={handleLogout}
+
           >
+
             Logout
+
           </button>
 
         </div>

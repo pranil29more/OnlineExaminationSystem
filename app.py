@@ -1,3 +1,8 @@
+from dotenv import load_dotenv
+
+# Load environment variables BEFORE importing Config
+load_dotenv(dotenv_path=".env")
+
 from flask import Flask
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
@@ -31,6 +36,7 @@ from routes.submission_routes import submission_bp
 from routes.result_routes import result_bp
 from routes.dashboard_routes import dashboard_bp
 from routes.batch_routes import batch_bp
+from routes.ai_routes import ai_bp
 
 app.register_blueprint(auth_bp)
 app.register_blueprint(exam_bp)
@@ -38,6 +44,7 @@ app.register_blueprint(submission_bp)
 app.register_blueprint(result_bp)
 app.register_blueprint(dashboard_bp)
 app.register_blueprint(batch_bp)
+app.register_blueprint(ai_bp)
 
 
 @app.route("/")

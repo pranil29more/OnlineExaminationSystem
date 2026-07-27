@@ -74,9 +74,13 @@ function Navbar() {
           </Link>
         )}
 
-        <Link to="/profile">
-          Profile
-        </Link>
+        <Link to="/chatbot">
+  AI Assistant
+</Link>
+
+<Link to="/profile">
+  Profile
+</Link>
 
       </div>
 

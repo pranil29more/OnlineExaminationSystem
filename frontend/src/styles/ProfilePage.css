@@ -1,81 +1,259 @@
+/* =====================================================
+   Page Container
+===================================================== */
+
 .page-container {
 
-  max-width: 700px;
+    max-width: 900px;
 
-  margin: 40px auto;
+    margin: 50px auto;
 
-  padding: 20px;
+    padding: 20px;
 
 }
+
+/* =====================================================
+   Page Title
+===================================================== */
 
 .page-title {
 
-  text-align: center;
+    color: white;
 
-  margin-bottom: 30px;
+    text-align: center;
+
+    font-size: 46px;
+
+    font-weight: 700;
+
+    margin-bottom: 35px;
 
 }
+
+/* =====================================================
+   Profile Card
+===================================================== */
 
 .profile-card {
 
-  background: #1e293b;
+    background: rgba(30, 41, 59, 0.95);
 
-  border: 1px solid #334155;
+    border: 1px solid rgba(59, 130, 246, 0.35);
 
-  border-radius: 16px;
+    border-radius: 22px;
 
-  padding: 30px;
+    padding: 40px;
 
-  box-shadow:
-    0 12px 24px rgba(
-      0,
-      0,
-      0,
-      0.3
+    box-shadow:
+        0 15px 40px rgba(0, 0, 0, 0.35);
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+}
+
+/* =====================================================
+   Avatar
+===================================================== */
+
+.profile-avatar {
+
+    width: 110px;
+
+    height: 110px;
+
+    border-radius: 50%;
+
+    background: linear-gradient(
+        135deg,
+        #3b82f6,
+        #2563eb
     );
 
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    color: white;
+
+    font-size: 42px;
+
+    font-weight: 700;
+
+    margin-bottom: 18px;
+
+    box-shadow:
+        0 10px 25px rgba(37, 99, 235, .45);
+
 }
 
-.profile-info {
+/* =====================================================
+   Name
+===================================================== */
 
-  margin-bottom: 18px;
+.profile-name {
 
-  font-size: 18px;
+    color: white;
+
+    font-size: 30px;
+
+    font-weight: 700;
+
+    margin-bottom: 12px;
 
 }
 
-.profile-label {
+/* =====================================================
+   Role Badge
+===================================================== */
 
-  font-weight: bold;
+.profile-role-badge {
 
-  color: #94a3b8;
+    background: rgba(59,130,246,.18);
+
+    color: #60a5fa;
+
+    padding: 8px 18px;
+
+    border-radius: 999px;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    margin-bottom: 35px;
 
 }
+
+/* =====================================================
+   Details
+===================================================== */
+
+.profile-details {
+
+    width: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 18px;
+
+}
+
+/* =====================================================
+   Individual Info Card
+===================================================== */
+
+.profile-item {
+
+    background: rgba(255,255,255,.04);
+
+    border: 1px solid rgba(255,255,255,.08);
+
+    border-radius: 16px;
+
+    padding: 18px 22px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+
+    transition: .25s;
+
+}
+
+.profile-item:hover {
+
+    border-color: #3b82f6;
+
+    transform: translateY(-2px);
+
+}
+
+/* =====================================================
+   Icons
+===================================================== */
+
+.profile-icon {
+
+    font-size: 26px;
+
+    color: #60a5fa;
+
+    min-width: 28px;
+
+}
+
+/* =====================================================
+   Labels
+===================================================== */
+
+.profile-item-title {
+
+    color: #94a3b8;
+
+    font-size: 14px;
+
+    margin-bottom: 4px;
+
+}
+
+/* =====================================================
+   Values
+===================================================== */
+
+.profile-item-value {
+
+    color: white;
+
+    font-size: 18px;
+
+    font-weight: 600;
+
+}
+
+/* =====================================================
+   Logout Button
+===================================================== */
 
 .logout-btn {
 
-  margin-top: 25px;
+    width: 100%;
 
-  background: #ef4444;
+    margin-top: 35px;
 
-  color: white;
+    padding: 14px;
 
-  border: none;
+    border: none;
 
-  padding: 12px 24px;
+    border-radius: 14px;
 
-  border-radius: 10px;
+    background: #ef4444;
 
-  cursor: pointer;
+    color: white;
 
-  font-size: 16px;
+    font-size: 17px;
 
-  font-weight: 600;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: .25s;
 
 }
 
 .logout-btn:hover {
 
-  background: #dc2626;
+    background: #dc2626;
+
+    transform: translateY(-2px);
 
 }

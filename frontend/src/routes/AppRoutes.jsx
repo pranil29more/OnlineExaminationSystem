@@ -11,6 +11,7 @@ import ExamDetailsPage from "../pages/ExamDetailsPage";
 import ResultsPage from "../pages/ResultsPage";
 import ResultDetailsPage from "../pages/ResultDetailsPage";
 import ProfilePage from "../pages/ProfilePage";
+import ChatbotPage from "../pages/ChatbotPage";
 
 import CreateExamPage from "../pages/CreateExamPage";
 import AddQuestionPage from "../pages/AddQuestionPage";
@@ -207,6 +208,11 @@ function AppRoutes() {
             </AdminRoute>
           }
         />
+
+        <Route
+    path="/chatbot"
+    element={<ChatbotPage />}
+/>
 
       </Routes>
 
