@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import { IoSend, IoTrashOutline } from "react-icons/io5";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import API_BASE_URL from "../services/api";
 
 import { useEffect, useRef, useState } from "react";
 
@@ -86,8 +87,7 @@ function ChatbotPage() {
         try {
 
             const response = await fetch(
-
-                "http://127.0.0.1:5000/chat",
+    `${API_BASE_URL}/chat`,
 
                 {
 
