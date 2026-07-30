@@ -1,7 +1,5 @@
 from flask import Blueprint, jsonify
-from flask_jwt_extended import (
-    jwt_required
-)
+from flask_jwt_extended import jwt_required
 
 from extensions import mysql
 
@@ -28,10 +26,7 @@ def dashboard():
     WHERE user_id = %s
     """
 
-    cur.execute(
-        role_query,
-        (current_user_id,)
-    )
+    cur.execute(role_query, (current_user_id,))
 
     user = cur.fetchone()
 
@@ -39,17 +34,16 @@ def dashboard():
 
         cur.close()
 
-        return jsonify({
-            "message": "User not found"
-        }), 404
+        return jsonify({"message": "User not found"}), 404
 
     if user[0] != "Admin":
 
         cur.close()
 
-        return jsonify({
-            "message": "Only Admin can access the Dashboard."
-        }), 403
+        return (
+            jsonify({"message": "Only Admin can access the Dashboard."}),
+            403,
+        )
 
     # ==========================================
     # Dashboard Counts
@@ -72,19 +66,18 @@ def dashboard():
 
     cur.close()
 
-    return jsonify({
-
-        "total_exams": total_exams,
-
-        "total_questions": total_questions,
-
-        "total_submissions": total_submissions,
-
-        "total_users": total_users,
-
-        "total_batches": total_batches
-
-    }), 200
+    return (
+        jsonify(
+            {
+                "total_exams": total_exams,
+                "total_questions": total_questions,
+                "total_submissions": total_submissions,
+                "total_users": total_users,
+                "total_batches": total_batches,
+            }
+        ),
+        200,
+    )
 
 
 @dashboard_bp.route("/exam-analytics", methods=["GET"])
@@ -95,10 +88,12 @@ def exam_analytics():
 
     # Total exams
 
-    cur.execute("""
+    cur.execute(
+        """
     SELECT COUNT(*)
     FROM exams
-    """)
+    """
+    )
 
     total_exams = cur.fetchone()[0]
 
@@ -147,22 +142,17 @@ def exam_analytics():
 
     for exam in exams:
 
-        exam_list.append({
+        exam_list.append(
+            {
+                "exam_id": exam[0],
+                "title": exam[1],
+                "questions": exam[2],
+                "submissions": exam[3],
+                "average_score": exam[4],
+            }
+        )
 
-            "exam_id": exam[0],
-            "title": exam[1],
-            "questions": exam[2],
-            "submissions": exam[3],
-            "average_score": exam[4]
-
-        })
-
-    return jsonify({
-
-        "total_exams": total_exams,
-        "exam_wise": exam_list
-
-    }), 200
+    return jsonify({"total_exams": total_exams, "exam_wise": exam_list}), 200
 
 
 @dashboard_bp.route("/submission-analytics", methods=["GET"])
@@ -173,10 +163,12 @@ def submission_analytics():
 
     # Total submissions
 
-    cur.execute("""
+    cur.execute(
+        """
     SELECT COUNT(*)
     FROM submissions
-    """)
+    """
+    )
 
     total_submissions = cur.fetchone()[0]
 
@@ -241,20 +233,20 @@ def submission_analytics():
 
     for exam in exams:
 
-        exam_list.append({
+        exam_list.append(
+            {
+                "exam_id": exam[0],
+                "title": exam[1],
+                "attempts": exam[2],
+                "average_score": exam[3],
+                "highest_score": exam[4],
+                "highest_scorer": exam[5] if exam[5] else "-",
+            }
+        )
 
-            "exam_id": exam[0],
-            "title": exam[1],
-            "attempts": exam[2],
-            "average_score": exam[3],
-            "highest_score": exam[4],
-            "highest_scorer": exam[5] if exam[5] else "-"
-
-        })
-
-    return jsonify({
-
-        "total_submissions": total_submissions,
-        "exam_wise": exam_list
-
-    }), 200
+    return (
+        jsonify(
+            {"total_submissions": total_submissions, "exam_wise": exam_list}
+        ),
+        200,
+    )

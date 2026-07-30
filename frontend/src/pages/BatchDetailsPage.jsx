@@ -9,6 +9,8 @@ import API_BASE_URL from "../services/api";
 
 import Navbar from "../components/Navbar";
 
+import PageLoader from "../components/PageLoader";
+
 import "../styles/BatchDetailsPage.css";
 
 function BatchDetailsPage() {
@@ -560,9 +562,19 @@ const filteredAvailableCandidates =
 
   if (!batch) {
 
-    return <h2>Loading Batch...</h2>;
+    return (
 
-  }
+        <div>
+
+            <Navbar />
+
+            <PageLoader message="Loading Batch Details..." />
+
+        </div>
+
+    );
+
+}
 
   return (
 

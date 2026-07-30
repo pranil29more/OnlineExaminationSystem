@@ -4,6 +4,8 @@ import { Link, useParams } from "react-router-dom";
 import API_BASE_URL from "../services/api";
 import Navbar from "../components/Navbar";
 
+import PageLoader from "../components/PageLoader";
+
 import "../styles/ExamResultsPage.css";
 
 function ExamResultsPage() {
@@ -51,9 +53,19 @@ function ExamResultsPage() {
 
   if (!exam) {
 
-    return <h2>Loading...</h2>;
+    return (
 
-  }
+        <div>
+
+            <Navbar />
+
+            <PageLoader message="Loading Exam Results..." />
+
+        </div>
+
+    );
+
+}
 
   return (
 

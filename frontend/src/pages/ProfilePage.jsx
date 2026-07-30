@@ -11,6 +11,8 @@ import API_BASE_URL from "../services/api";
 
 import Navbar from "../components/Navbar";
 
+import PageLoader from "../components/PageLoader";
+
 import "../styles/ProfilePage.css";
 
 function ProfilePage() {
@@ -73,9 +75,19 @@ function ProfilePage() {
 
   if (!profile) {
 
-    return <h2>Loading Profile...</h2>;
+    return (
 
-  }
+        <div>
+
+            <Navbar />
+
+            <PageLoader message="Loading Profile..." />
+
+        </div>
+
+    );
+
+}
 
   return (
 

@@ -7,6 +7,8 @@ import {
 import API_BASE_URL from "../services/api";
 import Navbar from "../components/Navbar";
 
+import PageLoader from "../components/PageLoader";
+
 import "../styles/ExamDetailsPage.css";
 
 function ExamDetailsPage() {
@@ -397,7 +399,17 @@ const handleSubmitExam = async () => {
 
 if (!exam) {
 
-  return <h2>Loading Exam...</h2>;
+  return (
+
+    <div>
+
+      <Navbar />
+
+      <PageLoader message="Loading Exam..." />
+
+    </div>
+
+  );
 
 }
 

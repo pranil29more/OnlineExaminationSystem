@@ -4,6 +4,8 @@ import { useParams } from "react-router-dom";
 import API_BASE_URL from "../services/api";
 import Navbar from "../components/Navbar";
 
+import PageLoader from "../components/PageLoader";
+
 import "../styles/ResultDetailsPage.css";
 
 function ResultDetailsPage() {
@@ -60,9 +62,19 @@ function ResultDetailsPage() {
 
     if (!result) {
 
-        return <h2>Loading Result...</h2>;
+    return (
 
-    }
+        <div>
+
+            <Navbar />
+
+            <PageLoader message="Loading Result..." />
+
+        </div>
+
+    );
+
+}
 
     return (
 

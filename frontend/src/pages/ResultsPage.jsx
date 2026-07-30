@@ -178,17 +178,19 @@ return (
 
         {filteredResults.length === 0 && (
 
-          <h3
-            style={{
-              textAlign: "center",
-              gridColumn: "1 / -1",
-              marginTop: "30px"
-            }}
-          >
-            No matching results found.
-          </h3>
+  <h3
+    style={{
+      textAlign: "center",
+      gridColumn: "1 / -1",
+      marginTop: "30px"
+    }}
+  >
+    {search.trim()
+      ? "No matching results found."
+      : "‎ "}
+  </h3>
 
-        )}
+)}
 
       </div>
 

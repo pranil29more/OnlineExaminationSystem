@@ -1,15 +1,9 @@
 from flask import Blueprint, request, jsonify
-from flask_jwt_extended import (
-    jwt_required,
-    get_jwt_identity
-)
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from extensions import mysql
 
-batch_bp = Blueprint(
-    "batch",
-    __name__
-)
+batch_bp = Blueprint("batch", __name__)
 
 
 @batch_bp.route("/create-batch", methods=["POST"])
@@ -30,10 +24,7 @@ def create_batch():
     WHERE user_id = %s
     """
 
-    cur.execute(
-        role_query,
-        (current_user_id,)
-    )
+    cur.execute(role_query, (current_user_id,))
 
     user = cur.fetchone()
 
@@ -41,17 +32,13 @@ def create_batch():
 
         cur.close()
 
-        return jsonify({
-            "message": "User not found"
-        }), 404
+        return jsonify({"message": "User not found"}), 404
 
     if user[0] != "Admin":
 
         cur.close()
 
-        return jsonify({
-            "message": "Only Admin can create batches."
-        }), 403
+        return jsonify({"message": "Only Admin can create batches."}), 403
 
     # ==========================================
     # Read Request Data
@@ -83,9 +70,7 @@ def create_batch():
 
         cur.close()
 
-        return jsonify({
-            "message": "All fields are required."
-        }), 400
+        return jsonify({"message": "All fields are required."}), 400
 
     # ==========================================
     # Prevent Duplicate Batch Names
@@ -97,10 +82,7 @@ def create_batch():
     WHERE batch_name = %s
     """
 
-    cur.execute(
-        check_query,
-        (batch_name,)
-    )
+    cur.execute(check_query, (batch_name,))
 
     existing = cur.fetchone()
 
@@ -108,9 +90,7 @@ def create_batch():
 
         cur.close()
 
-        return jsonify({
-            "message": "Batch already exists."
-        }), 400
+        return jsonify({"message": "Batch already exists."}), 400
 
     # ==========================================
     # Insert Batch
@@ -140,9 +120,7 @@ VALUES
     """
 
     cur.execute(
-
         insert_query,
-
         (
             batch_name,
             technology,
@@ -150,9 +128,8 @@ VALUES
             description,
             start_date,
             end_date,
-            status
-        )
-
+            status,
+        ),
     )
 
     mysql.connection.commit()
@@ -161,13 +138,12 @@ VALUES
 
     cur.close()
 
-    return jsonify({
-
-        "message": "Batch created successfully.",
-
-        "batch_id": batch_id
-
-    }), 201
+    return (
+        jsonify(
+            {"message": "Batch created successfully.", "batch_id": batch_id}
+        ),
+        201,
+    )
 
 
 @batch_bp.route("/batches", methods=["GET"])
@@ -188,10 +164,7 @@ def get_batches():
     WHERE user_id = %s
     """
 
-    cur.execute(
-        role_query,
-        (current_user_id,)
-    )
+    cur.execute(role_query, (current_user_id,))
 
     user = cur.fetchone()
 
@@ -199,17 +172,13 @@ def get_batches():
 
         cur.close()
 
-        return jsonify({
-            "message": "User not found"
-        }), 404
+        return jsonify({"message": "User not found"}), 404
 
     if user[0] != "Admin":
 
         cur.close()
 
-        return jsonify({
-            "message": "Only Admin can view batches."
-        }), 403
+        return jsonify({"message": "Only Admin can view batches."}), 403
 
     # ==========================================
     # Fetch All batches
@@ -271,27 +240,19 @@ ORDER BY b.batch_id DESC
 
     for batch in batches:
 
-        batch_list.append({
-
-    "batch_id": batch[0],
-
-    "batch_name": batch[1],
-
-    "technology": batch[2],
-
-    "trainer_name": batch[3],
-
-    "description": batch[4],
-
-    "start_date": str(batch[5]),
-
-    "end_date": str(batch[6]),
-
-    "status": batch[7],
-
-    "candidate_count": batch[8]
-
-})
+        batch_list.append(
+            {
+                "batch_id": batch[0],
+                "batch_name": batch[1],
+                "technology": batch[2],
+                "trainer_name": batch[3],
+                "description": batch[4],
+                "start_date": str(batch[5]),
+                "end_date": str(batch[6]),
+                "status": batch[7],
+                "candidate_count": batch[8],
+            }
+        )
 
     cur.close()
 
@@ -312,10 +273,7 @@ def get_batch(batch_id):
     WHERE user_id = %s
     """
 
-    cur.execute(
-        role_query,
-        (current_user_id,)
-    )
+    cur.execute(role_query, (current_user_id,))
 
     user = cur.fetchone()
 
@@ -323,17 +281,13 @@ def get_batch(batch_id):
 
         cur.close()
 
-        return jsonify({
-            "message": "User not found"
-        }), 404
+        return jsonify({"message": "User not found"}), 404
 
     if user[0] != "Admin":
 
         cur.close()
 
-        return jsonify({
-            "message": "Only Admin can view batch details."
-        }), 403
+        return jsonify({"message": "Only Admin can view batch details."}), 403
 
     query = """
     SELECT
@@ -359,10 +313,7 @@ def get_batch(batch_id):
     WHERE batch_id = %s
     """
 
-    cur.execute(
-        query,
-        (batch_id,)
-    )
+    cur.execute(query, (batch_id,))
 
     batch = cur.fetchone()
 
@@ -370,29 +321,23 @@ def get_batch(batch_id):
 
     if not batch:
 
-        return jsonify({
-            "message": "Batch not found"
-        }), 404
+        return jsonify({"message": "Batch not found"}), 404
 
-    return jsonify({
-
-        "batch_id": batch[0],
-
-        "batch_name": batch[1],
-
-        "technology": batch[2],
-
-        "trainer_name": batch[3],
-
-        "description": batch[4],
-
-        "start_date": str(batch[5]),
-
-        "end_date": str(batch[6]),
-
-        "status": batch[7]
-
-    }), 200
+    return (
+        jsonify(
+            {
+                "batch_id": batch[0],
+                "batch_name": batch[1],
+                "technology": batch[2],
+                "trainer_name": batch[3],
+                "description": batch[4],
+                "start_date": str(batch[5]),
+                "end_date": str(batch[6]),
+                "status": batch[7],
+            }
+        ),
+        200,
+    )
 
 
 @batch_bp.route("/batch-details/<int:batch_id>", methods=["GET"])
@@ -413,10 +358,7 @@ def get_batch_details(batch_id):
     WHERE user_id = %s
     """
 
-    cur.execute(
-        role_query,
-        (current_user_id,)
-    )
+    cur.execute(role_query, (current_user_id,))
 
     user = cur.fetchone()
 
@@ -424,17 +366,16 @@ def get_batch_details(batch_id):
 
         cur.close()
 
-        return jsonify({
-            "message": "User not found"
-        }), 404
+        return jsonify({"message": "User not found"}), 404
 
     if user[0] != "Admin":
 
         cur.close()
 
-        return jsonify({
-            "message": "Only Admin can access batch details."
-        }), 403
+        return (
+            jsonify({"message": "Only Admin can access batch details."}),
+            403,
+        )
 
     # ==========================================
     # Fetch Batch
@@ -457,10 +398,7 @@ def get_batch_details(batch_id):
     WHERE batch_id = %s
     """
 
-    cur.execute(
-        batch_query,
-        (batch_id,)
-    )
+    cur.execute(batch_query, (batch_id,))
 
     batch = cur.fetchone()
 
@@ -468,9 +406,7 @@ def get_batch_details(batch_id):
 
         cur.close()
 
-        return jsonify({
-            "message": "Batch not found"
-        }), 404
+        return jsonify({"message": "Batch not found"}), 404
 
     # ==========================================
     # Fetch Candidates
@@ -526,10 +462,7 @@ def get_batch_details(batch_id):
         u.name
     """
 
-    cur.execute(
-        candidate_query,
-        (batch_id,)
-    )
+    cur.execute(candidate_query, (batch_id,))
 
     candidates = cur.fetchall()
 
@@ -537,49 +470,37 @@ def get_batch_details(batch_id):
 
     for candidate in candidates:
 
-        candidate_list.append({
-
-            "user_id": candidate[0],
-
-            "name": candidate[1],
-
-            "email": candidate[2],
-
-            "assessment_count": candidate[3],
-
-            "average_score": candidate[4]
-
-        })
+        candidate_list.append(
+            {
+                "user_id": candidate[0],
+                "name": candidate[1],
+                "email": candidate[2],
+                "assessment_count": candidate[3],
+                "average_score": candidate[4],
+            }
+        )
 
     cur.close()
 
-    return jsonify({
-
-        "batch": {
-
-            "batch_id": batch[0],
-
-            "batch_name": batch[1],
-
-            "technology": batch[2],
-
-            "trainer_name": batch[3],
-
-            "description": batch[4],
-
-            "start_date": str(batch[5]),
-
-            "end_date": str(batch[6]),
-
-            "status": batch[7]
-
-        },
-
-        "candidate_count": len(candidate_list),
-
-        "candidates": candidate_list
-
-    }), 200
+    return (
+        jsonify(
+            {
+                "batch": {
+                    "batch_id": batch[0],
+                    "batch_name": batch[1],
+                    "technology": batch[2],
+                    "trainer_name": batch[3],
+                    "description": batch[4],
+                    "start_date": str(batch[5]),
+                    "end_date": str(batch[6]),
+                    "status": batch[7],
+                },
+                "candidate_count": len(candidate_list),
+                "candidates": candidate_list,
+            }
+        ),
+        200,
+    )
 
 
 @batch_bp.route("/available-candidates", methods=["GET"])
@@ -600,10 +521,7 @@ def get_available_candidates():
     WHERE user_id = %s
     """
 
-    cur.execute(
-        role_query,
-        (current_user_id,)
-    )
+    cur.execute(role_query, (current_user_id,))
 
     user = cur.fetchone()
 
@@ -611,17 +529,16 @@ def get_available_candidates():
 
         cur.close()
 
-        return jsonify({
-            "message": "User not found"
-        }), 404
+        return jsonify({"message": "User not found"}), 404
 
     if user[0] != "Admin":
 
         cur.close()
 
-        return jsonify({
-            "message": "Only Admin can access this resource."
-        }), 403
+        return (
+            jsonify({"message": "Only Admin can access this resource."}),
+            403,
+        )
 
     # ==========================================
     # Fetch Unassigned Candidates
@@ -655,15 +572,13 @@ def get_available_candidates():
 
     for candidate in candidates:
 
-        result.append({
-
-            "user_id": candidate[0],
-
-            "name": candidate[1],
-
-            "email": candidate[2]
-
-        })
+        result.append(
+            {
+                "user_id": candidate[0],
+                "name": candidate[1],
+                "email": candidate[2],
+            }
+        )
 
     return jsonify(result), 200
 
@@ -686,10 +601,7 @@ def assign_candidate():
     WHERE user_id = %s
     """
 
-    cur.execute(
-        role_query,
-        (current_user_id,)
-    )
+    cur.execute(role_query, (current_user_id,))
 
     user = cur.fetchone()
 
@@ -697,17 +609,13 @@ def assign_candidate():
 
         cur.close()
 
-        return jsonify({
-            "message": "User not found"
-        }), 404
+        return jsonify({"message": "User not found"}), 404
 
     if user[0] != "Admin":
 
         cur.close()
 
-        return jsonify({
-            "message": "Only Admin can assign candidates."
-        }), 403
+        return jsonify({"message": "Only Admin can assign candidates."}), 403
 
     # ==========================================
     # Read Request
@@ -727,17 +635,16 @@ def assign_candidate():
 
         cur.close()
 
-        return jsonify({
-            "message": "Batch ID is required."
-        }), 400
+        return jsonify({"message": "Batch ID is required."}), 400
 
     if not user_ids or len(user_ids) == 0:
 
         cur.close()
 
-        return jsonify({
-            "message": "Please select at least one candidate."
-        }), 400
+        return (
+            jsonify({"message": "Please select at least one candidate."}),
+            400,
+        )
 
     # ==========================================
     # Verify Batch Exists
@@ -749,10 +656,7 @@ def assign_candidate():
     WHERE batch_id = %s
     """
 
-    cur.execute(
-        batch_query,
-        (batch_id,)
-    )
+    cur.execute(batch_query, (batch_id,))
 
     batch = cur.fetchone()
 
@@ -760,9 +664,7 @@ def assign_candidate():
 
         cur.close()
 
-        return jsonify({
-            "message": "Batch not found."
-        }), 404
+        return jsonify({"message": "Batch not found."}), 404
 
     # ==========================================
     # Assign Candidates
@@ -780,16 +682,7 @@ def assign_candidate():
 
     for user_id in user_ids:
 
-        cur.execute(
-
-            update_query,
-
-            (
-                batch_id,
-                user_id
-            )
-
-        )
+        cur.execute(update_query, (batch_id, user_id))
 
         assigned_count += cur.rowcount
 
@@ -797,11 +690,14 @@ def assign_candidate():
 
     cur.close()
 
-    return jsonify({
-
-        "message": f"{assigned_count} candidate(s) assigned successfully."
-
-    }), 200
+    return (
+        jsonify(
+            {
+                "message": f"{assigned_count} candidate(s) assigned successfully."
+            }
+        ),
+        200,
+    )
 
 
 @batch_bp.route("/unassign-candidate", methods=["PUT"])
@@ -822,10 +718,7 @@ def unassign_candidate():
     WHERE user_id = %s
     """
 
-    cur.execute(
-        role_query,
-        (current_user_id,)
-    )
+    cur.execute(role_query, (current_user_id,))
 
     user = cur.fetchone()
 
@@ -833,17 +726,13 @@ def unassign_candidate():
 
         cur.close()
 
-        return jsonify({
-            "message": "User not found"
-        }), 404
+        return jsonify({"message": "User not found"}), 404
 
     if user[0] != "Admin":
 
         cur.close()
 
-        return jsonify({
-            "message": "Only Admin can unassign candidates."
-        }), 403
+        return jsonify({"message": "Only Admin can unassign candidates."}), 403
 
     # ==========================================
     # Read Request
@@ -861,9 +750,10 @@ def unassign_candidate():
 
         cur.close()
 
-        return jsonify({
-            "message": "Please select at least one candidate."
-        }), 400
+        return (
+            jsonify({"message": "Please select at least one candidate."}),
+            400,
+        )
 
     # ==========================================
     # Unassign Candidates
@@ -881,13 +771,7 @@ def unassign_candidate():
 
     for user_id in user_ids:
 
-        cur.execute(
-
-            update_query,
-
-            (user_id,)
-
-        )
+        cur.execute(update_query, (user_id,))
 
         unassigned_count += cur.rowcount
 
@@ -895,11 +779,14 @@ def unassign_candidate():
 
     cur.close()
 
-    return jsonify({
-
-        "message": f"{unassigned_count} candidate(s) unassigned successfully."
-
-    }), 200
+    return (
+        jsonify(
+            {
+                "message": f"{unassigned_count} candidate(s) unassigned successfully."
+            }
+        ),
+        200,
+    )
 
 
 @batch_bp.route("/update-batch/<int:batch_id>", methods=["PUT"])
@@ -924,17 +811,13 @@ def update_batch(batch_id):
 
         cur.close()
 
-        return jsonify({
-            "message": "User not found"
-        }), 404
+        return jsonify({"message": "User not found"}), 404
 
     if user[0] != "Admin":
 
         cur.close()
 
-        return jsonify({
-            "message": "Only Admin can update batches"
-        }), 403
+        return jsonify({"message": "Only Admin can update batches"}), 403
 
     data = request.get_json()
 
@@ -952,9 +835,7 @@ def update_batch(batch_id):
     """
 
     cur.execute(
-
         update_query,
-
         (
             data.get("batch_name"),
             data.get("technology"),
@@ -963,18 +844,15 @@ def update_batch(batch_id):
             data.get("start_date"),
             data.get("end_date"),
             data.get("status"),
-            batch_id
-        )
-
+            batch_id,
+        ),
     )
 
     mysql.connection.commit()
 
     cur.close()
 
-    return jsonify({
-        "message": "Batch updated successfully"
-    }), 200
+    return jsonify({"message": "Batch updated successfully"}), 200
 
 
 @batch_bp.route("/delete-batch/<int:batch_id>", methods=["DELETE"])
@@ -991,10 +869,7 @@ def delete_batch(batch_id):
     WHERE user_id = %s
     """
 
-    cur.execute(
-        role_query,
-        (current_user_id,)
-    )
+    cur.execute(role_query, (current_user_id,))
 
     user = cur.fetchone()
 
@@ -1002,17 +877,13 @@ def delete_batch(batch_id):
 
         cur.close()
 
-        return jsonify({
-            "message": "User not found"
-        }), 404
+        return jsonify({"message": "User not found"}), 404
 
     if user[0] != "Admin":
 
         cur.close()
 
-        return jsonify({
-            "message": "Only Admin can delete batches"
-        }), 403
+        return jsonify({"message": "Only Admin can delete batches"}), 403
 
     check_query = """
     SELECT batch_id
@@ -1020,10 +891,7 @@ def delete_batch(batch_id):
     WHERE batch_id = %s
     """
 
-    cur.execute(
-        check_query,
-        (batch_id,)
-    )
+    cur.execute(check_query, (batch_id,))
 
     batch = cur.fetchone()
 
@@ -1031,24 +899,17 @@ def delete_batch(batch_id):
 
         cur.close()
 
-        return jsonify({
-            "message": "Batch not found"
-        }), 404
+        return jsonify({"message": "Batch not found"}), 404
 
     delete_query = """
     DELETE FROM batches
     WHERE batch_id = %s
     """
 
-    cur.execute(
-        delete_query,
-        (batch_id,)
-    )
+    cur.execute(delete_query, (batch_id,))
 
     mysql.connection.commit()
 
     cur.close()
 
-    return jsonify({
-        "message": "Batch deleted successfully"
-    }), 200
+    return jsonify({"message": "Batch deleted successfully"}), 200

@@ -4,6 +4,8 @@ import { useParams, useNavigate } from "react-router-dom";
 
 import Navbar from "../components/Navbar";
 
+import PageLoader from "../components/PageLoader";
+
 import API_BASE_URL from "../services/api";
 
 import "../styles/CandidateResultsPage.css";
@@ -93,23 +95,19 @@ setHistory(
 
     if (!candidate) {
 
-        return (
+    return (
 
-            <div>
+        <div>
 
-                <Navbar />
+            <Navbar />
 
-                <h2>
+            <PageLoader message="Loading Candidate Results..." />
 
-                    Loading Candidate...
+        </div>
 
-                </h2>
+    );
 
-            </div>
-
-        );
-
-    }
+}
 
     return (
 

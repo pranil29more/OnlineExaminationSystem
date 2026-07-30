@@ -1,8 +1,5 @@
 from flask import Blueprint, request, jsonify
-from flask_jwt_extended import (
-    jwt_required,
-    get_jwt_identity
-)
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from extensions import mysql
 
@@ -29,18 +26,17 @@ def create_exam():
     if not user:
         cur.close()
 
-        return jsonify({
-            "message": "User not found"
-        }), 404
+        return jsonify({"message": "User not found"}), 404
 
     role = user[0]
 
     if role not in ["Admin", "Examiner"]:
         cur.close()
 
-        return jsonify({
-            "message": "Access denied. Admin or Examiner only."
-        }), 403
+        return (
+            jsonify({"message": "Access denied. Admin or Examiner only."}),
+            403,
+        )
 
     data = request.get_json()
 
@@ -70,13 +66,7 @@ def create_exam():
 
     cur.execute(
         insert_query,
-        (
-            title,
-            duration,
-            total_marks,
-            passing_marks,
-            current_user_id
-        )
+        (title, duration, total_marks, passing_marks, current_user_id),
     )
 
     mysql.connection.commit()
@@ -85,10 +75,10 @@ def create_exam():
 
     cur.close()
 
-    return jsonify({
-        "message": "Exam created successfully",
-        "exam_id": exam_id
-    }), 201
+    return (
+        jsonify({"message": "Exam created successfully", "exam_id": exam_id}),
+        201,
+    )
 
 
 @exam_bp.route("/update-exam/<int:exam_id>", methods=["PUT"])
@@ -111,18 +101,17 @@ def update_exam(exam_id):
     if not user:
         cur.close()
 
-        return jsonify({
-            "message": "User not found"
-        }), 404
+        return jsonify({"message": "User not found"}), 404
 
     role = user[0]
 
     if role not in ["Admin", "Examiner"]:
         cur.close()
 
-        return jsonify({
-            "message": "Access denied. Admin or Examiner only."
-        }), 403
+        return (
+            jsonify({"message": "Access denied. Admin or Examiner only."}),
+            403,
+        )
 
     exam_check_query = """
     SELECT exam_id
@@ -130,10 +119,7 @@ def update_exam(exam_id):
     WHERE exam_id = %s
     """
 
-    cur.execute(
-        exam_check_query,
-        (exam_id,)
-    )
+    cur.execute(exam_check_query, (exam_id,))
 
     exam = cur.fetchone()
 
@@ -141,9 +127,7 @@ def update_exam(exam_id):
 
         cur.close()
 
-        return jsonify({
-            "message": "Exam not found"
-        }), 404
+        return jsonify({"message": "Exam not found"}), 404
 
     data = request.get_json()
 
@@ -163,24 +147,17 @@ def update_exam(exam_id):
     """
 
     cur.execute(
-        update_query,
-        (
-            title,
-            duration,
-            total_marks,
-            passing_marks,
-            exam_id
-        )
+        update_query, (title, duration, total_marks, passing_marks, exam_id)
     )
 
     mysql.connection.commit()
 
     cur.close()
 
-    return jsonify({
-        "message": "Exam updated successfully",
-        "exam_id": exam_id
-    }), 200
+    return (
+        jsonify({"message": "Exam updated successfully", "exam_id": exam_id}),
+        200,
+    )
 
 
 @exam_bp.route("/add-question", methods=["POST"])
@@ -203,18 +180,17 @@ def add_question():
     if not user:
         cur.close()
 
-        return jsonify({
-            "message": "User not found"
-        }), 404
+        return jsonify({"message": "User not found"}), 404
 
     role = user[0]
 
     if role not in ["Admin", "Examiner"]:
         cur.close()
 
-        return jsonify({
-            "message": "Access denied. Admin or Examiner only."
-        }), 403
+        return (
+            jsonify({"message": "Access denied. Admin or Examiner only."}),
+            403,
+        )
 
     data = request.get_json()
 
@@ -244,15 +220,7 @@ def add_question():
     )
     """
 
-    cur.execute(
-        question_query,
-        (
-            exam_id,
-            question_text,
-            difficulty,
-            marks
-        )
-    )
+    cur.execute(question_query, (exam_id, question_text, difficulty, marks))
 
     question_id = cur.lastrowid
 
@@ -275,23 +243,21 @@ def add_question():
         )
         """
 
-        cur.execute(
-            option_query,
-            (
-                question_id,
-                option,
-                is_correct
-            )
-        )
+        cur.execute(option_query, (question_id, option, is_correct))
 
     mysql.connection.commit()
 
     cur.close()
 
-    return jsonify({
-        "message": "Question added successfully",
-        "question_id": question_id
-    }), 201
+    return (
+        jsonify(
+            {
+                "message": "Question added successfully",
+                "question_id": question_id,
+            }
+        ),
+        201,
+    )
 
 
 @exam_bp.route("/delete-question/<int:question_id>", methods=["DELETE"])
@@ -314,18 +280,17 @@ def delete_question(question_id):
     if not user:
         cur.close()
 
-        return jsonify({
-            "message": "User not found"
-        }), 404
+        return jsonify({"message": "User not found"}), 404
 
     role = user[0]
 
     if role not in ["Admin", "Examiner"]:
         cur.close()
 
-        return jsonify({
-            "message": "Access denied. Admin or Examiner only."
-        }), 403
+        return (
+            jsonify({"message": "Access denied. Admin or Examiner only."}),
+            403,
+        )
 
     question_query = """
     SELECT question_id
@@ -333,10 +298,7 @@ def delete_question(question_id):
     WHERE question_id = %s
     """
 
-    cur.execute(
-        question_query,
-        (question_id,)
-    )
+    cur.execute(question_query, (question_id,))
 
     question = cur.fetchone()
 
@@ -344,47 +306,34 @@ def delete_question(question_id):
 
         cur.close()
 
-        return jsonify({
-            "message": "Question not found"
-        }), 404
-    
+        return jsonify({"message": "Question not found"}), 404
+
     delete_answers_query = """
     DELETE FROM answers
     WHERE question_id = %s
     """
-    
-    cur.execute(
-    delete_answers_query,
-    (question_id,)
-    )
+
+    cur.execute(delete_answers_query, (question_id,))
 
     delete_options_query = """
     DELETE FROM options
     WHERE question_id = %s
     """
 
-    cur.execute(
-        delete_options_query,
-        (question_id,)
-    )
+    cur.execute(delete_options_query, (question_id,))
 
     delete_question_query = """
     DELETE FROM questions
     WHERE question_id = %s
     """
 
-    cur.execute(
-        delete_question_query,
-        (question_id,)
-    )
+    cur.execute(delete_question_query, (question_id,))
 
     mysql.connection.commit()
 
     cur.close()
 
-    return jsonify({
-        "message": "Question deleted successfully"
-    }), 200
+    return jsonify({"message": "Question deleted successfully"}), 200
 
 
 @exam_bp.route("/update-question/<int:question_id>", methods=["PUT"])
@@ -408,9 +357,7 @@ def update_question(question_id):
 
         cur.close()
 
-        return jsonify({
-            "message": "User not found"
-        }), 404
+        return jsonify({"message": "User not found"}), 404
 
     role = user[0]
 
@@ -418,9 +365,10 @@ def update_question(question_id):
 
         cur.close()
 
-        return jsonify({
-            "message": "Access denied. Admin or Examiner only."
-        }), 403
+        return (
+            jsonify({"message": "Access denied. Admin or Examiner only."}),
+            403,
+        )
 
     question_check_query = """
     SELECT question_id
@@ -428,10 +376,7 @@ def update_question(question_id):
     WHERE question_id = %s
     """
 
-    cur.execute(
-        question_check_query,
-        (question_id,)
-    )
+    cur.execute(question_check_query, (question_id,))
 
     question = cur.fetchone()
 
@@ -439,9 +384,7 @@ def update_question(question_id):
 
         cur.close()
 
-        return jsonify({
-            "message": "Question not found"
-        }), 404
+        return jsonify({"message": "Question not found"}), 404
 
     data = request.get_json()
 
@@ -461,13 +404,7 @@ def update_question(question_id):
     """
 
     cur.execute(
-        update_question_query,
-        (
-            question_text,
-            difficulty,
-            marks,
-            question_id
-        )
+        update_question_query, (question_text, difficulty, marks, question_id)
     )
 
     delete_options_query = """
@@ -475,10 +412,7 @@ def update_question(question_id):
     WHERE question_id = %s
     """
 
-    cur.execute(
-        delete_options_query,
-        (question_id,)
-    )
+    cur.execute(delete_options_query, (question_id,))
 
     for option in options:
 
@@ -499,23 +433,21 @@ def update_question(question_id):
         )
         """
 
-        cur.execute(
-            option_query,
-            (
-                question_id,
-                option,
-                is_correct
-            )
-        )
+        cur.execute(option_query, (question_id, option, is_correct))
 
     mysql.connection.commit()
 
     cur.close()
 
-    return jsonify({
-        "message": "Question updated successfully",
-        "question_id": question_id
-    }), 200
+    return (
+        jsonify(
+            {
+                "message": "Question updated successfully",
+                "question_id": question_id,
+            }
+        ),
+        200,
+    )
 
 
 @exam_bp.route("/exams", methods=["GET"])
@@ -546,18 +478,19 @@ def get_exams():
 
     for exam in exams:
 
-        exam_list.append({
-            "exam_id": exam[0],
-            "title": exam[1],
-            "duration": exam[2],
-            "total_marks": exam[3],
-            "passing_marks": exam[4],
-            "created_by": exam[5]
-        })
+        exam_list.append(
+            {
+                "exam_id": exam[0],
+                "title": exam[1],
+                "duration": exam[2],
+                "total_marks": exam[3],
+                "passing_marks": exam[4],
+                "created_by": exam[5],
+            }
+        )
 
     return jsonify(exam_list), 200
 
-# ADD THIS ROUTE AT THE BOTTOM OF YOUR EXISTING FILE
 
 @exam_bp.route("/exam/<int:exam_id>", methods=["GET"])
 @jwt_required()
@@ -582,9 +515,7 @@ def get_exam(exam_id):
     if not exam:
         cur.close()
 
-        return jsonify({
-            "message": "Exam not found"
-        }), 404
+        return jsonify({"message": "Exam not found"}), 404
 
     question_query = """
     SELECT
@@ -619,31 +550,37 @@ def get_exam(exam_id):
         option_list = []
 
         for option in options:
-            option_list.append({
-                "option_id": option[0],
-                "option_text": option[1]
-            })
+            option_list.append(
+                {"option_id": option[0], "option_text": option[1]}
+            )
 
-        question_list.append({
-            "question_id": question[0],
-            "question_text": question[1],
-            "difficulty": question[2],
-            "marks": question[3],
-            "options": option_list
-        })
+        question_list.append(
+            {
+                "question_id": question[0],
+                "question_text": question[1],
+                "difficulty": question[2],
+                "marks": question[3],
+                "options": option_list,
+            }
+        )
 
     cur.close()
 
-    return jsonify({
-        "exam": {
-            "exam_id": exam[0],
-            "title": exam[1],
-            "duration": exam[2],
-            "total_marks": exam[3],
-            "passing_marks": exam[4]
-        },
-        "questions": question_list
-    }), 200
+    return (
+        jsonify(
+            {
+                "exam": {
+                    "exam_id": exam[0],
+                    "title": exam[1],
+                    "duration": exam[2],
+                    "total_marks": exam[3],
+                    "passing_marks": exam[4],
+                },
+                "questions": question_list,
+            }
+        ),
+        200,
+    )
 
 
 @exam_bp.route("/question/<int:question_id>", methods=["GET"])
@@ -662,10 +599,7 @@ def get_question(question_id):
     WHERE question_id = %s
     """
 
-    cur.execute(
-        question_query,
-        (question_id,)
-    )
+    cur.execute(question_query, (question_id,))
 
     question = cur.fetchone()
 
@@ -673,9 +607,7 @@ def get_question(question_id):
 
         cur.close()
 
-        return jsonify({
-            "message": "Question not found"
-        }), 404
+        return jsonify({"message": "Question not found"}), 404
 
     option_query = """
     SELECT
@@ -686,10 +618,7 @@ def get_question(question_id):
     ORDER BY option_id
     """
 
-    cur.execute(
-        option_query,
-        (question_id,)
-    )
+    cur.execute(option_query, (question_id,))
 
     options = cur.fetchall()
 
@@ -705,14 +634,19 @@ def get_question(question_id):
 
     cur.close()
 
-    return jsonify({
-        "question_id": question[0],
-        "question_text": question[1],
-        "difficulty": question[2],
-        "marks": question[3],
-        "options": option_list,
-        "correct_option": correct_option
-    }), 200
+    return (
+        jsonify(
+            {
+                "question_id": question[0],
+                "question_text": question[1],
+                "difficulty": question[2],
+                "marks": question[3],
+                "options": option_list,
+                "correct_option": correct_option,
+            }
+        ),
+        200,
+    )
 
 
 @exam_bp.route("/delete-exam/<int:exam_id>", methods=["DELETE"])
@@ -736,17 +670,13 @@ def delete_exam(exam_id):
 
         cur.close()
 
-        return jsonify({
-            "message": "User not found"
-        }), 404
+        return jsonify({"message": "User not found"}), 404
 
     if user[0] not in ["Admin", "Examiner"]:
 
         cur.close()
 
-        return jsonify({
-            "message": "Access denied"
-        }), 403
+        return jsonify({"message": "Access denied"}), 403
 
     try:
 
@@ -756,10 +686,7 @@ def delete_exam(exam_id):
         WHERE exam_id = %s
         """
 
-        cur.execute(
-            question_query,
-            (exam_id,)
-        )
+        cur.execute(question_query, (exam_id,))
 
         questions = cur.fetchall()
 
@@ -772,50 +699,35 @@ def delete_exam(exam_id):
             WHERE question_id = %s
             """
 
-            cur.execute(
-                delete_answers_query,
-                (question_id,)
-            )
+            cur.execute(delete_answers_query, (question_id,))
 
             delete_options_query = """
             DELETE FROM options
             WHERE question_id = %s
             """
 
-            cur.execute(
-                delete_options_query,
-                (question_id,)
-            )
+            cur.execute(delete_options_query, (question_id,))
 
         delete_questions_query = """
         DELETE FROM questions
         WHERE exam_id = %s
         """
 
-        cur.execute(
-            delete_questions_query,
-            (exam_id,)
-        )
+        cur.execute(delete_questions_query, (exam_id,))
 
         delete_submissions_query = """
         DELETE FROM submissions
         WHERE exam_id = %s
         """
 
-        cur.execute(
-            delete_submissions_query,
-            (exam_id,)
-        )
+        cur.execute(delete_submissions_query, (exam_id,))
 
         delete_exam_query = """
         DELETE FROM exams
         WHERE exam_id = %s
         """
 
-        cur.execute(
-            delete_exam_query,
-            (exam_id,)
-        )
+        cur.execute(delete_exam_query, (exam_id,))
 
         mysql.connection.commit()
 
@@ -825,15 +737,11 @@ def delete_exam(exam_id):
 
         cur.close()
 
-        return jsonify({
-            "message": str(error)
-        }), 500
+        return jsonify({"message": str(error)}), 500
 
     cur.close()
 
-    return jsonify({
-        "message": "Exam deleted successfully"
-    }), 200
+    return jsonify({"message": "Exam deleted successfully"}), 200
 
 
 @exam_bp.route("/question-analytics", methods=["GET"])
@@ -867,11 +775,7 @@ def question_analytics():
 
     difficulty_rows = cur.fetchall()
 
-    difficulty = {
-        "Easy": 0,
-        "Medium": 0,
-        "Hard": 0
-    }
+    difficulty = {"Easy": 0, "Medium": 0, "Hard": 0}
 
     for row in difficulty_rows:
 
@@ -898,25 +802,21 @@ def question_analytics():
 
     for row in exam_rows:
 
-        exam_wise.append({
-
-            "title": row[0],
-
-            "questions": row[1]
-
-        })
+        exam_wise.append({"title": row[0], "questions": row[1]})
 
     cur.close()
 
-    return jsonify({
+    return (
+        jsonify(
+            {
+                "total_questions": total_questions,
+                "difficulty": difficulty,
+                "exam_wise": exam_wise,
+            }
+        ),
+        200,
+    )
 
-        "total_questions": total_questions,
-
-        "difficulty": difficulty,
-
-        "exam_wise": exam_wise
-
-    }), 200
 
 @exam_bp.route("/candidate-results/<int:user_id>", methods=["GET"])
 @jwt_required()
@@ -936,10 +836,7 @@ def candidate_results(user_id):
     WHERE user_id = %s
     """
 
-    cur.execute(
-        role_query,
-        (current_user_id,)
-    )
+    cur.execute(role_query, (current_user_id,))
 
     current_user = cur.fetchone()
 
@@ -947,17 +844,13 @@ def candidate_results(user_id):
 
         cur.close()
 
-        return jsonify({
-            "message": "User not found"
-        }), 404
+        return jsonify({"message": "User not found"}), 404
 
     if current_user[0] not in ["Admin", "Examiner"]:
 
         cur.close()
 
-        return jsonify({
-            "message": "Access denied."
-        }), 403
+        return jsonify({"message": "Access denied."}), 403
 
     # ==========================================
     # Fetch Candidate
@@ -985,10 +878,7 @@ def candidate_results(user_id):
     WHERE u.user_id = %s
     """
 
-    cur.execute(
-        candidate_query,
-        (user_id,)
-    )
+    cur.execute(candidate_query, (user_id,))
 
     candidate = cur.fetchone()
 
@@ -996,9 +886,7 @@ def candidate_results(user_id):
 
         cur.close()
 
-        return jsonify({
-            "message": "Candidate not found"
-        }), 404
+        return jsonify({"message": "Candidate not found"}), 404
 
     # ==========================================
     # Candidate Summary
@@ -1038,10 +926,7 @@ def candidate_results(user_id):
     WHERE s.user_id = %s
     """
 
-    cur.execute(
-        summary_query,
-        (user_id,)
-    )
+    cur.execute(summary_query, (user_id,))
 
     summary = cur.fetchone()
 
@@ -1085,10 +970,7 @@ def candidate_results(user_id):
     ORDER BY s.submitted_at DESC
     """
 
-    cur.execute(
-        history_query,
-        (user_id,)
-    )
+    cur.execute(history_query, (user_id,))
 
     history = cur.fetchall()
 
@@ -1096,56 +978,39 @@ def candidate_results(user_id):
 
     for row in history:
 
-        history_list.append({
-
-            "submission_id": row[0],
-
-            "exam_id": row[1],
-
-            "exam_title": row[2],
-
-            "score": row[3],
-
-            "total_marks": row[4],
-
-            "percentage": row[5],
-
-            "status": row[6],
-
-            "submitted_at": str(row[7])
-
-        })
+        history_list.append(
+            {
+                "submission_id": row[0],
+                "exam_id": row[1],
+                "exam_title": row[2],
+                "score": row[3],
+                "total_marks": row[4],
+                "percentage": row[5],
+                "status": row[6],
+                "submitted_at": str(row[7]),
+            }
+        )
 
     cur.close()
 
-    return jsonify({
-
-        "candidate": {
-
-            "user_id": candidate[0],
-
-            "name": candidate[1],
-
-            "email": candidate[2],
-
-            "batch_name": candidate[3],
-
-            "technology": candidate[4]
-
-        },
-
-        "summary": {
-
-            "assessment_count": summary[0],
-
-            "average_score": summary[1],
-
-            "highest_score": summary[2],
-
-            "lowest_score": summary[3]
-
-        },
-
-        "history": history_list
-
-    }), 200
+    return (
+        jsonify(
+            {
+                "candidate": {
+                    "user_id": candidate[0],
+                    "name": candidate[1],
+                    "email": candidate[2],
+                    "batch_name": candidate[3],
+                    "technology": candidate[4],
+                },
+                "summary": {
+                    "assessment_count": summary[0],
+                    "average_score": summary[1],
+                    "highest_score": summary[2],
+                    "lowest_score": summary[3],
+                },
+                "history": history_list,
+            }
+        ),
+        200,
+    )

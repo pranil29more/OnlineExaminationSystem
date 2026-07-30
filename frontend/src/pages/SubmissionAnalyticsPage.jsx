@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import API_BASE_URL from "../services/api";
 import Navbar from "../components/Navbar";
 
+import PageLoader from "../components/PageLoader";
+
 import "../styles/SubmissionAnalyticsPage.css";
 
 function SubmissionAnalyticsPage() {
@@ -45,9 +47,19 @@ function SubmissionAnalyticsPage() {
 
   if (!analytics) {
 
-    return <h2>Loading...</h2>;
+    return (
 
-  }
+        <div>
+
+            <Navbar />
+
+            <PageLoader message="Loading Submission Analytics..." />
+
+        </div>
+
+    );
+
+}
 
   return (
 

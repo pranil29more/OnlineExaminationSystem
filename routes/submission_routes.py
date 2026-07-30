@@ -1,8 +1,5 @@
 from flask import Blueprint, request, jsonify
-from flask_jwt_extended import (
-    jwt_required,
-    get_jwt_identity
-)
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from extensions import mysql
 
@@ -23,10 +20,7 @@ def start_exam():
     WHERE user_id = %s
     """
 
-    cur.execute(
-        role_query,
-        (current_user_id,)
-    )
+    cur.execute(role_query, (current_user_id,))
 
     user = cur.fetchone()
 
@@ -34,17 +28,13 @@ def start_exam():
 
         cur.close()
 
-        return jsonify({
-            "message": "User not found"
-        }), 404
+        return jsonify({"message": "User not found"}), 404
 
     if user[0] != "Candidate":
 
         cur.close()
 
-        return jsonify({
-            "message": "Only candidates can start exams"
-        }), 403
+        return jsonify({"message": "Only candidates can start exams"}), 403
 
     data = request.get_json()
 
@@ -59,13 +49,7 @@ def start_exam():
     AND exam_id = %s
     """
 
-    cur.execute(
-        check_query,
-        (
-            current_user_id,
-            exam_id
-        )
-    )
+    cur.execute(check_query, (current_user_id, exam_id))
 
     existing = cur.fetchone()
 
@@ -73,10 +57,10 @@ def start_exam():
 
         cur.close()
 
-        return jsonify({
-            "message":
-            "You have already attempted this exam."
-        }), 400
+        return (
+            jsonify({"message": "You have already attempted this exam."}),
+            400,
+        )
 
     duration_query = """
     SELECT duration
@@ -84,10 +68,7 @@ def start_exam():
     WHERE exam_id = %s
     """
 
-    cur.execute(
-        duration_query,
-        (exam_id,)
-    )
+    cur.execute(duration_query, (exam_id,))
 
     exam = cur.fetchone()
 
@@ -95,9 +76,7 @@ def start_exam():
 
         cur.close()
 
-        return jsonify({
-            "message": "Exam not found"
-        }), 404
+        return jsonify({"message": "Exam not found"}), 404
 
     insert_query = """
     INSERT INTO submissions
@@ -121,13 +100,7 @@ def start_exam():
 
     print("Python Time:", datetime.now())
 
-    cur.execute(
-        insert_query,
-        (
-            current_user_id,
-            exam_id
-        )
-    )
+    cur.execute(insert_query, (current_user_id, exam_id))
 
     mysql.connection.commit()
 
@@ -135,18 +108,16 @@ def start_exam():
 
     cur.close()
 
-    return jsonify({
-
-        "message":
-        "Exam started",
-
-        "submission_id":
-        submission_id,
-
-        "duration":
-        exam[0]
-
-    }), 200
+    return (
+        jsonify(
+            {
+                "message": "Exam started",
+                "submission_id": submission_id,
+                "duration": exam[0],
+            }
+        ),
+        200,
+    )
 
 
 @submission_bp.route("/exam-session/<int:exam_id>", methods=["GET"])
@@ -163,10 +134,7 @@ def get_exam_session(exam_id):
     WHERE user_id = %s
     """
 
-    cur.execute(
-        role_query,
-        (current_user_id,)
-    )
+    cur.execute(role_query, (current_user_id,))
 
     user = cur.fetchone()
 
@@ -174,17 +142,16 @@ def get_exam_session(exam_id):
 
         cur.close()
 
-        return jsonify({
-            "message": "User not found"
-        }), 404
+        return jsonify({"message": "User not found"}), 404
 
     if user[0] != "Candidate":
 
         cur.close()
 
-        return jsonify({
-            "message": "Only candidates can access exam session"
-        }), 403
+        return (
+            jsonify({"message": "Only candidates can access exam session"}),
+            403,
+        )
 
     session_query = """
     SELECT
@@ -202,13 +169,7 @@ def get_exam_session(exam_id):
     LIMIT 1
     """
 
-    cur.execute(
-        session_query,
-        (
-            current_user_id,
-            exam_id
-        )
-    )
+    cur.execute(session_query, (current_user_id, exam_id))
 
     session = cur.fetchone()
 
@@ -216,9 +177,7 @@ def get_exam_session(exam_id):
 
         cur.close()
 
-        return jsonify({
-            "status": "Not Started"
-        }), 200
+        return jsonify({"status": "Not Started"}), 200
 
     answers_query = """
     SELECT
@@ -228,10 +187,7 @@ def get_exam_session(exam_id):
     WHERE submission_id = %s
     """
 
-    cur.execute(
-        answers_query,
-        (session[0],)
-    )
+    cur.execute(answers_query, (session[0],))
 
     saved_answers = cur.fetchall()
 
@@ -239,29 +195,24 @@ def get_exam_session(exam_id):
 
     for answer in saved_answers:
 
-        answer_list.append({
-
-            "question_id": answer[0],
-
-            "answer_text": answer[1]
-
-        })
+        answer_list.append(
+            {"question_id": answer[0], "answer_text": answer[1]}
+        )
 
     cur.close()
 
-    return jsonify({
-
-        "submission_id": session[0],
-
-        "start_time": str(session[1]),
-
-        "duration": session[2],
-
-        "status": session[3],
-
-        "answers": answer_list
-
-    }), 200
+    return (
+        jsonify(
+            {
+                "submission_id": session[0],
+                "start_time": str(session[1]),
+                "duration": session[2],
+                "status": session[3],
+                "answers": answer_list,
+            }
+        ),
+        200,
+    )
 
 
 @submission_bp.route("/save-answer", methods=["POST"])
@@ -287,13 +238,7 @@ def save_answer():
         AND status = 'In Progress'
     """
 
-    cur.execute(
-        submission_query,
-        (
-            submission_id,
-            current_user_id
-        )
-    )
+    cur.execute(submission_query, (submission_id, current_user_id))
 
     submission = cur.fetchone()
 
@@ -301,9 +246,7 @@ def save_answer():
 
         cur.close()
 
-        return jsonify({
-            "message": "Invalid submission."
-        }), 404
+        return jsonify({"message": "Invalid submission."}), 404
 
     check_query = """
     SELECT answer_id
@@ -313,13 +256,7 @@ def save_answer():
         AND question_id = %s
     """
 
-    cur.execute(
-        check_query,
-        (
-            submission_id,
-            question_id
-        )
-    )
+    cur.execute(check_query, (submission_id, question_id))
 
     existing = cur.fetchone()
 
@@ -333,14 +270,7 @@ def save_answer():
             AND question_id = %s
         """
 
-        cur.execute(
-            update_query,
-            (
-                answer_text,
-                submission_id,
-                question_id
-            )
-        )
+        cur.execute(update_query, (answer_text, submission_id, question_id))
 
     else:
 
@@ -361,24 +291,13 @@ def save_answer():
         )
         """
 
-        cur.execute(
-            insert_query,
-            (
-                submission_id,
-                question_id,
-                answer_text
-            )
-        )
+        cur.execute(insert_query, (submission_id, question_id, answer_text))
 
     mysql.connection.commit()
 
     cur.close()
 
-    return jsonify({
-
-        "message": "Answer saved."
-
-    }), 200
+    return jsonify({"message": "Answer saved."}), 200
 
 
 @submission_bp.route("/submit-exam", methods=["POST"])
@@ -395,10 +314,7 @@ def submit_exam():
     WHERE user_id = %s
     """
 
-    cur.execute(
-        role_query,
-        (current_user_id,)
-    )
+    cur.execute(role_query, (current_user_id,))
 
     user = cur.fetchone()
 
@@ -406,17 +322,13 @@ def submit_exam():
 
         cur.close()
 
-        return jsonify({
-            "message": "User not found"
-        }), 404
+        return jsonify({"message": "User not found"}), 404
 
     if user[0] != "Candidate":
 
         cur.close()
 
-        return jsonify({
-            "message": "Only candidates can submit exams"
-        }), 403
+        return jsonify({"message": "Only candidates can submit exams"}), 403
 
     data = request.get_json()
 
@@ -431,13 +343,7 @@ def submit_exam():
         AND status = 'In Progress'
     """
 
-    cur.execute(
-        submission_query,
-        (
-            current_user_id,
-            exam_id
-        )
-    )
+    cur.execute(submission_query, (current_user_id, exam_id))
 
     submission = cur.fetchone()
 
@@ -445,9 +351,7 @@ def submit_exam():
 
         cur.close()
 
-        return jsonify({
-            "message": "No active exam found."
-        }), 404
+        return jsonify({"message": "No active exam found."}), 404
 
     submission_id = submission[0]
 
@@ -460,10 +364,7 @@ def submit_exam():
     WHERE submission_id = %s
     """
 
-    cur.execute(
-        answers_query,
-        (submission_id,)
-    )
+    cur.execute(answers_query, (submission_id,))
 
     saved_answers = cur.fetchall()
 
@@ -483,10 +384,7 @@ def submit_exam():
             AND is_correct = 1
         """
 
-        cur.execute(
-            correct_query,
-            (question_id,)
-        )
+        cur.execute(correct_query, (question_id,))
 
         correct_answer = cur.fetchone()
 
@@ -496,8 +394,7 @@ def submit_exam():
 
             is_correct = (
                 answer_text.strip().lower()
-                ==
-                correct_answer[0].strip().lower()
+                == correct_answer[0].strip().lower()
             )
 
         update_answer_query = """
@@ -506,13 +403,7 @@ def submit_exam():
         WHERE answer_id = %s
         """
 
-        cur.execute(
-            update_answer_query,
-            (
-                is_correct,
-                answer_id
-            )
-        )
+        cur.execute(update_answer_query, (is_correct, answer_id))
 
         if is_correct:
 
@@ -522,10 +413,7 @@ def submit_exam():
             WHERE question_id = %s
             """
 
-            cur.execute(
-                marks_query,
-                (question_id,)
-            )
+            cur.execute(marks_query, (question_id,))
 
             marks = cur.fetchone()
 
@@ -545,24 +433,19 @@ SET
 WHERE submission_id = %s
 """
 
-    cur.execute(
-        update_submission_query,
-        (
-            total_score,
-            submission_id
-        )
-    )
+    cur.execute(update_submission_query, (total_score, submission_id))
 
     mysql.connection.commit()
 
     cur.close()
 
-    return jsonify({
-
-        "message": "Exam submitted successfully",
-
-        "submission_id": submission_id,
-
-        "score": total_score
-
-    }), 200
+    return (
+        jsonify(
+            {
+                "message": "Exam submitted successfully",
+                "submission_id": submission_id,
+                "score": total_score,
+            }
+        ),
+        200,
+    )

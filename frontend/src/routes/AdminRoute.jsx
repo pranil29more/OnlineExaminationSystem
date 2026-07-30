@@ -1,9 +1,11 @@
 import { Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-
 import API_BASE_URL from "../services/api";
+import PageLoader from "../components/PageLoader";
 
-function AdminRoute({ children }) {
+function AdminRoute({
+  children
+}) {
 
   const [loading, setLoading] = useState(true);
 
@@ -30,8 +32,7 @@ function AdminRoute({ children }) {
       }
 
       const response = await fetch(
-        `${API_BASE_URL}/profile`,
-        {
+        `${API_BASE_URL}/profile`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -58,8 +59,14 @@ function AdminRoute({ children }) {
   };
 
   if (loading) {
-    return <h2>Loading...</h2>;
-  }
+
+    return (
+
+        <PageLoader message="Verifying Access..." />
+
+    );
+
+}
 
   if (!authorized) {
     return <Navigate to="/exams" replace />;

@@ -1,7 +1,4 @@
-# config.py
-
 import os
-
 
 class Config:
     MYSQL_HOST = os.getenv("MYSQL_HOST")

@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
 import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
 import DashboardPage from "../pages/DashboardPage";
@@ -12,10 +11,8 @@ import ResultsPage from "../pages/ResultsPage";
 import ResultDetailsPage from "../pages/ResultDetailsPage";
 import ProfilePage from "../pages/ProfilePage";
 import ChatbotPage from "../pages/ChatbotPage";
-
 import CreateExamPage from "../pages/CreateExamPage";
 import AddQuestionPage from "../pages/AddQuestionPage";
-
 import AdminRoute from "./AdminRoute";
 import EditExamPage from "../pages/EditExamPage";
 import EditQuestionPage from "../pages/EditQuestionPage";
@@ -26,7 +23,6 @@ import CreateBatchPage from "../pages/CreateBatchPage";
 import EditBatchPage from "../pages/EditBatchPage";
 import BatchDetailsPage from "../pages/BatchDetailsPage";
 import CandidateResultsPage from "../pages/CandidateResultsPage";
-
 import ScrollToTop from "../components/ScrollToTop";
 
 function AppRoutes() {
@@ -210,9 +206,9 @@ function AppRoutes() {
         />
 
         <Route
-    path="/chatbot"
-    element={<ChatbotPage />}
-/>
+          path="/chatbot"
+          element={<ChatbotPage />}
+        />
 
       </Routes>
 

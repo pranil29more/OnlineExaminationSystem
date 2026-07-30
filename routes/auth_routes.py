@@ -1,10 +1,8 @@
-# auth_routes.py
-
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import (
     create_access_token,
     jwt_required,
-    get_jwt_identity
+    get_jwt_identity,
 )
 
 from extensions import mysql, bcrypt
@@ -25,20 +23,13 @@ def register():
     # Optional
     batch_id = data.get("batch_id")
 
-    allowed_roles = [
-        "Candidate",
-        "Examiner"
-    ]
+    allowed_roles = ["Candidate", "Examiner"]
 
     if role not in allowed_roles:
 
-        return jsonify({
-            "message": "Invalid role selected"
-        }), 400
+        return jsonify({"message": "Invalid role selected"}), 400
 
-    hashed_password = bcrypt.generate_password_hash(
-        password
-    ).decode("utf-8")
+    hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
 
     cur = mysql.connection.cursor()
 
@@ -48,10 +39,7 @@ def register():
     WHERE email = %s
     """
 
-    cur.execute(
-        check_query,
-        (email,)
-    )
+    cur.execute(check_query, (email,))
 
     existing_user = cur.fetchone()
 
@@ -59,9 +47,7 @@ def register():
 
         cur.close()
 
-        return jsonify({
-            "message": "Email already registered"
-        }), 409
+        return jsonify({"message": "Email already registered"}), 409
 
     # ==========================================
     # Validate Batch (only if batch_id provided)
@@ -75,10 +61,7 @@ def register():
         WHERE batch_id = %s
         """
 
-        cur.execute(
-            batch_query,
-            (batch_id,)
-        )
+        cur.execute(batch_query, (batch_id,))
 
         batch = cur.fetchone()
 
@@ -86,9 +69,7 @@ def register():
 
             cur.close()
 
-            return jsonify({
-                "message": "Invalid Batch"
-            }), 400
+            return jsonify({"message": "Invalid Batch"}), 400
 
     # ==========================================
     # Insert User
@@ -113,24 +94,13 @@ def register():
     )
     """
 
-    cur.execute(
-        query,
-        (
-            name,
-            email,
-            hashed_password,
-            role,
-            batch_id
-        )
-    )
+    cur.execute(query, (name, email, hashed_password, role, batch_id))
 
     mysql.connection.commit()
 
     cur.close()
 
-    return jsonify({
-        "message": "User registered successfully"
-    }), 201
+    return jsonify({"message": "User registered successfully"}), 201
 
 
 @auth_bp.route("/login", methods=["POST"])
@@ -158,31 +128,30 @@ def login():
     cur.close()
 
     if not user:
-        return jsonify({
-            "message": "Invalid email or password"
-        }), 401
+        return jsonify({"message": "Invalid email or password"}), 401
 
     stored_password = user[3]
 
     if not bcrypt.check_password_hash(stored_password, password):
-        return jsonify({
-            "message": "Invalid email or password"
-        }), 401
+        return jsonify({"message": "Invalid email or password"}), 401
 
-    access_token = create_access_token(
-        identity=str(user[0])
+    access_token = create_access_token(identity=str(user[0]))
+
+    return (
+        jsonify(
+            {
+                "message": "Login successful",
+                "token": access_token,
+                "user": {
+                    "user_id": user[0],
+                    "name": user[1],
+                    "email": user[2],
+                    "role": user[4],
+                },
+            }
+        ),
+        200,
     )
-
-    return jsonify({
-        "message": "Login successful",
-        "token": access_token,
-        "user": {
-            "user_id": user[0],
-            "name": user[1],
-            "email": user[2],
-            "role": user[4]
-        }
-    }), 200
 
 
 @auth_bp.route("/profile", methods=["GET"])
@@ -205,16 +174,19 @@ def profile():
     cur.close()
 
     if not user:
-        return jsonify({
-            "message": "User not found"
-        }), 404
+        return jsonify({"message": "User not found"}), 404
 
-    return jsonify({
-        "user_id": user[0],
-        "name": user[1],
-        "email": user[2],
-        "role": user[3]
-    }), 200
+    return (
+        jsonify(
+            {
+                "user_id": user[0],
+                "name": user[1],
+                "email": user[2],
+                "role": user[3],
+            }
+        ),
+        200,
+    )
 
 
 @auth_bp.route("/admin-only", methods=["GET"])
@@ -237,20 +209,14 @@ def admin_only():
     cur.close()
 
     if not user:
-        return jsonify({
-            "message": "User not found"
-        }), 404
+        return jsonify({"message": "User not found"}), 404
 
     role = user[0]
 
     if role != "Admin":
-        return jsonify({
-            "message": "Access denied. Admin only."
-        }), 403
+        return jsonify({"message": "Access denied. Admin only."}), 403
 
-    return jsonify({
-        "message": "Welcome Admin!"
-    }), 200
+    return jsonify({"message": "Welcome Admin!"}), 200
 
 
 @auth_bp.route("/examiner-only", methods=["GET"])
@@ -273,20 +239,18 @@ def examiner_only():
     cur.close()
 
     if not user:
-        return jsonify({
-            "message": "User not found"
-        }), 404
+        return jsonify({"message": "User not found"}), 404
 
     role = user[0]
 
     if role not in ["Admin", "Examiner"]:
-        return jsonify({
-            "message": "Access denied. Examiner or Admin only."
-        }), 403
+        return (
+            jsonify({"message": "Access denied. Examiner or Admin only."}),
+            403,
+        )
 
-    return jsonify({
-        "message": "Welcome Examiner!"
-    }), 200
+    return jsonify({"message": "Welcome Examiner!"}), 200
+
 
 @auth_bp.route("/users", methods=["GET"])
 @jwt_required()
@@ -302,10 +266,7 @@ def get_users():
     WHERE user_id = %s
     """
 
-    cur.execute(
-        role_query,
-        (current_user_id,)
-    )
+    cur.execute(role_query, (current_user_id,))
 
     user = cur.fetchone()
 
@@ -313,17 +274,13 @@ def get_users():
 
         cur.close()
 
-        return jsonify({
-            "message": "User not found"
-        }), 404
+        return jsonify({"message": "User not found"}), 404
 
     if user[0] != "Admin":
 
         cur.close()
 
-        return jsonify({
-            "message": "Access denied"
-        }), 403
+        return jsonify({"message": "Access denied"}), 403
 
     query = """
     SELECT
@@ -351,23 +308,19 @@ ORDER BY
 
     for user in users:
 
-        user_list.append({
-
-    "user_id": user[0],
-
-    "name": user[1],
-
-    "email": user[2],
-
-    "role": user[3],
-
-    "batch_id": user[4],
-
-    "batch_name": user[5]
-
-})
+        user_list.append(
+            {
+                "user_id": user[0],
+                "name": user[1],
+                "email": user[2],
+                "role": user[3],
+                "batch_id": user[4],
+                "batch_name": user[5],
+            }
+        )
 
     return jsonify(user_list), 200
+
 
 @auth_bp.route("/delete-user/<int:user_id>", methods=["DELETE"])
 @jwt_required()
@@ -383,10 +336,7 @@ def delete_user(user_id):
     WHERE user_id = %s
     """
 
-    cur.execute(
-        role_query,
-        (current_user_id,)
-    )
+    cur.execute(role_query, (current_user_id,))
 
     admin = cur.fetchone()
 
@@ -394,17 +344,13 @@ def delete_user(user_id):
 
         cur.close()
 
-        return jsonify({
-            "message": "User not found"
-        }), 404
+        return jsonify({"message": "User not found"}), 404
 
     if admin[0] != "Admin":
 
         cur.close()
 
-        return jsonify({
-            "message": "Access denied"
-        }), 403
+        return jsonify({"message": "Access denied"}), 403
 
     user_query = """
     SELECT role
@@ -412,10 +358,7 @@ def delete_user(user_id):
     WHERE user_id = %s
     """
 
-    cur.execute(
-        user_query,
-        (user_id,)
-    )
+    cur.execute(user_query, (user_id,))
 
     user = cur.fetchone()
 
@@ -423,17 +366,13 @@ def delete_user(user_id):
 
         cur.close()
 
-        return jsonify({
-            "message": "User not found"
-        }), 404
+        return jsonify({"message": "User not found"}), 404
 
     if user[0] == "Admin":
 
         cur.close()
 
-        return jsonify({
-            "message": "Admin accounts cannot be deleted"
-        }), 403
+        return jsonify({"message": "Admin accounts cannot be deleted"}), 403
 
     submission_query = """
     SELECT submission_id
@@ -441,10 +380,7 @@ def delete_user(user_id):
     WHERE user_id = %s
     """
 
-    cur.execute(
-        submission_query,
-        (user_id,)
-    )
+    cur.execute(submission_query, (user_id,))
 
     submissions = cur.fetchall()
 
@@ -455,35 +391,24 @@ def delete_user(user_id):
         WHERE submission_id = %s
         """
 
-        cur.execute(
-            delete_answers_query,
-            (submission[0],)
-        )
+        cur.execute(delete_answers_query, (submission[0],))
 
     delete_submissions_query = """
     DELETE FROM submissions
     WHERE user_id = %s
     """
 
-    cur.execute(
-        delete_submissions_query,
-        (user_id,)
-    )
+    cur.execute(delete_submissions_query, (user_id,))
 
     delete_user_query = """
     DELETE FROM users
     WHERE user_id = %s
     """
 
-    cur.execute(
-        delete_user_query,
-        (user_id,)
-    )
+    cur.execute(delete_user_query, (user_id,))
 
     mysql.connection.commit()
 
     cur.close()
 
-    return jsonify({
-        "message": "User deleted successfully"
-    }), 200
+    return jsonify({"message": "User deleted successfully"}), 200

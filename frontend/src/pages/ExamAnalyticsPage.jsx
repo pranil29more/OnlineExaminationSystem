@@ -5,6 +5,8 @@ import API_BASE_URL from "../services/api";
 
 import Navbar from "../components/Navbar";
 
+import PageLoader from "../components/PageLoader";
+
 import "../styles/ExamAnalyticsPage.css";
 
 function ExamAnalyticsPage() {
@@ -46,9 +48,19 @@ function ExamAnalyticsPage() {
 
   if (!analytics) {
 
-    return <h2>Loading...</h2>;
+    return (
 
-  }
+        <div>
+
+            <Navbar />
+
+            <PageLoader message="Loading Exam Analytics..." />
+
+        </div>
+
+    );
+
+}
 
   return (
 

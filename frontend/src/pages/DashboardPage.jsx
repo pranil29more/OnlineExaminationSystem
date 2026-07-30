@@ -6,6 +6,8 @@ import Navbar from "../components/Navbar";
 
 import "../styles/DashboardPage.css";
 
+import PageLoader from "../components/PageLoader";
+
 function DashboardPage() {
 
   const [dashboard, setDashboard] = useState(null);
@@ -58,7 +60,7 @@ function DashboardPage() {
 
       }
 
-      fetchDashboard();
+      await fetchDashboard();
 
     }
 
@@ -118,9 +120,19 @@ function DashboardPage() {
 
   if (!dashboard) {
 
-    return <h2>Loading Dashboard...</h2>;
+    return (
 
-  }
+        <div>
+
+            <Navbar />
+
+            <PageLoader message="Loading Dashboard..." />
+
+        </div>
+
+    );
+
+}
 
   return (
 

@@ -1,6 +1,5 @@
 from dotenv import load_dotenv
 
-# Load environment variables BEFORE importing Config
 load_dotenv(dotenv_path=".env")
 
 from flask import Flask
@@ -9,6 +8,8 @@ from flask_cors import CORS
 
 from config import Config
 from extensions import mysql, bcrypt
+
+from datetime import timedelta
 
 app = Flask(__name__)
 
@@ -22,6 +23,7 @@ app.config["MYSQL_PORT"] = Config.MYSQL_PORT
 app.config["MYSQL_SSL_MODE"] = "REQUIRED"
 app.config["MYSQL_SSL_CA"] = "ca.pem"
 app.config["JWT_SECRET_KEY"] = Config.JWT_SECRET_KEY
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=365)
 
 mysql.init_app(app)
 print("MYSQL_DB:", app.config["MYSQL_DB"])

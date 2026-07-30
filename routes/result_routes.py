@@ -253,12 +253,12 @@ AND s.user_id = %s
                 "exam_id": submission[1],
                 "exam_title": submission[2],
                 "candidate_name": submission[3],
-"batch_name": submission[4],
-"score": submission[5],
-"total_marks": submission[6],
-"passing_marks": submission[7],
-"percentage": submission[8],
-"submitted_at": str(submission[9]),
+                "batch_name": submission[4],
+                "score": submission[5],
+                "total_marks": submission[6],
+                "passing_marks": submission[7],
+                "percentage": submission[8],
+                "submitted_at": str(submission[9]),
                 "answers": answer_list,
             }
         ),
@@ -349,32 +349,26 @@ def get_exam_results(exam_id):
 
     for result in results:
 
-        result_list.append({
+        result_list.append(
+            {
+                "submission_id": result[0],
+                "candidate_name": result[1],
+                "score": result[2],
+                "submitted_at": str(result[3]),
+            }
+        )
 
-            "submission_id": result[0],
-
-            "candidate_name": result[1],
-
-            "score": result[2],
-
-            "submitted_at": str(result[3])
-
-        })
-
-    return jsonify({
-
-        "exam": {
-
-            "exam_id": exam[0],
-
-            "title": exam[1],
-
-            "total_marks": exam[2],
-
-            "passing_marks": exam[3]
-
-        },
-
-        "results": result_list
-
-    }), 200
+    return (
+        jsonify(
+            {
+                "exam": {
+                    "exam_id": exam[0],
+                    "title": exam[1],
+                    "total_marks": exam[2],
+                    "passing_marks": exam[3],
+                },
+                "results": result_list,
+            }
+        ),
+        200,
+    )
