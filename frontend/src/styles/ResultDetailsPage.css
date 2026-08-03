@@ -1,106 +1,90 @@
 .page-container {
-  max-width: 1000px;
-  margin: 40px auto;
-  padding: 20px;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
 }
 
 .page-title {
-  text-align: center;
-  margin-bottom: 30px;
-  color: var(--text-h);
+    margin-bottom: 30px;
+    text-align: center;
+    color: var(--text-h);
 }
 
 .result-summary-card {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 24px;
-  margin-bottom: 30px;
-  box-shadow: var(--shadow);
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 30px;
+    box-shadow: var(--shadow);
 }
 
 .summary-title {
-  margin-bottom: 20px;
-  color: var(--text-h);
+    margin-bottom: 20px;
+    color: var(--text-h);
 }
 
 .summary-info {
-  margin: 12px 0;
-  color: var(--text);
-  font-size: 16px;
+    margin: 12px 0;
+    color: var(--text);
+    font-size: 16px;
 }
 
 .answers-grid {
-  display: grid;
-  gap: 20px;
+    display: grid;
+    gap: 20px;
 }
 
 .answer-card {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 20px;
-  box-shadow: var(--shadow);
-  transition: transform 0.2s ease;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: var(--shadow);
+    transition: transform 0.2s ease;
 }
 
 .answer-card:hover {
-  transform: translateY(-2px);
+    transform: translateY(-2px);
 }
 
 .question-title {
-  margin-bottom: 15px;
-  color: var(--text-h);
-  font-size: 20px;
+    margin-bottom: 15px;
+    color: var(--text-h);
+    font-size: 20px;
 }
 
 .answer-info {
-  margin: 10px 0;
-  color: var(--text);
+    margin: 10px 0;
+    color: var(--text);
 }
 
 .correct-status {
-  font-weight: 600;
-  color: #22c55e;
+    color: #22c55e;
+    font-weight: 600;
 }
 
 .incorrect-status {
-  font-weight: 600;
-  color: #ef4444;
+    color: #ef4444;
+    font-weight: 600;
 }
 
 .status-pass {
-
     display: inline-block;
-
     padding: 6px 16px;
-
     border-radius: 999px;
-
     background: #22c55e;
-
     color: white;
-
-    font-weight: 600;
-
     font-size: 14px;
-
+    font-weight: 600;
 }
 
 .status-fail {
-
     display: inline-block;
-
     padding: 6px 16px;
-
     border-radius: 999px;
-
     background: #ef4444;
-
     color: white;
-
-    font-weight: 600;
-
     font-size: 14px;
-
+    font-weight: 600;
 }

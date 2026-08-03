@@ -3,7 +3,6 @@ import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
 import DashboardPage from "../pages/DashboardPage";
 import UsersPage from "../pages/UsersPage";
-import QuestionAnalyticsPage from "../pages/QuestionAnalyticsPage";
 import ExamAnalyticsPage from "../pages/ExamAnalyticsPage";
 import ExamsPage from "../pages/ExamsPage";
 import ExamDetailsPage from "../pages/ExamDetailsPage";
@@ -26,196 +25,179 @@ import CandidateResultsPage from "../pages/CandidateResultsPage";
 import ScrollToTop from "../components/ScrollToTop";
 
 function AppRoutes() {
+    return (
+        <BrowserRouter>
+            <ScrollToTop />
 
-  return (
+            <Routes>
+                <Route
+                    path="/"
+                    element={<LoginPage />}
+                />
 
-    <BrowserRouter>
+                <Route
+                    path="/register"
+                    element={<RegisterPage />}
+                />
 
-      <ScrollToTop />
+                <Route
+                    path="/dashboard"
+                    element={
+                        <AdminRoute>
+                            <DashboardPage />
+                        </AdminRoute>
+                    }
+                />
 
-      <Routes>
+                <Route
+                    path="/users"
+                    element={
+                        <AdminRoute>
+                            <UsersPage />
+                        </AdminRoute>
+                    }
+                />
 
-        <Route
-          path="/"
-          element={<LoginPage />}
-        />
+                <Route
+                    path="/submission-analytics"
+                    element={
+                        <AdminRoute>
+                            <SubmissionAnalyticsPage />
+                        </AdminRoute>
+                    }
+                />
 
-        <Route
-          path="/register"
-          element={<RegisterPage />}
-        />
+                <Route
+                    path="/exam-analytics"
+                    element={
+                        <AdminRoute>
+                            <ExamAnalyticsPage />
+                        </AdminRoute>
+                    }
+                />
 
-        <Route
-          path="/dashboard"
-          element={
-            <AdminRoute>
-              <DashboardPage />
-            </AdminRoute>
-          }
-        />
+                <Route
+                    path="/exams"
+                    element={<ExamsPage />}
+                />
 
-        <Route
-          path="/users"
-          element={
-            <AdminRoute>
-              <UsersPage />
-            </AdminRoute>
-          }
-        />
+                <Route
+                    path="/exam/:examId"
+                    element={<ExamDetailsPage />}
+                />
 
-        {/* <Route
-          path="/question-analytics"
-          element={
-            <AdminRoute>
-              <QuestionAnalyticsPage />
-            </AdminRoute>
-          }
-        /> */}
+                <Route
+                    path="/results"
+                    element={<ResultsPage />}
+                />
 
-        <Route
-          path="/submission-analytics"
-          element={
-            <AdminRoute>
-              <SubmissionAnalyticsPage />
-            </AdminRoute>
-          }
-        />
+                <Route
+                    path="/result/:submissionId"
+                    element={<ResultDetailsPage />}
+                />
 
-        <Route
-          path="/exam-analytics"
-          element={
-            <AdminRoute>
-              <ExamAnalyticsPage />
-            </AdminRoute>
-          }
-        />
+                <Route
+                    path="/results/exam/:examId"
+                    element={
+                        <AdminRoute>
+                            <ExamResultsPage />
+                        </AdminRoute>
+                    }
+                />
 
-        <Route
-          path="/exams"
-          element={<ExamsPage />}
-        />
+                <Route
+                    path="/profile"
+                    element={<ProfilePage />}
+                />
 
-        <Route
-          path="/exam/:examId"
-          element={<ExamDetailsPage />}
-        />
+                <Route
+                    path="/create-exam"
+                    element={
+                        <AdminRoute>
+                            <CreateExamPage />
+                        </AdminRoute>
+                    }
+                />
 
-        <Route
-          path="/results"
-          element={<ResultsPage />}
-        />
+                <Route
+                    path="/edit-exam/:examId"
+                    element={
+                        <AdminRoute>
+                            <EditExamPage />
+                        </AdminRoute>
+                    }
+                />
 
-        <Route
-          path="/result/:submissionId"
-          element={<ResultDetailsPage />}
-        />
+                <Route
+                    path="/add-question"
+                    element={
+                        <AdminRoute>
+                            <AddQuestionPage />
+                        </AdminRoute>
+                    }
+                />
 
-        <Route
-          path="/results/exam/:examId"
-          element={
-            <AdminRoute>
-              <ExamResultsPage />
-            </AdminRoute>
-          }
-        />
+                <Route
+                    path="/edit-question/:questionId"
+                    element={
+                        <AdminRoute>
+                            <EditQuestionPage />
+                        </AdminRoute>
+                    }
+                />
 
-        <Route
-          path="/profile"
-          element={<ProfilePage />}
-        />
+                <Route
+                    path="/batch-management"
+                    element={
+                        <AdminRoute>
+                            <BatchManagementPage />
+                        </AdminRoute>
+                    }
+                />
 
-        <Route
-          path="/create-exam"
-          element={
-            <AdminRoute>
-              <CreateExamPage />
-            </AdminRoute>
-          }
-        />
+                <Route
+                    path="/create-batch"
+                    element={
+                        <AdminRoute>
+                            <CreateBatchPage />
+                        </AdminRoute>
+                    }
+                />
 
-        <Route
-          path="/edit-exam/:examId"
-          element={
-            <AdminRoute>
-              <EditExamPage />
-            </AdminRoute>
-          }
-        />
+                <Route
+                    path="/edit-batch/:batchId"
+                    element={
+                        <AdminRoute>
+                            <EditBatchPage />
+                        </AdminRoute>
+                    }
+                />
 
-        <Route
-          path="/add-question"
-          element={
-            <AdminRoute>
-              <AddQuestionPage />
-            </AdminRoute>
-          }
-        />
+                <Route
+                    path="/batch-details/:batchId"
+                    element={
+                        <AdminRoute>
+                            <BatchDetailsPage />
+                        </AdminRoute>
+                    }
+                />
 
-        <Route
-          path="/edit-question/:questionId"
-          element={
-            <AdminRoute>
-              <EditQuestionPage />
-            </AdminRoute>
-          }
-        />
+                <Route
+                    path="/candidate-results/:userId"
+                    element={
+                        <AdminRoute>
+                            <CandidateResultsPage />
+                        </AdminRoute>
+                    }
+                />
 
-        <Route
-          path="/batch-management"
-          element={
-            <AdminRoute>
-              <BatchManagementPage />
-            </AdminRoute>
-          }
-        />
-
-        <Route
-          path="/create-batch"
-          element={
-            <AdminRoute>
-              <CreateBatchPage />
-            </AdminRoute>
-          }
-        />
-
-        <Route
-          path="/edit-batch/:batchId"
-          element={
-            <AdminRoute>
-              <EditBatchPage />
-            </AdminRoute>
-          }
-        />
-
-        <Route
-          path="/batch-details/:batchId"
-          element={
-            <AdminRoute>
-              <BatchDetailsPage />
-            </AdminRoute>
-          }
-        />
-
-        <Route
-          path="/candidate-results/:userId"
-          element={
-            <AdminRoute>
-              <CandidateResultsPage />
-            </AdminRoute>
-          }
-        />
-
-        <Route
-          path="/chatbot"
-          element={<ChatbotPage />}
-        />
-
-      </Routes>
-
-    </BrowserRouter>
-
-  );
-
+                <Route
+                    path="/chatbot"
+                    element={<ChatbotPage />}
+                />
+            </Routes>
+        </BrowserRouter>
+    );
 }
 
 export default AppRoutes;

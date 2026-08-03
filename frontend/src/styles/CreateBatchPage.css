@@ -1,286 +1,122 @@
-/* =====================================================
-   Page Container
-===================================================== */
-
 .page-container {
-
     width: 100%;
-
     max-width: 900px;
-
     margin: auto;
-
     padding: 40px;
-
 }
-
-/* =====================================================
-   Page Title
-===================================================== */
 
 .page-title {
-
     color: white;
-
     font-size: 40px;
-
     font-weight: 700;
-
     text-align: center;
-
     margin-bottom: 40px;
-
 }
-
-/* =====================================================
-   Form Container
-===================================================== */
 
 .batch-form {
-
-    background: #1e293b;
-
-    border: 1px solid #334155;
-
-    border-radius: 18px;
-
-    padding: 35px;
-
     display: flex;
-
     flex-direction: column;
-
     gap: 18px;
-
-    box-shadow:
-        0 0 25px rgba(59,130,246,.10);
-
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 18px;
+    padding: 35px;
+    box-shadow: 0 0 25px rgba(59, 130, 246, 0.1);
 }
-
-/* =====================================================
-   Labels
-===================================================== */
 
 .batch-form label {
-
     color: #e2e8f0;
-
     font-size: 15px;
-
     font-weight: 600;
-
 }
-
-/* =====================================================
-   Inputs
-===================================================== */
 
 .batch-form input,
-
 .batch-form textarea,
-
 .batch-form select {
-
     width: 100%;
-
-    padding: 14px;
-
-    background: #0f172a;
-
-    border: 1px solid #334155;
-
-    border-radius: 10px;
-
-    color: white;
-
-    font-size: 15px;
-
-    transition: .3s;
-
     box-sizing: border-box;
-
+    padding: 14px;
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    color: white;
+    font-size: 15px;
+    transition: 0.3s;
 }
-
-/* =====================================================
-   Placeholder
-===================================================== */
 
 .batch-form input::placeholder,
-
 .batch-form textarea::placeholder {
-
     color: #94a3b8;
-
 }
-
-/* =====================================================
-   Focus
-===================================================== */
 
 .batch-form input:focus,
-
 .batch-form textarea:focus,
-
 .batch-form select:focus {
-
     outline: none;
-
     border-color: #3b82f6;
-
-    box-shadow:
-
-        0 0 12px rgba(59,130,246,.25);
-
+    box-shadow: 0 0 12px rgba(59, 130, 246, 0.25);
 }
-
-/* =====================================================
-   Textarea
-===================================================== */
 
 .batch-form textarea {
-
     resize: vertical;
-
     min-height: 120px;
-
     font-family: inherit;
-
 }
 
-/* =====================================================
-   Select
-===================================================== */
-
-.batch-form select {
-
-    cursor: pointer;
-
-}
-
-/* =====================================================
-   Date Inputs
-===================================================== */
-
+.batch-form select,
 .batch-form input[type="date"] {
-
     cursor: pointer;
-
 }
-
-/* =====================================================
-   Submit Button
-===================================================== */
 
 .create-btn {
-
     margin-top: 20px;
-
     background: #2563eb;
-
     color: white;
-
     border: none;
-
     border-radius: 10px;
-
     padding: 15px;
-
     font-size: 16px;
-
     font-weight: 600;
-
     cursor: pointer;
-
-    transition: .3s;
-
+    transition: 0.3s;
 }
-
-/* =====================================================
-   Hover
-===================================================== */
 
 .create-btn:hover {
-
     background: #3b82f6;
-
     transform: translateY(-2px);
-
-    box-shadow:
-
-        0 8px 20px rgba(59,130,246,.25);
-
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.25);
 }
-
-/* =====================================================
-   Active
-===================================================== */
 
 .create-btn:active {
-
-    transform: scale(.98);
-
+    transform: scale(0.98);
 }
-
-/* =====================================================
-   Responsive
-===================================================== */
-
-@media (max-width:768px) {
-
-    .page-container {
-
-        padding: 20px;
-
-    }
-
-    .page-title {
-
-        font-size: 32px;
-
-    }
-
-    .batch-form {
-
-        padding: 25px;
-
-    }
-
-}
-
-/* =====================================================
-   Date Row
-===================================================== */
 
 .date-row {
-
     display: flex;
-
     gap: 20px;
-
 }
 
 .date-field {
-
     flex: 1;
-
     display: flex;
-
     flex-direction: column;
-
     gap: 8px;
-
 }
 
-/* =====================================================
-   Mobile
-===================================================== */
-
-@media (max-width:768px) {
-
-    .date-row {
-
-        flex-direction: column;
-
+@media (max-width: 768px) {
+    .page-container {
+        padding: 20px;
     }
 
+    .page-title {
+        font-size: 32px;
+    }
+
+    .batch-form {
+        padding: 25px;
+    }
+
+    .date-row {
+        flex-direction: column;
+    }
 }

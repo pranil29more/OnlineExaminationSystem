@@ -1,10 +1,10 @@
-import "../styles/ChatbotPage.css";
-import Navbar from "../components/Navbar";
+import { useEffect, useRef, useState } from "react";
 import { IoSend, IoTrashOutline } from "react-icons/io5";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import Navbar from "../components/Navbar";
 import API_BASE_URL from "../services/api";
-import { useEffect, useRef, useState } from "react";
+import "../styles/ChatbotPage.css";
 
 function ChatbotPage() {
     const [message, setMessage] = useState("");
@@ -16,7 +16,9 @@ function ChatbotPage() {
     const [messages, setMessages] = useState(() => {
         const savedMessages = localStorage.getItem(chatHistoryKey);
 
-        return savedMessages ? JSON.parse(savedMessages) : [];
+        return savedMessages
+            ? JSON.parse(savedMessages)
+            : [];
     });
 
     const [loading, setLoading] = useState(false);
@@ -60,16 +62,20 @@ function ChatbotPage() {
         try {
             const token = localStorage.getItem("token");
 
-            const response = await fetch(`${API_BASE_URL}/chat`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
-                body: JSON.stringify({
-                    message: currentMessage,
-                }),
-            });
+            const response = await fetch(
+                `${API_BASE_URL}/chat`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type":
+                            "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({
+                        message: currentMessage,
+                    }),
+                }
+            );
 
             const data = await response.json();
 
@@ -129,27 +135,34 @@ function ChatbotPage() {
                     </h1>
 
                     <p className="chat-subtitle">
-                        Your Smart Learning Companion
+                        Your Smart Learning
+                        Companion
                     </p>
                 </div>
 
                 {messages.length === 0 ? (
                     <div className="welcome-screen">
                         <div className="welcome-card">
-                            <h2>
-                                Welcome!
-                            </h2>
+                            <h2>Welcome!</h2>
 
                             <p>
-                                I'm your AI Examination Assistant.
+                                I'm your AI
+                                Examination
+                                Assistant.
                             </p>
 
                             <p>
-                                I can help you understand programming,
-                                explain difficult concepts,
-                                prepare for interviews,
-                                solve aptitude questions
-                                and assist with your examinations.
+                                I can help you
+                                understand
+                                programming,
+                                explain difficult
+                                concepts,
+                                prepare for
+                                interviews,
+                                solve aptitude
+                                questions and
+                                assist with your
+                                examinations.
                             </p>
                         </div>
 
@@ -160,15 +173,22 @@ function ChatbotPage() {
                                 placeholder="Ask your question..."
                                 value={message}
                                 onChange={(e) =>
-                                    setMessage(e.target.value)
+                                    setMessage(
+                                        e.target
+                                            .value
+                                    )
                                 }
-                                onKeyDown={handleKeyDown}
+                                onKeyDown={
+                                    handleKeyDown
+                                }
                                 disabled={loading}
                             />
 
                             <button
                                 className="send-button"
-                                onClick={sendMessage}
+                                onClick={
+                                    sendMessage
+                                }
                                 disabled={loading}
                             >
                                 <IoSend />
@@ -191,30 +211,45 @@ function ChatbotPage() {
                         </div>
 
                         <div className="chat-container">
-                            {messages.map((msg, index) => (
-                                <div
-                                    key={index}
-                                    className={
-                                        msg.sender === "user"
-                                            ? "user-message"
-                                            : "ai-message"
-                                    }
-                                >
-                                    <ReactMarkdown
-                                        remarkPlugins={[remarkGfm]}
+                            {messages.map(
+                                (msg, index) => (
+                                    <div
+                                        key={
+                                            index
+                                        }
+                                        className={
+                                            msg.sender ===
+                                            "user"
+                                                ? "user-message"
+                                                : "ai-message"
+                                        }
                                     >
-                                        {msg.text}
-                                    </ReactMarkdown>
-                                </div>
-                            ))}
+                                        <ReactMarkdown
+                                            remarkPlugins={[
+                                                remarkGfm,
+                                            ]}
+                                        >
+                                            {
+                                                msg.text
+                                            }
+                                        </ReactMarkdown>
+                                    </div>
+                                )
+                            )}
 
                             {loading && (
                                 <div className="typing-indicator">
-                                    🤖 AI Assistant is thinking...
+                                    🤖 AI
+                                    Assistant is
+                                    thinking...
                                 </div>
                             )}
 
-                            <div ref={messagesEndRef}></div>
+                            <div
+                                ref={
+                                    messagesEndRef
+                                }
+                            ></div>
                         </div>
 
                         <div className="input-container">
@@ -224,15 +259,22 @@ function ChatbotPage() {
                                 placeholder="Ask your question..."
                                 value={message}
                                 onChange={(e) =>
-                                    setMessage(e.target.value)
+                                    setMessage(
+                                        e.target
+                                            .value
+                                    )
                                 }
-                                onKeyDown={handleKeyDown}
+                                onKeyDown={
+                                    handleKeyDown
+                                }
                                 disabled={loading}
                             />
 
                             <button
                                 className="send-button"
-                                onClick={sendMessage}
+                                onClick={
+                                    sendMessage
+                                }
                                 disabled={loading}
                             >
                                 <IoSend />

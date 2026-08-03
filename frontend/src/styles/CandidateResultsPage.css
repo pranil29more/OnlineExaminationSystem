@@ -1,428 +1,222 @@
-/* =====================================================
-   Candidate Results Container
-===================================================== */
-
 .candidate-results-container {
-
     width: 100%;
-
     max-width: 1200px;
-
     margin: auto;
-
     padding: 40px;
-
 }
-
-/* =====================================================
-   Page Title
-===================================================== */
 
 .candidate-results-title {
-
     color: white;
-
     font-size: 42px;
-
     font-weight: 700;
-
     text-align: center;
-
     margin-bottom: 40px;
-
 }
-
-/* =====================================================
-   Candidate Information Card
-===================================================== */
 
 .candidate-info-card {
-
     max-width: 950px;
-
     margin: auto;
-
     background: #1e293b;
-
     border: 1px solid #334155;
-
     border-radius: 18px;
-
     padding: 40px;
-
-    box-shadow:
-        0 12px 30px rgba(0,0,0,.30);
-
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
 }
-
-/* =====================================================
-   Candidate Name
-===================================================== */
 
 .candidate-name {
-
     color: white;
-
     font-size: 34px;
-
     font-weight: 700;
-
     text-align: center;
-
     margin-bottom: 35px;
-
 }
-
-/* =====================================================
-   Information Grid
-===================================================== */
 
 .candidate-grid {
-
     display: grid;
-
     grid-template-columns: repeat(3, 1fr);
-
     gap: 20px;
-
 }
 
-/* =====================================================
-   Grid Cards
-===================================================== */
-
 .candidate-grid div {
-
     background: #0f172a;
-
     border: 1px solid #334155;
-
     border-radius: 12px;
-
     padding: 20px;
-
-    transition: .25s;
-
+    transition: 0.25s;
 }
 
 .candidate-grid div:hover {
-
     border-color: #3b82f6;
-
     transform: translateY(-2px);
-
 }
-
-/* =====================================================
-   Grid Labels
-===================================================== */
 
 .candidate-grid h4 {
-
     color: #60a5fa;
-
     font-size: 14px;
-
     font-weight: 600;
-
     margin-bottom: 10px;
-
     text-transform: uppercase;
-
-    letter-spacing: .5px;
-
+    letter-spacing: 0.5px;
 }
-
-/* =====================================================
-   Grid Values
-===================================================== */
 
 .candidate-grid p {
-
     color: white;
-
     font-size: 18px;
-
     font-weight: 500;
-
     margin: 0;
-
     word-break: break-word;
-
 }
 
-/* =====================================================
-   Responsive
-===================================================== */
-
 @media (max-width: 900px) {
-
     .candidate-grid {
-
         grid-template-columns: repeat(2, 1fr);
-
     }
-
 }
 
 @media (max-width: 768px) {
-
     .candidate-results-container {
-
         padding: 20px;
-
     }
 
     .candidate-results-title {
-
         font-size: 34px;
-
     }
 
     .candidate-info-card {
-
         padding: 25px;
-
     }
 
     .candidate-name {
-
         font-size: 28px;
-
     }
 
     .candidate-grid {
-
         grid-template-columns: 1fr;
-
     }
-
 }
 
-/* =====================================================
-   Summary Cards
-===================================================== */
-
 .summary-container {
-
     max-width: 950px;
-
     margin: 35px auto;
-
     display: grid;
-
     grid-template-columns: repeat(4, 1fr);
-
     gap: 20px;
-
 }
 
 .summary-card {
-
     background: #1e293b;
-
     border: 1px solid #334155;
-
     border-radius: 16px;
-
     padding: 25px;
-
     text-align: center;
-
-    transition: .25s;
-
-    box-shadow:
-        0 10px 25px rgba(0,0,0,.25);
-
+    transition: 0.25s;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
 }
 
 .summary-card:hover {
-
     border-color: #3b82f6;
-
     transform: translateY(-2px);
-
 }
 
 .summary-card h4 {
-
     color: #60a5fa;
-
     font-size: 14px;
-
     font-weight: 600;
-
     margin-bottom: 15px;
-
     text-transform: uppercase;
-
-    letter-spacing: .5px;
-
+    letter-spacing: 0.5px;
 }
 
 .summary-card p {
-
     color: white;
-
     font-size: 30px;
-
     font-weight: 700;
-
     margin: 0;
-
 }
 
 @media (max-width: 900px) {
-
     .summary-container {
-
         grid-template-columns: repeat(2, 1fr);
-
     }
-
 }
 
 @media (max-width: 768px) {
-
     .summary-container {
-
         grid-template-columns: 1fr;
-
     }
-
 }
 
-/* =====================================================
-   Assessment History
-===================================================== */
-
 .history-card {
-
     max-width: 950px;
-
     margin: 40px auto 0;
-
     background: #1e293b;
-
     border: 1px solid #334155;
-
     border-radius: 18px;
-
     padding: 35px;
-
-    box-shadow:
-        0 12px 30px rgba(0,0,0,.30);
-
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
 }
 
 .history-title {
-
     color: white;
-
     font-size: 30px;
-
     font-weight: 700;
-
     margin-bottom: 25px;
-
 }
 
 .history-table {
-
     width: 100%;
-
     border-collapse: collapse;
-
     overflow: hidden;
-
     border-radius: 12px;
-
 }
 
 .history-table th {
-
     background: #2563eb;
-
     color: white;
-
     padding: 15px;
-
     text-align: left;
-
 }
 
 .history-table td {
-
     background: #0f172a;
-
     color: white;
-
     padding: 15px;
-
     border-bottom: 1px solid #334155;
-
 }
 
 .history-table tbody tr:hover td {
-
     background: #172554;
-
 }
 
 .history-empty {
-
     text-align: center;
-
     color: #94a3b8;
-
     padding: 35px !important;
-
     font-style: italic;
-
 }
 
 .status-pass {
-
     background: #22c55e;
-
     color: white;
-
     padding: 5px 12px;
-
     border-radius: 50px;
-
     font-size: 13px;
-
     font-weight: 600;
-
 }
 
 .status-fail {
-
     background: #ef4444;
-
     color: white;
-
     padding: 5px 12px;
-
     border-radius: 50px;
-
     font-size: 13px;
-
     font-weight: 600;
-
 }
 
-@media (max-width:768px){
-
-    .history-table{
-
-        display:block;
-
-        overflow-x:auto;
-
-        white-space:nowrap;
-
+@media (max-width: 768px) {
+    .history-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
     }
-
 }

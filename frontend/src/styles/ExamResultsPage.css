@@ -1,192 +1,100 @@
 .page-container {
-
-  max-width: 1100px;
-
-  margin: 40px auto;
-
-  padding: 20px;
-
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 20px;
 }
 
 .page-title {
-
-  text-align: center;
-
-  margin-bottom: 35px;
-
+    text-align: center;
+    margin-bottom: 35px;
 }
 
 .summary-card {
-
-  background: #1e293b;
-
-  border: 1px solid #334155;
-
-  border-radius: 16px;
-
-  padding: 28px;
-
-  text-align: center;
-
-  margin-bottom: 40px;
-
-  box-shadow:
-    0 12px 24px rgba(
-      0,
-      0,
-      0,
-      0.3
-    );
-
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 16px;
+    padding: 28px;
+    text-align: center;
+    margin-bottom: 40px;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
 }
 
 .summary-title {
-
-  font-size: 32px;
-
-  font-weight: 700;
-
-  color: #3b82f6;
-
+    font-size: 32px;
+    font-weight: 700;
+    color: #3b82f6;
 }
 
 .section-title {
-
-  margin-bottom: 25px;
-
+    margin-bottom: 25px;
 }
 
-/* =====================================================
-   Results Table
-===================================================== */
-
 .results-table-container {
-
-  background: #1e293b;
-
-  border: 1px solid #334155;
-
-  border-radius: 18px;
-
-  padding: 30px;
-
-  box-shadow:
-    0 12px 30px rgba(0,0,0,.30);
-
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 18px;
+    padding: 30px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
 }
 
 .results-table {
-
-  width: 100%;
-
-  border-collapse: collapse;
-
-  overflow: hidden;
-
-  border-radius: 12px;
-
+    width: 100%;
+    border-collapse: collapse;
+    overflow: hidden;
+    border-radius: 12px;
 }
 
 .results-table th {
-
-  background: #2563eb;
-
-  color: white;
-
-  padding: 16px;
-
-  text-align: left;
-
-  font-size: 15px;
-
-  font-weight: 600;
-
+    background: #2563eb;
+    color: white;
+    padding: 16px;
+    text-align: left;
+    font-size: 15px;
+    font-weight: 600;
 }
 
 .results-table td {
-
-  background: #0f172a;
-
-  color: #e2e8f0;
-
-  padding: 16px;
-
-  border-bottom: 1px solid #334155;
-
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 16px;
+    border-bottom: 1px solid #334155;
 }
 
 .results-table tbody tr:hover td {
-
-  background: #172554;
-
+    background: #172554;
 }
 
-/* =====================================================
-   Status Badge
-===================================================== */
-
 .status-pass {
-
-  background: #22c55e;
-
-  color: white;
-
-  padding: 5px 14px;
-
-  border-radius: 999px;
-
-  font-size: 13px;
-
-  font-weight: 600;
-
+    background: #22c55e;
+    color: white;
+    padding: 5px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
 }
 
 .status-fail {
-
-  background: #ef4444;
-
-  color: white;
-
-  padding: 5px 14px;
-
-  border-radius: 999px;
-
-  font-size: 13px;
-
-  font-weight: 600;
-
+    background: #ef4444;
+    color: white;
+    padding: 5px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
 }
 
-/* =====================================================
-   View Button
-===================================================== */
-
 .uni-view-btn {
-
-  display: inline-block;
-
-  background: #2563eb;
-
-  color: white;
-
-  text-decoration: none;
-
-  padding: 9px 18px;
-
-  border-radius: 8px;
-
-  font-size: 14px;
-
-  font-weight: 600;
-
-  transition: .25s;
-
+    display: inline-block;
+    background: #2563eb;
+    color: white;
+    text-decoration: none;
+    padding: 9px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    transition: 0.25s;
 }
 
 .uni-view-btn:hover {
-
-  background: #3b82f6;
-
-  color: white;
-
+    background: #3b82f6;
+    color: white;
 }

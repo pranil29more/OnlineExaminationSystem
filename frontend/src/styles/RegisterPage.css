@@ -1,163 +1,91 @@
 .register-container {
-
-  min-height: 100vh;
-
-  display: flex;
-
-  justify-content: center;
-
-  align-items: center;
-
-  background: #0f172a;
-
-  padding: 20px;
-
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: #0f172a;
 }
 
 .register-card {
-
-  width: 100%;
-
-  max-width: 450px;
-
-  background: #1e293b;
-
-  border: 1px solid #334155;
-
-  border-radius: 16px;
-
-  padding: 40px;
-
-  box-shadow:
-    0 12px 24px rgba(
-      0,
-      0,
-      0,
-      0.35
-    );
-
+    width: 100%;
+    max-width: 450px;
+    padding: 40px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 16px;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
 }
 
 .register-title {
-
-  text-align: center;
-
-  margin-bottom: 10px;
-
+    text-align: center;
+    margin-bottom: 10px;
 }
 
 .register-subtitle {
-
-  text-align: center;
-
-  color: #94a3b8;
-
-  margin-bottom: 30px;
-
+    text-align: center;
+    color: #94a3b8;
+    margin-bottom: 30px;
 }
 
 .register-input,
 .register-select {
-
-  width: 100%;
-
-  box-sizing: border-box;
-
-  padding: 14px;
-
-  margin-bottom: 18px;
-
-  border: 1px solid #334155;
-
-  border-radius: 10px;
-
-  background: #0f172a;
-
-  color: white;
-
-  font-size: 15px;
-
+    width: 100%;
+    box-sizing: border-box;
+    padding: 14px;
+    margin-bottom: 18px;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    background: #0f172a;
+    color: white;
+    font-size: 15px;
 }
 
 .register-input:focus,
 .register-select:focus {
-
-  outline: none;
-
-  border-color: #3b82f6;
-
+    outline: none;
+    border-color: #3b82f6;
 }
 
 .register-btn {
-
-  width: 100%;
-
-  padding: 14px;
-
-  border: none;
-
-  border-radius: 10px;
-
-  background: #3b82f6;
-
-  color: white;
-
-  font-size: 16px;
-
-  font-weight: 600;
-
-  cursor: pointer;
-
-  transition: .3s;
-
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    background: #3b82f6;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
 .register-btn:hover {
-
-  background: #2563eb;
-
+    background: #2563eb;
 }
 
 .login-section {
-
-  margin-top: 24px;
-
-  text-align: center;
-
+    margin-top: 24px;
+    text-align: center;
 }
 
 .login-text {
-
-  color: #cbd5e1;
-
-  margin-bottom: 10px;
-
+    margin-bottom: 10px;
+    color: #cbd5e1;
 }
 
 .login-link {
-
-  background: transparent;
-
-  border: none;
-
-  color: #3b82f6;
-
-  font-size: 15px;
-
-  font-weight: 600;
-
-  cursor: pointer;
-
-  padding: 0;
-
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: #3b82f6;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
 }
 
 .login-link:hover {
-
-  background: transparent;
-
-  color: #60a5fa;
-
-  text-decoration: underline;
-
+    background: transparent;
+    color: #60a5fa;
+    text-decoration: underline;
 }

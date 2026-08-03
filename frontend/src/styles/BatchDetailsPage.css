@@ -1,812 +1,416 @@
-/* =====================================================
-   Batch Details Container
-===================================================== */
-
 .batch-details-container {
-
     width: 100%;
-
     max-width: 1200px;
-
     margin: auto;
-
     padding: 40px;
-
 }
-
-/* =====================================================
-   Batch Details Title
-===================================================== */
 
 .batch-details-title {
-
     color: white;
-
     font-size: 42px;
-
     font-weight: 700;
-
     text-align: center;
-
     margin-bottom: 40px;
-
 }
-
-/* =====================================================
-   Batch Details Card
-===================================================== */
 
 .batch-details-card {
-
     max-width: 950px;
-
     margin: auto;
-
     background: #1e293b;
-
     border: 1px solid #334155;
-
     border-radius: 18px;
-
     padding: 40px;
-
-    box-shadow:
-        0 12px 30px rgba(0,0,0,.30);
-
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
 }
-
-/* =====================================================
-   Batch Name
-===================================================== */
 
 .batch-details-name {
-
     color: white;
-
     font-size: 34px;
-
     font-weight: 700;
-
     text-align: center;
-
     margin-bottom: 35px;
-
 }
-
-/* =====================================================
-   Info Grid
-===================================================== */
 
 .batch-details-grid {
-
     display: grid;
-
     grid-template-columns: repeat(3, 1fr);
-
     gap: 20px;
-
     margin-bottom: 30px;
-
 }
 
-/* =====================================================
-   Grid Cards
-===================================================== */
-
 .batch-details-grid div {
-
     background: #0f172a;
-
     border: 1px solid #334155;
-
     border-radius: 12px;
-
     padding: 20px;
-
-    transition: .25s;
-
+    transition: 0.25s;
 }
 
 .batch-details-grid div:hover {
-
     border-color: #3b82f6;
-
     transform: translateY(-2px);
-
 }
 
 .batch-details-grid h4 {
-
     color: #60a5fa;
-
     font-size: 14px;
-
     font-weight: 600;
-
     margin-bottom: 10px;
-
     text-transform: uppercase;
-
-    letter-spacing: .5px;
-
+    letter-spacing: 0.5px;
 }
 
 .batch-details-grid p {
-
     color: white;
-
     font-size: 18px;
-
     font-weight: 500;
-
     margin: 0;
-
 }
 
-/* =====================================================
-   Description
-===================================================== */
-
 .batch-details-description {
-
     background: #0f172a;
-
     border: 1px solid #334155;
-
     border-radius: 12px;
-
     padding: 22px;
-
 }
 
 .batch-details-description h4 {
-
     color: #60a5fa;
-
     margin-bottom: 12px;
-
     text-transform: uppercase;
-
-    letter-spacing: .5px;
-
+    letter-spacing: 0.5px;
 }
 
 .batch-details-description p {
-
     color: #e2e8f0;
-
     line-height: 1.8;
-
     font-size: 16px;
-
     margin: 0;
-
 }
-
-/* =====================================================
-   Candidates Section
-===================================================== */
 
 .batch-details-candidates {
-
     max-width: 950px;
-
     margin: 40px auto 0;
-
     background: #1e293b;
-
     border: 1px solid #334155;
-
     border-radius: 18px;
-
     padding: 35px;
-
-    box-shadow:
-        0 12px 30px rgba(0,0,0,.30);
-
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
 }
-
-/* =====================================================
-   Section Title
-===================================================== */
 
 .batch-details-section-title {
-
     color: white;
-
     font-size: 30px;
-
     font-weight: 700;
-
     margin-bottom: 25px;
-
 }
 
-/* =====================================================
-   Table
-===================================================== */
-
 .batch-details-table {
-
     width: 100%;
-
     border-collapse: collapse;
-
     overflow: hidden;
-
     border-radius: 12px;
-
 }
 
 .batch-details-table th {
-
     background: #2563eb;
-
     color: white;
-
     padding: 16px;
-
     font-size: 15px;
-
     font-weight: 600;
-
     text-align: left;
-
 }
 
 .batch-details-table td {
-
     background: #0f172a;
-
     color: #e2e8f0;
-
     padding: 16px;
-
     border-bottom: 1px solid #334155;
-
 }
 
 .batch-details-table tbody tr:hover td {
-
     background: #172554;
-
 }
-
-/* =====================================================
-   Empty Row
-===================================================== */
 
 .batch-details-empty {
-
     text-align: center;
-
     color: #94a3b8;
-
     font-style: italic;
-
     padding: 40px !important;
-
 }
 
-/* =====================================================
-   Button
-===================================================== */
-
 .batch-details-btn {
-
     background: #2563eb;
-
     color: white;
-
     border: none;
-
     border-radius: 8px;
-
     padding: 9px 18px;
-
     font-size: 14px;
-
     font-weight: 600;
-
     cursor: pointer;
-
-    transition: .25s;
-
+    transition: 0.25s;
 }
 
 .batch-details-btn:hover {
-
     background: #3b82f6;
-
     transform: translateY(-1px);
-
 }
 
-/* =====================================================
-   Responsive
-===================================================== */
-
-@media (max-width:900px) {
-
+@media (max-width: 900px) {
     .batch-details-grid {
-
-        grid-template-columns: repeat(2,1fr);
-
+        grid-template-columns: repeat(2, 1fr);
     }
-
 }
 
-@media (max-width:768px) {
-
+@media (max-width: 768px) {
     .batch-details-container {
-
         padding: 20px;
-
     }
 
     .batch-details-title {
-
         font-size: 34px;
-
     }
 
     .batch-details-card,
-
     .batch-details-candidates {
-
         padding: 25px;
-
     }
 
     .batch-details-name {
-
         font-size: 28px;
-
     }
 
     .batch-details-grid {
-
         grid-template-columns: 1fr;
-
     }
 
     .batch-details-table {
-
         display: block;
-
         overflow-x: auto;
-
         white-space: nowrap;
-
     }
-
 }
-
-/* =====================================================
-   Candidates Header
-===================================================== */
 
 .batch-details-header {
-
     display: flex;
-
     justify-content: space-between;
-
     align-items: center;
-
     margin-bottom: 25px;
-
 }
 
-/* =====================================================
-   Candidates Search
-===================================================== */
-
 .batch-search-wrapper {
-
     margin-bottom: 20px;
-
 }
 
 .batch-search {
-
     width: 100%;
-
     padding: 12px 16px;
-
     background: #0f172a;
-
     color: white;
-
     border: 1px solid #334155;
-
     border-radius: 10px;
-
     font-size: 15px;
-
-    transition: .25s;
-
+    transition: 0.25s;
 }
 
 .batch-search:hover {
-
     border-color: #3b82f6;
-
-    box-shadow: 0 0 10px rgba(59,130,246,.20);
-
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.2);
 }
 
 .batch-search:focus {
-
     outline: none;
-
     border-color: #3b82f6;
-
-    box-shadow: 0 0 10px rgba(59,130,246,.25);
-
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.25);
 }
 
 .batch-search::placeholder {
-
     color: #94a3b8;
-
 }
 
-/* =====================================================
-   Assign Button
-===================================================== */
-
 .assign-btn {
-
     background: #22c55e;
-
     color: white;
-
     border: none;
-
     padding: 10px 18px;
-
     border-radius: 8px;
-
     font-size: 15px;
-
     font-weight: 600;
-
     cursor: pointer;
-
-    transition: .25s;
-
+    transition: 0.25s;
 }
 
 .assign-btn:hover {
-
     background: #16a34a;
-
 }
 
-/* =====================================================
-   Assign Candidate Modal
-===================================================== */
-
 .assign-modal-overlay {
-
     position: fixed;
-
     inset: 0;
-
-    background: rgba(15,23,42,.75);
-
+    background: rgba(15, 23, 42, 0.75);
     display: flex;
-
     justify-content: center;
-
     align-items: center;
-
     z-index: 999;
-
     backdrop-filter: blur(4px);
-
 }
 
 .assign-modal {
-
     width: 650px;
-
     max-width: 90vw;
-
     background: #1e293b;
-
     border: 1px solid #334155;
-
     border-radius: 18px;
-
     padding: 30px;
-
-    box-shadow:
-        0 20px 40px rgba(0,0,0,.45);
-
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
 }
 
 .assign-modal h2 {
-
     color: white;
-
     font-size: 28px;
-
     margin-bottom: 8px;
-
 }
 
 .selected-count {
-
     color: #94a3b8;
-
     margin-bottom: 20px;
-
     font-size: 15px;
-
 }
-
-/* =====================================================
-   Candidate List
-===================================================== */
 
 .candidate-list {
-
     max-height: 320px;
-
     overflow-y: auto;
-
     border: 1px solid #334155;
-
     border-radius: 12px;
-
     background: #0f172a;
-
 }
 
-/* =====================================================
-   Candidate Item
-===================================================== */
-
 .candidate-item {
-
     display: flex;
-
     align-items: center;
-
     gap: 18px;
-
     padding: 18px;
-
     cursor: pointer;
-
     border-bottom: 1px solid #1e293b;
-
-    transition: .25s;
-
+    transition: 0.25s;
 }
 
 .candidate-item:last-child {
-
     border-bottom: none;
-
 }
 
 .candidate-item:hover {
-
     background: #172554;
-
 }
 
 .candidate-item input[type="checkbox"] {
-
     width: 18px;
-
     height: 18px;
-
     cursor: pointer;
-
     accent-color: #3b82f6;
-
 }
 
-/* =====================================================
-   Candidate Info
-===================================================== */
-
 .candidate-info {
-
     display: flex;
-
     flex-direction: column;
-
 }
 
 .candidate-name {
-
     color: white;
-
     font-size: 16px;
-
     font-weight: 600;
-
 }
 
 .candidate-email {
-
     color: #94a3b8;
-
     font-size: 14px;
-
     margin-top: 4px;
-
 }
-
-/* =====================================================
-   No Candidates
-===================================================== */
 
 .no-candidates {
-
     color: #94a3b8;
-
     text-align: center;
-
     padding: 35px;
-
 }
 
-/* =====================================================
-   Modal Buttons
-===================================================== */
-
 .assign-modal-actions {
-
     display: flex;
-
     justify-content: flex-end;
-
     gap: 15px;
-
     margin-top: 25px;
-
 }
 
 .cancel-btn {
-
     background: #ef4444;
-
     color: white;
-
     border: none;
-
     border-radius: 8px;
-
     padding: 10px 20px;
-
     font-size: 15px;
-
     font-weight: 600;
-
     cursor: pointer;
-
-    transition: .25s;
-
+    transition: 0.25s;
 }
 
 .cancel-btn:hover {
-
     background: #dc2626;
-
 }
 
 .batch-action-buttons {
-
     display: flex;
-
     gap: 12px;
-
 }
 
 .unassign-btn {
-
     background: #ef4444;
-
     color: white;
-
     border: none;
-
     border-radius: 8px;
-
     padding: 10px 18px;
-
     font-size: 15px;
-
     font-weight: 600;
-
     cursor: pointer;
-
-    transition: .25s;
-
+    transition: 0.25s;
 }
 
 .unassign-btn:hover {
-
     background: #dc2626;
-
 }
 
-/* =====================================================
-   Candidate Search
-===================================================== */
-
 .candidate-search {
-
     width: 100%;
-
     padding: 12px 15px;
-
     margin: 18px 0;
-
     background: #0f172a;
-
     color: white;
-
     border: 1px solid #334155;
-
     border-radius: 8px;
-
     font-size: 15px;
-
 }
 
 .candidate-search:focus {
-
     outline: none;
-
     border-color: #3b82f6;
-
 }
 
-/* =====================================================
-   Select All
-===================================================== */
-
 .select-all-row {
-
     margin-bottom: 15px;
-
     padding: 10px 0;
-
     color: white;
-
     font-size: 15px;
-
     font-weight: 600;
-
 }
 
 .select-all-row label {
-
     display: flex;
-
     align-items: center;
-
     gap: 10px;
-
     cursor: pointer;
-
 }
 
 .select-all-row input {
-
     width: 18px;
-
     height: 18px;
-
     cursor: pointer;
-
     accent-color: #3b82f6;
-
 }

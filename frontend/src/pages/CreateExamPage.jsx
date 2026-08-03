@@ -1,136 +1,123 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import API_BASE_URL from "../services/api";
 import Navbar from "../components/Navbar";
-
 import "../styles/CreateExamPage.css";
 
 function CreateExamPage() {
+    const navigate = useNavigate();
 
-  const navigate = useNavigate();
+    const [title, setTitle] = useState("");
+    const [duration, setDuration] = useState("");
+    const [totalMarks, setTotalMarks] = useState("");
+    const [passingMarks, setPassingMarks] = useState("");
 
-  const [title, setTitle] = useState("");
-  const [duration, setDuration] = useState("");
-  const [totalMarks, setTotalMarks] = useState("");
-  const [passingMarks, setPassingMarks] = useState("");
+    const handleCreateExam = async () => {
+        try {
+            const token = localStorage.getItem("token");
 
-  const handleCreateExam = async () => {
+            const response = await fetch(
+                `${API_BASE_URL}/create-exam`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type":
+                            "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({
+                        title,
+                        duration: Number(duration),
+                        total_marks: Number(
+                            totalMarks
+                        ),
+                        passing_marks: Number(
+                            passingMarks
+                        ),
+                    }),
+                }
+            );
 
-    try {
+            const data = await response.json();
 
-      const token = localStorage.getItem("token");
+            if (response.ok) {
+                alert("Exam Created Successfully");
 
-      const response = await fetch(
-        `${API_BASE_URL}/create-exam`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
-          },
-          body: JSON.stringify({
-            title,
-            duration: Number(duration),
-            total_marks: Number(totalMarks),
-            passing_marks: Number(passingMarks)
-          })
+                navigate(
+                    `/add-question?examId=${data.exam_id}`
+                );
+            } else {
+                alert(data.message);
+            }
+        } catch (error) {
+            console.error(error);
         }
-      );
+    };
 
-      const data = await response.json();
+    return (
+        <div>
+            <Navbar />
 
-      if (response.ok) {
+            <div className="page-container">
+                <h1 className="page-title">
+                    Create Exam
+                </h1>
 
-        alert("Exam Created Successfully");
+                <div className="form-card">
+                    <input
+                        className="form-input"
+                        type="text"
+                        placeholder="Exam Title"
+                        value={title}
+                        onChange={(e) =>
+                            setTitle(e.target.value)
+                        }
+                    />
 
-        navigate(
-          `/add-question?examId=${data.exam_id}`
-        );
+                    <input
+                        className="form-input"
+                        type="number"
+                        placeholder="Duration (Minutes)"
+                        value={duration}
+                        onChange={(e) =>
+                            setDuration(e.target.value)
+                        }
+                    />
 
-      } else {
+                    <input
+                        className="form-input"
+                        type="number"
+                        placeholder="Total Marks"
+                        value={totalMarks}
+                        onChange={(e) =>
+                            setTotalMarks(
+                                e.target.value
+                            )
+                        }
+                    />
 
-        alert(data.message);
+                    <input
+                        className="form-input"
+                        type="number"
+                        placeholder="Passing Marks"
+                        value={passingMarks}
+                        onChange={(e) =>
+                            setPassingMarks(
+                                e.target.value
+                            )
+                        }
+                    />
 
-      }
-
-    } catch (error) {
-
-      console.error(error);
-
-    }
-
-  };
-
-  return (
-
-    <div>
-
-      <Navbar />
-
-      <div className="page-container">
-
-        <h1 className="page-title">
-          Create Exam
-        </h1>
-
-        <div className="form-card">
-
-          <input
-            className="form-input"
-            type="text"
-            placeholder="Exam Title"
-            value={title}
-            onChange={(e) =>
-              setTitle(e.target.value)
-            }
-          />
-
-          <input
-            className="form-input"
-            type="number"
-            placeholder="Duration (Minutes)"
-            value={duration}
-            onChange={(e) =>
-              setDuration(e.target.value)
-            }
-          />
-
-          <input
-            className="form-input"
-            type="number"
-            placeholder="Total Marks"
-            value={totalMarks}
-            onChange={(e) =>
-              setTotalMarks(e.target.value)
-            }
-          />
-
-          <input
-            className="form-input"
-            type="number"
-            placeholder="Passing Marks"
-            value={passingMarks}
-            onChange={(e) =>
-              setPassingMarks(e.target.value)
-            }
-          />
-
-          <button
-            className="submit-btn"
-            onClick={handleCreateExam}
-          >
-            Create Exam
-          </button>
-
+                    <button
+                        className="submit-btn"
+                        onClick={handleCreateExam}
+                    >
+                        Create Exam
+                    </button>
+                </div>
+            </div>
         </div>
-
-      </div>
-
-    </div>
-
-  );
-
+    );
 }
 
 export default CreateExamPage;
