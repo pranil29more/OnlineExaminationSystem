@@ -1,416 +1,2720 @@
-.batch-details-container {
+/* =========================================================
+   BATCH DETAILS PAGE
+   Namespace: bdp-
+========================================================= */
+
+
+/* =========================================================
+   Page
+========================================================= */
+
+.bdp-page {
     width: 100%;
-    max-width: 1200px;
-    margin: auto;
-    padding: 40px;
+    max-width: 1100px;
+
+    margin:
+        40px
+        auto;
+
+    padding:
+        20px;
+
+    box-sizing: border-box;
+
+    color: #f8fafc;
 }
 
-.batch-details-title {
-    color: white;
-    font-size: 42px;
-    font-weight: 700;
-    text-align: center;
-    margin-bottom: 40px;
-}
 
-.batch-details-card {
-    max-width: 950px;
-    margin: auto;
-    background: #1e293b;
-    border: 1px solid #334155;
-    border-radius: 18px;
-    padding: 40px;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
-}
+/* =========================================================
+   Page Header
+========================================================= */
 
-.batch-details-name {
-    color: white;
-    font-size: 34px;
-    font-weight: 700;
-    text-align: center;
+.bdp-page-header {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: flex-end;
+
+    gap: 25px;
+
     margin-bottom: 35px;
 }
 
-.batch-details-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    margin-bottom: 30px;
-}
 
-.batch-details-grid div {
-    background: #0f172a;
-    border: 1px solid #334155;
-    border-radius: 12px;
-    padding: 20px;
-    transition: 0.25s;
-}
+.bdp-page-eyebrow,
+.bdp-section-eyebrow,
+.bdp-modal-eyebrow {
+    display: block;
 
-.batch-details-grid div:hover {
-    border-color: #3b82f6;
-    transform: translateY(-2px);
-}
-
-.batch-details-grid h4 {
-    color: #60a5fa;
-    font-size: 14px;
-    font-weight: 600;
-    margin-bottom: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.batch-details-grid p {
-    color: white;
-    font-size: 18px;
-    font-weight: 500;
-    margin: 0;
-}
-
-.batch-details-description {
-    background: #0f172a;
-    border: 1px solid #334155;
-    border-radius: 12px;
-    padding: 22px;
-}
-
-.batch-details-description h4 {
-    color: #60a5fa;
-    margin-bottom: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.batch-details-description p {
-    color: #e2e8f0;
-    line-height: 1.8;
-    font-size: 16px;
-    margin: 0;
-}
-
-.batch-details-candidates {
-    max-width: 950px;
-    margin: 40px auto 0;
-    background: #1e293b;
-    border: 1px solid #334155;
-    border-radius: 18px;
-    padding: 35px;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
-}
-
-.batch-details-section-title {
-    color: white;
-    font-size: 30px;
-    font-weight: 700;
-    margin-bottom: 25px;
-}
-
-.batch-details-table {
-    width: 100%;
-    border-collapse: collapse;
-    overflow: hidden;
-    border-radius: 12px;
-}
-
-.batch-details-table th {
-    background: #2563eb;
-    color: white;
-    padding: 16px;
-    font-size: 15px;
-    font-weight: 600;
-    text-align: left;
-}
-
-.batch-details-table td {
-    background: #0f172a;
-    color: #e2e8f0;
-    padding: 16px;
-    border-bottom: 1px solid #334155;
-}
-
-.batch-details-table tbody tr:hover td {
-    background: #172554;
-}
-
-.batch-details-empty {
-    text-align: center;
-    color: #94a3b8;
-    font-style: italic;
-    padding: 40px !important;
-}
-
-.batch-details-btn {
-    background: #2563eb;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 9px 18px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.25s;
-}
-
-.batch-details-btn:hover {
-    background: #3b82f6;
-    transform: translateY(-1px);
-}
-
-@media (max-width: 900px) {
-    .batch-details-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 768px) {
-    .batch-details-container {
-        padding: 20px;
-    }
-
-    .batch-details-title {
-        font-size: 34px;
-    }
-
-    .batch-details-card,
-    .batch-details-candidates {
-        padding: 25px;
-    }
-
-    .batch-details-name {
-        font-size: 28px;
-    }
-
-    .batch-details-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .batch-details-table {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-    }
-}
-
-.batch-details-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
-}
-
-.batch-search-wrapper {
-    margin-bottom: 20px;
-}
-
-.batch-search {
-    width: 100%;
-    padding: 12px 16px;
-    background: #0f172a;
-    color: white;
-    border: 1px solid #334155;
-    border-radius: 10px;
-    font-size: 15px;
-    transition: 0.25s;
-}
-
-.batch-search:hover {
-    border-color: #3b82f6;
-    box-shadow: 0 0 10px rgba(59, 130, 246, 0.2);
-}
-
-.batch-search:focus {
-    outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 10px rgba(59, 130, 246, 0.25);
-}
-
-.batch-search::placeholder {
-    color: #94a3b8;
-}
-
-.assign-btn {
-    background: #22c55e;
-    color: white;
-    border: none;
-    padding: 10px 18px;
-    border-radius: 8px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.25s;
-}
-
-.assign-btn:hover {
-    background: #16a34a;
-}
-
-.assign-modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(15, 23, 42, 0.75);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 999;
-    backdrop-filter: blur(4px);
-}
-
-.assign-modal {
-    width: 650px;
-    max-width: 90vw;
-    background: #1e293b;
-    border: 1px solid #334155;
-    border-radius: 18px;
-    padding: 30px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
-}
-
-.assign-modal h2 {
-    color: white;
-    font-size: 28px;
     margin-bottom: 8px;
+
+    color: #60a5fa;
+
+    font-size: 12px;
+    font-weight: 800;
+
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
 }
 
-.selected-count {
+
+.bdp-page-title {
+    margin:
+        0
+        0
+        8px;
+
+    color: #f8fafc;
+
+    font-size: 38px;
+    line-height: 1.2;
+    font-weight: 700;
+
+    overflow-wrap: anywhere;
+}
+
+
+.bdp-page-description {
+    max-width: 700px;
+
+    margin: 0;
+
     color: #94a3b8;
-    margin-bottom: 20px;
+
     font-size: 15px;
+    line-height: 1.6;
 }
 
-.candidate-list {
-    max-height: 320px;
-    overflow-y: auto;
-    border: 1px solid #334155;
-    border-radius: 12px;
-    background: #0f172a;
-}
 
-.candidate-item {
-    display: flex;
+/* =========================================================
+   Batch Status
+========================================================= */
+
+.bdp-status-badge {
+    display: inline-flex;
+
     align-items: center;
-    gap: 18px;
-    padding: 18px;
-    cursor: pointer;
-    border-bottom: 1px solid #1e293b;
-    transition: 0.25s;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    padding:
+        8px
+        15px;
+
+    border-radius: 999px;
+
+    font-size: 13px;
+    font-weight: 800;
 }
 
-.candidate-item:last-child {
+
+.bdp-status-badge.upcoming {
+    color: #fde68a;
+
+    background:
+        rgba(245, 158, 11, 0.12);
+
+    border:
+        1px solid
+        #f59e0b;
+}
+
+
+.bdp-status-badge.active {
+    color: #bbf7d0;
+
+    background:
+        rgba(34, 197, 94, 0.12);
+
+    border:
+        1px solid
+        #22c55e;
+}
+
+
+.bdp-status-badge.completed {
+    color: #cbd5e1;
+
+    background:
+        rgba(100, 116, 139, 0.12);
+
+    border:
+        1px solid
+        #64748b;
+}
+
+
+/* =========================================================
+   Shared Section Heading
+========================================================= */
+
+.bdp-section-heading {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: flex-end;
+
+    gap: 20px;
+
+    margin-bottom: 25px;
+}
+
+
+.bdp-section-title {
+    margin:
+        0
+        0
+        8px;
+
+    color: #f8fafc;
+
+    font-size: 25px;
+    font-weight: 700;
+}
+
+
+.bdp-section-description {
+    margin: 0;
+
+    color: #94a3b8;
+
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   Batch Overview
+========================================================= */
+
+.bdp-overview-card {
+    margin-bottom: 35px;
+
+    padding: 28px;
+
+    background:
+        #1e293b;
+
+    border:
+        1px solid
+        #334155;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 10px 20px
+        rgba(0, 0, 0, 0.22);
+}
+
+
+/* =========================================================
+   Batch Information Grid
+========================================================= */
+
+.bdp-overview-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
+
+    gap: 16px;
+
+    margin-bottom: 18px;
+}
+
+
+.bdp-info-card {
+    display: flex;
+
+    flex-direction: column;
+
+    min-width: 0;
+
+    padding: 18px;
+
+    background:
+        #0f172a;
+
+    border:
+        1px solid
+        #334155;
+
+    border-radius: 12px;
+
+    transition:
+        border-color 0.25s ease,
+        transform 0.25s ease;
+}
+
+
+.bdp-info-card:hover {
+    border-color:
+        #475569;
+
+    transform:
+        translateY(-2px);
+}
+
+
+.bdp-info-label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #94a3b8;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+}
+
+
+.bdp-info-card strong {
+    color: #e2e8f0;
+
+    font-size: 16px;
+    line-height: 1.4;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* =========================================================
+   Batch Description
+========================================================= */
+
+.bdp-description-box {
+    padding: 20px;
+
+    background:
+        rgba(15, 23, 42, 0.45);
+
+    border:
+        1px solid
+        #334155;
+
+    border-radius: 12px;
+}
+
+
+.bdp-description-box .bdp-info-label {
+    color:
+        #60a5fa;
+}
+
+
+.bdp-description-box p {
+    margin: 0;
+
+    color:
+        #cbd5e1;
+
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   Candidates Section
+========================================================= */
+
+.bdp-candidates-section {
+    margin-bottom: 35px;
+
+    padding: 28px;
+
+    background:
+        #1e293b;
+
+    border:
+        1px solid
+        #334155;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 10px 20px
+        rgba(0, 0, 0, 0.22);
+}
+
+
+.bdp-candidates-heading {
+    align-items: flex-end;
+}
+
+
+/* =========================================================
+   Candidate Action Buttons
+========================================================= */
+
+.bdp-action-buttons {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    flex-shrink: 0;
+}
+
+
+.bdp-assign-btn,
+.bdp-unassign-btn {
+    min-height: 40px;
+
+    padding:
+        10px
+        16px;
+
+    border-radius: 9px;
+
+    font-family: inherit;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease,
+        opacity 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+/* =========================================================
+   Assign Button
+========================================================= */
+
+.bdp-assign-btn {
+    background:
+        #22c55e;
+
+    color:
+        #ffffff;
+
+    border:
+        1px solid
+        #22c55e;
+
+    box-shadow:
+        0 5px 12px
+        rgba(34, 197, 94, 0.16);
+}
+
+
+.bdp-assign-btn:hover:not(:disabled) {
+    background:
+        #16a34a;
+
+    border-color:
+        #16a34a;
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 8px 18px
+        rgba(34, 197, 94, 0.25);
+}
+
+
+/* =========================================================
+   Unassign Button
+========================================================= */
+
+.bdp-unassign-btn {
+    background:
+        #ef4444;
+
+    color:
+        #ffffff;
+
+    border:
+        1px solid
+        #ef4444;
+
+    box-shadow:
+        0 5px 12px
+        rgba(239, 68, 68, 0.16);
+}
+
+
+.bdp-unassign-btn:hover:not(:disabled) {
+    background:
+        #dc2626;
+
+    border-color:
+        #dc2626;
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 8px 18px
+        rgba(239, 68, 68, 0.25);
+}
+
+
+/* =========================================================
+   Candidate Button Disabled
+========================================================= */
+
+.bdp-assign-btn:disabled,
+.bdp-unassign-btn:disabled {
+    opacity: 0.5;
+
+    cursor: not-allowed;
+
+    transform: none;
+
+    box-shadow: none;
+}
+
+
+/* =========================================================
+   Candidate Summary
+========================================================= */
+
+.bdp-candidate-summary-row {
+    display: flex;
+
+    align-items: center;
+
+    gap: 16px;
+
+    margin-bottom: 20px;
+}
+
+
+.bdp-candidate-count-card {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding:
+        9px
+        14px;
+
+    background:
+        #0f172a;
+
+    border:
+        1px solid
+        #334155;
+
+    border-radius: 10px;
+}
+
+
+.bdp-candidate-count-card span {
+    color:
+        #94a3b8;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+
+.bdp-candidate-count-card strong {
+    color:
+        #60a5fa;
+
+    font-size: 18px;
+}
+
+
+.bdp-candidate-count-description {
+    color:
+        #64748b;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   Candidate Search
+========================================================= */
+
+.bdp-search-wrapper {
+    margin-bottom: 18px;
+}
+
+
+.bdp-search {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding:
+        12px
+        15px;
+
+    background:
+        #0f172a;
+
+    color:
+        #f8fafc;
+
+    border:
+        1px solid
+        #475569;
+
+    border-radius: 10px;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        opacity 0.2s ease;
+}
+
+
+.bdp-search::placeholder {
+    color:
+        #64748b;
+}
+
+
+.bdp-search:hover:not(:disabled) {
+    border-color:
+        #64748b;
+}
+
+
+.bdp-search:focus {
+    border-color:
+        #3b82f6;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(59, 130, 246, 0.15);
+}
+
+
+.bdp-search:disabled {
+    opacity: 0.55;
+
+    cursor: not-allowed;
+}
+
+
+/* =========================================================
+   Candidate Table Wrapper
+========================================================= */
+
+.bdp-table-wrapper {
+    width: 100%;
+
+    max-height: 360px;
+
+    overflow-x: auto;
+    overflow-y: auto;
+
+    background:
+        #0f172a;
+
+    border:
+        1px solid
+        #334155;
+
+    border-radius: 12px;
+
+    scrollbar-width: thin;
+
+    scrollbar-color:
+        #475569
+        #0f172a;
+}
+
+
+.bdp-table-wrapper::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+
+.bdp-table-wrapper::-webkit-scrollbar-track {
+    background:
+        #0f172a;
+}
+
+
+.bdp-table-wrapper::-webkit-scrollbar-thumb {
+    background:
+        #475569;
+
+    border-radius: 8px;
+}
+
+
+.bdp-table-wrapper::-webkit-scrollbar-thumb:hover {
+    background:
+        #64748b;
+}
+
+
+/* =========================================================
+   Candidate Table
+========================================================= */
+
+.bdp-details-table {
+    width: 100%;
+
+    min-width: 620px;
+
+    table-layout: fixed;
+
+    border-collapse: collapse;
+}
+
+
+.bdp-details-table th {
+    position: sticky;
+
+    top: 0;
+
+    z-index: 5;
+
+    padding:
+        14px
+        16px;
+
+    background:
+        #2563eb;
+
+    color:
+        #ffffff;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    text-align: left;
+
+    white-space: nowrap;
+}
+
+
+.bdp-details-table th:nth-child(1),
+.bdp-details-table td:nth-child(1) {
+    width: 35%;
+}
+
+
+.bdp-details-table th:nth-child(2),
+.bdp-details-table td:nth-child(2) {
+    width: 45%;
+}
+
+
+.bdp-details-table th:nth-child(3),
+.bdp-details-table td:nth-child(3) {
+    width: 20%;
+}
+
+
+.bdp-details-table td {
+    padding:
+        15px
+        16px;
+
+    background:
+        #0f172a;
+
+    color:
+        #e2e8f0;
+
+    font-size: 14px;
+
+    border-bottom:
+        1px solid
+        #334155;
+
+    vertical-align: middle;
+}
+
+
+.bdp-details-table tbody tr:last-child td {
     border-bottom: none;
 }
 
-.candidate-item:hover {
-    background: #172554;
+
+.bdp-details-table tbody tr:hover td {
+    background:
+        #172554;
 }
 
-.candidate-item input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    cursor: pointer;
-    accent-color: #3b82f6;
+
+/* =========================================================
+   Candidate Table Content
+========================================================= */
+
+.bdp-candidate-table-name {
+    color:
+        #f8fafc;
+
+    font-weight: 700;
+
+    overflow-wrap: anywhere;
 }
 
-.candidate-info {
-    display: flex;
-    flex-direction: column;
+
+.bdp-candidate-table-email {
+    display: block;
+
+    color:
+        #94a3b8;
+
+    font-size: 13px;
+
+    overflow-wrap: anywhere;
 }
 
-.candidate-name {
-    color: white;
-    font-size: 16px;
-    font-weight: 600;
-}
 
-.candidate-email {
-    color: #94a3b8;
-    font-size: 14px;
-    margin-top: 4px;
-}
+/* =========================================================
+   View Results
+========================================================= */
 
-.no-candidates {
-    color: #94a3b8;
-    text-align: center;
-    padding: 35px;
-}
+.bdp-view-results-btn {
+    display: inline-flex;
 
-.assign-modal-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 15px;
-    margin-top: 25px;
-}
-
-.cancel-btn {
-    background: #ef4444;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 10px 20px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.25s;
-}
-
-.cancel-btn:hover {
-    background: #dc2626;
-}
-
-.batch-action-buttons {
-    display: flex;
-    gap: 12px;
-}
-
-.unassign-btn {
-    background: #ef4444;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 10px 18px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.25s;
-}
-
-.unassign-btn:hover {
-    background: #dc2626;
-}
-
-.candidate-search {
-    width: 100%;
-    padding: 12px 15px;
-    margin: 18px 0;
-    background: #0f172a;
-    color: white;
-    border: 1px solid #334155;
-    border-radius: 8px;
-    font-size: 15px;
-}
-
-.candidate-search:focus {
-    outline: none;
-    border-color: #3b82f6;
-}
-
-.select-all-row {
-    margin-bottom: 15px;
-    padding: 10px 0;
-    color: white;
-    font-size: 15px;
-    font-weight: 600;
-}
-
-.select-all-row label {
-    display: flex;
     align-items: center;
-    gap: 10px;
-    cursor: pointer;
+    justify-content: center;
+
+    gap: 7px;
+
+    min-height: 36px;
+
+    padding:
+        0
+        12px;
+
+    border:
+        1px solid
+        #3b82f6;
+
+    border-radius:
+        8px;
+
+    background:
+        #2563eb;
+
+    color:
+        #ffffff;
+
+    font-family:
+        inherit;
+
+    font-size:
+        11px;
+
+    font-weight:
+        750;
+
+    line-height:
+        1;
+
+    white-space:
+        nowrap;
+
+    cursor:
+        pointer;
+
+    box-shadow:
+        0 5px 12px
+        rgba(37, 99, 235, 0.20);
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease,
+        opacity 0.2s ease;
 }
 
-.select-all-row input {
-    width: 18px;
-    height: 18px;
+
+.bdp-view-results-btn:hover:not(:disabled) {
+    background:
+        #3b82f6;
+
+    border-color:
+        #60a5fa;
+
+    color:
+        #ffffff;
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 8px 18px
+        rgba(37, 99, 235, 0.30);
+}
+
+
+.bdp-view-results-icon {
+    width: 15px;
+    height: 15px;
+
+    flex-shrink: 0;
+}
+
+
+/* =========================================================
+   Candidate Empty State
+========================================================= */
+
+.bdp-details-empty {
+    padding:
+        40px !important;
+
+    color:
+        #64748b !important;
+
+    text-align: center;
+
+    font-style: italic;
+}
+
+
+/* =========================================================
+   Batch Performance Report
+========================================================= */
+
+.bdp-report-section {
+    padding: 28px;
+
+    background:
+        #1e293b;
+
+    border:
+        1px solid
+        #334155;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 10px 20px
+        rgba(0, 0, 0, 0.22);
+}
+
+
+.bdp-report-header {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: flex-end;
+
+    gap: 25px;
+
+    margin-bottom: 28px;
+}
+
+
+.bdp-report-title {
+    margin:
+        0
+        0
+        8px;
+
+    color:
+        #f8fafc;
+
+    font-size: 25px;
+    font-weight: 700;
+}
+
+
+.bdp-report-description {
+    max-width: 650px;
+
+    margin: 0;
+
+    color:
+        #94a3b8;
+
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   Download Report Button
+========================================================= */
+
+.bdp-report-download-btn {
+    flex-shrink: 0;
+
+    min-height: 40px;
+
+    padding:
+        11px
+        18px;
+
+    border:
+        1px solid
+        #2563eb;
+
+    border-radius: 9px;
+
+    background:
+        #2563eb;
+
+    color:
+        #ffffff;
+
+    font-family: inherit;
+
+    font-size: 13px;
+    font-weight: 700;
+
     cursor: pointer;
-    accent-color: #3b82f6;
+
+    box-shadow:
+        0 5px 12px
+        rgba(37, 99, 235, 0.18);
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        opacity 0.2s ease;
+}
+
+
+.bdp-report-download-btn:hover:not(:disabled) {
+    background:
+        #3b82f6;
+
+    border-color:
+        #3b82f6;
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 8px 18px
+        rgba(37, 99, 235, 0.28);
+}
+
+
+.bdp-report-download-btn:disabled {
+    background:
+        #475569;
+
+    border-color:
+        #475569;
+
+    color:
+        #94a3b8;
+
+    cursor:
+        not-allowed;
+
+    opacity:
+        0.7;
+
+    transform:
+        none;
+
+    box-shadow:
+        none;
+}
+
+
+/* =========================================================
+   Report Loading
+========================================================= */
+
+.bdp-report-loading {
+    padding:
+        35px;
+
+    background:
+        #0f172a;
+
+    border:
+        1px dashed
+        #475569;
+
+    border-radius:
+        12px;
+
+    color:
+        #94a3b8;
+
+    text-align:
+        center;
+
+    font-size:
+        14px;
+}
+
+
+/* =========================================================
+   Report Summary
+========================================================= */
+
+.bdp-report-summary {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
+
+    gap:
+        16px;
+
+    margin-bottom:
+        35px;
+}
+
+
+.bdp-report-summary-card {
+    min-width:
+        0;
+
+    padding:
+        18px;
+
+    background:
+        #0f172a;
+
+    border:
+        1px solid
+        #334155;
+
+    border-radius:
+        12px;
+
+    transition:
+        border-color 0.25s ease,
+        transform 0.25s ease;
+}
+
+
+.bdp-report-summary-card:hover {
+    border-color:
+        #475569;
+
+    transform:
+        translateY(-2px);
+}
+
+
+.bdp-report-summary-card span {
+    display:
+        block;
+
+    margin-bottom:
+        8px;
+
+    color:
+        #94a3b8;
+
+    font-size:
+        11px;
+
+    font-weight:
+        700;
+
+    text-transform:
+        uppercase;
+
+    letter-spacing:
+        0.6px;
+}
+
+
+.bdp-report-summary-card strong {
+    color:
+        #f8fafc;
+
+    font-size:
+        25px;
+
+    font-weight:
+        700;
+}
+
+
+/* =========================================================
+   Report Subsections
+========================================================= */
+
+.bdp-report-subsection {
+    margin-top:
+        35px;
+}
+
+
+.bdp-report-subsection-header {
+    margin-bottom:
+        18px;
+}
+
+
+.bdp-report-subsection-header h3 {
+    margin:
+        0
+        0
+        6px;
+
+    color:
+        #f8fafc;
+
+    font-size:
+        20px;
+
+    font-weight:
+        700;
+}
+
+
+.bdp-report-subsection-header p {
+    margin:
+        0;
+
+    color:
+        #94a3b8;
+
+    font-size:
+        13px;
+
+    line-height:
+        1.6;
+}
+
+
+/* =========================================================
+   Report Tables
+========================================================= */
+
+.bdp-report-table-wrapper {
+    width:
+        100%;
+
+    max-height:
+        360px;
+
+    overflow-x:
+        auto;
+
+    overflow-y:
+        auto;
+
+    background:
+        #0f172a;
+
+    border:
+        1px solid
+        #334155;
+
+    border-radius:
+        12px;
+
+    scrollbar-width:
+        thin;
+
+    scrollbar-color:
+        #475569
+        #0f172a;
+}
+
+
+.bdp-report-table-wrapper::-webkit-scrollbar {
+    width:
+        8px;
+
+    height:
+        8px;
+}
+
+
+.bdp-report-table-wrapper::-webkit-scrollbar-track {
+    background:
+        #0f172a;
+}
+
+
+.bdp-report-table-wrapper::-webkit-scrollbar-thumb {
+    background:
+        #475569;
+
+    border-radius:
+        8px;
+}
+
+
+.bdp-report-table-wrapper::-webkit-scrollbar-thumb:hover {
+    background:
+        #64748b;
+}
+
+
+/* =========================================================
+   Report Table
+========================================================= */
+
+.bdp-report-table {
+    width:
+        100%;
+
+    min-width:
+        850px;
+
+    border-collapse:
+        collapse;
+}
+
+
+.bdp-report-table th {
+    position:
+        sticky;
+
+    top:
+        0;
+
+    z-index:
+        5;
+
+    padding:
+        13px
+        15px;
+
+    background:
+        #2563eb;
+
+    color:
+        #ffffff;
+
+    font-size:
+        13px;
+
+    font-weight:
+        700;
+
+    text-align:
+        left;
+
+    white-space:
+        nowrap;
+}
+
+
+.bdp-report-table td {
+    padding:
+        14px
+        15px;
+
+    background:
+        #0f172a;
+
+    color:
+        #cbd5e1;
+
+    font-size:
+        13px;
+
+    border-bottom:
+        1px solid
+        #334155;
+
+    white-space:
+        nowrap;
+
+    vertical-align:
+        middle;
+}
+
+
+.bdp-report-table tbody tr:last-child td {
+    border-bottom:
+        none;
+}
+
+
+.bdp-report-table tbody tr:hover td {
+    background:
+        #172554;
+}
+
+
+.bdp-report-table td strong {
+    color:
+        #f8fafc;
+
+    font-weight:
+        700;
+}
+
+
+/* =========================================================
+   Rank
+========================================================= */
+
+.bdp-rank-badge {
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    min-width:
+        30px;
+
+    padding:
+        4px
+        7px;
+
+    border-radius:
+        7px;
+
+    background:
+        rgba(59, 130, 246, 0.1);
+
+    border:
+        1px solid
+        rgba(59, 130, 246, 0.4);
+
+    color:
+        #93c5fd;
+
+    font-size:
+        12px;
+
+    font-weight:
+        800;
+}
+
+
+/* =========================================================
+   Pass / Fail
+========================================================= */
+
+.bdp-pass-count {
+    color:
+        #86efac;
+
+    font-weight:
+        700;
+}
+
+
+.bdp-fail-count {
+    color:
+        #fca5a5;
+
+    font-weight:
+        700;
+}
+
+
+/* =========================================================
+   Report Empty
+========================================================= */
+
+.bdp-report-empty {
+    padding:
+        35px !important;
+
+    color:
+        #64748b !important;
+
+    text-align:
+        center;
+
+    font-style:
+        italic;
+}
+
+
+/* =========================================================
+   Modal Overlay
+========================================================= */
+
+.bdp-modal-overlay {
+    position:
+        fixed;
+
+    inset:
+        0;
+
+    z-index:
+        2000;
+
+    display:
+        flex;
+
+    justify-content:
+        center;
+
+    align-items:
+        center;
+
+    padding:
+        20px;
+
+    box-sizing:
+        border-box;
+
+    background:
+        rgba(2, 6, 23, 0.82);
+
+    backdrop-filter:
+        blur(4px);
+}
+
+
+/* =========================================================
+   Modal
+========================================================= */
+
+.bdp-modal {
+    width:
+        100%;
+
+    max-width:
+        650px;
+
+    max-height:
+        90vh;
+
+    box-sizing:
+        border-box;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    overflow:
+        hidden;
+
+    padding:
+        28px;
+
+    background:
+        #1e293b;
+
+    border:
+        1px solid
+        #475569;
+
+    border-radius:
+        18px;
+
+    box-shadow:
+        0 25px 60px
+        rgba(0, 0, 0, 0.5);
+}
+
+
+/* =========================================================
+   Modal Header
+========================================================= */
+
+.bdp-modal-header {
+    display:
+        flex;
+
+    justify-content:
+        space-between;
+
+    align-items:
+        flex-start;
+
+    gap:
+        20px;
+
+    padding-bottom:
+        20px;
+
+    margin-bottom:
+        2px;
+
+    border-bottom:
+        1px solid
+        #334155;
+}
+
+
+.bdp-modal-header > div {
+    min-width:
+        0;
+}
+
+
+.bdp-modal-header h2 {
+    margin:
+        0
+        0
+        7px;
+
+    color:
+        #f8fafc;
+
+    font-size:
+        24px;
+
+    line-height:
+        1.3;
+}
+
+
+.bdp-modal-header p {
+    margin:
+        0;
+
+    color:
+        #94a3b8;
+
+    font-size:
+        13px;
+
+    line-height:
+        1.5;
+}
+
+
+.bdp-modal-header p strong {
+    color:
+        #cbd5e1;
+}
+
+
+/* =========================================================
+   Modal Close
+========================================================= */
+
+.bdp-modal-close {
+    flex:
+        0 0 38px;
+
+    width:
+        38px;
+
+    height:
+        38px;
+
+    padding:
+        0;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border:
+        1px solid
+        #475569;
+
+    border-radius:
+        10px;
+
+    background:
+        #334155;
+
+    color:
+        #e2e8f0;
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    font-size:
+        25px;
+
+    font-weight:
+        400;
+
+    line-height:
+        1;
+
+    cursor:
+        pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        opacity 0.2s ease;
+}
+
+
+.bdp-modal-close:hover:not(:disabled) {
+    background:
+        #475569;
+
+    color:
+        #ffffff;
+}
+
+
+.bdp-modal-close:disabled {
+    opacity:
+        0.45;
+
+    cursor:
+        not-allowed;
+}
+
+
+/* =========================================================
+   Modal Candidate Search
+========================================================= */
+
+.bdp-candidate-search {
+    width:
+        100%;
+
+    box-sizing:
+        border-box;
+
+    padding:
+        12px
+        14px;
+
+    margin:
+        20px
+        0
+        15px;
+
+    background:
+        #0f172a;
+
+    color:
+        #f8fafc;
+
+    border:
+        1px solid
+        #475569;
+
+    border-radius:
+        10px;
+
+    font-family:
+        inherit;
+
+    font-size:
+        14px;
+
+    outline:
+        none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        opacity 0.2s ease;
+}
+
+
+.bdp-candidate-search::placeholder {
+    color:
+        #64748b;
+}
+
+
+.bdp-candidate-search:focus {
+    border-color:
+        #3b82f6;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(59, 130, 246, 0.15);
+}
+
+
+.bdp-candidate-search:disabled {
+    opacity:
+        0.55;
+
+    cursor:
+        not-allowed;
+}
+
+
+/* =========================================================
+   Selection Toolbar
+========================================================= */
+
+.bdp-selection-toolbar {
+    display:
+        flex;
+
+    justify-content:
+        space-between;
+
+    align-items:
+        center;
+
+    gap:
+        15px;
+
+    margin-bottom:
+        12px;
+
+    padding:
+        5px
+        2px;
+}
+
+
+.bdp-selected-count {
+    margin:
+        0;
+
+    color:
+        #94a3b8;
+
+    font-size:
+        13px;
+
+    font-weight:
+        600;
+}
+
+
+.bdp-select-all-control {
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        8px;
+
+    color:
+        #cbd5e1;
+
+    font-size:
+        13px;
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
+}
+
+
+.bdp-select-all-control input {
+    width:
+        16px;
+
+    height:
+        16px;
+
+    margin:
+        0;
+
+    accent-color:
+        #3b82f6;
+
+    cursor:
+        pointer;
+}
+
+
+.bdp-select-all-control input:disabled {
+    cursor:
+        not-allowed;
+}
+
+
+/* =========================================================
+   Candidate List
+========================================================= */
+
+.bdp-candidate-list {
+    width:
+        100%;
+
+    min-height:
+        0;
+
+    flex:
+        1;
+
+    overflow-y:
+        auto;
+
+    overflow-x:
+        hidden;
+
+    box-sizing:
+        border-box;
+
+    background:
+        #0f172a;
+
+    border:
+        1px solid
+        #334155;
+
+    border-radius:
+        12px;
+
+    scrollbar-width:
+        thin;
+
+    scrollbar-color:
+        #475569
+        #0f172a;
+}
+
+
+.bdp-candidate-list::-webkit-scrollbar {
+    width:
+        8px;
+}
+
+
+.bdp-candidate-list::-webkit-scrollbar-track {
+    background:
+        #0f172a;
+
+    border-radius:
+        12px;
+}
+
+
+.bdp-candidate-list::-webkit-scrollbar-thumb {
+    background:
+        #475569;
+
+    border-radius:
+        12px;
+}
+
+
+.bdp-candidate-list::-webkit-scrollbar-thumb:hover {
+    background:
+        #64748b;
+}
+
+
+/* =========================================================
+   Candidate Item
+========================================================= */
+
+.bdp-candidate-item {
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        14px;
+
+    min-width:
+        0;
+
+    padding:
+        15px
+        16px;
+
+    cursor:
+        pointer;
+
+    border-bottom:
+        1px solid
+        #1e293b;
+
+    transition:
+        background 0.2s ease,
+        opacity 0.2s ease;
+}
+
+
+.bdp-candidate-item:last-child {
+    border-bottom:
+        none;
+}
+
+
+.bdp-candidate-item:hover {
+    background:
+        #172554;
+}
+
+
+.bdp-candidate-item.selected {
+    background:
+        rgba(59, 130, 246, 0.08);
+}
+
+
+.bdp-candidate-item input[type="checkbox"] {
+    flex-shrink:
+        0;
+
+    width:
+        17px;
+
+    height:
+        17px;
+
+    margin:
+        0;
+
+    accent-color:
+        #3b82f6;
+
+    cursor:
+        pointer;
+}
+
+
+.bdp-candidate-item input[type="checkbox"]:disabled {
+    cursor:
+        not-allowed;
+}
+
+
+.bdp-candidate-modal-info {
+    min-width:
+        0;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        4px;
+}
+
+
+.bdp-candidate-modal-info strong {
+    color:
+        #f8fafc;
+
+    font-size:
+        14px;
+
+    font-weight:
+        700;
+
+    overflow-wrap:
+        anywhere;
+}
+
+
+.bdp-candidate-modal-info span {
+    color:
+        #94a3b8;
+
+    font-size:
+        12px;
+
+    overflow-wrap:
+        anywhere;
+}
+
+
+/* =========================================================
+   No Candidates
+========================================================= */
+
+.bdp-no-candidates {
+    margin:
+        0;
+
+    padding:
+        35px;
+
+    color:
+        #64748b;
+
+    text-align:
+        center;
+
+    font-size:
+        14px;
+}
+
+
+/* =========================================================
+   Modal Actions
+========================================================= */
+
+.bdp-modal-actions {
+    display:
+        flex;
+
+    justify-content:
+        flex-end;
+
+    align-items:
+        center;
+
+    gap:
+        12px;
+
+    flex-shrink:
+        0;
+
+    padding-top:
+        20px;
+
+    margin-top:
+        18px;
+
+    border-top:
+        1px solid
+        #334155;
+}
+
+
+/* =========================================================
+   Modal Cancel
+========================================================= */
+
+.bdp-modal-cancel-btn {
+    min-height:
+        40px;
+
+    padding:
+        10px
+        18px;
+
+    border:
+        1px solid
+        #64748b;
+
+    border-radius:
+        9px;
+
+    background:
+        #475569;
+
+    color:
+        #ffffff;
+
+    font-family:
+        inherit;
+
+    font-size:
+        13px;
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease,
+        opacity 0.2s ease;
+}
+
+
+.bdp-modal-cancel-btn:hover:not(:disabled) {
+    background:
+        #64748b;
+
+    border-color:
+        #94a3b8;
+
+    transform:
+        translateY(-1px);
+}
+
+
+.bdp-modal-cancel-btn:disabled {
+    opacity:
+        0.45;
+
+    cursor:
+        not-allowed;
+
+    transform:
+        none;
+}
+
+
+/* =========================================================
+   Modal Primary
+========================================================= */
+
+.bdp-modal-primary-btn {
+    min-height:
+        40px;
+
+    padding:
+        10px
+        18px;
+
+    border:
+        1px solid
+        #22c55e;
+
+    border-radius:
+        9px;
+
+    background:
+        #22c55e;
+
+    color:
+        #ffffff;
+
+    font-family:
+        inherit;
+
+    font-size:
+        13px;
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
+
+    box-shadow:
+        0 5px 12px
+        rgba(34, 197, 94, 0.16);
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease,
+        opacity 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.bdp-modal-primary-btn:hover:not(:disabled) {
+    background:
+        #16a34a;
+
+    border-color:
+        #16a34a;
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 8px 18px
+        rgba(34, 197, 94, 0.25);
+}
+
+
+.bdp-modal-primary-btn:disabled {
+    opacity:
+        0.45;
+
+    cursor:
+        not-allowed;
+
+    transform:
+        none;
+
+    box-shadow:
+        none;
+}
+
+
+/* =========================================================
+   Modal Danger
+========================================================= */
+
+.bdp-modal-danger-btn {
+    min-height:
+        40px;
+
+    padding:
+        10px
+        18px;
+
+    border:
+        1px solid
+        #ef4444;
+
+    border-radius:
+        9px;
+
+    background:
+        rgba(239, 68, 68, 0.1);
+
+    color:
+        #fca5a5;
+
+    font-family:
+        inherit;
+
+    font-size:
+        13px;
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease,
+        opacity 0.2s ease;
+}
+
+
+.bdp-modal-danger-btn:hover:not(:disabled) {
+    background:
+        #ef4444;
+
+    border-color:
+        #ef4444;
+
+    color:
+        #ffffff;
+
+    transform:
+        translateY(-1px);
+}
+
+
+.bdp-modal-danger-btn:disabled {
+    opacity:
+        0.45;
+
+    cursor:
+        not-allowed;
+
+    transform:
+        none;
+}
+
+
+/* =========================================================
+   Focus Protection
+========================================================= */
+
+.bdp-page button:focus-visible,
+.bdp-page input:focus-visible,
+.bdp-page a:focus-visible {
+    outline:
+        2px solid
+        rgba(96, 165, 250, 0.8);
+
+    outline-offset:
+        2px;
+}
+
+
+.bdp-modal-overlay button:focus-visible,
+.bdp-modal-overlay input:focus-visible {
+    outline:
+        2px solid
+        rgba(96, 165, 250, 0.8);
+
+    outline-offset:
+        2px;
+}
+
+
+/* =========================================================
+   Responsive — Tablet
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .bdp-overview-grid {
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            );
+    }
+
+
+    .bdp-report-summary {
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            );
+    }
+
+
+    .bdp-report-header {
+        align-items:
+            flex-start;
+
+        flex-direction:
+            column;
+    }
+
+
+    .bdp-report-download-btn {
+        width:
+            100%;
+    }
+
+}
+
+
+/* =========================================================
+   Responsive — Mobile
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .bdp-page {
+        margin:
+            25px
+            auto;
+
+        padding:
+            15px;
+    }
+
+
+    .bdp-page-header {
+        align-items:
+            flex-start;
+
+        flex-direction:
+            column;
+
+        gap:
+            15px;
+    }
+
+
+    .bdp-page-title {
+        font-size:
+            30px;
+    }
+
+
+    .bdp-status-badge {
+        align-self:
+            flex-start;
+    }
+
+
+    .bdp-overview-card,
+    .bdp-candidates-section,
+    .bdp-report-section {
+        padding:
+            22px;
+    }
+
+
+    .bdp-overview-grid {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .bdp-section-heading {
+        align-items:
+            flex-start;
+
+        flex-direction:
+            column;
+    }
+
+
+    .bdp-candidates-heading {
+        gap:
+            18px;
+    }
+
+
+    .bdp-action-buttons {
+        width:
+            100%;
+    }
+
+
+    .bdp-assign-btn,
+    .bdp-unassign-btn {
+        flex:
+            1;
+    }
+
+
+    .bdp-candidate-summary-row {
+        align-items:
+            flex-start;
+
+        flex-direction:
+            column;
+
+        gap:
+            8px;
+    }
+
+
+    /* ======================================
+       Candidate Table
+    ====================================== */
+
+    .bdp-table-wrapper {
+        max-height:
+            320px;
+    }
+
+
+    .bdp-details-table {
+        min-width:
+            560px;
+    }
+
+
+    .bdp-details-table th,
+    .bdp-details-table td {
+        padding:
+            13px
+            12px;
+    }
+
+
+    .bdp-details-table th:nth-child(1),
+    .bdp-details-table td:nth-child(1) {
+        width:
+            35%;
+    }
+
+
+    .bdp-details-table th:nth-child(2),
+    .bdp-details-table td:nth-child(2) {
+        width:
+            45%;
+    }
+
+
+    .bdp-details-table th:nth-child(3),
+    .bdp-details-table td:nth-child(3) {
+        width:
+            20%;
+    }
+
+
+    /* ======================================
+       Report Tables
+    ====================================== */
+
+    .bdp-report-table-wrapper {
+        max-height:
+            320px;
+    }
+
+
+    .bdp-report-table {
+        min-width:
+            850px;
+    }
+
+
+    .bdp-report-table th,
+    .bdp-report-table td {
+        padding:
+            12px
+            13px;
+    }
+
+
+    /* ======================================
+       Report Summary
+    ====================================== */
+
+    .bdp-report-summary {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .bdp-report-summary-card strong {
+        font-size:
+            23px;
+    }
+
+
+    /* ======================================
+       Assignment Modal
+    ====================================== */
+
+    .bdp-modal-overlay {
+        padding:
+            15px;
+    }
+
+
+    .bdp-modal {
+        max-width:
+            100%;
+
+        max-height:
+            92vh;
+
+        padding:
+            22px;
+
+        border-radius:
+            16px;
+    }
+
+
+    .bdp-modal-header {
+        gap:
+            12px;
+    }
+
+
+    .bdp-modal-header h2 {
+        font-size:
+            22px;
+    }
+
+
+    .bdp-selection-toolbar {
+        align-items:
+            flex-start;
+
+        flex-direction:
+            column;
+
+        gap:
+            8px;
+    }
+
+
+    .bdp-candidate-item {
+        padding:
+            14px;
+
+        gap:
+            12px;
+    }
+
+
+    .bdp-modal-actions {
+        flex-direction:
+            column-reverse;
+
+        align-items:
+            stretch;
+    }
+
+
+    .bdp-modal-cancel-btn,
+    .bdp-modal-primary-btn,
+    .bdp-modal-danger-btn {
+        width:
+            100%;
+    }
+
+}
+
+
+/* =========================================================
+   Responsive — Small Mobile
+========================================================= */
+
+@media (max-width: 450px) {
+
+    .bdp-page {
+        margin:
+            18px
+            auto;
+
+        padding:
+            10px;
+    }
+
+
+    .bdp-page-title {
+        font-size:
+            27px;
+    }
+
+
+    .bdp-section-title,
+    .bdp-report-title {
+        font-size:
+            21px;
+    }
+
+
+    .bdp-overview-card,
+    .bdp-candidates-section,
+    .bdp-report-section {
+        padding:
+            18px;
+    }
+
+
+    .bdp-action-buttons {
+        flex-direction:
+            column;
+
+        align-items:
+            stretch;
+    }
+
+
+    .bdp-assign-btn,
+    .bdp-unassign-btn {
+        width:
+            100%;
+    }
+
+
+    .bdp-candidate-table-email {
+        font-size:
+            12px;
+    }
+
+
+    .bdp-view-results-btn {
+        padding:
+            8px
+            11px;
+    }
+
+
+    .bdp-modal {
+        padding:
+            18px;
+    }
+
 }

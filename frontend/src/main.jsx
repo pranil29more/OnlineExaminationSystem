@@ -1,10 +1,47 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.jsx'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-)
+import App from "./App.jsx";
+
+import {
+    AuthProvider,
+    useAuth
+} from "./context/AuthContext";
+
+import PageLoader from "./components/PageLoader";
+
+import "./index.css";
+
+
+function AppInitializer() {
+
+    const { loading } = useAuth();
+
+    if (loading) {
+
+        return (
+            <PageLoader message="Loading Application..." />
+        );
+
+    }
+
+    return <App />;
+
+}
+
+
+createRoot(
+    document.getElementById("root")
+).render(
+
+    <StrictMode>
+
+        <AuthProvider>
+
+            <AppInitializer />
+
+        </AuthProvider>
+
+    </StrictMode>
+
+);

@@ -1,109 +1,221 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+import { useAuth } from "../context/AuthContext";
 import API_BASE_URL from "../services/api";
+
 import "../styles/LoginPage.css";
 
 function LoginPage() {
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
+    const [loginLoading, setLoginLoading] =
+        useState(false);
+
+    const [registerLoading, setRegisterLoading] =
+        useState(false);
+
     const navigate = useNavigate();
 
-    const handleLogin = async () => {
-        try {
-            const response = await fetch(`${API_BASE_URL}/login`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    email,
-                    password,
-                }),
-            });
+    const { login } = useAuth();
 
-            const data = await response.json();
+    const handleLogin = async () => {
+
+        try {
+
+            setLoginLoading(true);
+
+            const response = await fetch(
+                `${API_BASE_URL}/login`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        email,
+                        password
+                    })
+                }
+            );
+
+            const data =
+                await response.json();
 
             if (response.ok) {
-                localStorage.setItem("token", data.token);
 
-                const profileResponse = await fetch(
-                    `${API_BASE_URL}/profile`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${data.token}`,
-                        },
-                    }
+                login(
+                    data.token,
+                    data.user
                 );
 
-                const profileData = await profileResponse.json();
+                if (
+                    data.user.role === "Admin"
+                ) {
 
-                localStorage.setItem(
-                    "userEmail",
-                    profileData.email
-                );
-
-                if (profileData.role === "Admin") {
                     navigate("/dashboard");
+
                 } else {
+
                     navigate("/exams");
+
                 }
+
             } else {
+
                 alert(data.message);
+
             }
+
         } catch (error) {
+
             console.error(error);
+
+        } finally {
+
+            setLoginLoading(false);
+
         }
+
+    };
+
+    const handleRegister = () => {
+
+        setRegisterLoading(true);
+
+        navigate("/register");
+
     };
 
     return (
-        <div className="login-container">
-            <div className="login-card">
-                <h1 className="login-title">
-                    Online Examination System
-                </h1>
 
-                <p className="login-subtitle">
-                    Sign in to continue
-                </p>
+        <div className="lpg-page">
 
-                <input
-                    className="login-input"
-                    type="email"
-                    placeholder="Enter Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
+            <main className="lpg-container">
 
-                <input
-                    className="login-input"
-                    type="password"
-                    placeholder="Enter Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
+                <section className="lpg-card">
 
-                <button
-                    className="login-btn"
-                    onClick={handleLogin}
-                >
-                    Login
-                </button>
+                    <div className="lpg-header">
 
-                <div className="register-section">
-                    <p className="register-text">
-                        Don't have an account?
-                    </p>
+                        <span className="lpg-eyebrow">
+                            Online Examination System
+                        </span>
 
-                    <button
-                        className="register-link"
-                        onClick={() => navigate("/register")}
-                    >
-                        Create New Account
-                    </button>
-                </div>
-            </div>
+                        <h1 className="lpg-title">
+                            Welcome
+                        </h1>
+
+                        <p className="lpg-subtitle">
+                            Login to continue to your account.
+                        </p>
+
+                    </div>
+
+
+                    <div className="lpg-form">
+
+                        <div className="lpg-field">
+
+                            <label
+                                htmlFor="lpg-email"
+                                className="lpg-label"
+                            >
+                                Email Address
+                            </label>
+
+                            <input
+                                id="lpg-email"
+                                className="lpg-input"
+                                type="email"
+                                placeholder="Enter your email"
+                                value={email}
+                                onChange={(e) =>
+                                    setEmail(
+                                        e.target.value
+                                    )
+                                }
+                                disabled={loginLoading}
+                            />
+
+                        </div>
+
+
+                        <div className="lpg-field">
+
+                            <label
+                                htmlFor="lpg-password"
+                                className="lpg-label"
+                            >
+                                Password
+                            </label>
+
+                            <input
+                                id="lpg-password"
+                                className="lpg-input"
+                                type="password"
+                                placeholder="Enter your password"
+                                value={password}
+                                onChange={(e) =>
+                                    setPassword(
+                                        e.target.value
+                                    )
+                                }
+                                disabled={loginLoading}
+                            />
+
+                        </div>
+
+
+                        <button
+                            type="button"
+                            className="lpg-login-btn"
+                            onClick={handleLogin}
+                            disabled={
+                                loginLoading ||
+                                registerLoading
+                            }
+                        >
+                            {loginLoading
+                                ? "Logging in..."
+                                : "Login"}
+                        </button>
+
+                    </div>
+
+
+                    <div className="lpg-register-section">
+
+                        <p className="lpg-register-text">
+                            Don't have an account?
+                        </p>
+
+                        <button
+                            type="button"
+                            className="lpg-register-link"
+                            onClick={handleRegister}
+                            disabled={
+                                loginLoading ||
+                                registerLoading
+                            }
+                        >
+                            {registerLoading
+                                ? "Loading..."
+                                : "Create New Account"}
+                        </button>
+
+                    </div>
+
+                </section>
+
+            </main>
+
         </div>
+
     );
 }
 

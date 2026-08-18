@@ -1,56 +1,796 @@
-.page-container {
-    max-width: 650px;
-    margin: 40px auto;
-    padding: 20px;
+/* =========================================================
+   EDIT QUESTION PAGE
+   Namespace: eqp-
+========================================================= */
+
+
+/* =========================================================
+   Page
+========================================================= */
+
+.eqp-page {
+    min-height:
+        100vh;
+
+    color:
+        #f8fafc;
 }
 
-.page-title {
-    text-align: center;
-    margin-bottom: 30px;
+
+/* =========================================================
+   Container
+========================================================= */
+
+.eqp-container {
+    width:
+        min(
+            calc(100% - 40px),
+            900px
+        );
+
+    margin:
+        0 auto;
+
+    padding:
+        42px
+        0
+        70px;
+
+    box-sizing:
+        border-box;
 }
 
-.form-card {
-    background: #1e293b;
-    border: 1px solid #334155;
-    border-radius: 16px;
-    padding: 30px;
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+
+/* =========================================================
+   Page Header
+========================================================= */
+
+.eqp-header {
+    margin-bottom:
+        32px;
 }
 
-.form-input,
-.form-select {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 14px;
-    margin-bottom: 18px;
-    border: 1px solid #334155;
-    border-radius: 10px;
-    background: #0f172a;
-    color: white;
-    font-size: 16px;
+
+.eqp-eyebrow {
+    display:
+        block;
+
+    margin-bottom:
+        8px;
+
+    color:
+        #60a5fa;
+
+    font-size:
+        11px;
+
+    font-weight:
+        800;
+
+    text-transform:
+        uppercase;
+
+    letter-spacing:
+        1.3px;
 }
 
-.form-input:focus,
-.form-select:focus {
-    outline: none;
-    border-color: #3b82f6;
+
+.eqp-title {
+    margin:
+        0 0 10px;
+
+    color:
+        #f8fafc;
+
+    font-size:
+        clamp(
+            30px,
+            4vw,
+            40px
+        );
+
+    line-height:
+        1.2;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        -0.7px;
 }
 
-.submit-btn {
-    display: block;
-    width: 220px;
-    margin: 30px auto 0;
-    padding: 14px;
-    border: none;
-    border-radius: 10px;
-    background: #3b82f6;
-    color: white;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.3s;
+
+.eqp-description {
+    max-width:
+        700px;
+
+    margin:
+        0;
+
+    color:
+        #94a3b8;
+
+    font-size:
+        14px;
+
+    line-height:
+        1.65;
 }
 
-.submit-btn:hover {
-    background: #2563eb;
+
+/* =========================================================
+   Main Form Card
+========================================================= */
+
+.eqp-form-card {
+    width:
+        100%;
+
+    box-sizing:
+        border-box;
+
+    padding:
+        30px;
+
+    background:
+        #1e293b;
+
+    border:
+        1px solid
+        #334155;
+
+    border-radius:
+        16px;
+
+    box-shadow:
+        0 10px 24px
+        rgba(0, 0, 0, 0.22);
+}
+
+
+.eqp-form-section {
+    margin-bottom:
+        28px;
+
+    animation:
+        eqpFadeIn
+        0.2s
+        ease;
+}
+
+
+.eqp-form-section:last-of-type {
+    margin-bottom:
+        0;
+}
+
+
+@keyframes eqpFadeIn {
+
+    from {
+        opacity:
+            0;
+
+        transform:
+            translateY(4px);
+    }
+
+    to {
+        opacity:
+            1;
+
+        transform:
+            translateY(0);
+    }
+
+}
+
+
+/* =========================================================
+   Section Heading
+========================================================= */
+
+.eqp-section-heading {
+    margin-bottom:
+        25px;
+
+    padding-bottom:
+        20px;
+
+    border-bottom:
+        1px solid
+        #334155;
+}
+
+
+.eqp-section-eyebrow {
+    display:
+        block;
+
+    margin-bottom:
+        7px;
+
+    color:
+        #60a5fa;
+
+    font-size:
+        10px;
+
+    font-weight:
+        800;
+
+    text-transform:
+        uppercase;
+
+    letter-spacing:
+        1px;
+}
+
+
+.eqp-section-heading h2 {
+    display:
+        block;
+
+    width:
+        100%;
+
+    margin:
+        0 0 7px;
+
+    padding:
+        0;
+
+    color:
+        #f8fafc;
+
+    font-size:
+        22px;
+
+    line-height:
+        1.3;
+
+    font-weight:
+        800;
+
+    text-align:
+        left;
+
+    letter-spacing:
+        -0.2px;
+}
+
+
+.eqp-section-heading p {
+    margin:
+        0;
+
+    color:
+        #94a3b8;
+
+    font-size:
+        13px;
+
+    line-height:
+        1.6;
+}
+
+
+/* =========================================================
+   Field Labels
+========================================================= */
+
+.eqp-field-label {
+    display:
+        block;
+
+    margin-bottom:
+        9px;
+
+    color:
+        #e2e8f0;
+
+    font-size:
+        13px;
+
+    font-weight:
+        750;
+
+    line-height:
+        1.4;
+}
+
+
+/* =========================================================
+   Form Inputs
+========================================================= */
+
+.eqp-form-input {
+    width:
+        100%;
+
+    min-height:
+        46px;
+
+    box-sizing:
+        border-box;
+
+    margin-bottom:
+        18px;
+
+    padding:
+        0 14px;
+
+    border:
+        1px solid
+        #475569;
+
+    border-radius:
+        9px;
+
+    outline:
+        none;
+
+    background:
+        #0f172a;
+
+    color:
+        #f8fafc;
+
+    font-family:
+        inherit;
+
+    font-size:
+        13px;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+
+.eqp-form-input::placeholder {
+    color:
+        #64748b;
+}
+
+
+.eqp-form-input:hover {
+    border-color:
+        #64748b;
+}
+
+
+.eqp-form-input:focus {
+    border-color:
+        #3b82f6;
+
+    background:
+        #101a2c;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(59, 130, 246, 0.12);
+}
+
+
+/* =========================================================
+   Select
+========================================================= */
+
+.eqp-form-select {
+    cursor:
+        pointer;
+
+    appearance:
+        auto;
+}
+
+
+.eqp-form-select option {
+    background:
+        #0f172a;
+
+    color:
+        #f8fafc;
+}
+
+
+/* =========================================================
+   Number Input
+========================================================= */
+
+.eqp-form-input[type="number"] {
+    appearance:
+        textfield;
+
+    -moz-appearance:
+        textfield;
+}
+
+
+.eqp-form-input[type="number"]::-webkit-inner-spin-button,
+.eqp-form-input[type="number"]::-webkit-outer-spin-button {
+    appearance:
+        none;
+
+    -webkit-appearance:
+        none;
+
+    margin:
+        0;
+}
+
+
+/* =========================================================
+   Answer Options
+========================================================= */
+
+.eqp-subheading {
+    margin:
+        3px 0 14px;
+
+    color:
+        #e2e8f0;
+
+    font-size:
+        13px;
+
+    font-weight:
+        750;
+}
+
+
+.eqp-options-grid {
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap:
+        0 14px;
+}
+
+
+.eqp-option-field {
+    min-width:
+        0;
+}
+
+
+.eqp-options-grid .eqp-form-input {
+    margin-bottom:
+        18px;
+}
+
+
+/* =========================================================
+   Correct Answer
+========================================================= */
+
+.eqp-correct-section {
+    margin-top:
+        2px;
+}
+
+
+.eqp-form-hint {
+    margin:
+        -8px 0 0;
+
+    color:
+        #94a3b8;
+
+    font-size:
+        12px;
+
+    line-height:
+        1.55;
+}
+
+
+/* =========================================================
+   Update Action
+========================================================= */
+
+.eqp-action-area {
+    display:
+        flex;
+
+    justify-content:
+        center;
+
+    align-items:
+        center;
+
+    margin-top:
+        30px;
+}
+
+
+.eqp-update-btn {
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    min-width:
+        175px;
+
+    min-height:
+        40px;
+
+    padding:
+        0 17px;
+
+    box-sizing:
+        border-box;
+
+    border:
+        1px solid
+        #3b82f6;
+
+    border-radius:
+        9px;
+
+    background:
+        #2563eb;
+
+    color:
+        #ffffff;
+
+    font-family:
+        inherit;
+
+    font-size:
+        12px;
+
+    font-weight:
+        750;
+
+    line-height:
+        1;
+
+    cursor:
+        pointer;
+
+    box-shadow:
+        0 5px 12px
+        rgba(37, 99, 235, 0.20);
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease,
+        opacity 0.2s ease;
+}
+
+
+.eqp-update-btn:hover {
+    background:
+        #3b82f6;
+
+    border-color:
+        #60a5fa;
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 8px 18px
+        rgba(37, 99, 235, 0.30);
+}
+
+
+.eqp-update-btn:active {
+    transform:
+        translateY(0);
+}
+
+
+.eqp-update-btn:disabled {
+    opacity:
+        0.55;
+
+    cursor:
+        not-allowed;
+
+    transform:
+        none;
+
+    box-shadow:
+        none;
+}
+
+
+.eqp-update-btn:disabled:hover {
+    background:
+        #2563eb;
+
+    border-color:
+        #3b82f6;
+
+    transform:
+        none;
+
+    box-shadow:
+        none;
+}
+
+
+/* =========================================================
+   Focus Protection
+========================================================= */
+
+.eqp-page button:focus-visible,
+.eqp-page input:focus-visible,
+.eqp-page select:focus-visible {
+    outline:
+        2px solid
+        rgba(96, 165, 250, 0.8);
+
+    outline-offset:
+        2px;
+}
+
+
+/* =========================================================
+   Disabled Form Fields
+========================================================= */
+
+.eqp-form-input:disabled,
+.eqp-form-select:disabled {
+    opacity:
+        0.65;
+
+    cursor:
+        not-allowed;
+
+    background:
+        #172033;
+}
+
+
+/* =========================================================
+   Responsive — Tablet
+========================================================= */
+
+@media (max-width: 800px) {
+
+    .eqp-container {
+        width:
+            calc(100% - 40px);
+
+        padding:
+            32px
+            0
+            60px;
+    }
+
+
+    .eqp-form-card {
+        padding:
+            25px;
+    }
+
+
+    .eqp-title {
+        font-size:
+            36px;
+    }
+
+}
+
+
+/* =========================================================
+   Responsive — Mobile
+========================================================= */
+
+@media (max-width: 650px) {
+
+    .eqp-container {
+        width:
+            calc(100% - 30px);
+
+        padding:
+            27px
+            0
+            50px;
+    }
+
+
+    .eqp-title {
+        font-size:
+            32px;
+    }
+
+
+    .eqp-description {
+        font-size:
+            13px;
+    }
+
+
+    .eqp-form-card {
+        padding:
+            20px;
+    }
+
+
+    .eqp-options-grid {
+        grid-template-columns:
+            1fr;
+
+        gap:
+            0;
+    }
+
+
+    .eqp-action-area {
+        align-items:
+            stretch;
+    }
+
+
+    .eqp-update-btn {
+        width:
+            100%;
+    }
+
+}
+
+
+/* =========================================================
+   Responsive — Small Mobile
+========================================================= */
+
+@media (max-width: 450px) {
+
+    .eqp-container {
+        width:
+            calc(100% - 24px);
+
+        padding:
+            24px
+            0
+            45px;
+    }
+
+
+    .eqp-title {
+        font-size:
+            29px;
+    }
+
+
+    .eqp-form-card {
+        padding:
+            17px;
+
+        border-radius:
+            14px;
+    }
+
+
+    .eqp-section-heading h2 {
+        font-size:
+            20px;
+    }
+
+
+    .eqp-update-btn {
+        width:
+            100%;
+    }
+
 }

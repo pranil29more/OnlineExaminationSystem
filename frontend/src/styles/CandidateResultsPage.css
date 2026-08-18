@@ -1,222 +1,1020 @@
-.candidate-results-container {
+/* =========================================================
+   CANDIDATE RESULTS PAGE
+   Namespace: crp-
+========================================================= */
+
+
+/* =========================================================
+   Page
+========================================================= */
+
+.crp-page {
+    min-height: 100vh;
+
+    color: #f8fafc;
+}
+
+
+.crp-page-container {
     width: 100%;
+
     max-width: 1200px;
-    margin: auto;
-    padding: 40px;
+
+    margin: 0 auto;
+
+    padding:
+        40px
+        25px
+        70px;
+
+    box-sizing: border-box;
 }
 
-.candidate-results-title {
-    color: white;
-    font-size: 42px;
-    font-weight: 700;
-    text-align: center;
-    margin-bottom: 40px;
-}
 
-.candidate-info-card {
-    max-width: 950px;
-    margin: auto;
-    background: #1e293b;
-    border: 1px solid #334155;
-    border-radius: 18px;
-    padding: 40px;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
-}
+/* =========================================================
+   Page Header
+========================================================= */
 
-.candidate-name {
-    color: white;
-    font-size: 34px;
-    font-weight: 700;
-    text-align: center;
+.crp-page-header {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: flex-end;
+
+    gap: 25px;
+
     margin-bottom: 35px;
 }
 
-.candidate-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-}
 
-.candidate-grid div {
-    background: #0f172a;
-    border: 1px solid #334155;
-    border-radius: 12px;
-    padding: 20px;
-    transition: 0.25s;
-}
+.crp-page-eyebrow,
+.crp-section-eyebrow {
+    display: block;
 
-.candidate-grid div:hover {
-    border-color: #3b82f6;
-    transform: translateY(-2px);
-}
+    margin-bottom: 8px;
 
-.candidate-grid h4 {
     color: #60a5fa;
-    font-size: 14px;
-    font-weight: 600;
-    margin-bottom: 10px;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+
+    letter-spacing: 1px;
 }
 
-.candidate-grid p {
-    color: white;
-    font-size: 18px;
-    font-weight: 500;
+
+.crp-page-title {
+    margin: 0 0 10px;
+
+    color: #f8fafc;
+
+    font-size: 40px;
+
+    line-height: 1.2;
+
+    font-weight: 800;
+
+    letter-spacing: -0.6px;
+}
+
+
+.crp-page-description {
+    max-width: 720px;
+
     margin: 0;
-    word-break: break-word;
+
+    color: #94a3b8;
+
+    font-size: 14px;
+
+    line-height: 1.65;
 }
 
-@media (max-width: 900px) {
-    .candidate-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
 
-@media (max-width: 768px) {
-    .candidate-results-container {
-        padding: 20px;
-    }
+/* =========================================================
+   Shared Section
+========================================================= */
 
-    .candidate-results-title {
-        font-size: 34px;
-    }
+.crp-candidate-section,
+.crp-summary-section,
+.crp-history-section {
+    margin-bottom: 35px;
 
-    .candidate-info-card {
-        padding: 25px;
-    }
+    padding: 28px;
 
-    .candidate-name {
-        font-size: 28px;
-    }
-
-    .candidate-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-.summary-container {
-    max-width: 950px;
-    margin: 35px auto;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-}
-
-.summary-card {
     background: #1e293b;
-    border: 1px solid #334155;
+
+    border:
+        1px solid
+        #334155;
+
     border-radius: 16px;
-    padding: 25px;
-    text-align: center;
-    transition: 0.25s;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+
+    box-shadow:
+        0 10px 20px
+        rgba(0, 0, 0, 0.22);
 }
 
-.summary-card:hover {
-    border-color: #3b82f6;
-    transform: translateY(-2px);
+
+.crp-history-section {
+    margin-bottom: 0;
 }
 
-.summary-card h4 {
-    color: #60a5fa;
-    font-size: 14px;
-    font-weight: 600;
-    margin-bottom: 15px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
 
-.summary-card p {
-    color: white;
-    font-size: 30px;
-    font-weight: 700;
-    margin: 0;
-}
+.crp-section-header {
+    display: flex;
 
-@media (max-width: 900px) {
-    .summary-container {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
+    justify-content: space-between;
 
-@media (max-width: 768px) {
-    .summary-container {
-        grid-template-columns: 1fr;
-    }
-}
+    align-items: flex-end;
 
-.history-card {
-    max-width: 950px;
-    margin: 40px auto 0;
-    background: #1e293b;
-    border: 1px solid #334155;
-    border-radius: 18px;
-    padding: 35px;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
-}
+    gap: 20px;
 
-.history-title {
-    color: white;
-    font-size: 30px;
-    font-weight: 700;
     margin-bottom: 25px;
 }
 
-.history-table {
-    width: 100%;
-    border-collapse: collapse;
-    overflow: hidden;
+
+.crp-section-header > div {
+    min-width: 0;
+}
+
+
+.crp-section-title {
+    margin: 0 0 7px;
+
+    color: #f8fafc;
+
+    font-size: 25px;
+
+    font-weight: 800;
+
+    letter-spacing: -0.2px;
+}
+
+
+.crp-section-description {
+    margin: 0;
+
+    color: #94a3b8;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   Candidate Information
+========================================================= */
+
+.crp-candidate-profile {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 18px;
+}
+
+
+.crp-candidate-name-block {
+    padding:
+        20px
+        22px;
+
+    background: #0f172a;
+
+    border:
+        1px solid
+        #334155;
+
     border-radius: 12px;
 }
 
-.history-table th {
-    background: #2563eb;
-    color: white;
-    padding: 15px;
-    text-align: left;
+
+.crp-info-label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #60a5fa;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.8px;
 }
 
-.history-table td {
+
+.crp-candidate-name {
+    margin: 0;
+
+    color: #f8fafc;
+
+    font-size: 25px;
+
+    line-height: 1.3;
+
+    font-weight: 800;
+
+    overflow-wrap: anywhere;
+}
+
+
+.crp-candidate-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 16px;
+}
+
+
+.crp-info-card {
+    min-width: 0;
+
+    padding:
+        18px;
+
     background: #0f172a;
-    color: white;
-    padding: 15px;
-    border-bottom: 1px solid #334155;
+
+    border:
+        1px solid
+        #334155;
+
+    border-radius: 12px;
+
+    transition:
+        border-color 0.25s ease,
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
 }
 
-.history-table tbody tr:hover td {
-    background: #172554;
+
+.crp-info-card:hover {
+    border-color: #475569;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 18px
+        rgba(0, 0, 0, 0.18);
 }
 
-.history-empty {
-    text-align: center;
+
+.crp-info-card strong {
+    display: block;
+
+    color: #e2e8f0;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* =========================================================
+   Performance Summary
+========================================================= */
+
+.crp-summary-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 16px;
+}
+
+
+.crp-summary-card {
+    min-width: 0;
+
+    padding:
+        20px;
+
+    background: #0f172a;
+
+    border:
+        1px solid
+        #334155;
+
+    border-radius: 12px;
+
+    transition:
+        border-color 0.25s ease,
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+
+.crp-summary-card:hover {
+    border-color: #475569;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 18px
+        rgba(0, 0, 0, 0.18);
+}
+
+
+.crp-summary-label {
+    display: block;
+
+    margin-bottom: 10px;
+
     color: #94a3b8;
-    padding: 35px !important;
-    font-style: italic;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.7px;
 }
 
-.status-pass {
-    background: #22c55e;
-    color: white;
-    padding: 5px 12px;
-    border-radius: 50px;
-    font-size: 13px;
-    font-weight: 600;
+
+.crp-summary-value {
+    display: block;
+
+    color: #f8fafc;
+
+    font-size: 27px;
+
+    line-height: 1.2;
+
+    font-weight: 800;
 }
 
-.status-fail {
-    background: #ef4444;
-    color: white;
-    padding: 5px 12px;
-    border-radius: 50px;
-    font-size: 13px;
-    font-weight: 600;
+
+/* =========================================================
+   History Count
+========================================================= */
+
+.crp-history-count {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    min-height: 30px;
+
+    padding:
+        0
+        12px;
+
+    border:
+        1px solid
+        #334155;
+
+    border-radius:
+        999px;
+
+    background:
+        #0f172a;
+
+    color:
+        #93c5fd;
+
+    font-size:
+        11px;
+
+    font-weight:
+        750;
 }
 
-@media (max-width: 768px) {
-    .history-table {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
+
+/* =========================================================
+   History Table Wrapper
+========================================================= */
+
+.crp-table-wrapper {
+    width: 100%;
+
+    max-height: 420px;
+
+    overflow-x: auto;
+
+    overflow-y: auto;
+
+    box-sizing: border-box;
+
+    border:
+        1px solid
+        #334155;
+
+    border-radius:
+        12px;
+
+    background:
+        #0f172a;
+
+    scrollbar-width: thin;
+
+    scrollbar-color:
+        #475569
+        #0f172a;
+}
+
+
+.crp-table-wrapper::-webkit-scrollbar {
+    width: 8px;
+
+    height: 8px;
+}
+
+
+.crp-table-wrapper::-webkit-scrollbar-track {
+    background:
+        #0f172a;
+}
+
+
+.crp-table-wrapper::-webkit-scrollbar-thumb {
+    background:
+        #475569;
+
+    border-radius:
+        8px;
+}
+
+
+.crp-table-wrapper::-webkit-scrollbar-thumb:hover {
+    background:
+        #64748b;
+}
+
+
+/* =========================================================
+   History Table
+========================================================= */
+
+.crp-history-table {
+    width: 100%;
+
+    min-width: 850px;
+
+    border-collapse:
+        collapse;
+
+    table-layout:
+        fixed;
+}
+
+
+/* =========================================================
+   Table Header
+========================================================= */
+
+.crp-history-table th {
+    position: sticky;
+
+    top: 0;
+
+    z-index: 5;
+
+    padding:
+        14px
+        15px;
+
+    background:
+        #2563eb;
+
+    color:
+        #ffffff;
+
+    font-size:
+        12px;
+
+    font-weight:
+        750;
+
+    text-align:
+        left;
+
+    white-space:
+        nowrap;
+}
+
+
+/* =========================================================
+   Table Column Widths
+========================================================= */
+
+.crp-history-table th:nth-child(1),
+.crp-history-table td:nth-child(1) {
+    width: 25%;
+}
+
+
+.crp-history-table th:nth-child(2),
+.crp-history-table td:nth-child(2) {
+    width: 13%;
+}
+
+
+.crp-history-table th:nth-child(3),
+.crp-history-table td:nth-child(3) {
+    width: 13%;
+}
+
+
+.crp-history-table th:nth-child(4),
+.crp-history-table td:nth-child(4) {
+    width: 13%;
+}
+
+
+.crp-history-table th:nth-child(5),
+.crp-history-table td:nth-child(5) {
+    width: 16%;
+}
+
+
+.crp-history-table th:nth-child(6),
+.crp-history-table td:nth-child(6) {
+    width: 20%;
+}
+
+
+/* =========================================================
+   Table Rows
+========================================================= */
+
+.crp-history-table td {
+    padding:
+        15px;
+
+    background:
+        #0f172a;
+
+    color:
+        #cbd5e1;
+
+    font-size:
+        13px;
+
+    border-bottom:
+        1px solid
+        #334155;
+
+    vertical-align:
+        middle;
+}
+
+
+.crp-history-table tbody tr:last-child td {
+    border-bottom:
+        none;
+}
+
+
+.crp-history-table tbody tr:hover td {
+    background:
+        #172554;
+}
+
+
+/* =========================================================
+   Exam Title
+========================================================= */
+
+.crp-exam-title {
+    display: block;
+
+    color:
+        #f8fafc;
+
+    font-size:
+        13px;
+
+    font-weight:
+        750;
+
+    line-height:
+        1.4;
+
+    overflow-wrap:
+        anywhere;
+}
+
+
+/* =========================================================
+   Score
+========================================================= */
+
+.crp-score {
+    color:
+        #cbd5e1;
+
+    font-size:
+        13px;
+
+    font-weight:
+        600;
+
+    white-space:
+        nowrap;
+}
+
+
+.crp-percentage {
+    color:
+        #f8fafc;
+
+    font-size:
+        13px;
+
+    font-weight:
+        800;
+
+    white-space:
+        nowrap;
+}
+
+
+/* =========================================================
+   Status Badges
+========================================================= */
+
+.crp-status-badge {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-width:
+        60px;
+
+    min-height:
+        27px;
+
+    padding:
+        0
+        10px;
+
+    border-radius:
+        999px;
+
+    font-size:
+        10px;
+
+    font-weight:
+        800;
+
+    text-transform:
+        uppercase;
+}
+
+
+.crp-status-pass {
+    background:
+        rgba(34, 197, 94, 0.10);
+
+    border:
+        1px solid
+        rgba(34, 197, 94, 0.45);
+
+    color:
+        #86efac;
+}
+
+
+.crp-status-fail {
+    background:
+        rgba(239, 68, 68, 0.10);
+
+    border:
+        1px solid
+        rgba(239, 68, 68, 0.45);
+
+    color:
+        #fca5a5;
+}
+
+
+/* =========================================================
+   Submitted Date
+========================================================= */
+
+.crp-submitted-date {
+    color:
+        #94a3b8;
+
+    font-size:
+        12px;
+
+    white-space:
+        nowrap;
+}
+
+
+/* =========================================================
+   View Details Button
+========================================================= */
+
+.crp-view-details-btn {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    min-height:
+        36px;
+
+    padding:
+        0
+        12px;
+
+    border:
+        1px solid
+        #3b82f6;
+
+    border-radius:
+        8px;
+
+    background:
+        #2563eb;
+
+    color:
+        #ffffff;
+
+    font-family:
+        inherit;
+
+    font-size:
+        11px;
+
+    font-weight:
+        750;
+
+    line-height:
+        1;
+
+    white-space:
+        nowrap;
+
+    cursor:
+        pointer;
+
+    box-shadow:
+        0 5px 12px
+        rgba(37, 99, 235, 0.20);
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease,
+        opacity 0.2s ease;
+}
+
+
+.crp-view-details-btn:hover:not(:disabled) {
+    background:
+        #3b82f6;
+
+    border-color:
+        #60a5fa;
+
+    color:
+        #ffffff;
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 8px 18px
+        rgba(37, 99, 235, 0.30);
+}
+
+
+.crp-view-details-icon {
+    width:
+        15px;
+
+    height:
+        15px;
+
+    flex-shrink:
+        0;
+}
+
+
+/* =========================================================
+   Empty Table
+========================================================= */
+
+.crp-table-empty {
+    padding:
+        45px
+        20px !important;
+
+    color:
+        #64748b !important;
+
+    text-align:
+        center;
+
+    font-size:
+        13px;
+
+    font-style:
+        italic;
+}
+
+
+/* =========================================================
+   Focus Protection
+========================================================= */
+
+.crp-page button:focus-visible,
+.crp-page input:focus-visible,
+.crp-page select:focus-visible {
+    outline:
+        2px solid
+        rgba(96, 165, 250, 0.8);
+
+    outline-offset:
+        2px;
+}
+
+
+/* =========================================================
+   Responsive — Tablet
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .crp-page-container {
+        padding:
+            30px
+            20px
+            60px;
     }
+
+
+    .crp-page-header {
+        align-items:
+            flex-start;
+
+        flex-direction:
+            column;
+    }
+
+
+    .crp-candidate-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+
+    .crp-summary-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+/* =========================================================
+   Responsive — Mobile
+========================================================= */
+
+@media (max-width: 650px) {
+
+    .crp-page-container {
+        padding:
+            25px
+            15px
+            50px;
+    }
+
+
+    .crp-page-title {
+        font-size:
+            32px;
+    }
+
+
+    .crp-page-description {
+        font-size:
+            13px;
+    }
+
+
+    .crp-candidate-section,
+    .crp-summary-section,
+    .crp-history-section {
+        padding:
+            20px;
+    }
+
+
+    .crp-section-header {
+        align-items:
+            flex-start;
+
+        flex-direction:
+            column;
+    }
+
+
+    .crp-section-title {
+        font-size:
+            22px;
+    }
+
+
+    .crp-history-count {
+        align-self:
+            flex-start;
+    }
+
+
+    .crp-candidate-grid {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .crp-summary-grid {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .crp-table-wrapper {
+        max-height:
+            360px;
+    }
+
+
+    .crp-history-table {
+        min-width:
+            850px;
+    }
+
+
+    .crp-history-table th,
+    .crp-history-table td {
+        padding:
+            13px
+            12px;
+    }
+
+}
+
+
+/* =========================================================
+   Responsive — Small Mobile
+========================================================= */
+
+@media (max-width: 450px) {
+
+    .crp-page-title {
+        font-size:
+            29px;
+    }
+
+
+    .crp-candidate-section,
+    .crp-summary-section,
+    .crp-history-section {
+        padding:
+            17px;
+
+        border-radius:
+            14px;
+    }
+
+
+    .crp-candidate-name {
+        font-size:
+            22px;
+    }
+
+
+    .crp-summary-value {
+        font-size:
+            24px;
+    }
+
 }

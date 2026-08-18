@@ -23,6 +23,7 @@ import EditBatchPage from "../pages/EditBatchPage";
 import BatchDetailsPage from "../pages/BatchDetailsPage";
 import CandidateResultsPage from "../pages/CandidateResultsPage";
 import ScrollToTop from "../components/ScrollToTop";
+import CreateUserPage from "../pages/CreateUserPage";
 
 function AppRoutes() {
     return (
@@ -54,6 +55,15 @@ function AppRoutes() {
                     element={
                         <AdminRoute>
                             <UsersPage />
+                        </AdminRoute>
+                    }
+                />
+
+                <Route
+                    path="/create-user"
+                    element={
+                        <AdminRoute>
+                            <CreateUserPage />
                         </AdminRoute>
                     }
                 />

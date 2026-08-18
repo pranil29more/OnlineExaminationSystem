@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import API_BASE_URL from "../services/api";
 import Navbar from "../components/Navbar";
 import PageLoader from "../components/PageLoader";
+
 import "../styles/DashboardPage.css";
 
 function DashboardPage() {
@@ -11,50 +13,20 @@ function DashboardPage() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        checkAccess();
+        fetchDashboard();
     }, []);
-
-    const checkAccess = async () => {
-        try {
-            const token = localStorage.getItem("token");
-
-            if (!token) {
-                navigate("/");
-                return;
-            }
-
-            const profileResponse = await fetch(
-                `${API_BASE_URL}/profile`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
-
-            const profile = await profileResponse.json();
-
-            if (profile.role !== "Admin") {
-                navigate("/exams");
-                return;
-            }
-
-            await fetchDashboard();
-        } catch (error) {
-            console.error(error);
-            navigate("/");
-        }
-    };
 
     const fetchDashboard = async () => {
         try {
-            const token = localStorage.getItem("token");
+            const token =
+                localStorage.getItem("token");
 
             const response = await fetch(
                 `${API_BASE_URL}/dashboard`,
                 {
                     headers: {
-                        Authorization: `Bearer ${token}`,
+                        Authorization:
+                            `Bearer ${token}`,
                     },
                 }
             );
@@ -64,7 +36,9 @@ function DashboardPage() {
                 return;
             }
 
-            const data = await response.json();
+            const data =
+                await response.json();
+
             setDashboard(data);
         } catch (error) {
             console.error(error);
@@ -73,106 +47,168 @@ function DashboardPage() {
 
     if (!dashboard) {
         return (
-            <div>
+            <div className="adp-page">
+
                 <Navbar />
-                <PageLoader message="Loading Dashboard..." />
+
+                <PageLoader
+                    message="Loading Dashboard..."
+                />
+
             </div>
         );
     }
 
     return (
-        <div>
+        <div className="adp-page">
+
             <Navbar />
 
-            <div className="dashboard-container">
-                <h1 className="page-title">
-                    Admin Dashboard
-                </h1>
+            <main className="adp-dashboard-container">
 
-                <div className="dashboard-wrapper">
-                    <div className="dashboard-circle">
+                {/* =================================================
+                    Page Header
+                ================================================= */}
+
+                <header className="adp-page-header">
+
+                    <span className="adp-page-eyebrow">
+                        ADMINISTRATION
+                    </span>
+
+                    <h1 className="adp-page-title">
+                        Admin Dashboard
+                    </h1>
+
+                    <p className="adp-page-description">
+                        Monitor users, examinations,
+                        batches, and submission activity
+                        from a single overview.
+                    </p>
+
+                </header>
+
+
+                {/* =================================================
+                    Dashboard Statistics
+                ================================================= */}
+
+                <div className="adp-dashboard-wrapper">
+
+                    <div className="adp-dashboard-circle">
+
                         <div
-                            className="dashboard-quarter users"
+                            className="adp-dashboard-quarter adp-users"
                             onClick={() =>
                                 navigate("/users")
                             }
                         >
-                            <div className="quarter-content">
-                                <div className="quarter-label">
+
+                            <div className="adp-quarter-content">
+
+                                <div className="adp-quarter-label">
                                     USERS
                                 </div>
 
-                                <div className="quarter-number">
-                                    {dashboard.total_users}
+                                <div className="adp-quarter-number">
+                                    {
+                                        dashboard.total_users
+                                    }
                                 </div>
+
                             </div>
+
                         </div>
 
+
                         <div
-                            className="dashboard-quarter exams"
+                            className="adp-dashboard-quarter adp-exams"
                             onClick={() =>
                                 navigate(
                                     "/exam-analytics"
                                 )
                             }
                         >
-                            <div className="quarter-content">
-                                <div className="quarter-label">
+
+                            <div className="adp-quarter-content">
+
+                                <div className="adp-quarter-label">
                                     EXAMS
                                 </div>
 
-                                <div className="quarter-number">
-                                    {dashboard.total_exams}
+                                <div className="adp-quarter-number">
+                                    {
+                                        dashboard.total_exams
+                                    }
                                 </div>
+
                             </div>
+
                         </div>
 
+
                         <div
-                            className="dashboard-quarter questions"
+                            className="adp-dashboard-quarter adp-questions"
                             onClick={() =>
                                 navigate(
                                     "/batch-management"
                                 )
                             }
                         >
-                            <div className="quarter-content">
-                                <div className="quarter-label">
+
+                            <div className="adp-quarter-content">
+
+                                <div className="adp-quarter-label">
                                     BATCHES
                                 </div>
 
-                                <div className="quarter-number">
-                                    {dashboard.total_batches}
+                                <div className="adp-quarter-number">
+                                    {
+                                        dashboard.total_batches
+                                    }
                                 </div>
+
                             </div>
+
                         </div>
 
+
                         <div
-                            className="dashboard-quarter submissions"
+                            className="adp-dashboard-quarter adp-submissions"
                             onClick={() =>
                                 navigate(
                                     "/submission-analytics"
                                 )
                             }
                         >
-                            <div className="quarter-content">
-                                <div className="quarter-label">
+
+                            <div className="adp-quarter-content">
+
+                                <div className="adp-quarter-label">
                                     SUBMISSIONS
                                 </div>
 
-                                <div className="quarter-number">
+                                <div className="adp-quarter-number">
                                     {
                                         dashboard.total_submissions
                                     }
                                 </div>
+
                             </div>
+
                         </div>
 
-                        <div className="dashboard-center">
+
+                        <div className="adp-dashboard-center">
                             <span></span>
                         </div>
+
                     </div>
+
                 </div>
-            </div>
+
+            </main>
+
         </div>
     );
 }

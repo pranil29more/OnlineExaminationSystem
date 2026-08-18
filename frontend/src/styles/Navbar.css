@@ -1,107 +1,555 @@
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px 32px;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    background: rgba(30, 41, 59, 0.88);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+/* =========================================================
+   ONLINE EXAMINATION SYSTEM
+   NAVBAR
+   Namespace: nb-
+========================================================= */
+
+
+/* =========================================================
+   Navbar
+========================================================= */
+
+.nb-navbar {
+    display:
+        flex;
+
+    justify-content:
+        space-between;
+
+    align-items:
+        center;
+
+    width:
+        100%;
+
+    box-sizing:
+        border-box;
+
+    padding:
+        16px
+        32px;
+
+    position:
+        sticky;
+
+    top:
+        0;
+
+    z-index:
+        1000;
+
+    background:
+        rgba(
+            30,
+            41,
+            59,
+            0.88
+        );
+
+    backdrop-filter:
+        blur(16px);
+
+    -webkit-backdrop-filter:
+        blur(16px);
+
+    border-bottom:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.08
+        );
+
+    box-shadow:
+        0 8px 24px
+        rgba(
+            0,
+            0,
+            0,
+            0.25
+        );
 }
 
-.logo {
-    color: #f8fafc;
-    font-size: 23px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    cursor: pointer;
-    transition: 0.3s ease;
+
+/* =========================================================
+   OES Branding
+========================================================= */
+
+.nb-logo {
+    flex-shrink:
+        0;
+
+    color:
+        #f8fafc;
+
+    font-family:
+    Inter,
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
+
+font-weight: 750;
+letter-spacing: -0.3px;
+
+    font-size:
+        24px;
+
+    font-weight:
+        750;
+
+    letter-spacing:
+        0.3px;
+
+    line-height:
+        1.2;
+
+    cursor:
+        pointer;
+
+    transition:
+        color 0.3s ease,
+        text-shadow 0.3s ease;
 }
 
-.logo:hover {
-    color: #60a5fa;
-    text-shadow: 0 0 12px rgba(96, 165, 250, 0.55);
+
+.nb-logo:hover {
+    color:
+        #60a5fa;
+
+    text-shadow:
+        0 0 12px
+        rgba(
+            96,
+            165,
+            250,
+            0.55
+        );
 }
 
-.nav-links {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+
+/* =========================================================
+   Navigation Links
+========================================================= */
+
+.nb-nav-links {
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        flex-end;
+
+    gap:
+        12px;
 }
 
-.nav-item {
-    position: relative;
-    padding: 10px 18px;
-    border: none;
-    outline: none;
-    border-radius: 999px;
-    background: transparent;
-    color: #cbd5e1;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease,
+
+/* =========================================================
+   Navigation Item
+========================================================= */
+
+.nb-nav-item {
+    position:
+        relative;
+
+    padding:
+        10px
+        18px;
+
+    border:
+        none;
+
+    outline:
+        none;
+
+    border-radius:
+        999px;
+
+    background:
+        transparent;
+
+    color:
+        #cbd5e1;
+
+    font-family:
+    Inter,
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
+
+    font-size:
+        14px;
+
+    font-weight:
+        650;
+
+    line-height:
+        1.2;
+
+    letter-spacing:
+        0.15px;
+
+    white-space:
+        nowrap;
+
+    cursor:
+        pointer;
+
+    transition:
+        background 0.25s ease,
+        color 0.25s ease,
+        transform 0.25s ease,
         box-shadow 0.25s ease;
 }
 
-.nav-item::after {
-    content: "";
-    position: absolute;
-    left: 50%;
-    bottom: 4px;
-    width: 0;
-    height: 2px;
-    background: #60a5fa;
-    border-radius: 10px;
-    transform: translateX(-50%);
-    transition: width 0.25s ease;
+
+/* =========================================================
+   Navigation Underline
+========================================================= */
+
+.nb-nav-item::after {
+    content:
+        "";
+
+    position:
+        absolute;
+
+    left:
+        50%;
+
+    bottom:
+        4px;
+
+    width:
+        0;
+
+    height:
+        2px;
+
+    background:
+        #60a5fa;
+
+    border-radius:
+        10px;
+
+    transform:
+        translateX(-50%);
+
+    transition:
+        width 0.25s ease;
 }
 
-.nav-item:hover {
-    color: white;
-    background: rgba(59, 130, 246, 0.14);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.18);
+
+/* =========================================================
+   Hover
+========================================================= */
+
+.nb-nav-item:hover {
+    color:
+        #ffffff;
+
+    background:
+        rgba(
+            59,
+            130,
+            246,
+            0.14
+        );
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 8px 20px
+        rgba(
+            59,
+            130,
+            246,
+            0.18
+        );
 }
 
-.nav-item:hover::after {
-    width: 60%;
+
+.nb-nav-item:hover::after {
+    width:
+        60%;
 }
 
-.nav-item.active {
-    color: #ffffff;
-    background: rgba(59, 130, 246, 0.18);
-    border: 1px solid rgba(96, 165, 250, 0.25);
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+
+/* =========================================================
+   Active Navigation Item
+========================================================= */
+
+.nb-nav-item.nb-active {
+    color:
+        #ffffff;
+
+    background:
+        rgba(
+            59,
+            130,
+            246,
+            0.18
+        );
+
+    border:
+        1px solid
+        rgba(
+            96,
+            165,
+            250,
+            0.25
+        );
+
+    box-shadow:
+        0 4px 12px
+        rgba(
+            59,
+            130,
+            246,
+            0.15
+        );
 }
 
-.nav-item.active::after {
-    width: 60%;
-    background: #60a5fa;
+
+.nb-nav-item.nb-active::after {
+    width:
+        60%;
+
+    background:
+        #60a5fa;
 }
 
-.nav-item:active {
-    transform: scale(0.96);
+
+/* =========================================================
+   Click State
+========================================================= */
+
+.nb-nav-item:active {
+    transform:
+        scale(0.96);
 }
+
+
+/* =========================================================
+   Focus Protection
+========================================================= */
+
+.nb-nav-item:focus-visible,
+.nb-logo:focus-visible {
+    outline:
+        2px solid
+        rgba(
+            96,
+            165,
+            250,
+            0.8
+        );
+
+    outline-offset:
+        3px;
+}
+
+
+/* =========================================================
+   Responsive — Large Tablet
+========================================================= */
+
+@media (max-width: 1100px) {
+
+    .nb-navbar {
+        padding:
+            15px
+            24px;
+    }
+
+
+    .nb-nav-links {
+        gap:
+            7px;
+    }
+
+
+    .nb-nav-item {
+        padding:
+            9px
+            14px;
+
+        font-size:
+            13px;
+    }
+
+
+    .nb-logo {
+        font-size:
+            21px;
+    }
+
+}
+
+
+/* =========================================================
+   Responsive — Tablet
+========================================================= */
 
 @media (max-width: 1000px) {
-    .navbar {
-        flex-direction: column;
-        gap: 16px;
-        padding: 20px;
+
+    .nb-navbar {
+        flex-direction:
+            column;
+
+        gap:
+            16px;
+
+        padding:
+            20px;
     }
 
-    .nav-links {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 10px;
+
+    .nb-logo {
+        text-align:
+            center;
     }
 
-    .logo {
-        text-align: center;
+
+    .nb-nav-links {
+        flex-wrap:
+            wrap;
+
+        justify-content:
+            center;
+
+        gap:
+            10px;
     }
+
+}
+
+
+/* =========================================================
+   Responsive — Mobile
+========================================================= */
+
+@media (max-width: 650px) {
+
+    .nb-navbar {
+        padding:
+            17px
+            14px;
+
+        gap:
+            14px;
+    }
+
+
+    .nb-logo {
+        font-size:
+            20px;
+
+        text-align:
+            center;
+    }
+
+
+    .nb-nav-links {
+        width:
+            100%;
+
+        gap:
+            7px;
+    }
+
+
+    .nb-nav-item {
+        padding:
+            9px
+            12px;
+
+        font-size:
+            12px;
+    }
+
+}
+
+
+/* =========================================================
+   Responsive — Small Mobile
+========================================================= */
+
+@media (max-width: 450px) {
+
+    .nb-navbar {
+        padding:
+            15px
+            10px;
+    }
+
+
+    .nb-logo {
+        font-size:
+            18px;
+
+        letter-spacing:
+            0.1px;
+    }
+
+
+    .nb-nav-links {
+        gap:
+            5px;
+    }
+
+
+    .nb-nav-item {
+        padding:
+            8px
+            10px;
+
+        font-size:
+            11px;
+    }
+
+
+    .nb-nav-item::after {
+        bottom:
+            3px;
+    }
+
+}
+
+
+/* =========================================================
+   Very Small Screens
+========================================================= */
+
+@media (max-width: 360px) {
+
+    .nb-logo {
+        font-size:
+            16px;
+    }
+
+
+    .nb-nav-links {
+        gap:
+            3px;
+    }
+
+
+    .nb-nav-item {
+        padding:
+            7px
+            8px;
+
+        font-size:
+            10px;
+    }
+
 }

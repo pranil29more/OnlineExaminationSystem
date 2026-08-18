@@ -40,35 +40,19 @@ def start_exam():
 
     exam_id = data.get("exam_id")
 
-    # Already attempted?
+    # ==========================================
+    # Fetch Exam
+    # ==========================================
 
-    check_query = """
-    SELECT submission_id
-    FROM submissions
-    WHERE user_id = %s
-    AND exam_id = %s
-    """
-
-    cur.execute(check_query, (current_user_id, exam_id))
-
-    existing = cur.fetchone()
-
-    if existing:
-
-        cur.close()
-
-        return (
-            jsonify({"message": "You have already attempted this exam."}),
-            400,
-        )
-
-    duration_query = """
-    SELECT duration
+    exam_query = """
+    SELECT
+        duration,
+        exam_type
     FROM exams
     WHERE exam_id = %s
     """
 
-    cur.execute(duration_query, (exam_id,))
+    cur.execute(exam_query, (exam_id,))
 
     exam = cur.fetchone()
 
@@ -77,6 +61,82 @@ def start_exam():
         cur.close()
 
         return jsonify({"message": "Exam not found"}), 404
+
+    duration = exam[0]
+    exam_type = exam[1]
+
+    # ==========================================
+    # Check Latest Submission
+    # ==========================================
+
+    submission_query = """
+    SELECT
+        submission_id,
+        status
+    FROM submissions
+    WHERE
+        user_id = %s
+        AND exam_id = %s
+    ORDER BY submission_id DESC
+    LIMIT 1
+    """
+
+    cur.execute(
+        submission_query,
+        (
+            current_user_id,
+            exam_id,
+        ),
+    )
+
+    existing_submission = cur.fetchone()
+
+    # ==========================================
+    # Existing In-Progress Attempt
+    # ==========================================
+
+    if (
+        existing_submission
+        and existing_submission[1] == "In Progress"
+    ):
+
+        cur.close()
+
+        return (
+            jsonify(
+                {
+                    "message": "Exam is already in progress.",
+                    "submission_id": existing_submission[0],
+                    "duration": duration,
+                }
+            ),
+            200,
+        )
+
+    # ==========================================
+    # Actual Exam - Only One Attempt
+    # ==========================================
+
+    if exam_type == "Actual" and existing_submission:
+
+        cur.close()
+
+        return (
+            jsonify(
+                {
+                    "message":
+                    "You have already attempted this assessment."
+                }
+            ),
+            400,
+        )
+
+    # ==========================================
+    # Practice Exam
+    #
+    # Completed practice attempts are allowed
+    # to create a new submission.
+    # ==========================================
 
     insert_query = """
     INSERT INTO submissions
@@ -96,11 +156,14 @@ def start_exam():
         'In Progress'
     )
     """
-    from datetime import datetime
 
-    print("Python Time:", datetime.now())
-
-    cur.execute(insert_query, (current_user_id, exam_id))
+    cur.execute(
+        insert_query,
+        (
+            current_user_id,
+            exam_id,
+        ),
+    )
 
     mysql.connection.commit()
 
@@ -113,7 +176,7 @@ def start_exam():
             {
                 "message": "Exam started",
                 "submission_id": submission_id,
-                "duration": exam[0],
+                "duration": duration,
             }
         ),
         200,
@@ -149,9 +212,40 @@ def get_exam_session(exam_id):
         cur.close()
 
         return (
-            jsonify({"message": "Only candidates can access exam session"}),
+            jsonify(
+                {
+                    "message":
+                    "Only candidates can access exam session"
+                }
+            ),
             403,
         )
+
+    # ==========================================
+    # Fetch Exam Type
+    # ==========================================
+
+    exam_query = """
+    SELECT exam_type
+    FROM exams
+    WHERE exam_id = %s
+    """
+
+    cur.execute(exam_query, (exam_id,))
+
+    exam = cur.fetchone()
+
+    if not exam:
+
+        cur.close()
+
+        return jsonify({"message": "Exam not found"}), 404
+
+    exam_type = exam[0]
+
+    # ==========================================
+    # Fetch Latest Submission
+    # ==========================================
 
     session_query = """
     SELECT
@@ -169,15 +263,61 @@ def get_exam_session(exam_id):
     LIMIT 1
     """
 
-    cur.execute(session_query, (current_user_id, exam_id))
+    cur.execute(
+        session_query,
+        (
+            current_user_id,
+            exam_id,
+        ),
+    )
 
     session = cur.fetchone()
+
+    # ==========================================
+    # Never Attempted
+    # ==========================================
 
     if not session:
 
         cur.close()
 
-        return jsonify({"status": "Not Started"}), 200
+        return (
+            jsonify(
+                {
+                    "status": "Not Started",
+                    "exam_type": exam_type,
+                }
+            ),
+            200,
+        )
+
+    # ==========================================
+    # Practice Exam Already Completed
+    #
+    # Candidate can attempt it again.
+    # ==========================================
+
+    if (
+        exam_type == "Practice"
+        and session[3] in ["Completed", "Auto Submitted"]
+    ):
+
+        cur.close()
+
+        return (
+            jsonify(
+                {
+                    "status": "Practice Completed",
+                    "exam_type": exam_type,
+                    "can_attempt_again": True,
+                }
+            ),
+            200,
+        )
+
+    # ==========================================
+    # Fetch Saved Answers
+    # ==========================================
 
     answers_query = """
     SELECT
@@ -187,7 +327,10 @@ def get_exam_session(exam_id):
     WHERE submission_id = %s
     """
 
-    cur.execute(answers_query, (session[0],))
+    cur.execute(
+        answers_query,
+        (session[0],),
+    )
 
     saved_answers = cur.fetchall()
 
@@ -196,7 +339,10 @@ def get_exam_session(exam_id):
     for answer in saved_answers:
 
         answer_list.append(
-            {"question_id": answer[0], "answer_text": answer[1]}
+            {
+                "question_id": answer[0],
+                "answer_text": answer[1],
+            }
         )
 
     cur.close()
@@ -208,6 +354,7 @@ def get_exam_session(exam_id):
                 "start_time": str(session[1]),
                 "duration": session[2],
                 "status": session[3],
+                "exam_type": exam_type,
                 "answers": answer_list,
             }
         ),

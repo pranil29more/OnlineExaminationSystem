@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API_BASE_URL from "../services/api";
 import Navbar from "../components/Navbar";
+import PageLoader from "../components/PageLoader";
 import "../styles/BatchManagementPage.css";
 
 function BatchManagementPage() {
@@ -9,181 +10,471 @@ function BatchManagementPage() {
 
     const [batches, setBatches] = useState([]);
 
+    const [loading, setLoading] = useState(true);
+
+    const [activeAction, setActiveAction] =
+        useState(null);
+
     useEffect(() => {
         fetchBatches();
     }, []);
 
     const fetchBatches = async () => {
         try {
-            const token = localStorage.getItem("token");
+            setLoading(true);
+
+            const token =
+                localStorage.getItem("token");
 
             const response = await fetch(
                 `${API_BASE_URL}/batches`,
                 {
                     headers: {
-                        Authorization: `Bearer ${token}`,
+                        Authorization:
+                            `Bearer ${token}`,
                     },
                 }
             );
 
-            const data = await response.json();
+            const data =
+                await response.json();
 
-            setBatches(data);
+            if (!response.ok) {
+                alert(
+                    data.message ||
+                        "Unable to load batches."
+                );
+
+                return;
+            }
+
+            setBatches(data || []);
         } catch (error) {
             console.error(error);
+
+            alert(
+                "Unable to load batches."
+            );
+        } finally {
+            setLoading(false);
         }
     };
 
-    const handleDeleteBatch = async (batchId) => {
-        const confirmDelete = window.confirm(
-            "Are you sure you want to delete this batch?"
+    const handleCreateBatch = () => {
+        navigate("/create-batch");
+    };
+
+    const handleViewDetails = (
+        batchId
+    ) => {
+        navigate(
+            `/batch-details/${batchId}`
         );
+    };
+
+    const handleEditBatch = (
+        batchId
+    ) => {
+        navigate(
+            `/edit-batch/${batchId}`
+        );
+    };
+
+    const handleDeleteBatch = async (
+        batchId
+    ) => {
+        const confirmDelete =
+            window.confirm(
+                "Are you sure you want to delete this batch?"
+            );
 
         if (!confirmDelete) {
             return;
         }
 
         try {
-            const token = localStorage.getItem("token");
+            setActiveAction({
+                type: "delete",
+                id: batchId,
+            });
+
+            const token =
+                localStorage.getItem("token");
 
             const response = await fetch(
                 `${API_BASE_URL}/delete-batch/${batchId}`,
                 {
                     method: "DELETE",
+
                     headers: {
-                        Authorization: `Bearer ${token}`,
+                        Authorization:
+                            `Bearer ${token}`,
                     },
                 }
             );
 
-            const data = await response.json();
+            const data =
+                await response.json();
 
-            if (response.ok) {
-                alert("Batch deleted successfully.");
+            if (!response.ok) {
+                alert(
+                    data.message ||
+                        "Unable to delete batch."
+                );
 
-                fetchBatches();
-            } else {
-                alert(data.message);
+                return;
             }
+
+            alert(
+                "Batch deleted successfully."
+            );
+
+            await fetchBatches();
         } catch (error) {
             console.error(error);
+
+            alert(
+                "Unable to delete batch."
+            );
+        } finally {
+            setActiveAction(null);
         }
     };
 
+    const isActionActive = (
+        type,
+        batchId = null
+    ) => {
+        if (!activeAction) {
+            return false;
+        }
+
+        if (
+            activeAction.type !== type
+        ) {
+            return false;
+        }
+
+        if (batchId === null) {
+            return true;
+        }
+
+        return (
+            activeAction.id === batchId
+        );
+    };
+
+    if (loading) {
+        return (
+            <div>
+                <Navbar />
+
+                <PageLoader
+                    message="Loading Batches..."
+                />
+            </div>
+        );
+    }
+
+
     return (
-        <div>
+        <div className="bmp-page">
+
             <Navbar />
 
-            <div className="batch-management-container">
-                <div className="batch-management-header">
-                    <h1 className="batch-management-title">
-                        Batch Management
-                    </h1>
+            <main className="bmp-container">
+
+                {/* ==========================================
+                    Page Header
+                ========================================== */}
+
+                <div className="bmp-header">
+
+                    <div>
+
+                        <span className="bmp-eyebrow">
+                            Administration
+                        </span>
+
+                        <h1 className="bmp-title">
+                            Batch Management
+                        </h1>
+
+                        <p className="bmp-description">
+                            Create, manage, and monitor
+                            training batches and their
+                            assigned candidates.
+                        </p>
+
+                    </div>
+
 
                     <button
-                        className="create-btn"
-                        onClick={() =>
-                            navigate("/create-batch")
+                        type="button"
+                        className="bmp-create-btn"
+                        onClick={
+                            handleCreateBatch
                         }
                     >
                         + Create Batch
                     </button>
+
                 </div>
 
-                <div className="batch-management-grid">
-                    {batches.map((batch) => (
-                        <div
-                            key={batch.batch_id}
-                            className="batch-management-card"
-                        >
-                            <h2 className="batch-management-name">
-                                {batch.batch_name}
-                            </h2>
 
-                            <p className="batch-management-description">
-                                {batch.description}
-                            </p>
+                {/* ==========================================
+                    Batch Grid
+                ========================================== */}
 
-                            <p className="batch-management-info">
-                                <strong>
-                                    Technology:
-                                </strong>{" "}
-                                {batch.technology}
-                            </p>
+                {batches.length === 0 ? (
 
-                            <p className="batch-management-info">
-                                <strong>
-                                    Trainer:
-                                </strong>{" "}
-                                {batch.trainer_name}
-                            </p>
+                    <div className="bmp-empty-state">
 
-                            <p className="batch-management-info">
-                                <strong>
-                                    Candidates:
-                                </strong>{" "}
-                                {batch.candidate_count}
-                            </p>
-
-                            <p className="batch-management-info">
-                                <strong>
-                                    Duration:
-                                </strong>{" "}
-                                {batch.start_date}
-                                {" - "}
-                                {batch.end_date}
-                            </p>
-
-                            <p className="batch-management-info">
-                                <strong>
-                                    Status:
-                                </strong>
-
-                                <span
-                                    className={`status-badge status-${batch.status.toLowerCase()}`}
-                                >
-                                    {batch.status}
-                                </span>
-                            </p>
-
-                            <div className="batch-management-actions">
-                                <button
-                                    className="details-btn"
-                                    onClick={() =>
-                                        navigate(
-                                            `/batch-details/${batch.batch_id}`
-                                        )
-                                    }
-                                >
-                                    View Details
-                                </button>
-
-                                <button
-                                    className="edit-btn"
-                                    onClick={() =>
-                                        navigate(
-                                            `/edit-batch/${batch.batch_id}`
-                                        )
-                                    }
-                                >
-                                    Edit
-                                </button>
-
-                                <button
-                                    className="delete-btn"
-                                    onClick={() =>
-                                        handleDeleteBatch(
-                                            batch.batch_id
-                                        )
-                                    }
-                                >
-                                    Delete
-                                </button>
-                            </div>
+                        <div className="bmp-empty-icon">
+                            +
                         </div>
-                    ))}
-                </div>
-            </div>
+
+                        <h2>
+                            No Training Batches
+                        </h2>
+
+                        <p>
+                            There are currently no
+                            training batches available.
+                            Create your first batch to
+                            get started.
+                        </p>
+
+                        <button
+                            type="button"
+                            className="bmp-empty-create-btn"
+                            onClick={
+                                handleCreateBatch
+                            }
+                        >
+                            + Create Batch
+                        </button>
+
+                    </div>
+
+                ) : (
+
+                    <div className="bmp-grid">
+
+                        {batches.map(
+                            (batch) => (
+
+                                <article
+                                    key={
+                                        batch.batch_id
+                                    }
+                                    className="bmp-card"
+                                >
+
+                                    {/* ==================================
+                                        Card Header
+                                    ================================== */}
+
+                                    <div className="bmp-card-header">
+
+                                        <div className="bmp-card-heading">
+
+                                            <span className="bmp-card-label">
+                                                Batch
+                                            </span>
+
+                                            <h2 className="bmp-card-name">
+                                                {
+                                                    batch.batch_name
+                                                }
+                                            </h2>
+
+                                        </div>
+
+
+                                        <span
+                                            className={`bmp-status-badge bmp-status-${batch.status
+                                                .toLowerCase()
+                                                .replace(
+                                                    /\s+/g,
+                                                    "-"
+                                                )}`}
+                                        >
+                                            {
+                                                batch.status
+                                            }
+                                        </span>
+
+                                    </div>
+
+
+                                    {/* ==================================
+                                        Description
+                                    ================================== */}
+
+                                    <p className="bmp-card-description">
+                                        {
+                                            batch.description ||
+                                            "No description provided for this batch."
+                                        }
+                                    </p>
+
+
+                                    {/* ==================================
+                                        Batch Information
+                                    ================================== */}
+
+                                    <div className="bmp-info-grid">
+
+                                        <div className="bmp-info-item">
+
+                                            <span>
+                                                Technology
+                                            </span>
+
+                                            <strong>
+                                                {
+                                                    batch.technology
+                                                }
+                                            </strong>
+
+                                        </div>
+
+
+                                        <div className="bmp-info-item">
+
+                                            <span>
+                                                Trainer
+                                            </span>
+
+                                            <strong>
+                                                {
+                                                    batch.trainer_name
+                                                }
+                                            </strong>
+
+                                        </div>
+
+
+                                        <div className="bmp-info-item">
+
+                                            <span>
+                                                Candidates
+                                            </span>
+
+                                            <strong>
+                                                {
+                                                    batch.candidate_count
+                                                }
+                                            </strong>
+
+                                        </div>
+
+
+                                        <div className="bmp-info-item">
+
+                                            <span>
+                                                Assignments
+                                            </span>
+
+                                            <strong>
+                                                {
+                                                    batch.assignment_count
+                                                }
+                                            </strong>
+
+                                        </div>
+
+
+                                        <div className="bmp-info-item bmp-info-item-wide">
+
+                                            <span>
+                                                Duration
+                                            </span>
+
+                                            <strong>
+                                                {
+                                                    batch.start_date
+                                                }
+                                                {" — "}
+                                                {
+                                                    batch.end_date
+                                                }
+                                            </strong>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    {/* ==================================
+                                        Actions
+                                    ================================== */}
+
+                                    <div className="bmp-actions">
+
+                                        <button
+                                            type="button"
+                                            className="bmp-details-btn"
+                                            onClick={() =>
+                                                handleViewDetails(
+                                                    batch.batch_id
+                                                )
+                                            }
+                                        >
+                                            View Details
+                                        </button>
+
+
+                                        <button
+                                            type="button"
+                                            className="bmp-edit-btn"
+                                            onClick={() =>
+                                                handleEditBatch(
+                                                    batch.batch_id
+                                                )
+                                            }
+                                        >
+                                            Edit
+                                        </button>
+
+
+                                        <button
+    type="button"
+    className="bmp-delete-btn"
+    onClick={() =>
+        handleDeleteBatch(
+            batch.batch_id
+        )
+    }
+    disabled={
+        isActionActive(
+            "delete",
+            batch.batch_id
+        )
+    }
+>
+    {isActionActive(
+        "delete",
+        batch.batch_id
+    )
+        ? "Deleting..."
+        : "Delete"}
+</button>
+
+                                    </div>
+
+                                </article>
+
+                            )
+                        )}
+
+                    </div>
+
+                )}
+
+            </main>
+
         </div>
     );
 }

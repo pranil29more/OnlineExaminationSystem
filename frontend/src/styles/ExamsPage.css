@@ -1,154 +1,1710 @@
-.page-container {
-    padding: 30px;
+/* =========================================================
+   EXAMS PAGE
+   Namespace: ep-
+========================================================= */
+
+
+/* =========================================================
+   Page Scope
+========================================================= */
+
+.ep-page {
+    --ep-bg: #0f172a;
+    --ep-surface: #1e293b;
+    --ep-surface-raised: #243247;
+    --ep-surface-deep: #0b1220;
+
+    --ep-border: #334155;
+    --ep-border-light: #475569;
+
+    --ep-text: #f8fafc;
+    --ep-text-soft: #cbd5e1;
+    --ep-text-muted: #94a3b8;
+    --ep-text-dim: #64748b;
+
+    --ep-primary: #3b82f6;
+    --ep-primary-hover: #2563eb;
+    --ep-primary-soft: #93c5fd;
+
+    --ep-success: #22c55e;
+    --ep-success-soft: #86efac;
+
+    --ep-warning: #f59e0b;
+    --ep-warning-soft: #fde68a;
+
+    --ep-danger: #ef4444;
+    --ep-danger-soft: #fca5a5;
+
+    --ep-radius-sm: 8px;
+    --ep-radius-md: 12px;
+    --ep-radius-lg: 16px;
+    --ep-radius-xl: 20px;
+
+    --ep-shadow-sm:
+        0 6px 16px rgba(0, 0, 0, 0.18);
+
+    --ep-shadow-md:
+        0 12px 28px rgba(0, 0, 0, 0.24);
+
+    --ep-shadow-lg:
+        0 24px 60px rgba(0, 0, 0, 0.42);
+
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at 82% 0%,
+            rgba(59, 130, 246, 0.07),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 15% 18%,
+            rgba(30, 64, 175, 0.035),
+            transparent 25%
+        ),
+        var(--ep-bg);
+
+    color:
+        var(--ep-text);
 }
 
-.page-title {
+
+/* =========================================================
+   Page Container
+========================================================= */
+
+.ep-page-container {
+    width:
+        min(
+            calc(100% - 40px),
+            1180px
+        );
+
+    margin:
+        0 auto;
+
+    padding:
+        42px
+        0
+        70px;
+}
+
+
+/* =========================================================
+   Page Header
+========================================================= */
+
+.ep-page-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-end;
+
+    gap: 30px;
+
     margin-bottom: 30px;
 }
 
-.exams-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 25px;
+
+.ep-page-header > div {
+    min-width: 0;
 }
 
-.exam-card {
-    background: #1e293b;
-    border: 1px solid #334155;
-    border-radius: 16px;
-    padding: 24px;
-    text-align: left;
-    cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
 
-.exam-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
-}
+.ep-page-eyebrow {
+    display: inline-block;
 
-.exam-title {
-    font-size: 22px;
-    margin-bottom: 15px;
-}
-
-.exam-info {
     margin-bottom: 8px;
+
+    color:
+        #60a5fa;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.4px;
 }
 
-.exam-actions {
+
+.ep-page-title {
+    margin: 0;
+
+    color:
+        var(--ep-text);
+
+    font-size:
+        clamp(
+            30px,
+            4vw,
+            40px
+        );
+
+    font-weight: 800;
+
+    line-height: 1.15;
+
+    letter-spacing: -0.7px;
+}
+
+
+.ep-page-description {
+    max-width: 700px;
+
+    margin:
+        10px
+        0
+        0;
+
+    color:
+        var(--ep-text-muted);
+
+    font-size: 15px;
+
+    line-height: 1.65;
+}
+
+
+/* =========================================================
+   Search Section
+========================================================= */
+
+.ep-search-section {
+    max-width: 760px;
+
+    margin:
+        0 auto
+        48px;
+}
+
+
+.ep-search-wrapper {
+    position: relative;
+
+    width: 100%;
+}
+
+
+.ep-search-input {
+    display: block;
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    min-height: 48px;
+
+    padding:
+        0
+        16px;
+
+    border:
+        1px solid
+        var(--ep-border);
+
+    border-radius:
+        var(--ep-radius-md);
+
+    outline: none;
+
+    background:
+        var(--ep-surface);
+
+    color:
+        var(--ep-text);
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+
+.ep-search-input::placeholder {
+    color:
+        var(--ep-text-dim);
+}
+
+
+.ep-search-input:focus {
+    border-color:
+        var(--ep-primary);
+
+    background:
+        #101a2c;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(59, 130, 246, 0.12);
+}
+
+
+.ep-search-summary {
+    margin:
+        10px
+        0
+        0;
+
+    color:
+        var(--ep-text-dim);
+
+    font-size: 11px;
+}
+
+
+.ep-search-summary strong {
+    color:
+        var(--ep-text-soft);
+
+    font-weight: 750;
+}
+
+
+/* =========================================================
+   Sections
+========================================================= */
+
+.ep-section {
+    margin-bottom: 54px;
+}
+
+
+.ep-section-header {
     display: flex;
-    gap: 12px;
-    margin-top: 20px;
-    flex-wrap: wrap;
+
+    justify-content: space-between;
+
+    align-items: flex-end;
+
+    gap: 24px;
+
+    margin-bottom: 24px;
 }
 
-.action-link {
-    color: #3b82f6;
-    font-weight: 600;
-    text-decoration: none;
+
+.ep-section-header > div {
+    min-width: 0;
 }
 
-.action-link:hover {
-    color: #60a5fa;
+
+.ep-section-kicker {
+    display: block;
+
+    margin-bottom: 6px;
+
+    color:
+        #60a5fa;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.2px;
 }
 
-.exam-actions button {
-    background: #ef4444;
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 8px;
+
+.ep-section-title {
+    margin: 0;
+
+    color:
+        var(--ep-text);
+
+    font-size: 24px;
+
+    font-weight: 800;
+
+    letter-spacing: -0.3px;
+}
+
+
+.ep-section-description {
+    max-width: 700px;
+
+    margin:
+        7px
+        0
+        0;
+
+    color:
+        var(--ep-text-muted);
+
+    font-size: 14px;
+
+    line-height: 1.6;
+}
+
+
+.ep-count-badge {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    min-height: 30px;
+
+    padding:
+        0
+        11px;
+
+    border:
+        1px solid
+        var(--ep-border-light);
+
+    border-radius: 999px;
+
+    background:
+        rgba(71, 85, 105, 0.12);
+
+    color:
+        var(--ep-text-soft);
+
+    font-size: 11px;
+
+    font-weight: 750;
+}
+
+
+/* =========================================================
+   Exams Grid
+========================================================= */
+
+.ep-exam-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap: 20px;
+}
+
+
+/* =========================================================
+   Exam Card
+========================================================= */
+
+.ep-exam-card {
+    position: relative;
+
+    display: flex;
+
+    flex-direction: column;
+
+    min-width: 0;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(30, 41, 59, 0.96),
+            rgba(15, 23, 42, 0.92)
+        );
+
+    border:
+        1px solid
+        var(--ep-border);
+
+    border-radius:
+        var(--ep-radius-lg);
+
+    box-shadow:
+        var(--ep-shadow-sm);
+
     cursor: pointer;
-    font-weight: 600;
+
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        opacity 0.18s ease;
 }
 
-.exam-actions button:hover {
-    background: #dc2626;
-}
 
-.modal-overlay {
-    position: fixed;
+.ep-exam-card::before {
+    content: "";
+
+    position: absolute;
+
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.75);
+    right: 0;
+
+    height: 3px;
+}
+
+
+.ep-exam-card:hover {
+    transform:
+        translateY(-3px);
+
+    border-color:
+        var(--ep-border-light);
+
+    box-shadow:
+        0 16px 35px
+        rgba(0, 0, 0, 0.3);
+}
+
+
+/* =========================================================
+   Exam Card Loading State
+========================================================= */
+
+.ep-exam-card.ep-exam-card-loading {
+    opacity: 0.55;
+
+    cursor: not-allowed;
+
+    transform: none;
+
+    border-color:
+        var(--ep-border);
+
+    box-shadow:
+        var(--ep-shadow-sm);
+}
+
+
+.ep-exam-card.ep-exam-card-loading:hover {
+    opacity: 0.55;
+
+    cursor: not-allowed;
+
+    transform: none;
+
+    border-color:
+        var(--ep-border);
+
+    box-shadow:
+        var(--ep-shadow-sm);
+}
+
+
+/* =========================================================
+   Actual Card
+========================================================= */
+
+.ep-exam-card:has(
+    .ep-availability-badge.available
+)::before,
+.ep-exam-card:has(
+    .ep-availability-badge.upcoming
+)::before,
+.ep-exam-card:has(
+    .ep-availability-badge.ended
+)::before,
+.ep-exam-card:has(
+    .ep-availability-badge.scheduled
+)::before,
+.ep-exam-card:has(
+    .ep-availability-badge.not-scheduled
+)::before {
+    background:
+        linear-gradient(
+            90deg,
+            #ef4444,
+            #f97316
+        );
+}
+
+
+/* =========================================================
+   Practice Card
+========================================================= */
+
+.ep-exam-card:not(
+    :has(.ep-availability-badge)
+)::before {
+    background:
+        linear-gradient(
+            90deg,
+            #22c55e,
+            #3b82f6
+        );
+}
+
+
+/* =========================================================
+   Disabled Candidate Card
+========================================================= */
+
+.ep-exam-card-disabled {
+    opacity: 0.68;
+
+    cursor: not-allowed;
+}
+
+
+.ep-exam-card-disabled:hover {
+    transform: none;
+
+    border-color:
+        var(--ep-border);
+
+    box-shadow:
+        var(--ep-shadow-sm);
+}
+
+
+/* =========================================================
+   Exam Card Header
+========================================================= */
+
+.ep-exam-card-header {
     display: flex;
-    justify-content: center;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    gap: 18px;
+
+    padding:
+        22px
+        22px
+        19px;
+
+    border-bottom:
+        1px solid
+        var(--ep-border);
+}
+
+
+.ep-exam-heading {
+    min-width: 0;
+}
+
+
+.ep-exam-number {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color:
+        var(--ep-text-dim);
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.8px;
+}
+
+
+.ep-exam-title {
+    margin: 0;
+
+    color:
+        var(--ep-text);
+
+    font-size: 18px;
+
+    font-weight: 750;
+
+    line-height: 1.4;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* =========================================================
+   Availability Badge
+========================================================= */
+
+.ep-availability-badge {
+    display: inline-flex;
+
     align-items: center;
-    z-index: 1000;
-}
 
-.start-exam-modal {
-    width: 90%;
-    max-width: 520px;
-    background: #1e293b;
-    border: 1px solid #334155;
-    border-radius: 18px;
-    padding: 30px;
-    text-align: center;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
-}
-
-.start-exam-modal h2 {
-    margin-bottom: 20px;
-    color: #3b82f6;
-}
-
-.start-exam-modal h3 {
-    margin-bottom: 20px;
-    font-size: 24px;
-}
-
-.start-exam-modal p {
-    margin-bottom: 10px;
-    font-size: 17px;
-}
-
-.modal-warning {
-    margin-top: 25px;
-    padding: 16px;
-    background: rgba(239, 68, 68, 0.12);
-    border: 1px solid #ef4444;
-    border-radius: 12px;
-    line-height: 1.6;
-    color: #fecaca;
-}
-
-.modal-buttons {
-    display: flex;
     justify-content: center;
-    gap: 20px;
-    margin-top: 30px;
+
+    flex-shrink: 0;
+
+    min-height: 27px;
+
+    padding:
+        0
+        10px;
+
+    border-radius: 999px;
+
+    font-size: 10px;
+
+    font-weight: 850;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.6px;
 }
 
-.cancel-btn {
-    background: #475569;
-    color: white;
-    border: none;
-    padding: 12px 28px;
-    border-radius: 10px;
+
+/* =========================================================
+   Available
+========================================================= */
+
+.ep-availability-badge.available,
+.ep-availability-badge.scheduled {
+    color:
+        #bbf7d0;
+
+    background:
+        rgba(34, 197, 94, 0.1);
+
+    border:
+        1px solid
+        rgba(34, 197, 94, 0.45);
+}
+
+
+/* =========================================================
+   Upcoming
+========================================================= */
+
+.ep-availability-badge.upcoming {
+    color:
+        #93c5fd;
+
+    background:
+        rgba(59, 130, 246, 0.1);
+
+    border:
+        1px solid
+        rgba(59, 130, 246, 0.45);
+}
+
+
+/* =========================================================
+   Ended
+========================================================= */
+
+.ep-availability-badge.ended {
+    color:
+        #fecaca;
+
+    background:
+        rgba(239, 68, 68, 0.1);
+
+    border:
+        1px solid
+        rgba(239, 68, 68, 0.45);
+}
+
+
+/* =========================================================
+   Not Scheduled
+========================================================= */
+
+.ep-availability-badge.not-scheduled {
+    color:
+        #fde68a;
+
+    background:
+        rgba(245, 158, 11, 0.1);
+
+    border:
+        1px solid
+        rgba(245, 158, 11, 0.45);
+}
+
+
+/* =========================================================
+   Exam Details
+========================================================= */
+
+.ep-exam-details {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    border-bottom:
+        1px solid
+        var(--ep-border);
+}
+
+
+.ep-exam-detail {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 6px;
+
+    min-width: 0;
+
+    padding:
+        16px
+        22px;
+}
+
+
+.ep-exam-detail:nth-child(odd) {
+    border-right:
+        1px solid
+        var(--ep-border);
+}
+
+
+.ep-exam-detail:nth-child(-n + 2) {
+    border-bottom:
+        1px solid
+        var(--ep-border);
+}
+
+
+.ep-detail-label {
+    color:
+        var(--ep-text-dim);
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.6px;
+}
+
+
+.ep-exam-detail strong {
+    color:
+        var(--ep-text-soft);
+
+    font-size: 16px;
+
+    font-weight: 750;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* =========================================================
+   Schedule Area
+========================================================= */
+
+.ep-schedule-area {
+    padding:
+        18px
+        22px;
+
+    background:
+        rgba(15, 23, 42, 0.28);
+
+    border-bottom:
+        1px solid
+        var(--ep-border);
+}
+
+
+.ep-schedule-heading {
+    margin-bottom: 12px;
+
+    color:
+        var(--ep-text-soft);
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.7px;
+}
+
+
+.ep-schedule-details {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap: 16px;
+}
+
+
+.ep-schedule-details > div {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+
+    min-width: 0;
+}
+
+
+.ep-schedule-details span {
+    color:
+        var(--ep-text-dim);
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.5px;
+}
+
+
+.ep-schedule-details strong {
+    color:
+        var(--ep-text-soft);
+
+    font-size: 13px;
+
+    font-weight: 650;
+
+    line-height: 1.5;
+
+    overflow-wrap: anywhere;
+}
+
+
+.ep-schedule-empty {
+    margin: 0;
+
+    color:
+        var(--ep-text-muted);
+
+    font-size: 12px;
+
+    line-height: 1.55;
+}
+
+
+/* =========================================================
+   Empty State
+========================================================= */
+
+.ep-empty-state {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-height: 150px;
+
+    padding: 30px;
+
+    background:
+        rgba(30, 41, 59, 0.72);
+
+    border:
+        1px dashed
+        var(--ep-border-light);
+
+    border-radius:
+        var(--ep-radius-lg);
+
+    text-align: center;
+}
+
+
+.ep-empty-icon {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 42px;
+    height: 42px;
+
+    margin-bottom: 11px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(59, 130, 246, 0.08);
+
+    color:
+        #60a5fa;
+
+    font-size: 21px;
+}
+
+
+.ep-empty-state strong {
+    color:
+        var(--ep-text);
+
+    font-size: 14px;
+
+    font-weight: 750;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   Modal Overlay
+========================================================= */
+
+.ep-modal-overlay {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 2000;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+
+    background:
+        rgba(2, 6, 23, 0.82);
+
+    backdrop-filter:
+        blur(7px);
+}
+
+
+/* =========================================================
+   Modal
+========================================================= */
+
+.ep-exam-modal {
+    width: 100%;
+
+    max-width: 520px;
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    box-sizing: border-box;
+
+    padding: 28px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #243247,
+            #1e293b
+        );
+
+    border:
+        1px solid
+        var(--ep-border-light);
+
+    border-radius:
+        var(--ep-radius-xl);
+
+    box-shadow:
+        var(--ep-shadow-lg);
+
+    animation:
+        epModalFadeIn
+        0.2s
+        ease;
+
+    scrollbar-width: thin;
+}
+
+
+@keyframes epModalFadeIn {
+
+    from {
+        opacity: 0;
+
+        transform:
+            translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0);
+    }
+
+}
+
+
+/* =========================================================
+   Modal Header
+========================================================= */
+
+.ep-modal-header {
+    padding-bottom: 20px;
+
+    border-bottom:
+        1px solid
+        var(--ep-border);
+
+    text-align: center;
+}
+
+
+.ep-modal-label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color:
+        var(--ep-text-dim);
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.8px;
+}
+
+
+.ep-modal-header h2 {
+    margin:
+        0
+        0
+        8px;
+
+    color:
+        var(--ep-text);
+
+    font-size: 23px;
+
+    font-weight: 800;
+}
+
+
+.ep-modal-header p {
+    margin: 0;
+
+    color:
+        var(--ep-text-muted);
+
+    font-size: 14px;
+
+    line-height: 1.5;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* =========================================================
+   Modal Details
+========================================================= */
+
+.ep-modal-details {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
+
+    margin-top: 20px;
+
+    overflow: hidden;
+
+    border:
+        1px solid
+        var(--ep-border);
+
+    border-radius:
+        var(--ep-radius-md);
+}
+
+
+.ep-modal-detail {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 6px;
+
+    padding: 15px;
+
+    background:
+        rgba(15, 23, 42, 0.32);
+}
+
+
+.ep-modal-detail:not(:last-child) {
+    border-right:
+        1px solid
+        var(--ep-border);
+}
+
+
+.ep-modal-detail span {
+    color:
+        var(--ep-text-dim);
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.5px;
+}
+
+
+.ep-modal-detail strong {
+    color:
+        var(--ep-text-soft);
+
+    font-size: 15px;
+
+    font-weight: 750;
+}
+
+
+/* =========================================================
+   Modal Warning
+========================================================= */
+
+.ep-modal-warning {
+    margin-top: 20px;
+
+    padding: 17px;
+
+    background:
+        rgba(245, 158, 11, 0.08);
+
+    border:
+        1px solid
+        rgba(245, 158, 11, 0.45);
+
+    border-radius:
+        var(--ep-radius-md);
+
+    color:
+        #fde68a;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+}
+
+
+.ep-modal-warning strong {
+    color:
+        #fef3c7;
+}
+
+
+.ep-modal-warning p {
+    margin:
+        8px
+        0
+        0;
+}
+
+
+.ep-modal-warning-danger {
+    background:
+        rgba(239, 68, 68, 0.08);
+
+    border-color:
+        rgba(239, 68, 68, 0.45);
+
+    color:
+        #fecaca;
+}
+
+
+.ep-modal-warning-danger strong {
+    color:
+        #fee2e2;
+}
+
+
+.ep-modal-warning-info {
+    background:
+        rgba(59, 130, 246, 0.08);
+
+    border-color:
+        rgba(59, 130, 246, 0.45);
+
+    color:
+        #bfdbfe;
+}
+
+
+.ep-modal-warning-info strong {
+    color:
+        #dbeafe;
+}
+
+
+/* =========================================================
+   Modal Actions
+========================================================= */
+
+.ep-modal-actions {
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 10px;
+
+    width: 100%;
+
+    margin-top: 24px;
+}
+
+
+/* =========================================================
+   Shared Modal Button
+========================================================= */
+
+.ep-page button.ep-modal-cancel,
+.ep-page button.ep-modal-start {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: auto;
+
+    min-width: 96px;
+
+    height: 38px;
+
+    min-height: 38px;
+
+    max-height: 38px;
+
+    box-sizing: border-box;
+
+    margin: 0;
+
+    padding: 0 17px;
+
+    border-radius: 7px;
+
+    font-family: inherit;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    line-height: 1;
+
+    white-space: nowrap;
+
     cursor: pointer;
-    font-weight: 600;
-    transition: 0.2s;
+
+    appearance: none;
+
+    -webkit-appearance: none;
+
+    transition:
+        background 0.18s ease,
+        border-color 0.18s ease,
+        color 0.18s ease,
+        box-shadow 0.18s ease,
+        transform 0.18s ease,
+        opacity 0.18s ease;
 }
 
-.cancel-btn:hover {
-    background: #64748b;
+
+/* =========================================================
+   Close
+========================================================= */
+
+.ep-page button.ep-modal-cancel {
+    border: 1px solid #475569;
+
+    background: #1e293b;
+
+    color: #cbd5e1;
 }
 
-.start-btn {
+
+.ep-page button.ep-modal-cancel:hover:not(:disabled) {
+    border-color: #64748b;
+
+    background: #334155;
+
+    color: #f8fafc;
+}
+
+
+.ep-page button.ep-modal-cancel:active:not(:disabled) {
+    transform: translateY(1px);
+}
+
+
+.ep-page button.ep-modal-cancel:disabled {
+    opacity: 0.55;
+
+    cursor: not-allowed;
+
+    transform: none;
+}
+
+
+/* =========================================================
+   Start / Resume / Attempt Again
+========================================================= */
+
+.ep-page button.ep-modal-start {
+    border: 1px solid #22c55e;
+
     background: #22c55e;
-    color: white;
-    border: none;
-    padding: 12px 28px;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: 0.2s;
+
+    color: #ffffff;
+
+    box-shadow:
+        0 5px 12px
+        rgba(34, 197, 94, 0.20);
 }
 
-.start-btn:hover {
-    background: #16a34a;
+
+.ep-page button.ep-modal-start:hover:not(:disabled) {
+    border-color: #4ade80;
+
+    background: #4ade80;
+
+    color: #ffffff;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 8px 18px
+        rgba(34, 197, 94, 0.28);
+}
+
+
+.ep-page button.ep-modal-start:active:not(:disabled) {
+    transform: translateY(1px);
+
+    box-shadow:
+        0 3px 8px
+        rgba(34, 197, 94, 0.18);
+}
+
+
+/* =========================================================
+   Modal Action Loading State
+========================================================= */
+
+.ep-page button.ep-modal-start:disabled,
+.ep-page button.ep-modal-start.ep-modal-start-loading {
+    opacity: 0.55;
+
+    cursor: not-allowed;
+
+    transform: none;
+
+    border-color:
+        #22c55e;
+
+    background:
+        #22c55e;
+
+    color:
+        #ffffff;
+
+    box-shadow:
+        0 4px 10px
+        rgba(34, 197, 94, 0.10);
+}
+
+
+.ep-page button.ep-modal-start:disabled:hover,
+.ep-page button.ep-modal-start.ep-modal-start-loading:hover {
+    opacity: 0.55;
+
+    cursor: not-allowed;
+
+    border-color:
+        #22c55e;
+
+    background:
+        #22c55e;
+
+    color:
+        #ffffff;
+
+    transform: none;
+
+    box-shadow:
+        0 4px 10px
+        rgba(34, 197, 94, 0.10);
+}
+
+
+.ep-page button.ep-modal-start:disabled:active,
+.ep-page button.ep-modal-start.ep-modal-start-loading:active {
+    cursor: not-allowed;
+
+    transform: none;
+
+    box-shadow:
+        0 4px 10px
+        rgba(34, 197, 94, 0.10);
+}
+
+
+/* =========================================================
+   Focus Protection
+========================================================= */
+
+.ep-page button:focus-visible,
+.ep-page a:focus-visible,
+.ep-page input:focus-visible {
+    outline:
+        2px solid
+        rgba(96, 165, 250, 0.8);
+
+    outline-offset: 2px;
+}
+
+
+/* =========================================================
+   Modal Scrollbar
+========================================================= */
+
+.ep-exam-modal::-webkit-scrollbar {
+    width: 7px;
+}
+
+
+.ep-exam-modal::-webkit-scrollbar-track {
+    background:
+        transparent;
+}
+
+
+.ep-exam-modal::-webkit-scrollbar-thumb {
+    background:
+        #475569;
+
+    border-radius:
+        999px;
+}
+
+
+.ep-exam-modal::-webkit-scrollbar-thumb:hover {
+    background:
+        #64748b;
+}
+
+
+/* =========================================================
+   Responsive — Tablet
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .ep-page-container {
+        width:
+            min(
+                calc(100% - 30px),
+                760px
+            );
+
+        padding-top: 32px;
+    }
+
+
+    .ep-exam-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+/* =========================================================
+   Responsive — Mobile
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .ep-page-container {
+        width:
+            calc(100% - 24px);
+
+        padding:
+            25px
+            0
+            50px;
+    }
+
+
+    .ep-page-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+
+    .ep-page-title {
+        font-size: 30px;
+    }
+
+
+    .ep-section-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+
+    .ep-count-badge {
+        align-self: flex-start;
+    }
+
+
+    .ep-exam-card-header {
+        gap: 12px;
+    }
+
+
+    .ep-exam-details {
+        grid-template-columns: 1fr;
+    }
+
+
+    .ep-exam-detail:nth-child(odd) {
+        border-right: none;
+    }
+
+
+    .ep-exam-detail:nth-child(-n + 2) {
+        border-bottom: none;
+    }
+
+
+    .ep-exam-detail:not(:last-child) {
+        border-bottom:
+            1px solid
+            var(--ep-border);
+    }
+
+
+    .ep-schedule-details {
+        grid-template-columns: 1fr;
+    }
+
+
+    .ep-modal-details {
+        grid-template-columns: 1fr;
+    }
+
+
+    .ep-modal-detail:not(:last-child) {
+        border-right: none;
+
+        border-bottom:
+            1px solid
+            var(--ep-border);
+    }
+
+
+    .ep-exam-modal {
+        max-height: 92vh;
+
+        padding: 22px;
+    }
+
+}
+
+
+/* =========================================================
+   Responsive — Small Mobile
+========================================================= */
+
+@media (max-width: 480px) {
+
+    .ep-page-container {
+        width:
+            calc(100% - 18px);
+    }
+
+
+    .ep-page-title {
+        font-size: 27px;
+    }
+
+
+    .ep-section-title {
+        font-size: 21px;
+    }
+
+
+    .ep-exam-card-header {
+        flex-direction: column;
+    }
+
+
+    .ep-availability-badge {
+        align-self: flex-start;
+    }
+
+
+    .ep-exam-card-header,
+    .ep-schedule-area {
+        padding-left: 17px;
+        padding-right: 17px;
+    }
+
+
+    .ep-exam-detail {
+        padding-left: 17px;
+        padding-right: 17px;
+    }
+
+
+    .ep-modal-actions {
+        display: flex;
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 10px;
+    }
+
+
+    .ep-page button.ep-modal-cancel,
+    .ep-page button.ep-modal-start {
+        width: 100%;
+
+        min-width: 0;
+
+        max-width: none;
+
+        height: 46px;
+
+        min-height: 46px;
+
+        max-height: 46px;
+    }
+
 }

@@ -1,122 +1,688 @@
-.page-container {
+/* =========================================================
+   CREATE BATCH PAGE
+   Namespace: cbp-
+========================================================= */
+
+
+/* =========================================================
+   Page
+========================================================= */
+
+.cbp-page {
+    min-height: 100vh;
+
+    color: #f8fafc;
+}
+
+
+/* =========================================================
+   Container
+========================================================= */
+
+.cbp-container {
     width: 100%;
-    max-width: 900px;
-    margin: auto;
-    padding: 40px;
-}
 
-.page-title {
-    color: white;
-    font-size: 40px;
-    font-weight: 700;
-    text-align: center;
-    margin-bottom: 40px;
-}
+    max-width: 850px;
 
-.batch-form {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-    background: #1e293b;
-    border: 1px solid #334155;
-    border-radius: 18px;
-    padding: 35px;
-    box-shadow: 0 0 25px rgba(59, 130, 246, 0.1);
-}
+    margin: 0 auto;
 
-.batch-form label {
-    color: #e2e8f0;
-    font-size: 15px;
-    font-weight: 600;
-}
+    padding:
+        42px
+        25px
+        70px;
 
-.batch-form input,
-.batch-form textarea,
-.batch-form select {
-    width: 100%;
     box-sizing: border-box;
-    padding: 14px;
-    background: #0f172a;
-    border: 1px solid #334155;
-    border-radius: 10px;
-    color: white;
-    font-size: 15px;
-    transition: 0.3s;
 }
 
-.batch-form input::placeholder,
-.batch-form textarea::placeholder {
+
+/* =========================================================
+   Page Header
+========================================================= */
+
+.cbp-header {
+    margin-bottom: 32px;
+}
+
+
+.cbp-eyebrow {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #60a5fa;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1.3px;
+}
+
+
+.cbp-title {
+    margin: 0 0 10px;
+
+    color: #f8fafc;
+
+    font-size: 40px;
+
+    line-height: 1.2;
+
+    font-weight: 800;
+
+    letter-spacing: -0.7px;
+}
+
+
+.cbp-description {
+    max-width: 700px;
+
+    margin: 0;
+
     color: #94a3b8;
+
+    font-size: 14px;
+
+    line-height: 1.65;
 }
 
-.batch-form input:focus,
-.batch-form textarea:focus,
-.batch-form select:focus {
+
+/* =========================================================
+   Main Form Card
+========================================================= */
+
+.cbp-form-card {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 30px;
+
+    background: #1e293b;
+
+    border:
+        1px solid
+        #334155;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 10px 24px
+        rgba(0, 0, 0, 0.22);
+}
+
+
+/* =========================================================
+   Form Section
+========================================================= */
+
+.cbp-form-section {
+    animation:
+        cbpFadeIn
+        0.2s
+        ease;
+}
+
+
+@keyframes cbpFadeIn {
+
+    from {
+        opacity: 0;
+
+        transform:
+            translateY(4px);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0);
+    }
+
+}
+
+
+/* =========================================================
+   Section Heading
+========================================================= */
+
+.cbp-section-heading {
+    margin-bottom: 28px;
+
+    padding-bottom: 20px;
+
+    border-bottom:
+        1px solid
+        #334155;
+}
+
+
+.cbp-section-eyebrow {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #60a5fa;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1px;
+}
+
+
+.cbp-section-title {
+    display: block;
+
+    width: 100%;
+
+    margin:
+        0
+        0
+        7px;
+
+    padding: 0;
+
+    box-sizing: border-box;
+
+    color: #f8fafc;
+
+    font-size: 22px;
+
+    font-weight: 800;
+
+    line-height: 1.3;
+
+    text-align: left;
+
+    letter-spacing: -0.2px;
+}
+
+
+.cbp-section-description {
+    margin: 0;
+
+    color: #94a3b8;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   Form Field
+========================================================= */
+
+.cbp-field {
+    width: 100%;
+
+    margin-bottom: 19px;
+}
+
+
+.cbp-field-label {
+    display: block;
+
+    margin-bottom: 9px;
+
+    color: #e2e8f0;
+
+    font-size: 13px;
+
+    font-weight: 750;
+
+    line-height: 1.4;
+}
+
+
+/* =========================================================
+   Common Form Input
+========================================================= */
+
+.cbp-form-input,
+.cbp-form-textarea {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    border:
+        1px solid
+        #475569;
+
+    border-radius: 9px;
+
     outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 12px rgba(59, 130, 246, 0.25);
+
+    background:
+        #0f172a;
+
+    color:
+        #f8fafc;
+
+    font-family:
+        inherit;
+
+    font-size:
+        13px;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
 }
 
-.batch-form textarea {
-    resize: vertical;
-    min-height: 120px;
-    font-family: inherit;
+
+/* =========================================================
+   Text / Date Input
+========================================================= */
+
+.cbp-form-input {
+    min-height: 46px;
+
+    padding:
+        0
+        14px;
 }
 
-.batch-form select,
-.batch-form input[type="date"] {
-    cursor: pointer;
+
+.cbp-form-input::placeholder {
+    color:
+        #64748b;
 }
 
-.create-btn {
-    margin-top: 20px;
-    background: #2563eb;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    padding: 15px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.3s;
+
+.cbp-form-input:hover,
+.cbp-form-textarea:hover {
+    border-color:
+        #64748b;
 }
 
-.create-btn:hover {
-    background: #3b82f6;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.25);
+
+.cbp-form-input:focus,
+.cbp-form-textarea:focus {
+    border-color:
+        #3b82f6;
+
+    background:
+        #101a2c;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(59, 130, 246, 0.12);
 }
 
-.create-btn:active {
-    transform: scale(0.98);
+
+/* =========================================================
+   Textarea
+========================================================= */
+
+.cbp-form-textarea {
+    min-height: 125px;
+
+    padding:
+        13px
+        14px;
+
+    resize:
+        vertical;
+
+    line-height:
+        1.6;
 }
 
-.date-row {
-    display: flex;
-    gap: 20px;
+
+.cbp-form-textarea::placeholder {
+    color:
+        #64748b;
 }
 
-.date-field {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+
+/* =========================================================
+   Training Schedule Heading
+========================================================= */
+
+.cbp-date-heading {
+    margin:
+        8px
+        0
+        14px;
+
+    color:
+        #e2e8f0;
+
+    font-size:
+        13px;
+
+    font-weight:
+        750;
+
+    line-height:
+        1.4;
 }
 
-@media (max-width: 768px) {
-    .page-container {
-        padding: 20px;
+
+/* =========================================================
+   Date Grid
+========================================================= */
+
+.cbp-date-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap:
+        0
+        16px;
+
+    margin-bottom:
+        4px;
+}
+
+
+/* =========================================================
+   Date Inputs
+========================================================= */
+
+.cbp-page .cbp-form-input[type="date"] {
+    color-scheme:
+        dark;
+
+    cursor:
+        pointer;
+}
+
+
+/* =========================================================
+   Number Inputs
+========================================================= */
+
+.cbp-form-input[type="number"] {
+    appearance:
+        textfield;
+
+    -moz-appearance:
+        textfield;
+}
+
+
+.cbp-form-input[type="number"]::-webkit-inner-spin-button,
+.cbp-form-input[type="number"]::-webkit-outer-spin-button {
+    appearance:
+        none;
+
+    -webkit-appearance:
+        none;
+
+    margin:
+        0;
+}
+
+
+/* =========================================================
+   Create Batch Button
+========================================================= */
+
+.cbp-create-btn {
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    width:
+        220px;
+
+    min-height:
+        42px;
+
+    margin:
+        30px
+        auto
+        0;
+
+    padding:
+        0
+        20px;
+
+    box-sizing:
+        border-box;
+
+    border:
+        1px solid
+        #3b82f6;
+
+    border-radius:
+        9px;
+
+    background:
+        #2563eb;
+
+    color:
+        #ffffff;
+
+    font-family:
+        inherit;
+
+    font-size:
+        13px;
+
+    font-weight:
+        750;
+
+    line-height:
+        1;
+
+    cursor:
+        pointer;
+
+    box-shadow:
+        0 5px 12px
+        rgba(37, 99, 235, 0.20);
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.cbp-create-btn:hover {
+    background:
+        #3b82f6;
+
+    border-color:
+        #60a5fa;
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 8px 18px
+        rgba(37, 99, 235, 0.30);
+}
+
+
+.cbp-create-btn:active {
+    transform:
+        translateY(0);
+}
+
+
+.cbp-create-btn:disabled {
+    opacity: 0.55;
+
+    cursor: not-allowed;
+
+    transform: none;
+
+    box-shadow:
+        0 5px 12px
+        rgba(37, 99, 235, 0.10);
+}
+
+
+.cbp-create-btn:disabled:hover {
+    background:
+        #2563eb;
+
+    border-color:
+        #3b82f6;
+
+    transform:
+        none;
+
+    box-shadow:
+        0 5px 12px
+        rgba(37, 99, 235, 0.10);
+}
+
+
+/* =========================================================
+   Focus Protection
+========================================================= */
+
+.cbp-page button:focus-visible,
+.cbp-page input:focus-visible,
+.cbp-page textarea:focus-visible {
+    outline:
+        2px solid
+        rgba(96, 165, 250, 0.8);
+
+    outline-offset:
+        2px;
+}
+
+
+/* =========================================================
+   Responsive — Tablet
+========================================================= */
+
+@media (max-width: 800px) {
+
+    .cbp-container {
+        padding:
+            32px
+            20px
+            60px;
     }
 
-    .page-title {
-        font-size: 32px;
+
+    .cbp-header {
+        margin-bottom:
+            28px;
     }
 
-    .batch-form {
-        padding: 25px;
+
+    .cbp-title {
+        font-size:
+            36px;
     }
 
-    .date-row {
-        flex-direction: column;
+
+    .cbp-form-card {
+        padding:
+            25px;
     }
+
+}
+
+
+/* =========================================================
+   Responsive — Mobile
+========================================================= */
+
+@media (max-width: 650px) {
+
+    .cbp-container {
+        padding:
+            27px
+            15px
+            50px;
+    }
+
+
+    .cbp-title {
+        font-size:
+            32px;
+    }
+
+
+    .cbp-description {
+        font-size:
+            13px;
+    }
+
+
+    .cbp-form-card {
+        padding:
+            20px;
+    }
+
+
+    .cbp-date-grid {
+        grid-template-columns:
+            1fr;
+
+        gap:
+            0;
+    }
+
+
+    .cbp-create-btn {
+        width:
+            100%;
+    }
+
+}
+
+
+/* =========================================================
+   Responsive — Small Mobile
+========================================================= */
+
+@media (max-width: 450px) {
+
+    .cbp-container {
+        padding:
+            24px
+            12px
+            45px;
+    }
+
+
+    .cbp-title {
+        font-size:
+            29px;
+    }
+
+
+    .cbp-form-card {
+        padding:
+            17px;
+
+        border-radius:
+            14px;
+    }
+
+
+    .cbp-section-title {
+        font-size:
+            20px;
+    }
+
 }

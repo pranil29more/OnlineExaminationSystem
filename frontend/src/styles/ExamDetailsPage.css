@@ -1,119 +1,1418 @@
-.page-container {
-    max-width: 1100px;
-    margin: 40px auto;
-    padding: 20px;
+/* =========================================================
+   EXAM DETAILS PAGE
+   Namespace: edp-
+========================================================= */
+
+
+/* =========================================================
+   Page Scope
+========================================================= */
+
+.edp-page {
+    --edp-bg: #0f172a;
+    --edp-surface: #1e293b;
+    --edp-surface-raised: #243247;
+    --edp-surface-deep: #0b1220;
+
+    --edp-border: #334155;
+    --edp-border-light: #475569;
+
+    --edp-text: #f8fafc;
+    --edp-text-soft: #cbd5e1;
+    --edp-text-muted: #94a3b8;
+    --edp-text-dim: #64748b;
+
+    --edp-primary: #3b82f6;
+    --edp-primary-hover: #2563eb;
+    --edp-primary-soft: #93c5fd;
+
+    --edp-success: #22c55e;
+    --edp-success-hover: #16a34a;
+    --edp-success-soft: #86efac;
+
+    --edp-warning: #f59e0b;
+    --edp-warning-soft: #fde68a;
+
+    --edp-danger: #ef4444;
+    --edp-danger-soft: #fca5a5;
+
+    --edp-radius-sm: 8px;
+    --edp-radius-md: 12px;
+    --edp-radius-lg: 16px;
+    --edp-radius-xl: 20px;
+
+    --edp-shadow-sm:
+        0 6px 16px
+        rgba(0, 0, 0, 0.18);
+
+    --edp-shadow-md:
+        0 12px 28px
+        rgba(0, 0, 0, 0.24);
+
+    --edp-shadow-lg:
+        0 24px 60px
+        rgba(0, 0, 0, 0.42);
+
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at 82% 0%,
+            rgba(59, 130, 246, 0.07),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 15% 18%,
+            rgba(30, 64, 175, 0.035),
+            transparent 25%
+        ),
+        var(--edp-bg);
+
+    color: var(--edp-text);
 }
 
-.exam-header-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 24px;
-    margin-bottom: 30px;
-    box-shadow: var(--shadow);
+
+/* =========================================================
+   Page Container
+========================================================= */
+
+.edp-page-container {
+    width:
+        min(
+            calc(100% - 40px),
+            1180px
+        );
+
+    margin: 0 auto;
+
+    padding:
+        42px
+        0
+        70px;
 }
 
-.exam-title {
-    margin-bottom: 16px;
-    color: var(--text-h);
+
+/* =========================================================
+   Exam Header
+========================================================= */
+
+.edp-exam-header {
+    width: 100%;
+
+    margin-bottom: 48px;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(36, 50, 71, 0.92),
+            rgba(30, 41, 59, 0.97)
+        );
+
+    border:
+        1px solid
+        var(--edp-border);
+
+    border-radius:
+        var(--edp-radius-xl);
+
+    box-shadow:
+        var(--edp-shadow-md);
 }
 
-.exam-info {
-    margin: 10px 0;
-    color: var(--text);
-}
 
-.questions-grid {
-    display: grid;
-    gap: 20px;
-}
+/* =========================================================
+   Header Top
+========================================================= */
 
-.question-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 20px;
-    box-shadow: var(--shadow);
-}
-
-.question-title {
-    margin-bottom: 16px;
-    color: var(--text-h);
-}
-
-.options-container {
+.edp-exam-header-top {
     display: flex;
-    flex-direction: column;
-    gap: 14px;
-    margin-top: 20px;
-}
 
-.option-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.option-row input[type="radio"] {
-    width: 18px;
-    height: 18px;
-    margin: 0;
-    flex-shrink: 0;
-}
-
-.option-row span {
-    color: var(--text);
-    font-size: 16px;
-}
-
-.submit-section {
-    margin-top: 30px;
-    text-align: center;
-}
-
-.submit-btn {
-    background: var(--accent);
-    color: white;
-    border: none;
-    padding: 14px 32px;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 600;
-}
-
-.submit-btn:hover {
-    opacity: 0.9;
-}
-
-.question-header {
-    display: flex;
     justify-content: space-between;
-    align-items: center;
-    gap: 20px;
-    margin-bottom: 20px;
+
+    align-items: flex-start;
+
+    gap: 30px;
+
+    padding:
+        28px
+        30px;
+
+    border-bottom:
+        1px solid
+        var(--edp-border);
 }
 
-.question-marks {
-    background: rgba(0, 212, 255, 0.15);
-    color: #00d4ff;
-    padding: 6px 12px;
-    border-radius: 8px;
+
+.edp-exam-heading {
+    min-width: 0;
+}
+
+
+.edp-exam-eyebrow {
+    display: inline-block;
+
+    margin-bottom: 8px;
+
+    color: #60a5fa;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1.3px;
+}
+
+
+.edp-exam-title {
+    margin: 0 0 8px;
+
+    color:
+        var(--edp-text);
+
+    font-size:
+        clamp(
+            26px,
+            4vw,
+            36px
+        );
+
+    font-weight: 800;
+
+    line-height: 1.2;
+
+    letter-spacing: -0.5px;
+
+    overflow-wrap: anywhere;
+}
+
+
+.edp-exam-id {
+    color:
+        var(--edp-text-dim);
+
+    font-size: 11px;
+    font-weight: 700;
+
+    letter-spacing: 0.5px;
+}
+
+
+/* =========================================================
+   Timer
+========================================================= */
+
+.edp-timer-card {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    min-width: 145px;
+
+    padding:
+        13px
+        17px;
+
+    border:
+        1px solid
+        rgba(59, 130, 246, 0.45);
+
+    border-radius:
+        var(--edp-radius-md);
+
+    background:
+        rgba(59, 130, 246, 0.08);
+
+    box-shadow:
+        0 8px 20px
+        rgba(0, 0, 0, 0.12);
+
+    transition:
+        border-color 0.3s ease,
+        background 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+
+.edp-timer-label {
+    margin-bottom: 6px;
+
+    color:
+        var(--edp-text-muted);
+
+    font-size: 9px;
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.8px;
+
+    transition:
+        color 0.3s ease;
+}
+
+
+.edp-timer {
+    color:
+        var(--edp-primary-soft);
+
+    font-size: 23px;
+    font-weight: 850;
+
+    line-height: 1;
+
+    letter-spacing: 0.5px;
+
+    white-space: nowrap;
+
+    transition:
+        color 0.3s ease;
+}
+
+
+/* =========================================================
+   Timer — Normal State
+========================================================= */
+
+.edp-timer-card.edp-timer-normal {
+    border-color:
+        rgba(59, 130, 246, 0.45);
+
+    background:
+        rgba(59, 130, 246, 0.08);
+
+    box-shadow:
+        0 8px 20px
+        rgba(0, 0, 0, 0.12);
+}
+
+
+.edp-timer-card.edp-timer-normal
+.edp-timer-label {
+    color:
+        var(--edp-text-muted);
+}
+
+
+.edp-timer-card.edp-timer-normal
+.edp-timer {
+    color:
+        var(--edp-primary-soft);
+}
+
+
+/* =========================================================
+   Timer — Warning State
+========================================================= */
+
+.edp-timer-card.edp-timer-warning {
+    border-color:
+        rgba(245, 158, 11, 0.55);
+
+    background:
+        rgba(245, 158, 11, 0.08);
+
+    box-shadow:
+        0 8px 20px
+        rgba(245, 158, 11, 0.08);
+}
+
+
+.edp-timer-card.edp-timer-warning
+.edp-timer-label {
+    color:
+        #fcd34d;
+}
+
+
+.edp-timer-card.edp-timer-warning
+.edp-timer {
+    color:
+        var(--edp-warning-soft);
+}
+
+
+/* =========================================================
+   Timer — Critical State
+========================================================= */
+
+.edp-timer-card.edp-timer-critical {
+    border-color:
+        rgba(239, 68, 68, 0.65);
+
+    background:
+        rgba(239, 68, 68, 0.08);
+
+    box-shadow:
+        0 8px 22px
+        rgba(239, 68, 68, 0.1);
+}
+
+
+.edp-timer-card.edp-timer-critical
+.edp-timer-label {
+    color:
+        #fca5a5;
+}
+
+
+.edp-timer-card.edp-timer-critical
+.edp-timer {
+    color:
+        var(--edp-danger-soft);
+}
+
+
+/* =========================================================
+   Exam Details
+========================================================= */
+
+.edp-exam-details {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            4,
+            minmax(0, 1fr)
+        );
+}
+
+
+.edp-exam-detail {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 6px;
+
+    min-width: 0;
+
+    padding:
+        18px
+        22px;
+}
+
+
+.edp-exam-detail:not(:last-child) {
+    border-right:
+        1px solid
+        var(--edp-border);
+}
+
+
+.edp-exam-detail span {
+    color:
+        var(--edp-text-dim);
+
+    font-size: 10px;
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.7px;
+}
+
+
+.edp-exam-detail strong {
+    color:
+        var(--edp-text-soft);
+
+    font-size: 16px;
+    font-weight: 750;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* =========================================================
+   Questions Section
+========================================================= */
+
+.edp-questions-section {
+    margin-bottom: 54px;
+}
+
+
+/* =========================================================
+   Section Header
+========================================================= */
+
+.edp-section-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-end;
+
+    gap: 24px;
+
+    margin-bottom: 24px;
+}
+
+
+.edp-section-header > div {
+    min-width: 0;
+}
+
+
+.edp-section-kicker {
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: #60a5fa;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1.2px;
+}
+
+
+.edp-section-title {
+    margin: 0;
+
+    color:
+        var(--edp-text);
+
+    font-size: 24px;
+    font-weight: 800;
+
+    letter-spacing: -0.3px;
+}
+
+
+.edp-section-description {
+    max-width: 700px;
+
+    margin:
+        7px
+        0
+        0;
+
+    color:
+        var(--edp-text-muted);
+
     font-size: 14px;
-    font-weight: 600;
+
+    line-height: 1.6;
+}
+
+
+.edp-question-count {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    min-height: 30px;
+
+    padding:
+        0
+        11px;
+
+    border:
+        1px solid
+        var(--edp-border-light);
+
+    border-radius: 999px;
+
+    background:
+        rgba(71, 85, 105, 0.12);
+
+    color:
+        var(--edp-text-soft);
+
+    font-size: 11px;
+    font-weight: 750;
+}
+
+
+/* =========================================================
+   Questions Grid
+========================================================= */
+
+.edp-questions-grid {
+    display: grid;
+
+    grid-template-columns: 1fr;
+
+    gap: 18px;
+}
+
+
+/* =========================================================
+   Question Card
+========================================================= */
+
+.edp-question-card {
+    position: relative;
+
+    display: flex;
+
+    flex-direction: column;
+
+    min-width: 0;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(36, 50, 71, 0.88),
+            rgba(30, 41, 59, 0.96)
+        );
+
+    border:
+        1px solid
+        var(--edp-border);
+
+    border-radius:
+        var(--edp-radius-lg);
+
+    box-shadow:
+        var(--edp-shadow-sm);
+
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.edp-question-card::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    right: 0;
+
+    height: 3px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #3b82f6,
+            #60a5fa
+        );
+}
+
+
+.edp-question-card:hover {
+    transform:
+        translateY(-2px);
+
+    border-color:
+        var(--edp-border-light);
+
+    box-shadow:
+        0 15px 32px
+        rgba(0, 0, 0, 0.28);
+}
+
+
+/* =========================================================
+   Question Header
+========================================================= */
+
+.edp-question-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    gap: 20px;
+
+    padding:
+        23px
+        24px
+        19px;
+
+    border-bottom:
+        1px solid
+        var(--edp-border);
+}
+
+
+.edp-question-heading {
+    min-width: 0;
+}
+
+
+.edp-question-number {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color:
+        var(--edp-text-dim);
+
+    font-size: 10px;
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.8px;
+}
+
+
+.edp-question-title {
+    margin: 0;
+
+    color:
+        var(--edp-text);
+
+    font-size: 17px;
+    font-weight: 700;
+
+    line-height: 1.5;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* =========================================================
+   Question Marks
+========================================================= */
+
+.edp-question-marks {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    min-height: 27px;
+
+    padding:
+        0
+        10px;
+
+    border:
+        1px solid
+        rgba(59, 130, 246, 0.42);
+
+    border-radius: 999px;
+
+    background:
+        rgba(59, 130, 246, 0.09);
+
+    color:
+        var(--edp-primary-soft);
+
+    font-size: 10px;
+    font-weight: 850;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.5px;
+
     white-space: nowrap;
 }
 
-.exam-title-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
+
+/* =========================================================
+   Question Details
+========================================================= */
+
+.edp-question-details {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    border-bottom:
+        1px solid
+        var(--edp-border);
 }
 
-.exam-timer {
+
+.edp-question-detail {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 6px;
+
+    min-width: 0;
+
+    padding:
+        17px
+        24px;
+}
+
+
+.edp-question-detail:first-child {
+    border-right:
+        1px solid
+        var(--edp-border);
+}
+
+
+.edp-question-detail span {
+    color:
+        var(--edp-text-dim);
+
+    font-size: 10px;
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.7px;
+}
+
+
+.edp-question-detail strong {
+    color:
+        var(--edp-text-soft);
+
+    font-size: 15px;
+    font-weight: 750;
+}
+
+
+/* =========================================================
+   Difficulty
+========================================================= */
+
+.edp-difficulty {
+    font-size: 15px;
+}
+
+
+.edp-difficulty.easy {
+    color:
+        var(--edp-success-soft);
+}
+
+
+.edp-difficulty.medium {
+    color:
+        var(--edp-warning-soft);
+}
+
+
+.edp-difficulty.hard {
+    color:
+        var(--edp-danger-soft);
+}
+
+
+/* =========================================================
+   Options Section
+========================================================= */
+
+.edp-options-section {
+    padding:
+        20px
+        24px;
+
+    border-bottom:
+        1px solid
+        var(--edp-border);
+}
+
+
+.edp-options-label {
+    display: block;
+
+    margin-bottom: 12px;
+
+    color:
+        var(--edp-text-muted);
+
+    font-size: 10px;
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.7px;
+}
+
+
+/* =========================================================
+   Options Container
+========================================================= */
+
+.edp-options-container {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 9px;
+}
+
+
+/* =========================================================
+   Option Row
+========================================================= */
+
+.edp-option-row {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    min-width: 0;
+
+    box-sizing: border-box;
+
+    padding:
+        12px
+        14px;
+
+    border:
+        1px solid
+        var(--edp-border);
+
+    border-radius:
+        var(--edp-radius-sm);
+
+    background:
+        var(--edp-surface-deep);
+
+    color:
+        var(--edp-text-soft);
+
+    cursor: default;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.edp-option-row.edp-candidate-option {
+    cursor: pointer;
+}
+
+
+.edp-option-row.edp-candidate-option:hover {
+    border-color:
+        var(--edp-border-light);
+
+    background:
+        #172033;
+}
+
+
+.edp-option-row.edp-selected {
+    border-color:
+        rgba(59, 130, 246, 0.7);
+
+    background:
+        rgba(59, 130, 246, 0.08);
+
+    box-shadow:
+        0 5px 14px
+        rgba(37, 99, 235, 0.08);
+}
+
+
+/* =========================================================
+   Radio
+========================================================= */
+
+.edp-option-row input[type="radio"] {
+    width: 17px;
+
+    height: 17px;
+
     margin: 0;
+
+    flex-shrink: 0;
+
+    accent-color:
+        var(--edp-primary);
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   Option Letter
+========================================================= */
+
+.edp-option-letter {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 27px;
+    height: 27px;
+
+    flex-shrink: 0;
+
+    border:
+        1px solid
+        var(--edp-border-light);
+
+    border-radius: 7px;
+
+    background:
+        var(--edp-surface);
+
+    color:
+        var(--edp-text-muted);
+
+    font-size: 11px;
+    font-weight: 800;
+}
+
+
+.edp-option-row.edp-selected
+.edp-option-letter {
+    border-color:
+        rgba(59, 130, 246, 0.7);
+
+    background:
+        rgba(59, 130, 246, 0.12);
+
+    color:
+        var(--edp-primary-soft);
+}
+
+
+/* =========================================================
+   Option Text
+========================================================= */
+
+.edp-option-text {
+    min-width: 0;
+
+    color:
+        var(--edp-text-soft);
+
+    font-size: 14px;
+
+    line-height: 1.5;
+
+    overflow-wrap: anywhere;
+}
+
+
+.edp-option-row.edp-selected
+.edp-option-text {
+    color:
+        var(--edp-text);
+
+    font-weight: 650;
+}
+
+
+/* =========================================================
+   Empty State
+========================================================= */
+
+.edp-empty-state {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    min-height: 190px;
+
+    padding: 32px;
+
+    background:
+        rgba(30, 41, 59, 0.72);
+
+    border:
+        1px dashed
+        var(--edp-border-light);
+
+    border-radius:
+        var(--edp-radius-lg);
+
+    text-align: center;
+}
+
+
+.edp-empty-icon {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 44px;
+    height: 44px;
+
+    margin-bottom: 12px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(59, 130, 246, 0.08);
+
+    color:
+        var(--edp-primary-soft);
+
+    font-size: 20px;
+    font-weight: 800;
+}
+
+
+.edp-empty-state strong {
+    color:
+        var(--edp-text);
+
+    font-size: 15px;
+}
+
+
+.edp-empty-state p {
+    max-width: 480px;
+
+    margin:
+        7px
+        0
+        0;
+
+    color:
+        var(--edp-text-muted);
+
+    font-size: 13px;
+
+    line-height: 1.55;
+}
+
+
+/* =========================================================
+   Submit Section
+========================================================= */
+
+.edp-submit-section {
+    display: flex;
+
+    justify-content: center;
+
+    margin:
+        30px
+        0
+        50px;
+}
+
+
+/* =========================================================
+   Submit Button
+========================================================= */
+
+.edp-page button.edp-submit-btn {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-width: 210px;
+
+    min-height: 44px;
+
+    padding:
+        0
+        20px;
+
+    border:
+        1px solid
+        rgba(34, 197, 94, 0.45);
+
+    border-radius:
+        var(--edp-radius-md);
+
+    background:
+        linear-gradient(
+            135deg,
+            #22c55e,
+            #16a34a
+        );
+
     color: #ffffff;
-    font-size: 28px;
-    font-weight: 700;
+
+    font-family: inherit;
+
+    font-size: 13px;
+    font-weight: 800;
+
+    box-shadow:
+        0 7px 18px
+        rgba(22, 163, 74, 0.2);
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        opacity 0.2s ease;
+}
+
+
+.edp-page button.edp-submit-btn:hover:not(:disabled) {
+    background:
+        linear-gradient(
+            135deg,
+            #4ade80,
+            #16a34a
+        );
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 10px 24px
+        rgba(22, 163, 74, 0.28);
+}
+
+
+.edp-page button.edp-submit-btn:active:not(:disabled) {
+    transform:
+        translateY(0);
+}
+
+
+.edp-page button.edp-submit-btn:disabled {
+    opacity: 0.55;
+
+    cursor: not-allowed;
+
+    transform: none;
+
+    box-shadow:
+        0 5px 14px
+        rgba(22, 163, 74, 0.12);
+}
+
+
+.edp-page button.edp-submit-btn:focus-visible {
+    outline: none;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(34, 197, 94, 0.16),
+        0 8px 20px
+        rgba(22, 163, 74, 0.24);
+}
+
+
+.edp-page button.edp-submit-btn:disabled:focus-visible {
+    box-shadow:
+        0 0 0 3px
+        rgba(34, 197, 94, 0.08),
+        0 5px 14px
+        rgba(22, 163, 74, 0.12);
+}
+
+
+/* =========================================================
+   Focus Protection
+========================================================= */
+
+.edp-page
+button:focus-visible,
+.edp-page
+input:focus-visible {
+    outline:
+        2px solid
+        rgba(96, 165, 250, 0.8);
+
+    outline-offset: 2px;
+}
+
+
+/* =========================================================
+   Responsive — Tablet
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .edp-page-container {
+        width:
+            min(
+                calc(100% - 30px),
+                760px
+            );
+
+        padding-top: 32px;
+    }
+
+
+    .edp-exam-details {
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            );
+    }
+
+
+    .edp-exam-detail:nth-child(2) {
+        border-right: none;
+    }
+
+
+    .edp-exam-detail:nth-child(-n + 2) {
+        border-bottom:
+            1px solid
+            var(--edp-border);
+    }
+
+}
+
+
+/* =========================================================
+   Responsive — Mobile
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .edp-page-container {
+        width:
+            calc(100% - 24px);
+
+        padding:
+            25px
+            0
+            50px;
+    }
+
+
+    .edp-exam-header {
+        margin-bottom: 38px;
+    }
+
+
+    .edp-exam-header-top {
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 20px;
+
+        padding:
+            23px
+            22px;
+    }
+
+
+    .edp-timer-card {
+        align-items: center;
+
+        width: 100%;
+
+        box-sizing: border-box;
+    }
+
+
+    .edp-section-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+
+    .edp-question-count {
+        align-self: flex-start;
+    }
+
+
+    .edp-question-header {
+        gap: 13px;
+    }
+
+
+    .edp-options-section {
+        padding:
+            18px;
+    }
+
+}
+
+
+/* =========================================================
+   Responsive — Small Mobile
+========================================================= */
+
+@media (max-width: 480px) {
+
+    .edp-page-container {
+        width:
+            calc(100% - 18px);
+    }
+
+
+    .edp-exam-title {
+        font-size: 27px;
+    }
+
+
+    .edp-exam-details {
+        grid-template-columns: 1fr;
+    }
+
+
+    .edp-exam-detail {
+        border-right: none !important;
+
+        border-bottom:
+            1px solid
+            var(--edp-border);
+    }
+
+
+    .edp-exam-detail:last-child {
+        border-bottom: none;
+    }
+
+
+    .edp-question-header {
+        flex-direction: column;
+    }
+
+
+    .edp-question-marks {
+        align-self: flex-start;
+    }
+
+
+    .edp-question-details {
+        grid-template-columns: 1fr;
+    }
+
+
+    .edp-question-detail:first-child {
+        border-right: none;
+
+        border-bottom:
+            1px solid
+            var(--edp-border);
+    }
+
+
+    .edp-page button.edp-submit-btn {
+        width: 100%;
+    }
+
 }

@@ -1,51 +1,857 @@
-.page-container {
-    max-width: 650px;
-    margin: 40px auto;
-    padding: 20px;
+/* =========================================================
+   CREATE EXAM PAGE
+   Namespace: cep-
+========================================================= */
+
+
+/* =========================================================
+   Page
+========================================================= */
+
+.cep-page {
+    min-height:
+        100vh;
+
+    color:
+        #f8fafc;
 }
 
-.page-title {
-    text-align: center;
-    margin-bottom: 30px;
+
+/* =========================================================
+   Page Container
+========================================================= */
+
+.cep-container {
+    width:
+        min(
+            calc(100% - 40px),
+            820px
+        );
+
+    margin:
+        0 auto;
+
+    padding:
+        42px
+        0
+        70px;
+
+    box-sizing:
+        border-box;
 }
 
-.form-card {
-    background: #1e293b;
-    border: 1px solid #334155;
-    border-radius: 16px;
-    padding: 30px;
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+
+/* =========================================================
+   Page Header
+========================================================= */
+
+.cep-page-header {
+    margin-bottom:
+        35px;
+
+    text-align:
+        left;
 }
 
-.form-input {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 14px;
-    margin-bottom: 18px;
-    border: 1px solid #334155;
-    border-radius: 10px;
-    background: #0f172a;
-    color: white;
-    font-size: 16px;
+
+.cep-eyebrow {
+    display:
+        block;
+
+    margin-bottom:
+        8px;
+
+    color:
+        #60a5fa;
+
+    font-size:
+        11px;
+
+    font-weight:
+        800;
+
+    text-transform:
+        uppercase;
+
+    letter-spacing:
+        1.3px;
 }
 
-.form-input:focus {
-    outline: none;
-    border-color: #3b82f6;
+
+.cep-page-title {
+    margin:
+        0
+        0
+        10px;
+
+    color:
+        #f8fafc;
+
+    font-size:
+        40px;
+
+    font-weight:
+        800;
+
+    line-height:
+        1.2;
+
+    letter-spacing:
+        -0.6px;
 }
 
-.submit-btn {
-    width: 100%;
-    padding: 14px;
-    border: none;
-    border-radius: 10px;
-    background: #3b82f6;
-    color: white;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
+
+.cep-page-description {
+    max-width:
+        680px;
+
+    margin:
+        0;
+
+    color:
+        #94a3b8;
+
+    font-size:
+        14px;
+
+    line-height:
+        1.65;
 }
 
-.submit-btn:hover {
-    background: #2563eb;
+
+/* =========================================================
+   Form Card
+========================================================= */
+
+.cep-form-card {
+    width:
+        100%;
+
+    box-sizing:
+        border-box;
+
+    padding:
+        30px;
+
+    background:
+        #1e293b;
+
+    border:
+        1px solid
+        #334155;
+
+    border-radius:
+        16px;
+
+    box-shadow:
+        0 10px 20px
+        rgba(0, 0, 0, 0.22);
+}
+
+
+/* =========================================================
+   Form Section
+========================================================= */
+
+.cep-form-section {
+    width:
+        100%;
+
+    animation:
+        cepFormFadeIn 0.2s ease;
+}
+
+
+@keyframes cepFormFadeIn {
+
+    from {
+        opacity:
+            0;
+
+        transform:
+            translateY(4px);
+    }
+
+    to {
+        opacity:
+            1;
+
+        transform:
+            translateY(0);
+    }
+
+}
+
+
+/* =========================================================
+   Section Heading
+========================================================= */
+
+.cep-section-heading {
+    width:
+        100%;
+
+    box-sizing:
+        border-box;
+
+    margin-bottom:
+        27px;
+
+    padding-bottom:
+        20px;
+
+    border-bottom:
+        1px solid
+        #334155;
+
+    text-align:
+        left;
+}
+
+
+.cep-section-eyebrow {
+    display:
+        block;
+
+    width:
+        100%;
+
+    margin:
+        0
+        0
+        7px;
+
+    color:
+        #60a5fa;
+
+    font-size:
+        10px;
+
+    font-weight:
+        800;
+
+    text-align:
+        left;
+
+    text-transform:
+        uppercase;
+
+    letter-spacing:
+        1px;
+}
+
+
+.cep-section-title {
+    display:
+        block;
+
+    width:
+        100%;
+
+    margin:
+        0
+        0
+        7px
+        0;
+
+    padding:
+        0;
+
+    box-sizing:
+        border-box;
+
+    color:
+        #f8fafc;
+
+    font-size:
+        22px;
+
+    font-weight:
+        800;
+
+    line-height:
+        1.3;
+
+    text-align:
+        left;
+
+    letter-spacing:
+        -0.2px;
+}
+
+
+.cep-section-description {
+    display:
+        block;
+
+    width:
+        100%;
+
+    max-width:
+        650px;
+
+    margin:
+        0;
+
+    padding:
+        0;
+
+    color:
+        #94a3b8;
+
+    font-size:
+        13px;
+
+    line-height:
+        1.6;
+
+    text-align:
+        left;
+}
+
+
+/* =========================================================
+   Form Field
+========================================================= */
+
+.cep-field {
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        stretch;
+
+    gap:
+        7px;
+
+    width:
+        100%;
+
+    margin-bottom:
+        19px;
+}
+
+
+.cep-field-label {
+    display:
+        block;
+
+    width:
+        100%;
+
+    margin:
+        0;
+
+    padding:
+        0;
+
+    color:
+        #e2e8f0;
+
+    font-size:
+        11px;
+
+    font-weight:
+        800;
+
+    line-height:
+        1.4;
+
+    text-align:
+        left;
+
+    text-transform:
+        uppercase;
+
+    letter-spacing:
+        0.7px;
+}
+
+
+/* =========================================================
+   Inputs / Select
+========================================================= */
+
+.cep-input,
+.cep-select {
+    width:
+        100%;
+
+    min-height:
+        44px;
+
+    box-sizing:
+        border-box;
+
+    margin:
+        0;
+
+    padding:
+        0
+        14px;
+
+    border:
+        1px solid
+        #475569;
+
+    border-radius:
+        9px;
+
+    outline:
+        none;
+
+    background:
+        #0f172a;
+
+    color:
+        #f8fafc;
+
+    font-family:
+        inherit;
+
+    font-size:
+        13px;
+
+    line-height:
+        1.4;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+
+.cep-input::placeholder {
+    color:
+        #64748b;
+}
+
+
+.cep-input:hover,
+.cep-select:hover {
+    border-color:
+        #64748b;
+}
+
+
+.cep-input:focus,
+.cep-select:focus {
+    border-color:
+        #3b82f6;
+
+    background:
+        #101a2c;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(59, 130, 246, 0.12);
+}
+
+
+.cep-select {
+    cursor:
+        pointer;
+}
+
+
+.cep-select option {
+    background:
+        #0f172a;
+
+    color:
+        #f8fafc;
+}
+
+
+/* =========================================================
+   Form Hint
+========================================================= */
+
+.cep-field-hint {
+    width:
+        100%;
+
+    margin:
+        -1px
+        0
+        1px;
+
+    padding:
+        0;
+
+    color:
+        #64748b;
+
+    font-size:
+        11px;
+
+    line-height:
+        1.55;
+
+    text-align:
+        left;
+}
+
+
+/* =========================================================
+   Marks Configuration
+========================================================= */
+
+.cep-marks-section {
+    width:
+        100%;
+
+    margin:
+        3px
+        0
+        3px;
+}
+
+
+.cep-subsection-heading {
+    display:
+        block;
+
+    width:
+        100%;
+
+    margin:
+        0
+        0
+        12px;
+
+    padding:
+        0;
+
+    color:
+        #e2e8f0;
+
+    font-size:
+        12px;
+
+    font-weight:
+        800;
+
+    line-height:
+        1.4;
+
+    text-align:
+        left;
+
+    text-transform:
+        uppercase;
+
+    letter-spacing:
+        0.7px;
+}
+
+
+.cep-marks-grid {
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap:
+        0
+        14px;
+
+    width:
+        100%;
+}
+
+
+/* =========================================================
+   Number Input
+========================================================= */
+
+.cep-input[type="number"] {
+    appearance:
+        textfield;
+}
+
+
+.cep-input[type="number"]::-webkit-inner-spin-button,
+.cep-input[type="number"]::-webkit-outer-spin-button {
+    margin:
+        0;
+
+    appearance:
+        none;
+}
+
+
+/* =========================================================
+   Submit
+========================================================= */
+
+.cep-submit-wrapper {
+    display:
+        flex;
+
+    justify-content:
+        center;
+
+    width:
+        100%;
+
+    margin-top:
+        10px;
+
+    padding-top:
+        8px;
+
+    border-top:
+        1px solid
+        #334155;
+}
+
+
+.cep-submit-btn {
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    min-width:
+        180px;
+
+    min-height:
+        42px;
+
+    padding:
+        0
+        17px;
+
+    border:
+        1px solid
+        #3b82f6;
+
+    border-radius:
+        9px;
+
+    background:
+        #2563eb;
+
+    color:
+        #ffffff;
+
+    font-family:
+        inherit;
+
+    font-size:
+        13px;
+
+    font-weight:
+        750;
+
+    line-height:
+        1;
+
+    cursor:
+        pointer;
+
+    box-shadow:
+        0 5px 12px
+        rgba(37, 99, 235, 0.22);
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        opacity 0.2s ease;
+}
+
+
+.cep-submit-btn:hover:not(:disabled) {
+    background:
+        #3b82f6;
+
+    border-color:
+        #60a5fa;
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 8px 18px
+        rgba(37, 99, 235, 0.35);
+}
+
+
+.cep-submit-btn:active:not(:disabled) {
+    transform:
+        translateY(0);
+}
+
+
+/* =========================================================
+   Submit Button — Disabled / Loading
+========================================================= */
+
+.cep-submit-btn:disabled {
+    opacity:
+        0.5;
+
+    cursor:
+        not-allowed;
+
+    transform:
+        none;
+
+    box-shadow:
+        none;
+}
+
+
+/* =========================================================
+   Focus Protection
+========================================================= */
+
+.cep-page button:focus-visible,
+.cep-page input:focus-visible,
+.cep-page select:focus-visible {
+    outline:
+        2px solid
+        rgba(96, 165, 250, 0.8);
+
+    outline-offset:
+        2px;
+}
+
+
+/* =========================================================
+   Responsive — Tablet
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .cep-container {
+        width:
+            calc(100% - 30px);
+
+        padding:
+            30px
+            0
+            60px;
+    }
+
+
+    .cep-page-title {
+        font-size:
+            34px;
+    }
+
+
+    .cep-form-card {
+        padding:
+            24px;
+    }
+
+}
+
+
+/* =========================================================
+   Responsive — Mobile
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .cep-container {
+        width:
+            calc(100% - 24px);
+
+        padding:
+            25px
+            0
+            50px;
+    }
+
+
+    .cep-page-title {
+        font-size:
+            30px;
+    }
+
+
+    .cep-page-description {
+        font-size:
+            13px;
+    }
+
+
+    .cep-form-card {
+        padding:
+            20px;
+
+        border-radius:
+            14px;
+    }
+
+
+    .cep-section-title {
+        font-size:
+            20px;
+    }
+
+
+    .cep-marks-grid {
+        grid-template-columns:
+            1fr;
+
+        gap:
+            0;
+    }
+
+}
+
+
+/* =========================================================
+   Responsive — Small Mobile
+========================================================= */
+
+@media (max-width: 450px) {
+
+    .cep-container {
+        width:
+            calc(100% - 18px);
+    }
+
+
+    .cep-form-card {
+        padding:
+            17px;
+    }
+
+
+    .cep-page-title {
+        font-size:
+            27px;
+    }
+
+
+    .cep-submit-btn {
+        width:
+            100%;
+    }
+
+
+    .cep-section-heading {
+        margin-bottom:
+            23px;
+    }
+
 }

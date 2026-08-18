@@ -26,8 +26,10 @@ app.config["JWT_SECRET_KEY"] = Config.JWT_SECRET_KEY
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=365)
 
 mysql.init_app(app)
+
 print("MYSQL_DB:", app.config["MYSQL_DB"])
 print("MYSQL_PORT:", app.config["MYSQL_PORT"])
+
 bcrypt.init_app(app)
 
 jwt = JWTManager(app)
@@ -40,6 +42,9 @@ from routes.dashboard_routes import dashboard_bp
 from routes.batch_routes import batch_bp
 from routes.ai_routes import ai_bp
 
+from routes.schedule_routes import schedule_bp
+from routes.bulk_question_routes import bulk_question_bp
+
 app.register_blueprint(auth_bp)
 app.register_blueprint(exam_bp)
 app.register_blueprint(submission_bp)
@@ -47,6 +52,9 @@ app.register_blueprint(result_bp)
 app.register_blueprint(dashboard_bp)
 app.register_blueprint(batch_bp)
 app.register_blueprint(ai_bp)
+
+app.register_blueprint(schedule_bp)
+app.register_blueprint(bulk_question_bp)
 
 
 @app.route("/")

@@ -1,174 +1,1005 @@
-.batch-management-container {
-    max-width: 950px;
-    margin: 0 auto;
-    padding: 40px;
+/* =========================================================
+   BATCH MANAGEMENT PAGE
+   Namespace: bmp-
+========================================================= */
+
+
+/* =========================================================
+   Page
+========================================================= */
+
+.bmp-page {
+    --bmp-bg: #0f172a;
+    --bmp-surface: #1e293b;
+    --bmp-surface-raised: #243247;
+    --bmp-border: #334155;
+    --bmp-border-light: #475569;
+
+    --bmp-text: #f8fafc;
+    --bmp-text-soft: #cbd5e1;
+    --bmp-text-muted: #94a3b8;
+    --bmp-text-dim: #64748b;
+
+    --bmp-primary: #3b82f6;
+    --bmp-primary-hover: #2563eb;
+
+    --bmp-success: #22c55e;
+    --bmp-success-hover: #16a34a;
+
+    --bmp-warning: #f59e0b;
+    --bmp-warning-hover: #d97706;
+
+    --bmp-danger: #ef4444;
+    --bmp-danger-hover: #dc2626;
+
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at 82% 0%,
+            rgba(59, 130, 246, 0.07),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 15% 18%,
+            rgba(30, 64, 175, 0.035),
+            transparent 25%
+        ),
+        var(--bmp-bg);
+
+    color:
+        var(--bmp-text);
 }
 
-.batch-management-header {
+
+/* =========================================================
+   Page Container
+========================================================= */
+
+.bmp-container {
+    width:
+        min(
+            calc(100% - 40px),
+            1180px
+        );
+
+    margin:
+        0 auto;
+
+    padding:
+        42px
+        0
+        70px;
+}
+
+
+/* =========================================================
+   Page Header
+========================================================= */
+
+.bmp-header {
     display: flex;
+
     justify-content: space-between;
+    align-items: flex-end;
+
+    gap: 30px;
+
+    margin-bottom: 32px;
+}
+
+
+.bmp-eyebrow {
+    display: inline-block;
+
+    margin-bottom: 8px;
+
+    color:
+        #60a5fa;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1.4px;
+}
+
+
+.bmp-title {
+    margin: 0;
+
+    color:
+        var(--bmp-text);
+
+    font-size:
+        clamp(
+            30px,
+            4vw,
+            40px
+        );
+
+    font-weight: 800;
+
+    line-height: 1.15;
+
+    letter-spacing: -0.7px;
+}
+
+
+.bmp-description {
+    max-width: 680px;
+
+    margin:
+        10px
+        0
+        0;
+
+    color:
+        var(--bmp-text-muted);
+
+    font-size: 15px;
+
+    line-height: 1.65;
+}
+
+
+/* =========================================================
+   Create Button
+========================================================= */
+
+.bmp-create-btn,
+.bmp-empty-create-btn {
+    display: inline-flex;
+
     align-items: center;
-    margin-bottom: 40px;
-    flex-wrap: wrap;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    flex-shrink: 0;
+
+    min-height: 42px;
+
+    padding:
+        0
+        17px;
+
+    border:
+        1px solid
+        #3b82f6;
+
+    border-radius:
+        9px;
+
+    background:
+        #2563eb;
+
+    color:
+        #ffffff;
+
+    font-family:
+        inherit;
+
+    font-size: 13px;
+
+    font-weight: 750;
+
+    cursor:
+        pointer;
+
+    box-shadow:
+        0 5px 12px
+        rgba(37, 99, 235, 0.22);
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        opacity 0.2s ease;
+}
+
+
+.bmp-create-btn:hover:not(:disabled),
+.bmp-empty-create-btn:hover:not(:disabled) {
+    background:
+        #3b82f6;
+
+    border-color:
+        #60a5fa;
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 8px 18px
+        rgba(37, 99, 235, 0.35);
+}
+
+
+/* =========================================================
+   Grid
+========================================================= */
+
+.bmp-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
     gap: 20px;
 }
 
-.batch-management-title {
-    color: white;
-    font-size: 40px;
-    font-weight: 700;
-    margin: 0;
-    line-height: 1;
-}
 
-.create-btn {
-    background: #2563eb;
-    color: white;
-    border: none;
-    padding: 12px 26px;
-    border-radius: 10px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.3s;
-}
+/* =========================================================
+   Batch Card
+========================================================= */
 
-.create-btn:hover {
-    background: #3b82f6;
-    transform: translateY(-2px);
-}
+.bmp-card {
+    position: relative;
 
-.batch-management-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, 420px);
-    justify-content: center;
-    gap: 30px;
-}
-
-.batch-management-card {
-    background: #1e293b;
-    border: 1px solid #334155;
-    border-radius: 16px;
-    padding: 24px;
-    transition: 0.3s;
-    box-shadow: 0 0 18px rgba(59, 130, 246, 0.08);
-}
-
-.batch-management-card:hover {
-    transform: translateY(-5px);
-    border-color: #3b82f6;
-    box-shadow: 0 0 25px rgba(59, 130, 246, 0.18);
-}
-
-.batch-management-name {
-    color: white;
-    font-size: 24px;
-    margin-bottom: 15px;
-}
-
-.batch-management-description {
-    color: #cbd5e1;
-    line-height: 1.6;
-    margin-bottom: 18px;
-    min-height: 55px;
-}
-
-.batch-management-info {
-    color: #e2e8f0;
-    margin-bottom: 10px;
-    font-size: 15px;
-}
-
-.batch-management-info strong {
-    color: #60a5fa;
-}
-
-.status-badge {
-    display: inline-block;
-    padding: 5px 12px;
-    border-radius: 50px;
-    font-size: 13px;
-    font-weight: 600;
-    margin-top: 8px;
-}
-
-.status-active {
-    background: rgba(34, 197, 94, 0.15);
-    color: #22c55e;
-}
-
-.status-upcoming {
-    background: rgba(250, 204, 21, 0.15);
-    color: #facc15;
-}
-
-.status-completed {
-    background: rgba(148, 163, 184, 0.15);
-    color: #cbd5e1;
-}
-
-.batch-management-actions {
     display: flex;
-    gap: 10px;
-    margin-top: 25px;
-    flex-wrap: wrap;
+
+    flex-direction: column;
+
+    min-width: 0;
+
+    overflow: hidden;
+
+    padding: 24px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(30, 41, 59, 0.97),
+            rgba(15, 23, 42, 0.94)
+        );
+
+    border:
+        1px solid
+        var(--bmp-border);
+
+    border-radius:
+        16px;
+
+    box-shadow:
+        0 8px 22px
+        rgba(0, 0, 0, 0.20);
+
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
-.details-btn,
-.edit-btn,
-.delete-btn {
-    flex: 1;
-    border: none;
-    border-radius: 10px;
-    padding: 11px;
-    font-size: 14px;
-    font-weight: 600;
+
+.bmp-card::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    right: 0;
+
+    height: 3px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #3b82f6,
+            #60a5fa
+        );
+}
+
+
+.bmp-card:hover {
+    transform:
+        translateY(-3px);
+
+    border-color:
+        var(--bmp-border-light);
+
+    box-shadow:
+        0 16px 35px
+        rgba(0, 0, 0, 0.30);
+}
+
+
+/* =========================================================
+   Card Header
+========================================================= */
+
+.bmp-card-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    gap: 15px;
+
+    margin-bottom: 14px;
+}
+
+
+.bmp-card-heading {
+    min-width: 0;
+}
+
+
+.bmp-card-label {
+    display: block;
+
+    margin-bottom: 6px;
+
+    color:
+        var(--bmp-text-dim);
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.8px;
+}
+
+
+.bmp-card-name {
+    margin: 0;
+
+    color:
+        var(--bmp-text);
+
+    font-size: 20px;
+
+    font-weight: 750;
+
+    line-height: 1.35;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* =========================================================
+   Status Badge
+========================================================= */
+
+.bmp-status-badge {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    min-height: 28px;
+
+    padding:
+        0
+        10px;
+
+    border-radius:
+        999px;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.6px;
+}
+
+
+.bmp-status-active {
+    color:
+        #86efac;
+
+    background:
+        rgba(34, 197, 94, 0.10);
+
+    border:
+        1px solid
+        rgba(34, 197, 94, 0.42);
+}
+
+
+.bmp-status-upcoming {
+    color:
+        #fde68a;
+
+    background:
+        rgba(245, 158, 11, 0.10);
+
+    border:
+        1px solid
+        rgba(245, 158, 11, 0.42);
+}
+
+
+.bmp-status-completed {
+    color:
+        #cbd5e1;
+
+    background:
+        rgba(100, 116, 139, 0.10);
+
+    border:
+        1px solid
+        rgba(100, 116, 139, 0.42);
+}
+
+
+/* =========================================================
+   Card Description
+========================================================= */
+
+.bmp-card-description {
+    min-height: 48px;
+
+    margin:
+        0
+        0
+        20px;
+
+    color:
+        var(--bmp-text-muted);
+
+    font-size: 13px;
+
+    line-height: 1.6;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* =========================================================
+   Information Grid
+========================================================= */
+
+.bmp-info-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    border:
+        1px solid
+        var(--bmp-border);
+
+    border-radius:
+        12px;
+
+    overflow: hidden;
+
+    background:
+        rgba(15, 23, 42, 0.50);
+}
+
+
+.bmp-info-item {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+
+    min-width: 0;
+
+    padding:
+        13px
+        14px;
+
+    border-bottom:
+        1px solid
+        var(--bmp-border);
+}
+
+
+.bmp-info-item:nth-child(odd) {
+    border-right:
+        1px solid
+        var(--bmp-border);
+}
+
+
+.bmp-info-item:nth-child(3),
+.bmp-info-item:nth-child(4) {
+    border-bottom: none;
+}
+
+
+.bmp-info-item span {
+    color:
+        var(--bmp-text-dim);
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.6px;
+}
+
+
+.bmp-info-item strong {
+    min-width: 0;
+
+    color:
+        var(--bmp-text-soft);
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    line-height: 1.4;
+
+    overflow-wrap: anywhere;
+}
+
+
+.bmp-info-item-wide {
+    grid-column:
+        1 / -1;
+
+    align-items: center;
+
+    text-align: center;
+
+    border-right: none !important;
+
+    border-bottom: none !important;
+}
+
+
+/* =========================================================
+   Card Actions
+========================================================= */
+
+.bmp-actions {
+    display: grid;
+
+    grid-template-columns:
+        1.25fr
+        0.75fr
+        0.75fr;
+
+    gap: 8px;
+
+    margin-top: 20px;
+}
+
+
+/* =========================================================
+   Shared Action Button
+========================================================= */
+
+.bmp-details-btn,
+.bmp-edit-btn,
+.bmp-delete-btn {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    flex-shrink: 0;
+
+    min-height: 36px;
+
+    padding:
+        0
+        12px;
+
+    box-sizing: border-box;
+
+    border-radius: 8px;
+
+    font-family: inherit;
+
+    font-size: 11px;
+
+    font-weight: 750;
+
+    line-height: 1;
+
+    white-space: nowrap;
+
     cursor: pointer;
-    transition: 0.3s;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease,
+        opacity 0.2s ease;
 }
 
-.details-btn {
-    background: #2563eb;
-    color: white;
+
+/* =========================================================
+   View Details
+========================================================= */
+
+.bmp-details-btn {
+    border:
+        1px solid
+        #3b82f6;
+
+    background:
+        #2563eb;
+
+    color:
+        #ffffff;
+
+    box-shadow:
+        0 5px 12px
+        rgba(37, 99, 235, 0.20);
 }
 
-.details-btn:hover {
-    background: #3b82f6;
+
+.bmp-details-btn:hover:not(:disabled) {
+    background:
+        #3b82f6;
+
+    border-color:
+        #60a5fa;
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 8px 18px
+        rgba(37, 99, 235, 0.30);
 }
 
-.edit-btn {
-    background: #f59e0b;
-    color: white;
+
+/* =========================================================
+   Edit
+========================================================= */
+
+.bmp-edit-btn {
+    border:
+        1px solid
+        #f59e0b;
+
+    background:
+        #d97706;
+
+    color:
+        #ffffff;
+
+    box-shadow:
+        0 5px 12px
+        rgba(245, 158, 11, 0.18);
 }
 
-.edit-btn:hover {
-    background: #fbbf24;
+
+.bmp-edit-btn:hover:not(:disabled) {
+    background:
+        #f59e0b;
+
+    border-color:
+        #fbbf24;
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 8px 18px
+        rgba(245, 158, 11, 0.28);
 }
 
-.delete-btn {
-    background: #dc2626;
-    color: white;
+
+/* =========================================================
+   Delete
+========================================================= */
+
+.bmp-delete-btn {
+    border:
+        1px solid
+        #ef4444;
+
+    background:
+        #dc2626;
+
+    color:
+        #ffffff;
+
+    box-shadow:
+        0 5px 12px
+        rgba(220, 38, 38, 0.20);
 }
 
-.delete-btn:hover {
-    background: #ef4444;
+
+.bmp-delete-btn:hover:not(:disabled) {
+    background:
+        #ef4444;
+
+    border-color:
+        #f87171;
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 8px 18px
+        rgba(220, 38, 38, 0.30);
 }
 
-@media (max-width: 768px) {
-    .batch-management-header {
-        flex-direction: column;
-        align-items: flex-start;
+
+/* =========================================================
+   Button Disabled / Loading
+========================================================= */
+
+.bmp-actions button:disabled,
+.bmp-create-btn:disabled,
+.bmp-empty-create-btn:disabled {
+    opacity:
+        0.5;
+
+    cursor:
+        not-allowed;
+
+    transform:
+        none;
+
+    box-shadow:
+        none;
+}
+
+
+/* =========================================================
+   Empty State
+========================================================= */
+
+.bmp-empty-state {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-height: 280px;
+
+    padding: 40px;
+
+    background:
+        rgba(30, 41, 59, 0.72);
+
+    border:
+        1px dashed
+        var(--bmp-border-light);
+
+    border-radius:
+        16px;
+
+    text-align: center;
+}
+
+
+.bmp-empty-icon {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 48px;
+
+    height: 48px;
+
+    margin-bottom: 15px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(59, 130, 246, 0.10);
+
+    color:
+        #60a5fa;
+
+    font-size: 25px;
+
+    font-weight: 400;
+}
+
+
+.bmp-empty-state h2 {
+    margin: 0;
+
+    color:
+        var(--bmp-text);
+
+    font-size: 18px;
+}
+
+
+.bmp-empty-state p {
+    max-width: 500px;
+
+    margin:
+        8px
+        0
+        20px;
+
+    color:
+        var(--bmp-text-muted);
+
+    font-size: 13px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   Focus
+========================================================= */
+
+.bmp-page button:focus-visible {
+    outline:
+        2px solid
+        rgba(96, 165, 250, 0.8);
+
+    outline-offset:
+        2px;
+}
+
+
+/* =========================================================
+   Responsive — Tablet
+========================================================= */
+
+@media (max-width: 950px) {
+
+    .bmp-grid {
+        grid-template-columns:
+            1fr;
     }
 
-    .batch-management-title {
-        font-size: 32px;
+}
+
+
+/* =========================================================
+   Responsive — Mobile
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .bmp-container {
+        width:
+            calc(100% - 24px);
+
+        padding:
+            28px
+            0
+            50px;
     }
 
-    .batch-management-grid {
-        grid-template-columns: 1fr;
+
+    .bmp-header {
+        align-items:
+            flex-start;
+
+        flex-direction:
+            column;
+
+        gap: 18px;
     }
 
-    .batch-management-actions {
-        flex-direction: column;
+
+    .bmp-create-btn {
+        width:
+            100%;
     }
+
+
+    .bmp-title {
+        font-size:
+            30px;
+    }
+
+
+    .bmp-card {
+        padding:
+            20px;
+    }
+
+
+    .bmp-card-header {
+        flex-direction:
+            column;
+    }
+
+
+    .bmp-status-badge {
+        align-self:
+            flex-start;
+    }
+
+
+    .bmp-actions {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .bmp-details-btn,
+    .bmp-edit-btn,
+    .bmp-delete-btn {
+        width:
+            100%;
+    }
+
+}
+
+
+/* =========================================================
+   Responsive — Small Mobile
+========================================================= */
+
+@media (max-width: 450px) {
+
+    .bmp-container {
+        width:
+            calc(100% - 18px);
+    }
+
+
+    .bmp-title {
+        font-size:
+            27px;
+    }
+
+
+    .bmp-card-name {
+        font-size:
+            18px;
+    }
+
+
+    .bmp-info-grid {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .bmp-info-item {
+        border-right:
+            none !important;
+
+        border-bottom:
+            1px solid
+            var(--bmp-border) !important;
+    }
+
+
+    .bmp-info-item:last-child {
+        border-bottom:
+            none !important;
+    }
+
+
+    .bmp-info-item-wide {
+        grid-column:
+            auto;
+    }
+
 }

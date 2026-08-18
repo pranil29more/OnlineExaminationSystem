@@ -1,58 +1,69 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { IoEyeOutline } from "react-icons/io5";
 import API_BASE_URL from "../services/api";
 import Navbar from "../components/Navbar";
 import PageLoader from "../components/PageLoader";
 import "../styles/BatchDetailsPage.css";
 
 function BatchDetailsPage() {
+    const { batchId } = useParams();
+
+    const navigate = useNavigate();
+
+    const [batch, setBatch] = useState(null);
+    const [candidates, setCandidates] = useState([]);
+
     const [showAssignModal, setShowAssignModal] =
         useState(false);
 
-    const [
-        availableCandidates,
-        setAvailableCandidates,
-    ] = useState([]);
+    const [availableCandidates, setAvailableCandidates] =
+        useState([]);
 
-    const [
-        selectedCandidates,
-        setSelectedCandidates,
-    ] = useState([]);
+    const [selectedCandidates, setSelectedCandidates] =
+        useState([]);
 
-    const [
-        showUnassignModal,
-        setShowUnassignModal,
-    ] = useState(false);
+    const [showUnassignModal, setShowUnassignModal] =
+        useState(false);
 
     const [
         selectedUnassignCandidates,
         setSelectedUnassignCandidates,
     ] = useState([]);
 
-    const { batchId } = useParams();
-
-    const navigate = useNavigate();
-
-    const [batch, setBatch] = useState(null);
-
-    const [candidates, setCandidates] =
-        useState([]);
-
     const [searchAssign, setSearchAssign] =
         useState("");
 
-    const [
-        searchUnassign,
-        setSearchUnassign,
-    ] = useState("");
+    const [searchUnassign, setSearchUnassign] =
+        useState("");
 
-    const [
-        searchCandidate,
-        setSearchCandidate,
-    ] = useState("");
+    const [searchCandidate, setSearchCandidate] =
+        useState("");
+
+    const [batchReport, setBatchReport] =
+        useState(null);
+
+    const [reportLoading, setReportLoading] =
+        useState(true);
+
+    const [assigning, setAssigning] =
+        useState(false);
+
+    const [unassigning, setUnassigning] =
+        useState(false);
+
+    const [downloadingReport, setDownloadingReport] =
+        useState(false);
+
+    const [loadingAvailableCandidates, setLoadingAvailableCandidates] =
+        useState(false);
+
+    const [navigatingCandidateId, setNavigatingCandidateId] =
+        useState(null);
 
     useEffect(() => {
         fetchBatchDetails();
+        fetchBatchReport();
     }, []);
 
     const fetchBatchDetails = async () => {
@@ -64,52 +75,208 @@ function BatchDetailsPage() {
                 `${API_BASE_URL}/batch-details/${batchId}`,
                 {
                     headers: {
-                        Authorization: `Bearer ${token}`,
+                        Authorization:
+                            `Bearer ${token}`,
                     },
                 }
             );
 
-            const data =
-                await response.json();
+            const data = await response.json();
+
+            if (!response.ok) {
+                alert(
+                    data.message ||
+                        "Unable to load batch details."
+                );
+
+                return;
+            }
 
             setBatch(data.batch);
-            setCandidates(data.candidates);
+            setCandidates(data.candidates || []);
         } catch (error) {
             console.error(error);
+
+            alert(
+                "Unable to load batch details."
+            );
+        }
+    };
+
+    const fetchBatchReport = async () => {
+        try {
+            setReportLoading(true);
+
+            const token =
+                localStorage.getItem("token");
+
+            const response = await fetch(
+                `${API_BASE_URL}/batch-report/${batchId}`,
+                {
+                    headers: {
+                        Authorization:
+                            `Bearer ${token}`,
+                    },
+                }
+            );
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                alert(
+                    data.message ||
+                        "Unable to load batch report."
+                );
+
+                return;
+            }
+
+            setBatchReport(data);
+        } catch (error) {
+            console.error(error);
+
+            alert(
+                "Unable to load batch performance report."
+            );
+        } finally {
+            setReportLoading(false);
+        }
+    };
+
+    const handleDownloadBatchReport = async () => {
+        if (
+            downloadingReport ||
+            !batchReport ||
+            !batch
+        ) {
+            return;
+        }
+
+        try {
+            setDownloadingReport(true);
+
+            const token =
+                localStorage.getItem("token");
+
+            const response = await fetch(
+                `${API_BASE_URL}/batch-report/${batchId}/download/excel`,
+                {
+                    headers: {
+                        Authorization:
+                            `Bearer ${token}`,
+                    },
+                }
+            );
+
+            if (!response.ok) {
+                const data =
+                    await response.json();
+
+                alert(
+                    data.message ||
+                        "Unable to download batch report."
+                );
+
+                return;
+            }
+
+            const blob =
+                await response.blob();
+
+            const url =
+                window.URL.createObjectURL(blob);
+
+            const link =
+                document.createElement("a");
+
+            link.href = url;
+
+            link.download =
+                `${batch.batch_name.replace(
+                    /\s+/g,
+                    "_"
+                )}_Batch_Report.xlsx`;
+
+            document.body.appendChild(link);
+
+            link.click();
+
+            link.remove();
+
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error(error);
+
+            alert(
+                "Unable to download batch report."
+            );
+        } finally {
+            setDownloadingReport(false);
         }
     };
 
     const fetchAvailableCandidates =
         async () => {
-            try {
-                const token =
-                    localStorage.getItem(
-                        "token"
-                    );
+            if (loadingAvailableCandidates) {
+                return;
+            }
 
-                const response =
-                    await fetch(
-                        `${API_BASE_URL}/available-candidates`,
-                        {
-                            headers: {
-                                Authorization: `Bearer ${token}`,
-                            },
-                        }
-                    );
+            try {
+                setLoadingAvailableCandidates(true);
+
+                const token =
+                    localStorage.getItem("token");
+
+                const response = await fetch(
+                    `${API_BASE_URL}/available-candidates`,
+                    {
+                        headers: {
+                            Authorization:
+                                `Bearer ${token}`,
+                        },
+                    }
+                );
 
                 const data =
                     await response.json();
 
-                setAvailableCandidates(data);
+                if (!response.ok) {
+                    alert(
+                        data.message ||
+                            "Unable to load available candidates."
+                    );
+
+                    return;
+                }
+
+                setAvailableCandidates(
+                    data || []
+                );
+
+                setSelectedCandidates([]);
+
+                setSearchAssign("");
 
                 setShowAssignModal(true);
             } catch (error) {
                 console.error(error);
+
+                alert(
+                    "Unable to load available candidates."
+                );
+            } finally {
+                setLoadingAvailableCandidates(false);
             }
         };
 
     const fetchAssignedCandidates = () => {
+        if (unassigning) {
+            return;
+        }
+
         setSelectedUnassignCandidates([]);
+
+        setSearchUnassign("");
 
         setShowUnassignModal(true);
     };
@@ -117,18 +284,59 @@ function BatchDetailsPage() {
     const toggleCandidateSelection = (
         userId
     ) => {
-        setSelectedCandidates((prev) => {
-            if (prev.includes(userId)) {
-                return prev.filter(
+        if (assigning) {
+            return;
+        }
+
+        setSelectedCandidates((previous) => {
+            if (
+                previous.includes(userId)
+            ) {
+                return previous.filter(
                     (id) => id !== userId
                 );
             }
 
-            return [...prev, userId];
+            return [
+                ...previous,
+                userId,
+            ];
         });
     };
 
+    const toggleUnassignSelection = (
+        userId
+    ) => {
+        if (unassigning) {
+            return;
+        }
+
+        setSelectedUnassignCandidates(
+            (previous) => {
+                if (
+                    previous.includes(
+                        userId
+                    )
+                ) {
+                    return previous.filter(
+                        (id) =>
+                            id !== userId
+                    );
+                }
+
+                return [
+                    ...previous,
+                    userId,
+                ];
+            }
+        );
+    };
+
     const handleSelectAllAssign = () => {
+        if (assigning) {
+            return;
+        }
+
         if (allAssignSelected) {
             setSelectedCandidates(
                 selectedCandidates.filter(
@@ -157,6 +365,10 @@ function BatchDetailsPage() {
     };
 
     const handleSelectAllUnassign = () => {
+        if (unassigning) {
+            return;
+        }
+
         if (allUnassignSelected) {
             setSelectedUnassignCandidates(
                 selectedUnassignCandidates.filter(
@@ -184,56 +396,42 @@ function BatchDetailsPage() {
         }
     };
 
-    const toggleUnassignSelection = (
-        userId
-    ) => {
-        setSelectedUnassignCandidates(
-            (prev) => {
-                if (prev.includes(userId)) {
-                    return prev.filter(
-                        (id) => id !== userId
-                    );
-                }
-
-                return [...prev, userId];
-            }
-        );
-    };
-
     const handleAssignCandidate =
         async () => {
             if (
                 selectedCandidates.length ===
-                0
+                    0 ||
+                assigning
             ) {
-                alert(
-                    "Please select at least one candidate."
-                );
-
                 return;
             }
 
             try {
+                setAssigning(true);
+
                 const token =
-                    localStorage.getItem(
-                        "token"
-                    );
+                    localStorage.getItem("token");
 
                 const response =
                     await fetch(
                         `${API_BASE_URL}/assign-candidate`,
                         {
                             method: "PUT",
+
                             headers: {
                                 "Content-Type":
                                     "application/json",
-                                Authorization: `Bearer ${token}`,
+
+                                Authorization:
+                                    `Bearer ${token}`,
                             },
+
                             body: JSON.stringify({
                                 batch_id:
                                     Number(
                                         batchId
                                     ),
+
                                 user_ids:
                                     selectedCandidates,
                             }),
@@ -243,64 +441,93 @@ function BatchDetailsPage() {
                 const data =
                     await response.json();
 
-                if (response.ok) {
-                    alert(data.message);
-
-                    setShowAssignModal(false);
-
-                    setSelectedCandidates(
-                        []
+                if (!response.ok) {
+                    alert(
+                        data.message ||
+                            "Unable to assign candidates."
                     );
 
-                    setAvailableCandidates(
-                        []
-                    );
-
-                    fetchBatchDetails();
-                } else {
-                    alert(data.message);
+                    return;
                 }
+
+                alert(
+                    data.message ||
+                        "Candidates assigned successfully."
+                );
+
+                setShowAssignModal(false);
+
+                setSelectedCandidates([]);
+
+                setAvailableCandidates([]);
+
+                await fetchBatchDetails();
+
+                await fetchBatchReport();
             } catch (error) {
                 console.error(error);
+
+                alert(
+                    "Unable to assign candidates."
+                );
+            } finally {
+                setAssigning(false);
             }
         };
-        const handleUnassignCandidates = async () => {
-        if (
-            selectedUnassignCandidates.length ===
-            0
-        ) {
-            alert(
-                "Please select at least one candidate."
-            );
 
-            return;
-        }
+    const handleUnassignCandidates =
+        async () => {
+            if (
+                selectedUnassignCandidates.length ===
+                    0 ||
+                unassigning
+            ) {
+                return;
+            }
 
-        try {
-            const token =
-                localStorage.getItem("token");
+            try {
+                setUnassigning(true);
 
-            const response = await fetch(
-                `${API_BASE_URL}/unassign-candidate`,
-                {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type":
-                            "application/json",
-                        Authorization: `Bearer ${token}`,
-                    },
-                    body: JSON.stringify({
-                        user_ids:
-                            selectedUnassignCandidates,
-                    }),
+                const token =
+                    localStorage.getItem("token");
+
+                const response =
+                    await fetch(
+                        `${API_BASE_URL}/unassign-candidate`,
+                        {
+                            method: "PUT",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json",
+
+                                Authorization:
+                                    `Bearer ${token}`,
+                            },
+
+                            body: JSON.stringify({
+                                user_ids:
+                                    selectedUnassignCandidates,
+                            }),
+                        }
+                    );
+
+                const data =
+                    await response.json();
+
+                if (!response.ok) {
+                    alert(
+                        data.message ||
+                            "Unable to unassign candidates."
+                    );
+
+                    return;
                 }
-            );
 
-            const data =
-                await response.json();
-
-            if (response.ok) {
-                alert(data.message);
+                alert(
+                    data.message ||
+                        "Candidates unassigned successfully."
+                );
 
                 setShowUnassignModal(false);
 
@@ -308,13 +535,32 @@ function BatchDetailsPage() {
                     []
                 );
 
-                fetchBatchDetails();
-            } else {
-                alert(data.message);
+                await fetchBatchDetails();
+
+                await fetchBatchReport();
+            } catch (error) {
+                console.error(error);
+
+                alert(
+                    "Unable to unassign candidates."
+                );
+            } finally {
+                setUnassigning(false);
             }
-        } catch (error) {
-            console.error(error);
+        };
+
+    const handleViewResults = (
+        userId
+    ) => {
+        if (navigatingCandidateId) {
+            return;
         }
+
+        setNavigatingCandidateId(userId);
+
+        navigate(
+            `/candidate-results/${userId}?batch_id=${batchId}`
+        );
     };
 
     const filteredAvailableCandidates =
@@ -386,204 +632,1014 @@ function BatchDetailsPage() {
         return (
             <div>
                 <Navbar />
-                <PageLoader message="Loading Batch Details..." />
+
+                <PageLoader
+                    message="Loading Batch Details..."
+                />
             </div>
         );
     }
+
 
     return (
         <div>
             <Navbar />
 
-            <div className="batch-details-container">
-                <h1 className="batch-details-title">
-                    Batch Details
-                </h1>
+            <main className="bdp-page">
 
-                <div className="batch-details-card">
-                    <h2 className="batch-details-name">
-                        {batch.batch_name}
-                    </h2>
+                <div className="bdp-page-header">
 
-                    <div className="batch-details-grid">
-                        <div>
-                            <h4>Technology</h4>
-                            <p>{batch.technology}</p>
-                        </div>
+                    <div>
 
-                        <div>
-                            <h4>Trainer</h4>
-                            <p>{batch.trainer_name}</p>
-                        </div>
+                        <span className="bdp-page-eyebrow">
+                            Batch Management
+                        </span>
 
-                        <div>
-                            <h4>Status</h4>
-                            <p>{batch.status}</p>
-                        </div>
+                        <h1 className="bdp-page-title">
+                            {batch.batch_name}
+                        </h1>
 
-                        <div>
-                            <h4>Candidates</h4>
-                            <p>{candidates.length}</p>
-                        </div>
-
-                        <div>
-                            <h4>Start Date</h4>
-                            <p>{batch.start_date}</p>
-                        </div>
-
-                        <div>
-                            <h4>End Date</h4>
-                            <p>{batch.end_date}</p>
-                        </div>
-                    </div>
-
-                    <div className="batch-details-description">
-                        <h4>Description</h4>
-                        <p>{batch.description}</p>
-                    </div>
-                </div>
-
-                <div className="batch-details-candidates">
-                    <div className="batch-details-header">
-                        <h2 className="batch-details-section-title">
-                            Candidates
-                        </h2>
-
-                        <div className="batch-action-buttons">
-                            <button
-                                className="assign-btn"
-                                onClick={fetchAvailableCandidates}
-                            >
-                                + Assign Candidate
-                            </button>
-
-                            <button
-                                className="unassign-btn"
-                                onClick={fetchAssignedCandidates}
-                            >
-                                - Unassign Candidate
-                            </button>
-                        </div>
-                    </div>
-
-                    <div className="batch-search-wrapper">
-                        <input
-                            type="text"
-                            className="batch-search"
-                            placeholder="🔍 Search candidate..."
-                            value={searchCandidate}
-                            onChange={(e) =>
-                                setSearchCandidate(
-                                    e.target.value
-                                )
-                            }
-                        />
-                    </div>
-
-                    <table className="batch-details-table">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Assessment Count</th>
-                                <th>Average Score</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            {filteredCandidates.length ===
-                            0 ? (
-                                <tr>
-                                    <td
-                                        colSpan="5"
-                                        className="batch-details-empty"
-                                    >
-                                        No candidates assigned
-                                        to this batch.
-                                    </td>
-                                </tr>
-                            ) : (
-                                filteredCandidates.map(
-                                    (candidate) => (
-                                        <tr
-                                            key={
-                                                candidate.user_id
-                                            }
-                                        >
-                                            <td>
-                                                {
-                                                    candidate.name
-                                                }
-                                            </td>
-
-                                            <td>
-                                                {
-                                                    candidate.email
-                                                }
-                                            </td>
-
-                                            <td>
-                                                {
-                                                    candidate.assessment_count
-                                                }
-                                            </td>
-
-                                            <td>
-                                                {candidate.average_score !==
-                                                null
-                                                    ? `${candidate.average_score}%`
-                                                    : "--"}
-                                            </td>
-
-                                            <td>
-                                                <button
-                                                    className="batch-details-btn"
-                                                    onClick={() =>
-                                                        navigate(
-                                                            `/candidate-results/${candidate.user_id}`
-                                                        )
-                                                    }
-                                                >
-                                                    View
-                                                    Results
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    )
-                                )
-                            )}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            {showAssignModal && (
-                <div className="assign-modal-overlay">
-                    <div className="assign-modal">
-                        <h2>
-                            Assign Candidates
-                        </h2>
-
-                        <input
-                            type="text"
-                            className="candidate-search"
-                            placeholder="Search candidates..."
-                            value={searchAssign}
-                            onChange={(e) =>
-                                setSearchAssign(
-                                    e.target.value
-                                )
-                            }
-                        />
-
-                        <p className="selected-count">
-                            Selected:{" "}
-                            {selectedCandidates.length}
+                        <p className="bdp-page-description">
+                            View batch information,
+                            manage candidates, and
+                            monitor assessment
+                            performance.
                         </p>
 
-                        <div className="select-all-row">
-                            <label>
+                    </div>
+
+                    <span
+                        className={`bdp-status-badge ${batch.status
+                            .toLowerCase()
+                            .replace(
+                                " ",
+                                "-"
+                            )}`}
+                    >
+                        {batch.status}
+                    </span>
+
+                </div>
+
+
+                <section className="bdp-overview-card">
+
+                    <div className="bdp-section-heading">
+
+                        <div>
+
+                            <h2 className="bdp-section-title">
+                                Batch Overview
+                            </h2>
+
+                            <p className="bdp-section-description">
+                                Basic information and
+                                configuration for this
+                                training batch.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div className="bdp-overview-grid">
+
+                        <div className="bdp-info-card">
+
+                            <span className="bdp-info-label">
+                                Technology
+                            </span>
+
+                            <strong>
+                                {batch.technology}
+                            </strong>
+
+                        </div>
+
+
+                        <div className="bdp-info-card">
+
+                            <span className="bdp-info-label">
+                                Trainer
+                            </span>
+
+                            <strong>
+                                {batch.trainer_name}
+                            </strong>
+
+                        </div>
+
+
+                        <div className="bdp-info-card">
+
+                            <span className="bdp-info-label">
+                                Candidates
+                            </span>
+
+                            <strong>
+                                {candidates.length}
+                            </strong>
+
+                        </div>
+
+
+                        <div className="bdp-info-card">
+
+                            <span className="bdp-info-label">
+                                Start Date
+                            </span>
+
+                            <strong>
+                                {batch.start_date}
+                            </strong>
+
+                        </div>
+
+
+                        <div className="bdp-info-card">
+
+                            <span className="bdp-info-label">
+                                End Date
+                            </span>
+
+                            <strong>
+                                {batch.end_date}
+                            </strong>
+
+                        </div>
+
+
+                        <div className="bdp-info-card">
+
+                            <span className="bdp-info-label">
+                                Assessments
+                            </span>
+
+                            <strong>
+                                {batchReport?.summary
+                                    ?.total_assessments ?? 0}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div className="bdp-description-box">
+
+                        <span className="bdp-info-label">
+                            Description
+                        </span>
+
+                        <p>
+                            {batch.description ||
+                                "No description provided for this batch."}
+                        </p>
+
+                    </div>
+
+                </section>
+
+
+                <section className="bdp-candidates-section">
+
+                    <div className="bdp-section-heading bdp-candidates-heading">
+
+                        <div>
+
+                            <h2 className="bdp-section-title">
+                                Candidates
+                            </h2>
+
+                            <p className="bdp-section-description">
+                                Manage candidates assigned
+                                to this batch and review
+                                their assessment performance.
+                            </p>
+
+                        </div>
+
+
+                        <div className="bdp-action-buttons">
+
+                            <button
+                                type="button"
+                                className="bdp-assign-btn"
+                                onClick={
+                                    fetchAvailableCandidates
+                                }
+                                disabled={
+                                    loadingAvailableCandidates ||
+                                    assigning ||
+                                    unassigning
+                                }
+                            >
+                                {loadingAvailableCandidates
+                                    ? "Loading Candidates..."
+                                    : "+ Assign Candidate"}
+                            </button>
+
+
+                            <button
+                                type="button"
+                                className="bdp-unassign-btn"
+                                onClick={
+                                    fetchAssignedCandidates
+                                }
+                                disabled={
+                                    candidates.length ===
+                                        0 ||
+                                    loadingAvailableCandidates ||
+                                    assigning ||
+                                    unassigning
+                                }
+                            >
+                                − Unassign Candidate
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <div className="bdp-candidate-summary-row">
+
+                        <div className="bdp-candidate-count-card">
+
+                            <span>
+                                Assigned Candidates:
+                            </span>
+
+                            <strong>
+                                {candidates.length}
+                            </strong>
+
+                        </div>
+
+
+                        <div className="bdp-candidate-count-description">
+                            Candidates currently
+                            associated with this batch.
+                        </div>
+
+                    </div>
+
+
+                    <div className="bdp-search-wrapper">
+
+                        <input
+                            type="text"
+                            className="bdp-search"
+                            placeholder="🔍 Search candidate by name or email..."
+                            value={searchCandidate}
+                            onChange={(event) =>
+                                setSearchCandidate(
+                                    event.target.value
+                                )
+                            }
+                            disabled={
+                                assigning ||
+                                unassigning
+                            }
+                        />
+
+                    </div>
+
+
+                    <div className="bdp-table-wrapper">
+
+                        <table className="bdp-details-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Candidate
+                                    </th>
+
+                                    <th>
+                                        Email
+                                    </th>
+
+                                    <th>
+                                        Action
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+                                {filteredCandidates.length ===
+                                0 ? (
+
+                                    <tr>
+
+                                        <td
+                                            colSpan="3"
+                                            className="bdp-details-empty"
+                                        >
+                                            {candidates.length ===
+                                            0
+                                                ? "No candidates are currently assigned to this batch."
+                                                : "No candidates match your search."}
+                                        </td>
+
+                                    </tr>
+
+                                ) : (
+
+                                    filteredCandidates.map(
+                                        (
+                                            candidate
+                                        ) => (
+
+                                            <tr
+                                                key={
+                                                    candidate.user_id
+                                                }
+                                            >
+
+                                                <td>
+
+                                                    <div className="bdp-candidate-table-name">
+                                                        {
+                                                            candidate.name
+                                                        }
+                                                    </div>
+
+                                                </td>
+
+
+                                                <td>
+
+                                                    <span className="bdp-candidate-table-email">
+                                                        {
+                                                            candidate.email
+                                                        }
+                                                    </span>
+
+                                                </td>
+
+
+                                                <td>
+
+    <button
+    type="button"
+    className="bdp-view-results-btn"
+    onClick={() =>
+        handleViewResults(
+            candidate.user_id
+        )
+    }
+>
+    <IoEyeOutline
+        className="bdp-view-results-icon"
+    />
+
+    <span>
+        View Results
+    </span>
+</button>
+
+</td>
+
+                                            </tr>
+
+                                        )
+                                    )
+
+                                )}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </section>
+
+
+                <section className="bdp-report-section">
+
+                    <div className="bdp-report-header">
+
+                        <div>
+
+                            <span className="bdp-section-eyebrow">
+                                Performance
+                            </span>
+
+                            <h2 className="bdp-report-title">
+                                Batch Performance Report
+                            </h2>
+
+                            <p className="bdp-report-description">
+                                Overall performance of
+                                candidates across
+                                assessments conducted for
+                                this batch.
+                            </p>
+
+                        </div>
+
+
+                        <button
+                            type="button"
+                            className="bdp-report-download-btn"
+                            onClick={
+                                handleDownloadBatchReport
+                            }
+                            disabled={
+                                reportLoading ||
+                                !batchReport ||
+                                downloadingReport
+                            }
+                        >
+                            {downloadingReport
+                                ? "Downloading..."
+                                : reportLoading
+                                    ? "Preparing Report..."
+                                    : "Download Report"}
+                        </button>
+
+                    </div>
+
+
+                    {reportLoading ? (
+
+                        <div className="bdp-report-loading">
+                            Loading batch performance
+                            report...
+                        </div>
+
+                    ) : !batchReport ? (
+
+                        <div className="bdp-report-empty">
+                            Unable to load batch
+                            performance report.
+                        </div>
+
+                    ) : (
+
+                        <>
+
+                            <div className="bdp-report-summary">
+
+                                <div className="bdp-report-summary-card">
+
+                                    <span>
+                                        Candidates
+                                    </span>
+
+                                    <strong>
+                                        {
+                                            batchReport.summary
+                                                .total_candidates
+                                        }
+                                    </strong>
+
+                                </div>
+
+
+                                <div className="bdp-report-summary-card">
+
+                                    <span>
+                                        Assessments
+                                    </span>
+
+                                    <strong>
+                                        {
+                                            batchReport.summary
+                                                .total_assessments
+                                        }
+                                    </strong>
+
+                                </div>
+
+
+                                <div className="bdp-report-summary-card">
+
+                                    <span>
+                                        Submissions
+                                    </span>
+
+                                    <strong>
+                                        {
+                                            batchReport.summary
+                                                .total_submissions
+                                        }
+                                    </strong>
+
+                                </div>
+
+
+                                <div className="bdp-report-summary-card">
+
+                                    <span>
+                                        Average Score
+                                    </span>
+
+                                    <strong>
+                                        {
+                                            batchReport.summary
+                                                .average_score
+                                        }%
+                                    </strong>
+
+                                </div>
+
+
+                                <div className="bdp-report-summary-card">
+
+                                    <span>
+                                        Pass Percentage
+                                    </span>
+
+                                    <strong>
+                                        {
+                                            batchReport.summary
+                                                .pass_percentage
+                                        }%
+                                    </strong>
+
+                                </div>
+
+
+                                <div className="bdp-report-summary-card">
+
+                                    <span>
+                                        Highest Score
+                                    </span>
+
+                                    <strong>
+                                        {
+                                            batchReport.summary
+                                                .highest_score
+                                        }%
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+
+                            <div className="bdp-report-subsection">
+
+                                <div className="bdp-report-subsection-header">
+
+                                    <div>
+
+                                        <h3>
+                                            Candidate Performance
+                                        </h3>
+
+                                        <p>
+                                            Performance ranking
+                                            of candidates based
+                                            on their assessment
+                                            scores.
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div className="bdp-report-table-wrapper">
+
+                                    <table className="bdp-report-table">
+
+                                        <thead>
+
+                                            <tr>
+
+                                                <th>
+                                                    Rank
+                                                </th>
+
+                                                <th>
+                                                    Candidate
+                                                </th>
+
+                                                <th>
+                                                    Assessments
+                                                </th>
+
+                                                <th>
+                                                    Average Score
+                                                </th>
+
+                                                <th>
+                                                    Highest
+                                                </th>
+
+                                                <th>
+                                                    Lowest
+                                                </th>
+
+                                                <th>
+                                                    Passed
+                                                </th>
+
+                                                <th>
+                                                    Failed
+                                                </th>
+
+                                            </tr>
+
+                                        </thead>
+
+
+                                        <tbody>
+
+                                            {batchReport.candidates.length ===
+                                            0 ? (
+
+                                                <tr>
+
+                                                    <td
+                                                        colSpan="8"
+                                                        className="bdp-report-empty"
+                                                    >
+                                                        No candidate
+                                                        performance
+                                                        data available.
+                                                    </td>
+
+                                                </tr>
+
+                                            ) : (
+
+                                                batchReport.candidates.map(
+                                                    (
+                                                        candidate
+                                                    ) => (
+
+                                                        <tr
+                                                            key={
+                                                                candidate.user_id
+                                                            }
+                                                        >
+
+                                                            <td>
+
+                                                                <span className="bdp-rank-badge">
+                                                                    #
+                                                                    {
+                                                                        candidate.rank
+                                                                    }
+                                                                </span>
+
+                                                            </td>
+
+
+                                                            <td>
+
+                                                                <strong>
+                                                                    {
+                                                                        candidate.name
+                                                                    }
+                                                                </strong>
+
+                                                            </td>
+
+
+                                                            <td>
+                                                                {
+                                                                    candidate.assessment_count
+                                                                }
+                                                            </td>
+
+
+                                                            <td>
+                                                                {
+                                                                    candidate.average_score
+                                                                }%
+                                                            </td>
+
+
+                                                            <td>
+                                                                {
+                                                                    candidate.highest_score
+                                                                }%
+                                                            </td>
+
+
+                                                            <td>
+                                                                {
+                                                                    candidate.lowest_score
+                                                                }%
+                                                            </td>
+
+
+                                                            <td>
+
+                                                                <span className="bdp-pass-count">
+                                                                    {
+                                                                        candidate.pass_count
+                                                                    }
+                                                                </span>
+
+                                                            </td>
+
+
+                                                            <td>
+
+                                                                <span className="bdp-fail-count">
+                                                                    {
+                                                                        candidate.fail_count
+                                                                    }
+                                                                </span>
+
+                                                            </td>
+
+                                                        </tr>
+
+                                                    )
+                                                )
+
+                                            )}
+
+                                        </tbody>
+
+                                    </table>
+
+                                </div>
+
+                            </div>
+
+
+                            <div className="bdp-report-subsection">
+
+                                <div className="bdp-report-subsection-header">
+
+                                    <div>
+
+                                        <h3>
+                                            Assessment Performance
+                                        </h3>
+
+                                        <p>
+                                            Assessment-wise
+                                            performance across
+                                            the batch.
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div className="bdp-report-table-wrapper">
+
+                                    <table className="bdp-report-table">
+
+                                        <thead>
+
+                                            <tr>
+
+                                                <th>
+                                                    Assessment
+                                                </th>
+
+                                                <th>
+                                                    Submissions
+                                                </th>
+
+                                                <th>
+                                                    Average Score
+                                                </th>
+
+                                                <th>
+                                                    Highest
+                                                </th>
+
+                                                <th>
+                                                    Lowest
+                                                </th>
+
+                                                <th>
+                                                    Passed
+                                                </th>
+
+                                                <th>
+                                                    Failed
+                                                </th>
+
+                                                <th>
+                                                    Pass Rate
+                                                </th>
+
+                                            </tr>
+
+                                        </thead>
+
+
+                                        <tbody>
+
+                                            {batchReport.assessments.length ===
+                                            0 ? (
+
+                                                <tr>
+
+                                                    <td
+                                                        colSpan="8"
+                                                        className="bdp-report-empty"
+                                                    >
+                                                        No assessment
+                                                        performance
+                                                        data available.
+                                                    </td>
+
+                                                </tr>
+
+                                            ) : (
+
+                                                batchReport.assessments.map(
+                                                    (
+                                                        assessment
+                                                    ) => (
+
+                                                        <tr
+                                                            key={
+                                                                assessment.exam_id
+                                                            }
+                                                        >
+
+                                                            <td>
+
+                                                                <strong>
+                                                                    {
+                                                                        assessment.title
+                                                                    }
+                                                                </strong>
+
+                                                            </td>
+
+
+                                                            <td>
+                                                                {
+                                                                    assessment.submission_count
+                                                                }
+                                                            </td>
+
+
+                                                            <td>
+                                                                {
+                                                                    assessment.average_score
+                                                                }%
+                                                            </td>
+
+
+                                                            <td>
+                                                                {
+                                                                    assessment.highest_score
+                                                                }%
+                                                            </td>
+
+
+                                                            <td>
+                                                                {
+                                                                    assessment.lowest_score
+                                                                }%
+                                                            </td>
+
+
+                                                            <td>
+
+                                                                <span className="bdp-pass-count">
+                                                                    {
+                                                                        assessment.pass_count
+                                                                    }
+                                                                </span>
+
+                                                            </td>
+
+
+                                                            <td>
+
+                                                                <span className="bdp-fail-count">
+                                                                    {
+                                                                        assessment.fail_count
+                                                                    }
+                                                                </span>
+
+                                                            </td>
+
+
+                                                            <td>
+                                                                {
+                                                                    assessment.pass_percentage
+                                                                }%
+                                                            </td>
+
+                                                        </tr>
+
+                                                    )
+                                                )
+
+                                            )}
+
+                                        </tbody>
+
+                                    </table>
+
+                                </div>
+
+                            </div>
+
+                        </>
+
+                    )}
+
+                </section>
+
+            </main>
+
+
+            {showAssignModal && (
+
+                <div className="bdp-modal-overlay">
+
+                    <div className="bdp-modal">
+
+                        <div className="bdp-modal-header">
+
+                            <div>
+
+                                <span className="bdp-modal-eyebrow">
+                                    Candidate Management
+                                </span>
+
+                                <h2>
+                                    Assign Candidates
+                                </h2>
+
+                                <p>
+                                    Select candidates to
+                                    add them to{" "}
+                                    <strong>
+                                        {batch.batch_name}
+                                    </strong>
+                                    .
+                                </p>
+
+                            </div>
+
+
+                            <button
+                                type="button"
+                                className="bdp-modal-close"
+                                onClick={() => {
+                                    if (assigning) {
+                                        return;
+                                    }
+
+                                    setShowAssignModal(
+                                        false
+                                    );
+
+                                    setSelectedCandidates(
+                                        []
+                                    );
+                                }}
+                                disabled={assigning}
+                            >
+                                ×
+                            </button>
+
+                        </div>
+
+
+                        <input
+                            type="text"
+                            className="bdp-candidate-search"
+                            placeholder="🔍 Search candidates..."
+                            value={searchAssign}
+                            onChange={(event) =>
+                                setSearchAssign(
+                                    event.target.value
+                                )
+                            }
+                            disabled={assigning}
+                        />
+
+
+                        <div className="bdp-selection-toolbar">
+
+                            <span className="bdp-selected-count">
+                                {selectedCandidates.length}{" "}
+                                selected
+                            </span>
+
+
+                            <label className="bdp-select-all-control">
+
                                 <input
                                     type="checkbox"
                                     checked={
@@ -592,30 +1648,56 @@ function BatchDetailsPage() {
                                     onChange={
                                         handleSelectAllAssign
                                     }
-                                />{" "}
-                                Select All
+                                    disabled={assigning}
+                                />
+
+                                <span>
+                                    Select All
+                                </span>
+
                             </label>
+
                         </div>
 
-                        <div className="candidate-list">
+
+                        <div className="bdp-candidate-list">
+
                             {availableCandidates.length ===
                             0 ? (
-                                <p className="no-candidates">
+
+                                <p className="bdp-no-candidates">
                                     No unassigned
-                                    candidates
-                                    available.
+                                    candidates available.
                                 </p>
+
+                            ) : filteredAvailableCandidates.length ===
+                              0 ? (
+
+                                <p className="bdp-no-candidates">
+                                    No candidates match
+                                    your search.
+                                </p>
+
                             ) : (
+
                                 filteredAvailableCandidates.map(
                                     (
                                         candidate
                                     ) => (
+
                                         <label
                                             key={
                                                 candidate.user_id
                                             }
-                                            className="candidate-item"
+                                            className={`bdp-candidate-item ${
+                                                selectedCandidates.includes(
+                                                    candidate.user_id
+                                                )
+                                                    ? "selected"
+                                                    : ""
+                                            }`}
                                         >
+
                                             <input
                                                 type="checkbox"
                                                 checked={selectedCandidates.includes(
@@ -626,42 +1708,46 @@ function BatchDetailsPage() {
                                                         candidate.user_id
                                                     )
                                                 }
+                                                disabled={assigning}
                                             />
 
-                                            <div>
+
+                                            <div className="bdp-candidate-modal-info">
+
                                                 <strong>
                                                     {
                                                         candidate.name
                                                     }
                                                 </strong>
 
-                                                <br />
-
                                                 <span>
                                                     {
                                                         candidate.email
                                                     }
                                                 </span>
+
                                             </div>
+
                                         </label>
+
                                     )
                                 )
+
                             )}
+
                         </div>
 
-                        <div className="assign-modal-actions">
-                            <button
-                                className="batch-details-btn"
-                                onClick={
-                                    handleAssignCandidate
-                                }
-                            >
-                                Assign Selected
-                            </button>
+
+                        <div className="bdp-modal-actions">
 
                             <button
-                                className="cancel-btn"
+                                type="button"
+                                className="bdp-modal-cancel-btn"
                                 onClick={() => {
+                                    if (assigning) {
+                                        return;
+                                    }
+
                                     setShowAssignModal(
                                         false
                                     );
@@ -670,42 +1756,118 @@ function BatchDetailsPage() {
                                         []
                                     );
                                 }}
+                                disabled={assigning}
                             >
                                 Cancel
                             </button>
+
+
+                            <button
+                                type="button"
+                                className="bdp-modal-primary-btn"
+                                onClick={
+                                    handleAssignCandidate
+                                }
+                                disabled={
+                                    selectedCandidates.length ===
+                                        0 ||
+                                    assigning
+                                }
+                            >
+                                {assigning
+                                    ? "Assigning..."
+                                    : "Assign Selected"}
+                            </button>
+
                         </div>
+
                     </div>
+
                 </div>
+
             )}
 
+
             {showUnassignModal && (
-                <div className="assign-modal-overlay">
-                    <div className="assign-modal">
-                        <h2>
-                            Unassign Candidates
-                        </h2>
+
+                <div className="bdp-modal-overlay">
+
+                    <div className="bdp-modal">
+
+                        <div className="bdp-modal-header">
+
+                            <div>
+
+                                <span className="bdp-modal-eyebrow">
+                                    Candidate Management
+                                </span>
+
+                                <h2>
+                                    Unassign Candidates
+                                </h2>
+
+                                <p>
+                                    Select candidates to
+                                    remove from{" "}
+                                    <strong>
+                                        {batch.batch_name}
+                                    </strong>
+                                    .
+                                </p>
+
+                            </div>
+
+
+                            <button
+                                type="button"
+                                className="bdp-modal-close"
+                                onClick={() => {
+                                    if (unassigning) {
+                                        return;
+                                    }
+
+                                    setShowUnassignModal(
+                                        false
+                                    );
+
+                                    setSelectedUnassignCandidates(
+                                        []
+                                    );
+                                }}
+                                disabled={unassigning}
+                            >
+                                ×
+                            </button>
+
+                        </div>
+
 
                         <input
                             type="text"
-                            className="candidate-search"
-                            placeholder="Search candidates..."
+                            className="bdp-candidate-search"
+                            placeholder="🔍 Search candidates..."
                             value={searchUnassign}
-                            onChange={(e) =>
+                            onChange={(event) =>
                                 setSearchUnassign(
-                                    e.target.value
+                                    event.target.value
                                 )
                             }
+                            disabled={unassigning}
                         />
 
-                        <p className="selected-count">
-                            Selected:{" "}
-                            {
-                                selectedUnassignCandidates.length
-                            }
-                        </p>
 
-                        <div className="select-all-row">
-                            <label>
+                        <div className="bdp-selection-toolbar">
+
+                            <span className="bdp-selected-count">
+                                {
+                                    selectedUnassignCandidates.length
+                                }{" "}
+                                selected
+                            </span>
+
+
+                            <label className="bdp-select-all-control">
+
                                 <input
                                     type="checkbox"
                                     checked={
@@ -714,30 +1876,56 @@ function BatchDetailsPage() {
                                     onChange={
                                         handleSelectAllUnassign
                                     }
-                                />{" "}
-                                Select All
+                                    disabled={unassigning}
+                                />
+
+                                <span>
+                                    Select All
+                                </span>
+
                             </label>
+
                         </div>
 
-                        <div className="candidate-list">
+
+                        <div className="bdp-candidate-list">
+
                             {candidates.length ===
                             0 ? (
-                                <p className="no-candidates">
-                                    No candidates
-                                    assigned to this
-                                    batch.
+
+                                <p className="bdp-no-candidates">
+                                    No candidates assigned
+                                    to this batch.
                                 </p>
+
+                            ) : filteredAssignedCandidates.length ===
+                              0 ? (
+
+                                <p className="bdp-no-candidates">
+                                    No candidates match
+                                    your search.
+                                </p>
+
                             ) : (
+
                                 filteredAssignedCandidates.map(
                                     (
                                         candidate
                                     ) => (
+
                                         <label
                                             key={
                                                 candidate.user_id
                                             }
-                                            className="candidate-item"
+                                            className={`bdp-candidate-item ${
+                                                selectedUnassignCandidates.includes(
+                                                    candidate.user_id
+                                                )
+                                                    ? "selected"
+                                                    : ""
+                                            }`}
                                         >
+
                                             <input
                                                 type="checkbox"
                                                 checked={selectedUnassignCandidates.includes(
@@ -748,42 +1936,46 @@ function BatchDetailsPage() {
                                                         candidate.user_id
                                                     )
                                                 }
+                                                disabled={unassigning}
                                             />
 
-                                            <div>
+
+                                            <div className="bdp-candidate-modal-info">
+
                                                 <strong>
                                                     {
                                                         candidate.name
                                                     }
                                                 </strong>
 
-                                                <br />
-
                                                 <span>
                                                     {
                                                         candidate.email
                                                     }
                                                 </span>
+
                                             </div>
+
                                         </label>
+
                                     )
                                 )
+
                             )}
+
                         </div>
 
-                        <div className="assign-modal-actions">
-                            <button
-                                className="unassign-btn"
-                                onClick={
-                                    handleUnassignCandidates
-                                }
-                            >
-                                Unassign Selected
-                            </button>
+
+                        <div className="bdp-modal-actions">
 
                             <button
-                                className="cancel-btn"
+                                type="button"
+                                className="bdp-modal-cancel-btn"
                                 onClick={() => {
+                                    if (unassigning) {
+                                        return;
+                                    }
+
                                     setShowUnassignModal(
                                         false
                                     );
@@ -792,13 +1984,37 @@ function BatchDetailsPage() {
                                         []
                                     );
                                 }}
+                                disabled={unassigning}
                             >
                                 Cancel
                             </button>
+
+
+                            <button
+                                type="button"
+                                className="bdp-modal-danger-btn"
+                                onClick={
+                                    handleUnassignCandidates
+                                }
+                                disabled={
+                                    selectedUnassignCandidates.length ===
+                                        0 ||
+                                    unassigning
+                                }
+                            >
+                                {unassigning
+                                    ? "Unassigning..."
+                                    : "Unassign Selected"}
+                            </button>
+
                         </div>
+
                     </div>
+
                 </div>
+
             )}
+
         </div>
     );
 }

@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from extensions import mysql
@@ -368,6 +368,294 @@ def get_exam_results(exam_id):
                     "passing_marks": exam[3],
                 },
                 "results": result_list,
+            }
+        ),
+        200,
+    )
+
+
+@result_bp.route("/candidate-results/<int:user_id>", methods=["GET"])
+@jwt_required()
+def candidate_results(user_id):
+
+    current_user_id = get_jwt_identity()
+
+    batch_id = request.args.get("batch_id", type=int)
+
+    cur = mysql.connection.cursor()
+
+    # ==========================================
+    # Verify Admin / Examiner
+    # ==========================================
+
+    role_query = """
+    SELECT role
+    FROM users
+    WHERE user_id = %s
+    """
+
+    cur.execute(role_query, (current_user_id,))
+
+    current_user = cur.fetchone()
+
+    if not current_user:
+
+        cur.close()
+
+        return jsonify({"message": "User not found"}), 404
+
+    if current_user[0] not in ["Admin", "Examiner"]:
+
+        cur.close()
+
+        return jsonify({"message": "Access denied."}), 403
+
+    # ==========================================
+    # Fetch Candidate
+    # ==========================================
+
+    candidate_query = """
+    SELECT
+        u.user_id,
+        u.name,
+        u.email,
+        b.batch_name,
+        b.technology
+    FROM users u
+    LEFT JOIN batches b
+        ON u.batch_id = b.batch_id
+    WHERE u.user_id = %s
+    """
+
+    cur.execute(candidate_query, (user_id,))
+
+    candidate = cur.fetchone()
+
+    if not candidate:
+
+        cur.close()
+
+        return jsonify({"message": "Candidate not found"}), 404
+
+    # ==========================================
+    # Candidate Summary
+    # ==========================================
+
+    if batch_id is not None:
+
+        summary_query = """
+        SELECT
+            COUNT(s.submission_id),
+
+            ROUND(
+                AVG(
+                    (s.score * 100.0) / e.total_marks
+                ),
+                2
+            ),
+
+            ROUND(
+                MAX(
+                    (s.score * 100.0) / e.total_marks
+                ),
+                2
+            ),
+
+            ROUND(
+                MIN(
+                    (s.score * 100.0) / e.total_marks
+                ),
+                2
+            )
+
+        FROM submissions s
+
+        JOIN exams e
+            ON s.exam_id = e.exam_id
+
+        WHERE s.user_id = %s
+
+        AND EXISTS (
+            SELECT 1
+            FROM assessment_schedules ass
+            WHERE ass.exam_id = e.exam_id
+            AND ass.batch_id = %s
+        )
+        """
+
+        cur.execute(
+            summary_query,
+            (user_id, batch_id)
+        )
+
+    else:
+
+        summary_query = """
+        SELECT
+            COUNT(s.submission_id),
+
+            ROUND(
+                AVG(
+                    (s.score * 100.0) / e.total_marks
+                ),
+                2
+            ),
+
+            ROUND(
+                MAX(
+                    (s.score * 100.0) / e.total_marks
+                ),
+                2
+            ),
+
+            ROUND(
+                MIN(
+                    (s.score * 100.0) / e.total_marks
+                ),
+                2
+            )
+
+        FROM submissions s
+
+        JOIN exams e
+            ON s.exam_id = e.exam_id
+
+        WHERE s.user_id = %s
+        """
+
+        cur.execute(
+            summary_query,
+            (user_id,)
+        )
+
+    summary = cur.fetchone()
+
+    # ==========================================
+    # Assessment History
+    # ==========================================
+
+    if batch_id is not None:
+
+        history_query = """
+        SELECT
+            s.submission_id,
+            e.exam_id,
+            e.title,
+            s.score,
+            e.total_marks,
+
+            ROUND(
+                (s.score * 100.0) / e.total_marks,
+                2
+            ) AS percentage,
+
+            CASE
+                WHEN s.score >= e.passing_marks
+                THEN 'Pass'
+                ELSE 'Fail'
+            END AS status,
+
+            s.submitted_at
+
+        FROM submissions s
+
+        JOIN exams e
+            ON s.exam_id = e.exam_id
+
+        WHERE s.user_id = %s
+
+        AND EXISTS (
+            SELECT 1
+            FROM assessment_schedules ass
+            WHERE ass.exam_id = e.exam_id
+            AND ass.batch_id = %s
+        )
+
+        ORDER BY s.submitted_at DESC
+        """
+
+        cur.execute(
+            history_query,
+            (user_id, batch_id)
+        )
+
+    else:
+
+        history_query = """
+        SELECT
+            s.submission_id,
+            e.exam_id,
+            e.title,
+            s.score,
+            e.total_marks,
+
+            ROUND(
+                (s.score * 100.0) / e.total_marks,
+                2
+            ) AS percentage,
+
+            CASE
+                WHEN s.score >= e.passing_marks
+                THEN 'Pass'
+                ELSE 'Fail'
+            END AS status,
+
+            s.submitted_at
+
+        FROM submissions s
+
+        JOIN exams e
+            ON s.exam_id = e.exam_id
+
+        WHERE s.user_id = %s
+
+        ORDER BY s.submitted_at DESC
+        """
+
+        cur.execute(
+            history_query,
+            (user_id,)
+        )
+
+    history = cur.fetchall()
+
+    history_list = []
+
+    for row in history:
+
+        history_list.append(
+            {
+                "submission_id": row[0],
+                "exam_id": row[1],
+                "exam_title": row[2],
+                "score": row[3],
+                "total_marks": row[4],
+                "percentage": row[5],
+                "status": row[6],
+                "submitted_at": str(row[7]),
+            }
+        )
+
+    cur.close()
+
+    return (
+        jsonify(
+            {
+                "candidate": {
+                    "user_id": candidate[0],
+                    "name": candidate[1],
+                    "email": candidate[2],
+                    "batch_name": candidate[3],
+                    "technology": candidate[4],
+                },
+                "summary": {
+                    "assessment_count": summary[0],
+                    "average_score": summary[1],
+                    "highest_score": summary[2],
+                    "lowest_score": summary[3],
+                },
+                "history": history_list,
+                "batch_id": batch_id,
             }
         ),
         200,

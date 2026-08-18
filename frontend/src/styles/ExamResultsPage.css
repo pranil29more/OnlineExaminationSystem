@@ -1,100 +1,955 @@
-.page-container {
-    max-width: 1100px;
-    margin: 40px auto;
-    padding: 20px;
+/* =========================================================
+   EXAM RESULTS PAGE
+   Namespace: erp-
+========================================================= */
+
+
+/* =========================================================
+   Page
+========================================================= */
+
+.erp-page {
+    min-height: 100vh;
+
+    color: #f8fafc;
 }
 
-.page-title {
-    text-align: center;
+
+.erp-page-container {
+    width: 100%;
+
+    max-width: 1200px;
+
+    margin: 0 auto;
+
+    padding:
+        40px
+        25px
+        70px;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   Page Header
+========================================================= */
+
+.erp-page-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-end;
+
+    gap: 25px;
+
     margin-bottom: 35px;
 }
 
-.summary-card {
-    background: #1e293b;
-    border: 1px solid #334155;
-    border-radius: 16px;
+
+.erp-page-eyebrow,
+.erp-section-eyebrow {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #60a5fa;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1px;
+}
+
+
+.erp-page-title {
+    margin: 0 0 10px;
+
+    color: #f8fafc;
+
+    font-size: 40px;
+
+    line-height: 1.2;
+
+    font-weight: 800;
+
+    letter-spacing: -0.6px;
+}
+
+
+.erp-page-description {
+    max-width: 720px;
+
+    margin: 0;
+
+    color: #94a3b8;
+
+    font-size: 14px;
+
+    line-height: 1.65;
+}
+
+
+/* =========================================================
+   Shared Sections
+========================================================= */
+
+.erp-exam-section,
+.erp-results-section {
+    margin-bottom: 35px;
+
     padding: 28px;
-    text-align: center;
-    margin-bottom: 40px;
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+
+    background: #1e293b;
+
+    border:
+        1px solid
+        #334155;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 10px 20px
+        rgba(0, 0, 0, 0.22);
 }
 
-.summary-title {
-    font-size: 32px;
-    font-weight: 700;
-    color: #3b82f6;
+
+.erp-results-section {
+    margin-bottom: 0;
 }
 
-.section-title {
+
+.erp-section-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-end;
+
+    gap: 20px;
+
     margin-bottom: 25px;
 }
 
-.results-table-container {
-    background: #1e293b;
-    border: 1px solid #334155;
-    border-radius: 18px;
-    padding: 30px;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+
+.erp-section-header > div {
+    min-width: 0;
 }
 
-.results-table {
-    width: 100%;
-    border-collapse: collapse;
-    overflow: hidden;
+
+.erp-section-title {
+    margin: 0 0 7px;
+
+    color: #f8fafc;
+
+    font-size: 25px;
+
+    font-weight: 800;
+
+    letter-spacing: -0.2px;
+}
+
+
+.erp-section-description {
+    margin: 0;
+
+    color: #94a3b8;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   Exam Information
+========================================================= */
+
+.erp-exam-profile {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 18px;
+}
+
+
+.erp-exam-name-block {
+    padding:
+        20px
+        22px;
+
+    background: #0f172a;
+
+    border:
+        1px solid
+        #334155;
+
     border-radius: 12px;
 }
 
-.results-table th {
-    background: #2563eb;
-    color: white;
-    padding: 16px;
-    text-align: left;
-    font-size: 15px;
-    font-weight: 600;
+
+.erp-info-label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #60a5fa;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.8px;
 }
 
-.results-table td {
+
+.erp-exam-name {
+    margin: 0;
+
+    color: #f8fafc;
+
+    font-size: 25px;
+
+    line-height: 1.3;
+
+    font-weight: 800;
+
+    overflow-wrap: anywhere;
+}
+
+
+.erp-exam-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
+
+    gap: 16px;
+}
+
+
+.erp-info-card {
+    min-width: 0;
+
+    padding: 18px;
+
     background: #0f172a;
+
+    border:
+        1px solid
+        #334155;
+
+    border-radius: 12px;
+
+    transition:
+        border-color 0.25s ease,
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+
+.erp-info-card:hover {
+    border-color: #475569;
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 8px 18px
+        rgba(0, 0, 0, 0.18);
+}
+
+
+.erp-info-card strong {
+    display: block;
+
     color: #e2e8f0;
-    padding: 16px;
-    border-bottom: 1px solid #334155;
+
+    font-size: 20px;
+
+    line-height: 1.5;
+
+    overflow-wrap: anywhere;
 }
 
-.results-table tbody tr:hover td {
-    background: #172554;
+
+/* =========================================================
+   Results Count
+========================================================= */
+
+.erp-results-count {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    min-height: 30px;
+
+    padding:
+        0
+        12px;
+
+    border:
+        1px solid
+        #334155;
+
+    border-radius:
+        999px;
+
+    background:
+        #0f172a;
+
+    color:
+        #93c5fd;
+
+    font-size:
+        11px;
+
+    font-weight:
+        750;
 }
 
-.status-pass {
-    background: #22c55e;
-    color: white;
-    padding: 5px 14px;
-    border-radius: 999px;
-    font-size: 13px;
-    font-weight: 600;
+
+/* =========================================================
+   Results Table Wrapper
+========================================================= */
+
+.erp-table-wrapper {
+    width: 100%;
+
+    max-height: 420px;
+
+    overflow-x: auto;
+
+    overflow-y: auto;
+
+    box-sizing: border-box;
+
+    border:
+        1px solid
+        #334155;
+
+    border-radius:
+        12px;
+
+    background:
+        #0f172a;
+
+    scrollbar-width: thin;
+
+    scrollbar-color:
+        #475569
+        #0f172a;
 }
 
-.status-fail {
-    background: #ef4444;
-    color: white;
-    padding: 5px 14px;
-    border-radius: 999px;
-    font-size: 13px;
-    font-weight: 600;
+
+.erp-table-wrapper::-webkit-scrollbar {
+    width: 8px;
+
+    height: 8px;
 }
 
-.uni-view-btn {
-    display: inline-block;
-    background: #2563eb;
-    color: white;
-    text-decoration: none;
-    padding: 9px 18px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    transition: 0.25s;
+
+.erp-table-wrapper::-webkit-scrollbar-track {
+    background:
+        #0f172a;
 }
 
-.uni-view-btn:hover {
-    background: #3b82f6;
-    color: white;
+
+.erp-table-wrapper::-webkit-scrollbar-thumb {
+    background:
+        #475569;
+
+    border-radius:
+        8px;
+}
+
+
+.erp-table-wrapper::-webkit-scrollbar-thumb:hover {
+    background:
+        #64748b;
+}
+
+
+/* =========================================================
+   Results Table
+========================================================= */
+
+.erp-results-table {
+    width: 100%;
+
+    min-width: 850px;
+
+    border-collapse:
+        collapse;
+
+    table-layout:
+        fixed;
+}
+
+
+/* =========================================================
+   Table Header
+========================================================= */
+
+.erp-results-table th {
+    position: sticky;
+
+    top: 0;
+
+    z-index: 5;
+
+    padding:
+        14px
+        15px;
+
+    background:
+        #2563eb;
+
+    color:
+        #ffffff;
+
+    font-size:
+        12px;
+
+    font-weight:
+        750;
+
+    text-align:
+        left;
+
+    white-space:
+        nowrap;
+}
+
+
+/* =========================================================
+   Table Column Widths
+========================================================= */
+
+.erp-results-table th:nth-child(1),
+.erp-results-table td:nth-child(1) {
+    width: 24%;
+}
+
+
+.erp-results-table th:nth-child(2),
+.erp-results-table td:nth-child(2) {
+    width: 13%;
+}
+
+
+.erp-results-table th:nth-child(3),
+.erp-results-table td:nth-child(3) {
+    width: 15%;
+}
+
+
+.erp-results-table th:nth-child(4),
+.erp-results-table td:nth-child(4) {
+    width: 13%;
+}
+
+
+.erp-results-table th:nth-child(5),
+.erp-results-table td:nth-child(5) {
+    width: 15%;
+}
+
+
+.erp-results-table th:nth-child(6),
+.erp-results-table td:nth-child(6) {
+    width: 20%;
+}
+
+
+/* =========================================================
+   Table Rows
+========================================================= */
+
+.erp-results-table td {
+    padding:
+        15px;
+
+    background:
+        #0f172a;
+
+    color:
+        #cbd5e1;
+
+    font-size:
+        13px;
+
+    border-bottom:
+        1px solid
+        #334155;
+
+    vertical-align:
+        middle;
+}
+
+
+.erp-results-table tbody tr:last-child td {
+    border-bottom:
+        none;
+}
+
+
+.erp-results-table tbody tr:hover td {
+    background:
+        #172554;
+}
+
+
+/* =========================================================
+   Candidate Name
+========================================================= */
+
+.erp-candidate-name {
+    display: block;
+
+    color:
+        #f8fafc;
+
+    font-size:
+        13px;
+
+    font-weight:
+        750;
+
+    line-height:
+        1.4;
+
+    overflow-wrap:
+        anywhere;
+}
+
+
+/* =========================================================
+   Score
+========================================================= */
+
+.erp-score {
+    color:
+        #cbd5e1;
+
+    font-size:
+        13px;
+
+    font-weight:
+        600;
+
+    white-space:
+        nowrap;
+}
+
+
+/* =========================================================
+   Percentage
+========================================================= */
+
+.erp-percentage {
+    color:
+        #f8fafc;
+
+    font-size:
+        13px;
+
+    font-weight:
+        800;
+
+    white-space:
+        nowrap;
+}
+
+
+/* =========================================================
+   Status Badges
+========================================================= */
+
+.erp-status-badge {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-width:
+        60px;
+
+    min-height:
+        27px;
+
+    padding:
+        0
+        10px;
+
+    border-radius:
+        999px;
+
+    font-size:
+        10px;
+
+    font-weight:
+        800;
+
+    text-transform:
+        uppercase;
+}
+
+
+.erp-status-pass {
+    background:
+        rgba(34, 197, 94, 0.10);
+
+    border:
+        1px solid
+        rgba(34, 197, 94, 0.45);
+
+    color:
+        #86efac;
+}
+
+
+.erp-status-fail {
+    background:
+        rgba(239, 68, 68, 0.10);
+
+    border:
+        1px solid
+        rgba(239, 68, 68, 0.45);
+
+    color:
+        #fca5a5;
+}
+
+
+/* =========================================================
+   Submitted Date
+========================================================= */
+
+.erp-submitted-date {
+    color:
+        #94a3b8;
+
+    font-size:
+        12px;
+
+    white-space:
+        nowrap;
+}
+
+
+/* =========================================================
+   View Details Button
+========================================================= */
+
+.erp-view-details-btn {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    min-height:
+        36px;
+
+    padding:
+        0
+        12px;
+
+    border:
+        1px solid
+        #3b82f6;
+
+    border-radius:
+        8px;
+
+    background:
+        #2563eb;
+
+    color:
+        #ffffff;
+
+    font-family:
+        inherit;
+
+    font-size:
+        11px;
+
+    font-weight:
+        750;
+
+    line-height:
+        1;
+
+    text-decoration:
+        none;
+
+    white-space:
+        nowrap;
+
+    cursor:
+        pointer;
+
+    box-shadow:
+        0 5px 12px
+        rgba(
+            37,
+            99,
+            235,
+            0.20
+        );
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.erp-view-details-btn:hover {
+    background:
+        #3b82f6;
+
+    border-color:
+        #60a5fa;
+
+    color:
+        #ffffff;
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 8px 18px
+        rgba(
+            37,
+            99,
+            235,
+            0.30
+        );
+}
+
+
+.erp-view-details-icon {
+    width:
+        15px;
+
+    height:
+        15px;
+
+    flex-shrink:
+        0;
+}
+
+
+/* =========================================================
+   Empty Table
+========================================================= */
+
+.erp-table-empty {
+    padding:
+        45px
+        20px !important;
+
+    color:
+        #64748b !important;
+
+    text-align:
+        center;
+
+    font-size:
+        13px;
+}
+
+
+/* =========================================================
+   Focus Protection
+========================================================= */
+
+.erp-page button:focus-visible,
+.erp-page a:focus-visible,
+.erp-page input:focus-visible,
+.erp-page select:focus-visible {
+    outline:
+        2px solid
+        rgba(
+            96,
+            165,
+            250,
+            0.8
+        );
+
+    outline-offset:
+        2px;
+}
+
+
+/* =========================================================
+   Responsive — Tablet
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .erp-page-container {
+        padding:
+            30px
+            20px
+            60px;
+    }
+
+
+    .erp-page-header {
+        align-items:
+            flex-start;
+
+        flex-direction:
+            column;
+    }
+
+
+    .erp-exam-grid {
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            );
+    }
+
+}
+
+
+/* =========================================================
+   Responsive — Mobile
+========================================================= */
+
+@media (max-width: 650px) {
+
+    .erp-page-container {
+        padding:
+            25px
+            15px
+            50px;
+    }
+
+
+    .erp-page-title {
+        font-size:
+            32px;
+    }
+
+
+    .erp-page-description {
+        font-size:
+            13px;
+    }
+
+
+    .erp-exam-section,
+    .erp-results-section {
+        padding:
+            20px;
+    }
+
+
+    .erp-section-header {
+        align-items:
+            flex-start;
+
+        flex-direction:
+            column;
+    }
+
+
+    .erp-section-title {
+        font-size:
+            22px;
+    }
+
+
+    .erp-results-count {
+        align-self:
+            flex-start;
+    }
+
+
+    .erp-exam-grid {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .erp-table-wrapper {
+        max-height:
+            360px;
+    }
+
+
+    .erp-results-table {
+        min-width:
+            850px;
+    }
+
+
+    .erp-results-table th,
+    .erp-results-table td {
+        padding:
+            13px
+            12px;
+    }
+
+}
+
+
+/* =========================================================
+   Responsive — Small Mobile
+========================================================= */
+
+@media (max-width: 450px) {
+
+    .erp-page-title {
+        font-size:
+            29px;
+    }
+
+
+    .erp-exam-section,
+    .erp-results-section {
+        padding:
+            17px;
+
+        border-radius:
+            14px;
+    }
+
+
+    .erp-exam-name {
+        font-size:
+            22px;
+    }
+
+
+    .erp-info-card strong {
+        font-size:
+            19px;
+    }
+
 }

@@ -1,70 +1,1260 @@
-.results-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 25px;
+/* =========================================================
+   RESULTS PAGE
+   Namespace: rp-
+========================================================= */
+
+
+/* =========================================================
+   Page Scope
+========================================================= */
+
+.rp-page {
+    --rp-bg: #0f172a;
+    --rp-surface: #1e293b;
+    --rp-surface-raised: #243247;
+    --rp-surface-deep: #0b1220;
+
+    --rp-border: #334155;
+    --rp-border-light: #475569;
+
+    --rp-text: #f8fafc;
+    --rp-text-soft: #cbd5e1;
+    --rp-text-muted: #94a3b8;
+    --rp-text-dim: #64748b;
+
+    --rp-primary: #3b82f6;
+    --rp-primary-hover: #2563eb;
+    --rp-primary-soft: #93c5fd;
+
+    --rp-success: #22c55e;
+    --rp-success-soft: #86efac;
+
+    --rp-danger: #ef4444;
+    --rp-danger-soft: #fca5a5;
+
+    --rp-radius-sm: 8px;
+    --rp-radius-md: 12px;
+    --rp-radius-lg: 16px;
+    --rp-radius-xl: 20px;
+
+    --rp-shadow-sm:
+        0 6px 16px
+        rgba(0, 0, 0, 0.18);
+
+    --rp-shadow-md:
+        0 12px 28px
+        rgba(0, 0, 0, 0.24);
+
+    --rp-shadow-lg:
+        0 24px 60px
+        rgba(0, 0, 0, 0.42);
+
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at 82% 0%,
+            rgba(59, 130, 246, 0.07),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 15% 18%,
+            rgba(30, 64, 175, 0.035),
+            transparent 25%
+        ),
+        var(--rp-bg);
+
+    color:
+        var(--rp-text);
 }
 
-.result-card {
-    background: #1e293b;
-    border: 1px solid #334155;
-    border-radius: 16px;
-    padding: 24px;
-    text-align: left;
-    transition: 0.3s;
+
+/* =========================================================
+   Page Container
+========================================================= */
+
+.rp-page-container {
+    width:
+        min(
+            calc(100% - 40px),
+            1180px
+        );
+
+    margin:
+        0 auto;
+
+    padding:
+        42px
+        0
+        70px;
 }
 
-.result-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+
+/* =========================================================
+   Page Header
+========================================================= */
+
+.rp-page-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-end;
+
+    gap: 30px;
+
+    margin-bottom: 30px;
 }
 
-.result-title {
-    font-size: 22px;
-    margin-bottom: 15px;
+
+.rp-page-header > div {
+    min-width: 0;
 }
 
-.result-info {
+
+.rp-page-eyebrow {
+    display: inline-block;
+
     margin-bottom: 8px;
+
+    color:
+        #60a5fa;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.4px;
 }
 
-.result-actions {
-    margin-top: 20px;
+
+.rp-page-title {
+    margin: 0;
+
+    color:
+        var(--rp-text);
+
+    font-size:
+        clamp(
+            30px,
+            4vw,
+            40px
+        );
+
+    font-weight: 800;
+
+    line-height: 1.15;
+
+    letter-spacing: -0.7px;
 }
 
-.search-input {
-    display: block;
+
+.rp-page-description {
+    max-width: 700px;
+
+    margin:
+        10px
+        0
+        0;
+
+    color:
+        var(--rp-text-muted);
+
+    font-size: 15px;
+
+    line-height: 1.65;
+}
+
+
+/* =========================================================
+   Search Section
+========================================================= */
+
+.rp-search-section {
+    max-width: 760px;
+
+    margin:
+        0 auto
+        48px;
+}
+
+
+.rp-search-wrapper {
+    position: relative;
+
     width: 100%;
-    max-width: 500px;
-    margin: 0 auto 30px;
-    padding: 14px 18px;
-    border: 1px solid #334155;
-    border-radius: 10px;
-    background: #1e293b;
-    color: white;
-    font-size: 16px;
+}
+
+
+.rp-search-input {
+    display: block;
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    min-height: 48px;
+
+    padding:
+        0
+        16px;
+
+    border:
+        1px solid
+        var(--rp-border);
+
+    border-radius:
+        var(--rp-radius-md);
+
     outline: none;
+
+    background:
+        var(--rp-surface);
+
+    color:
+        var(--rp-text);
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
 }
 
-.search-input:focus {
-    border-color: #3b82f6;
+
+.rp-search-input::placeholder {
+    color:
+        var(--rp-text-dim);
 }
 
-.status-pass {
-    display: inline-block;
-    padding: 6px 16px;
-    border-radius: 999px;
-    background: #22c55e;
-    color: white;
+
+.rp-search-input:focus {
+    border-color:
+        var(--rp-primary);
+
+    background:
+        #101a2c;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(59, 130, 246, 0.12);
+}
+
+
+.rp-search-summary {
+    margin:
+        10px
+        0
+        0;
+
+    color:
+        var(--rp-text-dim);
+
+    font-size: 11px;
+}
+
+
+.rp-search-summary strong {
+    color:
+        var(--rp-text-soft);
+
+    font-weight: 750;
+}
+
+
+/* =========================================================
+   Results Section
+========================================================= */
+
+.rp-section {
+    margin-bottom: 54px;
+}
+
+
+.rp-section-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-end;
+
+    gap: 24px;
+
+    margin-bottom: 24px;
+}
+
+
+.rp-section-header > div {
+    min-width: 0;
+}
+
+
+.rp-section-kicker {
+    display: block;
+
+    margin-bottom: 6px;
+
+    color:
+        #60a5fa;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.2px;
+}
+
+
+.rp-section-title {
+    margin: 0;
+
+    color:
+        var(--rp-text);
+
+    font-size: 24px;
+
+    font-weight: 800;
+
+    letter-spacing: -0.3px;
+}
+
+
+.rp-section-description {
+    max-width: 700px;
+
+    margin:
+        7px
+        0
+        0;
+
+    color:
+        var(--rp-text-muted);
+
     font-size: 14px;
-    font-weight: 600;
+
+    line-height: 1.6;
 }
 
-.status-fail {
-    display: inline-block;
-    padding: 6px 16px;
+
+.rp-count-badge {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    min-height: 30px;
+
+    padding:
+        0
+        11px;
+
+    border:
+        1px solid
+        var(--rp-border-light);
+
     border-radius: 999px;
-    background: #ef4444;
-    color: white;
-    font-size: 14px;
+
+    background:
+        rgba(71, 85, 105, 0.12);
+
+    color:
+        var(--rp-text-soft);
+
+    font-size: 11px;
+
+    font-weight: 750;
+}
+
+
+/* =========================================================
+   Results Grid
+========================================================= */
+
+.rp-results-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap: 20px;
+}
+
+
+/* =========================================================
+   Result Card
+========================================================= */
+
+.rp-result-card {
+    position: relative;
+
+    display: flex;
+
+    flex-direction: column;
+
+    min-width: 0;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(30, 41, 59, 0.96),
+            rgba(15, 23, 42, 0.92)
+        );
+
+    border:
+        1px solid
+        var(--rp-border);
+
+    border-radius:
+        var(--rp-radius-lg);
+
+    box-shadow:
+        var(--rp-shadow-sm);
+
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+/* =========================================================
+   Result Status Accent
+========================================================= */
+
+.rp-result-card::before {
+    content: "";
+
+    display: block;
+
+    width: 100%;
+
+    height: 3px;
+
+    flex-shrink: 0;
+}
+
+
+/* Passed = ONLY Green */
+
+.rp-result-card-pass::before {
+    background:
+        #22c55e;
+}
+
+
+/* Failed = ONLY Red */
+
+.rp-result-card-fail::before {
+    background:
+        #ef4444;
+}
+
+
+/* =========================================================
+   Card Hover
+========================================================= */
+
+.rp-result-card:hover {
+    transform:
+        translateY(-3px);
+
+    border-color:
+        var(--rp-border-light);
+
+    box-shadow:
+        0 16px 35px
+        rgba(0, 0, 0, 0.30);
+}
+
+
+/* =========================================================
+   Result Card Header
+========================================================= */
+
+.rp-card-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    gap: 18px;
+
+    padding:
+        22px;
+
+    border-bottom:
+        1px solid
+        var(--rp-border);
+}
+
+
+.rp-card-heading {
+    min-width: 0;
+}
+
+
+.rp-submission-label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color:
+        var(--rp-text-dim);
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.8px;
+}
+
+
+.rp-result-title {
+    margin: 0;
+
+    color:
+        var(--rp-text);
+
+    font-size: 21px;
+
+    font-weight: 800;
+
+    line-height: 1.4;
+}
+
+
+/* =========================================================
+   Status Badges
+========================================================= */
+
+.rp-status-badge {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    min-height: 27px;
+
+    padding:
+        0
+        10px;
+
+    border-radius: 999px;
+
+    font-size: 10px;
+
+    font-weight: 850;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.6px;
+}
+
+
+/* =========================================================
+   Passed Badge
+========================================================= */
+
+.rp-status-pass {
+    color:
+        #bbf7d0;
+
+    background:
+        rgba(34, 197, 94, 0.10);
+
+    border:
+        1px solid
+        rgba(34, 197, 94, 0.45);
+}
+
+
+/* =========================================================
+   Failed Badge
+========================================================= */
+
+.rp-status-fail {
+    color:
+        #fecaca;
+
+    background:
+        rgba(239, 68, 68, 0.10);
+
+    border:
+        1px solid
+        rgba(239, 68, 68, 0.45);
+}
+
+
+/* =========================================================
+   Result Details
+========================================================= */
+
+.rp-result-details {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    border-bottom:
+        1px solid
+        var(--rp-border);
+}
+
+
+.rp-result-detail {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 6px;
+
+    min-width: 0;
+
+    padding:
+        17px
+        22px;
+}
+
+
+.rp-result-detail:nth-child(odd) {
+    border-right:
+        1px solid
+        var(--rp-border);
+}
+
+
+.rp-result-detail:nth-child(-n + 2) {
+    border-bottom:
+        1px solid
+        var(--rp-border);
+}
+
+
+.rp-detail-label {
+    color:
+        var(--rp-text-dim);
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.6px;
+}
+
+
+.rp-result-detail strong {
+    color:
+        var(--rp-text-soft);
+
+    font-size: 15px;
+
+    font-weight: 750;
+
+    line-height: 1.5;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* =========================================================
+   Score
+========================================================= */
+
+.rp-score-value {
+    color:
+        #67e8f9 !important;
+
+    font-size:
+        19px !important;
+}
+
+
+.rp-score-value span {
+    color:
+        var(--rp-text-dim);
+
+    font-size:
+        14px;
+
+    font-weight:
+        600;
+}
+
+
+/* =========================================================
+   Submission Information
+========================================================= */
+
+.rp-submission-info {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 15px;
+
+    padding:
+        16px
+        22px;
+
+    background:
+        rgba(15, 23, 42, 0.32);
+
+    border-bottom:
+        1px solid
+        var(--rp-border);
+}
+
+
+.rp-submission-info span {
+    color:
+        var(--rp-text-dim);
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.5px;
+}
+
+
+.rp-submission-info strong {
+    color:
+        var(--rp-text-muted);
+
+    font-size: 12px;
+
     font-weight: 600;
+
+    text-align: right;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* =========================================================
+   Result Card Footer
+========================================================= */
+
+.rp-card-footer {
+    display: flex;
+
+    justify-content: flex-end;
+
+    align-items: center;
+
+    padding:
+        15px
+        22px;
+}
+
+
+/* =========================================================
+   View Result Button
+========================================================= */
+
+.rp-view-result {
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        7px;
+
+    flex-shrink:
+        0;
+
+    min-height:
+        38px;
+
+    padding:
+        0
+        15px;
+
+    border:
+        1px solid
+        #3b82f6;
+
+    border-radius:
+        8px;
+
+    background:
+        #2563eb;
+
+    color:
+        #ffffff;
+
+    font-family:
+        inherit;
+
+    font-size:
+        12px;
+
+    font-weight:
+        750;
+
+    line-height:
+        1;
+
+    text-decoration:
+        none;
+
+    white-space:
+        nowrap;
+
+    cursor:
+        pointer;
+
+    box-shadow:
+        0 5px 12px
+        rgba(
+            37,
+            99,
+            235,
+            0.22
+        );
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.rp-view-result:hover {
+    background:
+        #3b82f6;
+
+    border-color:
+        #60a5fa;
+
+    color:
+        #ffffff;
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 8px 18px
+        rgba(
+            37,
+            99,
+            235,
+            0.35
+        );
+}
+
+
+/* =========================================================
+   Eye Icon
+========================================================= */
+
+.rp-eye-icon {
+    width:
+        15px;
+
+    height:
+        15px;
+
+    flex-shrink:
+        0;
+
+    fill:
+        none;
+
+    stroke:
+        currentColor;
+
+    stroke-width:
+        1.8;
+
+    stroke-linecap:
+        round;
+
+    stroke-linejoin:
+        round;
+}
+
+
+.rp-view-result:hover {
+    background:
+        #3b82f6;
+
+    border-color:
+        #60a5fa;
+
+    color:
+        #ffffff;
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 8px 18px
+        rgba(
+            37,
+            99,
+            235,
+            0.35
+        );
+}
+
+
+.rp-view-result:active {
+    transform:
+        translateY(1px);
+
+    box-shadow:
+        0 3px 8px
+        rgba(6, 182, 212, 0.18);
+}
+
+
+/* =========================================================
+   Empty State
+========================================================= */
+
+.rp-empty-state {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-height: 150px;
+
+    padding:
+        30px;
+
+    background:
+        rgba(30, 41, 59, 0.72);
+
+    border:
+        1px dashed
+        var(--rp-border-light);
+
+    border-radius:
+        var(--rp-radius-lg);
+
+    text-align:
+        center;
+}
+
+
+.rp-empty-icon {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 42px;
+
+    height: 42px;
+
+    margin-bottom:
+        11px;
+
+    border-radius:
+        50%;
+
+    background:
+        rgba(59, 130, 246, 0.08);
+
+    color:
+        #60a5fa;
+
+    font-size:
+        21px;
+}
+
+
+.rp-empty-state strong {
+    color:
+        var(--rp-text);
+
+    font-size:
+        14px;
+
+    font-weight:
+        750;
+
+    line-height:
+        1.5;
+}
+
+
+.rp-empty-state p {
+    max-width:
+        600px;
+
+    margin:
+        8px
+        0
+        0;
+
+    color:
+        var(--rp-text-muted);
+
+    font-size:
+        13px;
+
+    line-height:
+        1.6;
+}
+
+
+/* =========================================================
+   Focus Protection
+========================================================= */
+
+.rp-page a:focus-visible,
+.rp-page input:focus-visible {
+    outline:
+        2px solid
+        rgba(96, 165, 250, 0.8);
+
+    outline-offset:
+        2px;
+}
+
+
+/* =========================================================
+   Responsive — Tablet
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .rp-page-container {
+        width:
+            min(
+                calc(100% - 30px),
+                760px
+            );
+
+        padding-top:
+            32px;
+    }
+
+
+    .rp-results-grid {
+        grid-template-columns:
+            1fr;
+    }
+
+}
+
+
+/* =========================================================
+   Responsive — Mobile
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .rp-page-container {
+        width:
+            calc(100% - 24px);
+
+        padding:
+            25px
+            0
+            50px;
+    }
+
+
+    .rp-page-header {
+        align-items:
+            flex-start;
+
+        flex-direction:
+            column;
+    }
+
+
+    .rp-page-title {
+        font-size:
+            30px;
+    }
+
+
+    .rp-section-header {
+        align-items:
+            flex-start;
+
+        flex-direction:
+            column;
+    }
+
+
+    .rp-count-badge {
+        align-self:
+            flex-start;
+    }
+
+
+    .rp-card-header {
+        gap:
+            12px;
+    }
+
+
+    .rp-result-details {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .rp-result-detail:nth-child(odd) {
+        border-right:
+            none;
+    }
+
+
+    .rp-result-detail:nth-child(-n + 2) {
+        border-bottom:
+            none;
+    }
+
+
+    .rp-result-detail:not(:last-child) {
+        border-bottom:
+            1px solid
+            var(--rp-border);
+    }
+
+
+    .rp-submission-info {
+        align-items:
+            flex-start;
+
+        flex-direction:
+            column;
+    }
+
+
+    .rp-submission-info strong {
+        text-align:
+            left;
+    }
+
+
+    .rp-card-footer {
+        justify-content:
+            flex-start;
+    }
+
+
+    .rp-view-result {
+        width:
+            100%;
+    }
+
+}
+
+
+/* =========================================================
+   Responsive — Small Mobile
+========================================================= */
+
+@media (max-width: 480px) {
+
+    .rp-page-container {
+        width:
+            calc(100% - 18px);
+    }
+
+
+    .rp-page-title {
+        font-size:
+            27px;
+    }
+
+
+    .rp-section-title {
+        font-size:
+            21px;
+    }
+
+
+    .rp-card-header {
+        flex-direction:
+            column;
+    }
+
+
+    .rp-status-badge {
+        align-self:
+            flex-start;
+    }
+
+
+    .rp-card-header {
+        padding-left:
+            17px;
+
+        padding-right:
+            17px;
+    }
+
+
+    .rp-result-detail {
+        padding-left:
+            17px;
+
+        padding-right:
+            17px;
+    }
+
+
+    .rp-submission-info {
+        padding-left:
+            17px;
+
+        padding-right:
+            17px;
+    }
+
+
+    .rp-card-footer {
+        padding-left:
+            17px;
+
+        padding-right:
+            17px;
+    }
+
 }

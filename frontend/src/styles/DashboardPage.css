@@ -1,201 +1,1007 @@
-.dashboard-container {
-    width: 100%;
-    padding: 40px;
+/* =========================================================
+   ADMIN DASHBOARD PAGE
+   Namespace: adp-
+========================================================= */
+
+
+/* =========================================================
+   Page
+========================================================= */
+
+.adp-page {
+    min-height:
+        100vh;
+
+    color:
+        #f8fafc;
 }
 
-.page-title {
-    color: white;
-    font-size: 42px;
-    font-weight: 700;
-    text-align: center;
-    margin-bottom: 40px;
+
+/* =========================================================
+   Dashboard Container
+========================================================= */
+
+.adp-dashboard-container {
+    width:
+        100%;
+
+    max-width:
+        1200px;
+
+    margin:
+        0 auto;
+
+    padding:
+        42px
+        25px
+        70px;
+
+    box-sizing:
+        border-box;
 }
 
-.dashboard-wrapper {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+
+/* =========================================================
+   Page Header
+========================================================= */
+
+.adp-page-header {
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        center;
+
+    margin-bottom:
+        40px;
+
+    text-align:
+        center;
 }
 
-.dashboard-circle {
-    position: relative;
-    width: 580px;
-    height: 580px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    border-radius: 50%;
-    overflow: hidden;
-    border: 3px solid #334155;
-    background: #111827;
-    box-shadow: 0 0 35px rgba(59, 130, 246, 0.12);
+
+/* =========================================================
+   Page Eyebrow
+========================================================= */
+
+.adp-page-eyebrow {
+    display:
+        inline-block;
+
+    margin-bottom:
+        9px;
+
+    color:
+        #60a5fa;
+
+    font-size:
+        11px;
+
+    font-weight:
+        800;
+
+    text-transform:
+        uppercase;
+
+    letter-spacing:
+        1.5px;
+
+    line-height:
+        1.2;
 }
 
-.dashboard-circle::before,
-.dashboard-circle::after {
-    content: "";
-    position: absolute;
-    background: rgba(148, 163, 184, 0.28);
-    z-index: 15;
-    box-shadow: 0 0 8px rgba(59, 130, 246, 0.2);
+
+/* =========================================================
+   Page Title
+========================================================= */
+
+.adp-page-title {
+    margin:
+        0;
+
+    color:
+        #f8fafc;
+
+    font-family:
+        Inter,
+        "Segoe UI",
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif;
+
+    font-size:
+        clamp(
+            32px,
+            4vw,
+            44px
+        );
+
+    font-weight:
+        800;
+
+    line-height:
+        1.15;
+
+    letter-spacing:
+        -0.8px;
 }
 
-.dashboard-circle::before {
-    width: 2px;
-    height: 100%;
-    left: 50%;
-    top: 0;
-    transform: translateX(-50%);
+
+/* =========================================================
+   Page Description
+========================================================= */
+
+.adp-page-description {
+    max-width:
+        650px;
+
+    margin:
+        11px
+        auto
+        0;
+
+    color:
+        #94a3b8;
+
+    font-family:
+        Inter,
+        "Segoe UI",
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif;
+
+    font-size:
+        14px;
+
+    font-weight:
+        500;
+
+    line-height:
+        1.65;
 }
 
-.dashboard-circle::after {
-    width: 100%;
-    height: 2px;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
+
+/* =========================================================
+   Dashboard Wrapper
+========================================================= */
+
+.adp-dashboard-wrapper {
+    width:
+        100%;
+
+    display:
+        flex;
+
+    justify-content:
+        center;
+
+    align-items:
+        center;
 }
 
-.dashboard-quarter {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    position: relative;
-    transition: transform 0.3s ease, background 0.3s ease;
+
+/* =========================================================
+   Dashboard Circle
+========================================================= */
+
+.adp-dashboard-circle {
+    position:
+        relative;
+
+    width:
+        580px;
+
+    height:
+        580px;
+
+    margin:
+        0 auto;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        1fr
+        1fr;
+
+    grid-template-rows:
+        1fr
+        1fr;
+
+    border-radius:
+        50%;
+
+    overflow:
+        hidden;
+
+    border:
+        3px solid
+        #334155;
+
+    background:
+        #111827;
+
+    box-shadow:
+        0 0 35px
+        rgba(
+            59,
+            130,
+            246,
+            0.12
+        );
 }
 
-.users {
-    background: #1e293b;
-    clip-path: ellipse(100% 100% at 100% 100%);
+
+/* =========================================================
+   Dashboard Divider Lines
+========================================================= */
+
+.adp-dashboard-circle::before,
+.adp-dashboard-circle::after {
+    content:
+        "";
+
+    position:
+        absolute;
+
+    background:
+        rgba(
+            148,
+            163,
+            184,
+            0.28
+        );
+
+    z-index:
+        15;
+
+    box-shadow:
+        0 0 8px
+        rgba(
+            59,
+            130,
+            246,
+            0.2
+        );
 }
 
-.exams {
-    background: #223245;
-    clip-path: ellipse(100% 100% at 0% 100%);
+
+.adp-dashboard-circle::before {
+    width:
+        2px;
+
+    height:
+        100%;
+
+    left:
+        50%;
+
+    top:
+        0;
+
+    transform:
+        translateX(-50%);
 }
 
-.questions {
-    background: #1b2736;
-    clip-path: ellipse(100% 100% at 100% 0%);
+
+.adp-dashboard-circle::after {
+    width:
+        100%;
+
+    height:
+        2px;
+
+    left:
+        0;
+
+    top:
+        50%;
+
+    transform:
+        translateY(-50%);
 }
 
-.submissions {
-    background: #243446;
-    clip-path: ellipse(100% 100% at 0% 0%);
+
+/* =========================================================
+   Dashboard Quarter
+========================================================= */
+
+.adp-dashboard-quarter {
+    display:
+        flex;
+
+    justify-content:
+        center;
+
+    align-items:
+        center;
+
+    cursor:
+        pointer;
+
+    position:
+        relative;
+
+    transition:
+        transform 0.3s ease,
+        background 0.3s ease;
 }
 
-.dashboard-quarter:hover {
-    transform: scale(1.03);
-    filter: brightness(1.08);
-    z-index: 5;
+
+/* =========================================================
+   Quarter Backgrounds
+========================================================= */
+
+.adp-users {
+    background:
+        #1e293b;
+
+    clip-path:
+        ellipse(
+            100%
+            100%
+            at
+            100%
+            100%
+        );
 }
 
-.quarter-content {
-    position: relative;
-    text-align: center;
-    color: white;
+
+.adp-exams {
+    background:
+        #223245;
+
+    clip-path:
+        ellipse(
+            100%
+            100%
+            at
+            0%
+            100%
+        );
 }
 
-.users .quarter-content {
-    transform: translate(35px, 35px);
+
+.adp-questions {
+    background:
+        #1b2736;
+
+    clip-path:
+        ellipse(
+            100%
+            100%
+            at
+            100%
+            0%
+        );
 }
 
-.exams .quarter-content {
-    transform: translate(-35px, 35px);
+
+.adp-submissions {
+    background:
+        #243446;
+
+    clip-path:
+        ellipse(
+            100%
+            100%
+            at
+            0%
+            0%
+        );
 }
 
-.questions .quarter-content {
-    transform: translate(35px, -35px);
+
+/* =========================================================
+   Quarter Hover
+========================================================= */
+
+.adp-dashboard-quarter:hover {
+    transform:
+        scale(1.03);
+
+    filter:
+        brightness(1.08);
+
+    z-index:
+        5;
 }
 
-.submissions .quarter-content {
-    transform: translate(-35px, -35px);
+
+/* =========================================================
+   Quarter Content
+========================================================= */
+
+.adp-quarter-content {
+    position:
+        relative;
+
+    text-align:
+        center;
+
+    color:
+        #ffffff;
 }
 
-.quarter-label {
-    color: #e2e8f0;
-    font-size: 20px;
-    letter-spacing: 2px;
-    opacity: 0.85;
-    margin-bottom: 18px;
+
+.adp-users .adp-quarter-content {
+    transform:
+        translate(
+            35px,
+            35px
+        );
 }
 
-.quarter-number {
-    color: #3b82f6 !important;
-    font-size: 72px;
-    font-weight: bold;
-    text-shadow: 0 0 10px rgba(59, 130, 246, 0.35);
-    transition: color 0.3s ease, transform 0.3s ease;
+
+.adp-exams .adp-quarter-content {
+    transform:
+        translate(
+            -35px,
+            35px
+        );
 }
 
-.dashboard-quarter:hover .quarter-number {
-    color: #60a5fa !important;
-    transform: scale(1.08);
+
+.adp-questions .adp-quarter-content {
+    transform:
+        translate(
+            35px,
+            -35px
+        );
 }
 
-.dashboard-center {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 100px;
-    height: 100px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 6px solid #475569;
-    border-radius: 50%;
-    background: #111827;
-    z-index: 20;
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.25);
+
+.adp-submissions .adp-quarter-content {
+    transform:
+        translate(
+            -35px,
+            -35px
+        );
 }
 
-.dashboard-center span {
-    color: white;
-    font-size: 24px;
-    font-weight: bold;
-    letter-spacing: 3px;
+
+/* =========================================================
+   Quarter Label
+========================================================= */
+
+.adp-quarter-label {
+    color:
+        #e2e8f0;
+
+    font-family:
+        Inter,
+        "Segoe UI",
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif;
+
+    font-size:
+        20px;
+
+    font-weight:
+        650;
+
+    letter-spacing:
+        2px;
+
+    opacity:
+        0.85;
+
+    margin-bottom:
+        18px;
 }
+
+
+/* =========================================================
+   Quarter Number
+========================================================= */
+
+.adp-quarter-number {
+    color:
+        #3b82f6 !important;
+
+    font-family:
+        Inter,
+        "Segoe UI",
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif;
+
+    font-size:
+        72px;
+
+    font-weight:
+        800;
+
+    line-height:
+        1;
+
+    text-shadow:
+        0 0 10px
+        rgba(
+            59,
+            130,
+            246,
+            0.35
+        );
+
+    transition:
+        color 0.3s ease,
+        transform 0.3s ease;
+}
+
+
+.adp-dashboard-quarter:hover
+.adp-quarter-number {
+    color:
+        #60a5fa !important;
+
+    transform:
+        scale(1.08);
+}
+
+
+/* =========================================================
+   Dashboard Center
+========================================================= */
+
+.adp-dashboard-center {
+    position:
+        absolute;
+
+    left:
+        50%;
+
+    top:
+        50%;
+
+    transform:
+        translate(
+            -50%,
+            -50%
+        );
+
+    width:
+        100px;
+
+    height:
+        100px;
+
+    display:
+        flex;
+
+    justify-content:
+        center;
+
+    align-items:
+        center;
+
+    border:
+        6px solid
+        #475569;
+
+    border-radius:
+        50%;
+
+    background:
+        #111827;
+
+    z-index:
+        20;
+
+    box-shadow:
+        0 0 20px
+        rgba(
+            59,
+            130,
+            246,
+            0.25
+        );
+}
+
+
+.adp-dashboard-center span {
+    color:
+        #ffffff;
+
+    font-size:
+        24px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        3px;
+}
+
+
+/* =========================================================
+   Focus Protection
+========================================================= */
+
+.adp-page button:focus-visible,
+.adp-page [role="button"]:focus-visible {
+    outline:
+        2px solid
+        rgba(
+            96,
+            165,
+            250,
+            0.8
+        );
+
+    outline-offset:
+        3px;
+}
+
+
+/* =========================================================
+   Responsive — Tablet
+========================================================= */
 
 @media (max-width: 850px) {
-    .dashboard-circle {
-        width: 500px;
-        height: 500px;
+
+    .adp-dashboard-container {
+        padding:
+            34px
+            20px
+            60px;
     }
 
-    .dashboard-center {
-        width: 90px;
-        height: 90px;
+
+    .adp-dashboard-circle {
+        width:
+            500px;
+
+        height:
+            500px;
     }
 
-    .quarter-number {
-        font-size: 54px;
+
+    .adp-dashboard-center {
+        width:
+            90px;
+
+        height:
+            90px;
     }
+
+
+    .adp-quarter-number {
+        font-size:
+            54px;
+    }
+
+
+    .adp-quarter-label {
+        font-size:
+            17px;
+    }
+
 }
 
+
+/* =========================================================
+   Responsive — Mobile
+========================================================= */
+
 @media (max-width: 600px) {
-    .dashboard-circle {
-        width: 360px;
-        height: 360px;
+
+    .adp-dashboard-container {
+        padding:
+            28px
+            15px
+            50px;
     }
 
-    .dashboard-center {
-        width: 70px;
-        height: 70px;
+
+    .adp-page-header {
+        margin-bottom:
+            30px;
     }
 
-    .dashboard-center span {
-        font-size: 18px;
+
+    .adp-page-title {
+        font-size:
+            32px;
+
+        letter-spacing:
+            -0.5px;
     }
 
-    .quarter-number {
-        font-size: 34px;
+
+    .adp-page-description {
+        max-width:
+            500px;
+
+        font-size:
+            13px;
     }
 
-    .quarter-label {
-        font-size: 12px;
+
+    .adp-dashboard-circle {
+        width:
+            360px;
+
+        height:
+            360px;
     }
+
+
+    .adp-dashboard-center {
+        width:
+            70px;
+
+        height:
+            70px;
+    }
+
+
+    .adp-dashboard-center span {
+        font-size:
+            18px;
+    }
+
+
+    .adp-quarter-number {
+        font-size:
+            34px;
+    }
+
+
+    .adp-quarter-label {
+        font-size:
+            12px;
+
+        letter-spacing:
+            1.5px;
+
+        margin-bottom:
+            12px;
+    }
+
+
+    .adp-users .adp-quarter-content {
+        transform:
+            translate(
+                22px,
+                22px
+            );
+    }
+
+
+    .adp-exams .adp-quarter-content {
+        transform:
+            translate(
+                -22px,
+                22px
+            );
+    }
+
+
+    .adp-questions .adp-quarter-content {
+        transform:
+            translate(
+                22px,
+                -22px
+            );
+    }
+
+
+    .adp-submissions .adp-quarter-content {
+        transform:
+            translate(
+                -22px,
+                -22px
+            );
+    }
+
+}
+
+
+/* =========================================================
+   Responsive — Small Mobile
+========================================================= */
+
+@media (max-width: 420px) {
+
+    .adp-dashboard-container {
+        padding:
+            25px
+            10px
+            45px;
+    }
+
+
+    .adp-page-eyebrow {
+        font-size:
+            10px;
+
+        letter-spacing:
+            1.2px;
+    }
+
+
+    .adp-page-title {
+        font-size:
+            29px;
+    }
+
+
+    .adp-page-description {
+        font-size:
+            12px;
+    }
+
+
+    .adp-dashboard-circle {
+        width:
+            320px;
+
+        height:
+            320px;
+    }
+
+
+    .adp-dashboard-center {
+        width:
+            62px;
+
+        height:
+            62px;
+
+        border-width:
+            5px;
+    }
+
+
+    .adp-dashboard-center span {
+        font-size:
+            16px;
+    }
+
+
+    .adp-quarter-number {
+        font-size:
+            30px;
+    }
+
+
+    .adp-quarter-label {
+        font-size:
+            10px;
+
+        letter-spacing:
+            1.2px;
+
+        margin-bottom:
+            10px;
+    }
+
+
+    .adp-users .adp-quarter-content {
+        transform:
+            translate(
+                18px,
+                18px
+            );
+    }
+
+
+    .adp-exams .adp-quarter-content {
+        transform:
+            translate(
+                -18px,
+                18px
+            );
+    }
+
+
+    .adp-questions .adp-quarter-content {
+        transform:
+            translate(
+                18px,
+                -18px
+            );
+    }
+
+
+    .adp-submissions .adp-quarter-content {
+        transform:
+            translate(
+                -18px,
+                -18px
+            );
+    }
+
+}
+
+
+/* =========================================================
+   Responsive — Very Small Mobile
+========================================================= */
+
+@media (max-width: 350px) {
+
+    .adp-dashboard-circle {
+        width:
+            285px;
+
+        height:
+            285px;
+    }
+
+
+    .adp-dashboard-center {
+        width:
+            56px;
+
+        height:
+            56px;
+    }
+
+
+    .adp-dashboard-center span {
+        font-size:
+            14px;
+    }
+
+
+    .adp-quarter-number {
+        font-size:
+            27px;
+    }
+
+
+    .adp-quarter-label {
+        font-size:
+            9px;
+
+        letter-spacing:
+            1px;
+    }
+
+
+    .adp-users .adp-quarter-content {
+        transform:
+            translate(
+                15px,
+                15px
+            );
+    }
+
+
+    .adp-exams .adp-quarter-content {
+        transform:
+            translate(
+                -15px,
+                15px
+            );
+    }
+
+
+    .adp-questions .adp-quarter-content {
+        transform:
+            translate(
+                15px,
+                -15px
+            );
+    }
+
+
+    .adp-submissions .adp-quarter-content {
+        transform:
+            translate(
+                -15px,
+                -15px
+            );
+    }
+
 }

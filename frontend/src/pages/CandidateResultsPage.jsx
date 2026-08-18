@@ -1,229 +1,553 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import {
+    useNavigate,
+    useParams,
+    useSearchParams,
+} from "react-router-dom";
+
+import { IoEyeOutline } from "react-icons/io5";
+
 import Navbar from "../components/Navbar";
 import PageLoader from "../components/PageLoader";
 import API_BASE_URL from "../services/api";
+
 import "../styles/CandidateResultsPage.css";
 
 function CandidateResultsPage() {
     const { userId } = useParams();
 
+    const [searchParams] = useSearchParams();
+
+    const batchId = searchParams.get("batch_id");
+
     const navigate = useNavigate();
 
-    const [candidate, setCandidate] = useState(null);
-    const [summary, setSummary] = useState(null);
-    const [history, setHistory] = useState([]);
+    const [candidate, setCandidate] =
+        useState(null);
+
+    const [summary, setSummary] =
+        useState(null);
+
+    const [history, setHistory] =
+        useState([]);
+
+    const [loadingSubmissionId, setLoadingSubmissionId] =
+        useState(null);
 
     useEffect(() => {
         fetchCandidate();
-    }, []);
+    }, [userId, batchId]);
 
     const fetchCandidate = async () => {
         try {
-            const token = localStorage.getItem("token");
+            const token =
+                localStorage.getItem("token");
+
+            const query =
+                batchId
+                    ? `?batch_id=${batchId}`
+                    : "";
 
             const response = await fetch(
-                `${API_BASE_URL}/candidate-results/${userId}`,
+                `${API_BASE_URL}/candidate-results/${userId}${query}`,
                 {
                     headers: {
-                        Authorization: `Bearer ${token}`,
+                        Authorization:
+                            `Bearer ${token}`,
                     },
                 }
             );
 
-            const data = await response.json();
+            const data =
+                await response.json();
 
-            if (response.ok) {
-                setCandidate(data.candidate);
-                setSummary(data.summary);
-                setHistory(data.history);
-            } else {
-                alert(data.message);
+            if (!response.ok) {
+                alert(
+                    data.message ||
+                        "Unable to load candidate results."
+                );
+
+                return;
             }
+
+            setCandidate(data.candidate);
+            setSummary(data.summary);
+            setHistory(data.history || []);
         } catch (error) {
             console.error(error);
+
+            alert(
+                "Unable to load candidate results."
+            );
         }
+    };
+
+    const handleViewDetails = (
+        submissionId
+    ) => {
+        setLoadingSubmissionId(
+            submissionId
+        );
+
+        navigate(
+            `/result/${submissionId}`
+        );
     };
 
     if (!candidate) {
         return (
-            <div>
+            <div className="crp-page">
+
                 <Navbar />
-                <PageLoader message="Loading Candidate Results..." />
+
+                <PageLoader
+                    message="Loading Candidate Results..."
+                />
+
             </div>
         );
     }
 
     return (
-        <div>
+        <div className="crp-page">
+
             <Navbar />
 
-            <div className="candidate-results-container">
-                <h1 className="candidate-results-title">
-                    Candidate Results
-                </h1>
 
-                <div className="candidate-info-card">
-                    <h2 className="candidate-name">
-                        {candidate.name}
-                    </h2>
+            <main className="crp-page-container">
 
-                    <div className="candidate-grid">
-                        <div>
-                            <h4>Email</h4>
+                {/* =================================================
+                    Page Header
+                ================================================= */}
 
-                            <p>
-                                {candidate.email}
-                            </p>
-                        </div>
+                <div className="crp-page-header">
 
-                        <div>
-                            <h4>Batch</h4>
+                    <div>
 
-                            <p>
-                                {candidate.batch_name}
-                            </p>
-                        </div>
+                        <span className="crp-page-eyebrow">
+                            Performance Analytics
+                        </span>
 
-                        <div>
-                            <h4>Technology</h4>
+                        <h1 className="crp-page-title">
+                            Candidate Results
+                        </h1>
 
-                            <p>
-                                {candidate.technology}
-                            </p>
-                        </div>
+                        <p className="crp-page-description">
+                            Review candidate
+                            information, assessment
+                            performance, and complete
+                            submission history.
+                        </p>
+
                     </div>
+
                 </div>
 
-                <div className="summary-container">
-                    <div className="summary-card">
-                        <h4>Total Assessments</h4>
 
-                        <p>
-                            {summary?.assessment_count ?? 0}
-                        </p>
+                {/* =================================================
+                    Candidate Information
+                ================================================= */}
+
+                <section className="crp-candidate-section">
+
+                    <div className="crp-section-header">
+
+                        <div>
+
+                            <h2 className="crp-section-title">
+                                Candidate Information
+                            </h2>
+
+                            <p className="crp-section-description">
+                                Profile and batch
+                                information associated
+                                with this candidate.
+                            </p>
+
+                        </div>
+
                     </div>
 
-                    <div className="summary-card">
-                        <h4>Average Score</h4>
 
-                        <p>
-                            {summary?.average_score !== null &&
-                            summary?.average_score !==
-                                undefined
-                                ? `${summary.average_score}%`
-                                : "--"}
-                        </p>
+                    <div className="crp-candidate-profile">
+
+                        <div className="crp-candidate-name-block">
+
+                            <span className="crp-info-label">
+                                Candidate
+                            </span>
+
+                            <h2 className="crp-candidate-name">
+                                {candidate.name}
+                            </h2>
+
+                        </div>
+
+
+                        <div className="crp-candidate-grid">
+
+                            <div className="crp-info-card">
+
+                                <span className="crp-info-label">
+                                    Email
+                                </span>
+
+                                <strong>
+                                    {candidate.email}
+                                </strong>
+
+                            </div>
+
+
+                            <div className="crp-info-card">
+
+                                <span className="crp-info-label">
+                                    Batch
+                                </span>
+
+                                <strong>
+                                    {candidate.batch_name ||
+                                        "Not Assigned"}
+                                </strong>
+
+                            </div>
+
+
+                            <div className="crp-info-card">
+
+                                <span className="crp-info-label">
+                                    Technology
+                                </span>
+
+                                <strong>
+                                    {candidate.technology ||
+                                        "Not Available"}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
                     </div>
 
-                    <div className="summary-card">
-                        <h4>Highest Score</h4>
+                </section>
 
-                        <p>
-                            {summary?.highest_score !== null &&
-                            summary?.highest_score !==
-                                undefined
-                                ? `${summary.highest_score}%`
-                                : "--"}
-                        </p>
+
+                {/* =================================================
+                    Performance Summary
+                ================================================= */}
+
+                <section className="crp-summary-section">
+
+                    <div className="crp-section-header">
+
+                        <div>
+
+                            <h2 className="crp-section-title">
+                                Performance Summary
+                            </h2>
+
+                            <p className="crp-section-description">
+                                Overall assessment
+                                performance for this
+                                candidate.
+                            </p>
+
+                        </div>
+
                     </div>
 
-                    <div className="summary-card">
-                        <h4>Lowest Score</h4>
 
-                        <p>
-                            {summary?.lowest_score !== null &&
-                            summary?.lowest_score !==
-                                undefined
-                                ? `${summary.lowest_score}%`
-                                : "--"}
-                        </p>
+                    <div className="crp-summary-grid">
+
+                        <div className="crp-summary-card">
+
+                            <span className="crp-summary-label">
+                                Total Assessments
+                            </span>
+
+                            <strong className="crp-summary-value">
+                                {
+                                    summary?.assessment_count ??
+                                    0
+                                }
+                            </strong>
+
+                        </div>
+
+
+                        <div className="crp-summary-card">
+
+                            <span className="crp-summary-label">
+                                Average Score
+                            </span>
+
+                            <strong className="crp-summary-value">
+                                {summary?.average_score !==
+                                    null &&
+                                summary?.average_score !==
+                                    undefined
+                                    ? `${summary.average_score}%`
+                                    : "--"}
+                            </strong>
+
+                        </div>
+
+
+                        <div className="crp-summary-card">
+
+                            <span className="crp-summary-label">
+                                Highest Score
+                            </span>
+
+                            <strong className="crp-summary-value">
+                                {summary?.highest_score !==
+                                    null &&
+                                summary?.highest_score !==
+                                    undefined
+                                    ? `${summary.highest_score}%`
+                                    : "--"}
+                            </strong>
+
+                        </div>
+
+
+                        <div className="crp-summary-card">
+
+                            <span className="crp-summary-label">
+                                Lowest Score
+                            </span>
+
+                            <strong className="crp-summary-value">
+                                {summary?.lowest_score !==
+                                    null &&
+                                summary?.lowest_score !==
+                                    undefined
+                                    ? `${summary.lowest_score}%`
+                                    : "--"}
+                            </strong>
+
+                        </div>
+
                     </div>
-                </div>
 
-                <div className="history-card">
-                    <h2 className="history-title">
-                        Assessment History
-                    </h2>
+                </section>
 
-                    <table className="history-table">
-                        <thead>
-                            <tr>
-                                <th>Exam</th>
-                                <th>Score</th>
-                                <th>Percentage</th>
-                                <th>Status</th>
-                                <th>Submitted</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
 
-                        <tbody>
-                            {history.length === 0 ? (
+                {/* =================================================
+                    Assessment History
+                ================================================= */}
+
+                <section className="crp-history-section">
+
+                    <div className="crp-section-header">
+
+                        <div>
+
+                            <span className="crp-section-eyebrow">
+                                Performance History
+                            </span>
+
+                            <h2 className="crp-section-title">
+                                Assessment History
+                            </h2>
+
+                            <p className="crp-section-description">
+                                Review every assessment
+                                submission and open
+                                detailed result information.
+                            </p>
+
+                        </div>
+
+
+                        <span className="crp-history-count">
+                            {history.length}{" "}
+                            {history.length === 1
+                                ? "Assessment"
+                                : "Assessments"}
+                        </span>
+
+                    </div>
+
+
+                    <div className="crp-table-wrapper">
+
+                        <table className="crp-history-table">
+
+                            <thead>
+
                                 <tr>
-                                    <td
-                                        colSpan="6"
-                                        className="history-empty"
-                                    >
-                                        No assessments attempted.
-                                    </td>
+
+                                    <th>
+                                        Exam
+                                    </th>
+
+                                    <th>
+                                        Score
+                                    </th>
+
+                                    <th>
+                                        Percentage
+                                    </th>
+
+                                    <th>
+                                        Status
+                                    </th>
+
+                                    <th>
+                                        Submitted
+                                    </th>
+
+                                    <th>
+                                        Action
+                                    </th>
+
                                 </tr>
-                            ) : (
-                                history.map((item) => (
-                                    <tr
-                                        key={item.submission_id}
-                                    >
-                                        <td>
-                                            {item.exam_title}
+
+                            </thead>
+
+
+                            <tbody>
+
+                                {history.length ===
+                                0 ? (
+
+                                    <tr>
+
+                                        <td
+                                            colSpan="6"
+                                            className="crp-table-empty"
+                                        >
+                                            No assessments
+                                            attempted.
                                         </td>
 
-                                        <td>
-                                            {item.score} /{" "}
-                                            {item.total_marks}
-                                        </td>
-
-                                        <td>
-                                            {item.percentage}%
-                                        </td>
-
-                                        <td>
-                                            <span
-                                                className={
-                                                    item.status ===
-                                                    "Pass"
-                                                        ? "status-pass"
-                                                        : "status-fail"
-                                                }
-                                            >
-                                                {item.status}
-                                            </span>
-                                        </td>
-
-                                        <td>
-                                            {new Date(
-                                                item.submitted_at
-                                            ).toLocaleDateString()}
-                                        </td>
-
-                                        <td>
-                                            <button
-                                                className="batch-details-btn"
-                                                onClick={() =>
-                                                    navigate(
-                                                        `/result/${item.submission_id}`
-                                                    )
-                                                }
-                                            >
-                                                View Details
-                                            </button>
-                                        </td>
                                     </tr>
-                                ))
-                            )}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+
+                                ) : (
+
+                                    history.map(
+                                        (item) => {
+
+                                            const loading =
+                                                loadingSubmissionId ===
+                                                item.submission_id;
+
+                                            return (
+
+                                                <tr
+                                                    key={
+                                                        item.submission_id
+                                                    }
+                                                >
+
+                                                    <td>
+
+                                                        <strong className="crp-exam-title">
+                                                            {
+                                                                item.exam_title
+                                                            }
+                                                        </strong>
+
+                                                    </td>
+
+
+                                                    <td>
+
+                                                        <span className="crp-score">
+                                                            {
+                                                                item.score
+                                                            }{" "}
+                                                            /{" "}
+                                                            {
+                                                                item.total_marks
+                                                            }
+                                                        </span>
+
+                                                    </td>
+
+
+                                                    <td>
+
+                                                        <strong className="crp-percentage">
+                                                            {
+                                                                item.percentage
+                                                            }%
+                                                        </strong>
+
+                                                    </td>
+
+
+                                                    <td>
+
+                                                        <span
+                                                            className={
+                                                                item.status ===
+                                                                "Pass"
+                                                                    ? "crp-status-badge crp-status-pass"
+                                                                    : "crp-status-badge crp-status-fail"
+                                                            }
+                                                        >
+                                                            {
+                                                                item.status
+                                                            }
+                                                        </span>
+
+                                                    </td>
+
+
+                                                    <td>
+
+                                                        <span className="crp-submitted-date">
+                                                            {new Date(
+                                                                item.submitted_at
+                                                            ).toLocaleDateString()}
+                                                        </span>
+
+                                                    </td>
+
+
+                                                    <td>
+
+                                                        <button
+    type="button"
+    className="crp-view-details-btn"
+    onClick={() =>
+        handleViewDetails(
+            item.submission_id
+        )
+    }
+>
+    <IoEyeOutline
+        className="crp-view-details-icon"
+    />
+
+    <span>
+        View Details
+    </span>
+</button>
+
+                                                    </td>
+
+                                                </tr>
+
+                                            );
+                                        }
+                                    )
+
+                                )}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </section>
+
+            </main>
+
         </div>
     );
 }

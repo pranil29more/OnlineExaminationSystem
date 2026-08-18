@@ -9,21 +9,28 @@ import "../styles/ChatbotPage.css";
 function ChatbotPage() {
     const [message, setMessage] = useState("");
 
-    const userEmail = localStorage.getItem("userEmail");
+    const userEmail =
+        localStorage.getItem("userEmail");
 
-    const chatHistoryKey = `chatHistory_${userEmail}`;
+    const chatHistoryKey =
+        `chatHistory_${userEmail}`;
 
     const [messages, setMessages] = useState(() => {
-        const savedMessages = localStorage.getItem(chatHistoryKey);
+        const savedMessages =
+            localStorage.getItem(
+                chatHistoryKey
+            );
 
         return savedMessages
             ? JSON.parse(savedMessages)
             : [];
     });
 
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] =
+        useState(false);
 
-    const messagesEndRef = useRef(null);
+    const messagesEndRef =
+        useRef(null);
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({
@@ -36,10 +43,16 @@ function ChatbotPage() {
             chatHistoryKey,
             JSON.stringify(messages)
         );
-    }, [messages, chatHistoryKey]);
+    }, [
+        messages,
+        chatHistoryKey,
+    ]);
 
     const sendMessage = async () => {
-        if (message.trim() === "" || loading) {
+        if (
+            message.trim() === "" ||
+            loading
+        ) {
             return;
         }
 
@@ -53,31 +66,41 @@ function ChatbotPage() {
             userMessage,
         ]);
 
-        const currentMessage = message;
+        const currentMessage =
+            message;
 
         setMessage("");
 
         setLoading(true);
 
         try {
-            const token = localStorage.getItem("token");
+            const token =
+                localStorage.getItem(
+                    "token"
+                );
 
             const response = await fetch(
                 `${API_BASE_URL}/chat`,
                 {
                     method: "POST",
+
                     headers: {
                         "Content-Type":
                             "application/json",
-                        Authorization: `Bearer ${token}`,
+
+                        Authorization:
+                            `Bearer ${token}`,
                     },
+
                     body: JSON.stringify({
-                        message: currentMessage,
+                        message:
+                            currentMessage,
                     }),
                 }
             );
 
-            const data = await response.json();
+            const data =
+                await response.json();
 
             const aiMessage = {
                 sender: "ai",
@@ -95,7 +118,8 @@ function ChatbotPage() {
                 ...prevMessages,
                 {
                     sender: "ai",
-                    text: "Something went wrong while contacting the AI Assistant.",
+                    text:
+                        "Something went wrong while contacting the AI Assistant.",
                 },
             ]);
         } finally {
@@ -104,15 +128,18 @@ function ChatbotPage() {
     };
 
     const clearChat = () => {
-        const confirmClear = window.confirm(
-            "Are you sure you want to clear this conversation?"
-        );
+        const confirmClear =
+            window.confirm(
+                "Are you sure you want to clear this conversation?"
+            );
 
         if (!confirmClear) {
             return;
         }
 
-        localStorage.removeItem(chatHistoryKey);
+        localStorage.removeItem(
+            chatHistoryKey
+        );
 
         setMessages([]);
     };
@@ -120,61 +147,96 @@ function ChatbotPage() {
     const handleKeyDown = (event) => {
         if (event.key === "Enter") {
             event.preventDefault();
+
             sendMessage();
         }
     };
 
     return (
-        <div>
+        <div className="cp-page">
+
             <Navbar />
 
-            <div className="chat-page">
-                <div className="chat-header">
-                    <h1 className="chat-title">
-                        🤖 AI Examination Assistant
+            <main className="cp-container">
+
+                {/* ==========================================
+                    Page Header
+                ========================================== */}
+
+                <header className="cp-page-header">
+
+                    <span className="cp-page-eyebrow">
+                        AI ASSISTANT
+                    </span>
+
+                    <h1 className="cp-page-title">
+                        AI Examination Assistant
                     </h1>
 
-                    <p className="chat-subtitle">
-                        Your Smart Learning
-                        Companion
+                    <p className="cp-page-description">
+                        Your intelligent learning
+                        companion for examinations,
+                        programming, aptitude, and
+                        interview preparation.
                     </p>
-                </div>
+
+                </header>
+
+
+                {/* ==========================================
+                    Welcome State
+                ========================================== */}
 
                 {messages.length === 0 ? (
-                    <div className="welcome-screen">
-                        <div className="welcome-card">
-                            <h2>Welcome!</h2>
 
-                            <p>
+                    <section className="cp-welcome">
+
+                        <div className="cp-welcome-card">
+
+                            <div className="cp-welcome-icon">
+                                AI
+                            </div>
+
+                            <span className="cp-welcome-kicker">
+                                SMART LEARNING
+                            </span>
+
+                            <h2 className="cp-welcome-title">
+                                Welcome!
+                            </h2>
+
+                            <p className="cp-welcome-text">
                                 I'm your AI
                                 Examination
                                 Assistant.
                             </p>
 
-                            <p>
+                            <p className="cp-welcome-description">
                                 I can help you
                                 understand
                                 programming,
                                 explain difficult
-                                concepts,
-                                prepare for
-                                interviews,
+                                concepts, prepare
+                                for interviews,
                                 solve aptitude
-                                questions and
+                                questions, and
                                 assist with your
                                 examinations.
                             </p>
+
                         </div>
 
-                        <div className="input-container">
+
+                        <div className="cp-input-container">
+
                             <input
-                                className="chat-input"
+                                className="cp-chat-input"
                                 type="text"
                                 placeholder="Ask your question..."
                                 value={message}
-                                onChange={(e) =>
+                                onChange={(event) =>
                                     setMessage(
-                                        e.target
+                                        event.target
                                             .value
                                     )
                                 }
@@ -185,34 +247,63 @@ function ChatbotPage() {
                             />
 
                             <button
-                                className="send-button"
+                                type="button"
+                                className="cp-send-button"
                                 onClick={
                                     sendMessage
                                 }
                                 disabled={loading}
+                                aria-label="Send message"
                             >
                                 <IoSend />
                             </button>
+
                         </div>
-                    </div>
+
+                    </section>
+
                 ) : (
-                    <div className="chat-card">
-                        <div className="conversation-header">
-                            <span>
-                                Conversation
-                            </span>
+
+                    /* ==========================================
+                       Conversation
+                    ========================================== */
+
+                    <section className="cp-chat-card">
+
+                        <header className="cp-conversation-header">
+
+                            <div>
+
+                                <span className="cp-conversation-kicker">
+                                    AI ASSISTANT
+                                </span>
+
+                                <strong>
+                                    Conversation
+                                </strong>
+
+                            </div>
+
 
                             <button
-                                className="clear-chat-btn"
-                                onClick={clearChat}
+                                type="button"
+                                className="cp-clear-chat-btn"
+                                onClick={
+                                    clearChat
+                                }
+                                aria-label="Clear conversation"
                             >
                                 <IoTrashOutline />
                             </button>
-                        </div>
 
-                        <div className="chat-container">
+                        </header>
+
+
+                        <div className="cp-chat-container">
+
                             {messages.map(
                                 (msg, index) => (
+
                                     <div
                                         key={
                                             index
@@ -220,10 +311,26 @@ function ChatbotPage() {
                                         className={
                                             msg.sender ===
                                             "user"
-                                                ? "user-message"
-                                                : "ai-message"
+                                                ? "cp-user-message"
+                                                : "cp-ai-message"
                                         }
                                     >
+
+                                        {msg.sender ===
+                                        "ai" ? (
+
+                                            <div className="cp-message-label">
+                                                AI Assistant
+                                            </div>
+
+                                        ) : (
+
+                                            <div className="cp-message-label">
+                                                You
+                                            </div>
+
+                                        )}
+
                                         <ReactMarkdown
                                             remarkPlugins={[
                                                 remarkGfm,
@@ -233,34 +340,52 @@ function ChatbotPage() {
                                                 msg.text
                                             }
                                         </ReactMarkdown>
+
                                     </div>
+
                                 )
                             )}
 
+
                             {loading && (
-                                <div className="typing-indicator">
-                                    🤖 AI
-                                    Assistant is
-                                    thinking...
+
+                                <div className="cp-typing-indicator">
+
+                                    <span className="cp-typing-dot"></span>
+
+                                    <span className="cp-typing-dot"></span>
+
+                                    <span className="cp-typing-dot"></span>
+
+                                    <span>
+                                        AI Assistant is
+                                        thinking...
+                                    </span>
+
                                 </div>
+
                             )}
+
 
                             <div
                                 ref={
                                     messagesEndRef
                                 }
-                            ></div>
+                            />
+
                         </div>
 
-                        <div className="input-container">
+
+                        <div className="cp-input-container">
+
                             <input
-                                className="chat-input"
+                                className="cp-chat-input"
                                 type="text"
                                 placeholder="Ask your question..."
                                 value={message}
-                                onChange={(e) =>
+                                onChange={(event) =>
                                     setMessage(
-                                        e.target
+                                        event.target
                                             .value
                                     )
                                 }
@@ -271,18 +396,25 @@ function ChatbotPage() {
                             />
 
                             <button
-                                className="send-button"
+                                type="button"
+                                className="cp-send-button"
                                 onClick={
                                     sendMessage
                                 }
                                 disabled={loading}
+                                aria-label="Send message"
                             >
                                 <IoSend />
                             </button>
+
                         </div>
-                    </div>
+
+                    </section>
+
                 )}
-            </div>
+
+            </main>
+
         </div>
     );
 }

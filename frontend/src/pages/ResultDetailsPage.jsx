@@ -1,149 +1,450 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+
 import API_BASE_URL from "../services/api";
 import Navbar from "../components/Navbar";
 import PageLoader from "../components/PageLoader";
+
 import "../styles/ResultDetailsPage.css";
 
-function ResultDetailsPage() {
-    const { submissionId } = useParams();
 
-    const [result, setResult] = useState(null);
+function ResultDetailsPage() {
+
+    const { submissionId } =
+        useParams();
+
+    const [result, setResult] =
+        useState(null);
+
 
     useEffect(() => {
         fetchResult();
     }, []);
 
+
     const fetchResult = async () => {
+
         try {
-            const token = localStorage.getItem("token");
+
+            const token =
+                localStorage.getItem("token");
 
             const response = await fetch(
                 `${API_BASE_URL}/result/${submissionId}`,
                 {
                     headers: {
-                        Authorization: `Bearer ${token}`,
+                        Authorization:
+                            `Bearer ${token}`,
                     },
                 }
             );
 
-            const data = await response.json();
+            const data =
+                await response.json();
+
             setResult(data);
+
         } catch (error) {
+
             console.error(error);
+
         }
     };
 
+
     if (!result) {
+
         return (
+
             <div>
+
                 <Navbar />
-                <PageLoader message="Loading Result..." />
+
+                <PageLoader
+                    message="Loading Result..."
+                />
+
             </div>
+
         );
     }
 
+
+    const isPassed =
+        result.score >=
+        result.passing_marks;
+
+
+    const correctAnswers =
+        result.answers.filter(
+            (answer) =>
+                answer.is_correct
+        ).length;
+
+
+    const incorrectAnswers =
+        result.answers.length -
+        correctAnswers;
+
+
     return (
-        <div>
+
+        <div className="rdp-page">
+
             <Navbar />
 
-            <div className="page-container">
-                <h1 className="page-title">
-                    Result Details
-                </h1>
 
-                <div className="result-summary-card">
-                    <h2 className="summary-title">
-                        Result Summary
-                    </h2>
+            <main className="rdp-page-container">
 
-                    <p className="summary-info">
-                        <strong>Submission ID:</strong>{" "}
-                        {result.submission_id}
+
+                {/* ==========================================
+                    Page Header
+                ========================================== */}
+
+                <header className="rdp-page-header">
+
+                    <span className="rdp-page-eyebrow">
+                        RESULT DETAILS
+                    </span>
+
+                    <h1 className="rdp-page-title">
+                        Result Details
+                    </h1>
+
+                    <p className="rdp-page-description">
+                        Review the examination
+                        performance and detailed
+                        answers for this submission.
                     </p>
 
-                    {result.candidate_name && (
-                        <p className="summary-info">
-                            <strong>Candidate:</strong>{" "}
-                            {result.candidate_name}
-                        </p>
-                    )}
+                </header>
 
-                    <p className="summary-info">
-                        <strong>Batch:</strong> {result.batch_name}
-                    </p>
 
-                    <p className="summary-info">
-                        <strong>Exam:</strong> {result.exam_title}
-                    </p>
+                {/* ==========================================
+                    Result Summary
+                ========================================== */}
 
-                    <p className="summary-info">
-                        <strong>Score:</strong>{" "}
-                        {result.score} / {result.total_marks}
-                    </p>
+                <section className="rdp-summary-card">
 
-                    <p className="summary-info">
-                        <strong>Percentage:</strong>{" "}
-                        {result.percentage}%
-                    </p>
+                    <div className="rdp-summary-header">
 
-                    <p className="summary-info">
-                        <strong>Status:</strong>{" "}
+                        <div>
+
+                            <span className="rdp-summary-label">
+                                RESULT SUMMARY
+                            </span>
+
+                            <h2 className="rdp-summary-title">
+                                {
+                                    result.exam_title
+                                }
+                            </h2>
+
+                            <p className="rdp-summary-subtitle">
+                                Submission #
+                                {
+                                    result.submission_id
+                                }
+                            </p>
+
+                        </div>
+
+
                         <span
                             className={
-                                result.score >= result.passing_marks
-                                    ? "status-pass"
-                                    : "status-fail"
+                                isPassed
+                                    ? "rdp-status-badge rdp-status-pass"
+                                    : "rdp-status-badge rdp-status-fail"
                             }
                         >
-                            {result.score >= result.passing_marks
-                                ? "Pass"
-                                : "Fail"}
+                            {
+                                isPassed
+                                    ? "Pass"
+                                    : "Fail"
+                            }
                         </span>
-                    </p>
 
-                    <p className="summary-info">
-                        <strong>Submitted:</strong>{" "}
-                        {result.submitted_at}
-                    </p>
-                </div>
+                    </div>
 
-                <div className="answers-grid">
-                    {result.answers.map((answer, index) => (
-                        <div
-                            key={index}
-                            className="answer-card"
-                        >
-                            <h3 className="question-title">
-                                Question {index + 1}
-                            </h3>
 
-                            <p className="answer-info">
-                                {answer.question_text}
-                            </p>
+                    {/* ==========================================
+                        Score Overview
+                    ========================================== */}
 
-                            <p className="answer-info">
-                                <strong>Selected Answer:</strong>{" "}
-                                {answer.answer_text}
-                            </p>
+                    <div className="rdp-score-overview">
 
-                            <p
-                                className={
-                                    answer.is_correct
-                                        ? "correct-status"
-                                        : "incorrect-status"
+                        <div className="rdp-score-main">
+
+                            <span className="rdp-score-label">
+                                Score
+                            </span>
+
+                            <strong className="rdp-score-value">
+
+                                {
+                                    result.score
                                 }
-                            >
-                                {answer.is_correct
-                                    ? "✅ Correct"
-                                    : "❌ Incorrect"}
-                            </p>
+
+                                <span>
+                                    {" "}
+                                    /{" "}
+                                    {
+                                        result.total_marks
+                                    }
+                                </span>
+
+                            </strong>
+
                         </div>
-                    ))}
-                </div>
-            </div>
+
+
+                        <div className="rdp-score-main">
+
+                            <span className="rdp-score-label">
+                                Percentage
+                            </span>
+
+                            <strong className="rdp-percentage-value">
+                                {
+                                    result.percentage
+                                }%
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    {/* ==========================================
+                        Summary Details
+                    ========================================== */}
+
+                    <div className="rdp-summary-details">
+
+                        {result.candidate_name && (
+
+                            <div className="rdp-summary-detail">
+
+                                <span className="rdp-detail-label">
+                                    Candidate
+                                </span>
+
+                                <strong>
+                                    {
+                                        result.candidate_name
+                                    }
+                                </strong>
+
+                            </div>
+
+                        )}
+
+
+                        <div className="rdp-summary-detail">
+
+                            <span className="rdp-detail-label">
+                                Batch
+                            </span>
+
+                            <strong>
+                                {
+                                    result.batch_name
+                                }
+                            </strong>
+
+                        </div>
+
+
+                        <div className="rdp-summary-detail">
+
+                            <span className="rdp-detail-label">
+                                Passing Marks
+                            </span>
+
+                            <strong>
+                                {
+                                    result.passing_marks
+                                }
+                            </strong>
+
+                        </div>
+
+
+                        <div className="rdp-summary-detail">
+
+                            <span className="rdp-detail-label">
+                                Submitted
+                            </span>
+
+                            <strong>
+                                {
+                                    result.submitted_at
+                                }
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                {/* ==========================================
+                    Answer Review
+                ========================================== */}
+
+                <section className="rdp-answers-section">
+
+                    <div className="rdp-answers-header">
+
+                        <div>
+
+                            <span className="rdp-section-kicker">
+                                ANSWERS
+                            </span>
+
+                            <h2 className="rdp-section-title">
+                                Answer Review
+                            </h2>
+
+                            <p className="rdp-section-description">
+                                Review each question
+                                and the submitted
+                                answer.
+                            </p>
+
+                        </div>
+
+
+                        <div className="rdp-answer-count">
+
+                            <span className="rdp-correct-count">
+                                {
+                                    correctAnswers
+                                } Correct
+                            </span>
+
+                            <span className="rdp-answer-divider">
+                                |
+                            </span>
+
+                            <span className="rdp-incorrect-count">
+                                {
+                                    incorrectAnswers
+                                } Incorrect
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    {/* ==========================================
+                        Answers
+                    ========================================== */}
+
+                    <div className="rdp-answers-grid">
+
+                        {result.answers.map(
+                            (answer, index) => (
+
+                                <article
+                                    key={index}
+                                    className={
+                                        `rdp-answer-card ${
+                                            answer.is_correct
+                                                ? "rdp-answer-correct"
+                                                : "rdp-answer-incorrect"
+                                        }`
+                                    }
+                                >
+
+
+                                    <div className="rdp-answer-card-header">
+
+                                        <div>
+
+                                            <span className="rdp-question-number">
+                                                Question{" "}
+                                                {
+                                                    index + 1
+                                                }
+                                            </span>
+
+                                            <h3 className="rdp-question-title">
+                                                {
+                                                    answer.question_text
+                                                }
+                                            </h3>
+
+                                        </div>
+
+
+                                        <span
+                                            className={
+                                                answer.is_correct
+                                                    ? "rdp-answer-status rdp-correct"
+                                                    : "rdp-answer-status rdp-incorrect"
+                                            }
+                                        >
+                                            {
+                                                answer.is_correct
+                                                    ? "Correct"
+                                                    : "Incorrect"
+                                            }
+                                        </span>
+
+                                    </div>
+
+
+                                    <div className="rdp-answer-content">
+
+                                        <span className="rdp-detail-label">
+                                            Selected Answer
+                                        </span>
+
+                                        <p className="rdp-answer-text">
+                                            {
+                                                answer.answer_text
+                                            }
+                                        </p>
+
+                                    </div>
+
+
+                                    <div className="rdp-answer-footer">
+
+                                        <span
+                                            className={
+                                                answer.is_correct
+                                                    ? "rdp-answer-result rdp-correct-result"
+                                                    : "rdp-answer-result rdp-incorrect-result"
+                                            }
+                                        >
+                                            {
+                                                answer.is_correct
+                                                    ? "✓ Correct Answer"
+                                                    : "✕ Incorrect Answer"
+                                            }
+                                        </span>
+
+                                    </div>
+
+
+                                </article>
+
+                            )
+                        )}
+
+                    </div>
+
+                </section>
+
+            </main>
+
         </div>
     );
 }
+
 
 export default ResultDetailsPage;
