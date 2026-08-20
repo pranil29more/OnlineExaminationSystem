@@ -65,7 +65,6 @@ function Navbar() {
 
         return (
             location.pathname === "/exams" ||
-
             location.pathname.startsWith("/exam/")
         );
 
@@ -75,7 +74,6 @@ function Navbar() {
 
         return (
             location.pathname === "/results" ||
-
             location.pathname.startsWith("/result/")
         );
 
@@ -85,7 +83,6 @@ function Navbar() {
 
         return (
             location.pathname === "/create-exam" ||
-
             (
                 location.pathname === "/add-question" &&
                 location.state?.from !== "edit-exam"
@@ -185,17 +182,21 @@ function Navbar() {
                 )}
 
 
-                <button
-                    type="button"
-                    className={navClass(
-                        location.pathname === "/chatbot"
-                    )}
-                    onClick={() =>
-                        handleNavigation("/chatbot")
-                    }
-                >
-                    AI Assistant
-                </button>
+                {role === "Admin" && (
+
+                    <button
+                        type="button"
+                        className={navClass(
+                            location.pathname === "/chatbot"
+                        )}
+                        onClick={() =>
+                            handleNavigation("/chatbot")
+                        }
+                    >
+                        AI Assistant
+                    </button>
+
+                )}
 
 
                 <button
