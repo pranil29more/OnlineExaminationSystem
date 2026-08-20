@@ -206,7 +206,7 @@ function CreateExamPage() {
                 <header className="cep-page-header">
 
                     <span className="cep-eyebrow">
-                        Examination Management
+                        CONFIGURATION
                     </span>
 
                     <h1 className="cep-page-title">

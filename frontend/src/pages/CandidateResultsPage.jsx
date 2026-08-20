@@ -125,7 +125,7 @@ function CandidateResultsPage() {
                     <div>
 
                         <span className="crp-page-eyebrow">
-                            Performance Analytics
+                            PERFORMANCE ANALYTICS
                         </span>
 
                         <h1 className="crp-page-title">

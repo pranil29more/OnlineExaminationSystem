@@ -141,7 +141,7 @@ function CreateBatchPage() {
                 <header className="cbp-header">
 
                     <span className="cbp-eyebrow">
-                        Batch Management
+                        CONFIGURATION
                     </span>
 
                     <h1 className="cbp-title">
@@ -169,7 +169,7 @@ function CreateBatchPage() {
                         <div className="cbp-section-heading">
 
                             <span className="cbp-section-eyebrow">
-                                Batch Configuration
+                                BATCH SETUP
                             </span>
 
                             <h2 className="cbp-section-title">

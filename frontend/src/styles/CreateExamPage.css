@@ -335,6 +335,10 @@
 }
 
 
+/* =========================================================
+   Form Field Label
+========================================================= */
+
 .cep-field-label {
     display:
         block;
@@ -352,10 +356,10 @@
         #e2e8f0;
 
     font-size:
-        11px;
+        13px;
 
     font-weight:
-        800;
+        750;
 
     line-height:
         1.4;
@@ -363,11 +367,8 @@
     text-align:
         left;
 
-    text-transform:
-        uppercase;
-
     letter-spacing:
-        0.7px;
+        0.2px;
 }
 
 
@@ -506,9 +507,13 @@
         100%;
 
     margin:
-        3px
+        28px
         0
-        3px;
+        14px;
+
+    padding:
+        4px
+        0;
 }
 
 
@@ -522,7 +527,7 @@
     margin:
         0
         0
-        12px;
+        14px;
 
     padding:
         0;
@@ -561,7 +566,6 @@
         );
 
     gap:
-        0
         14px;
 
     width:
@@ -808,6 +812,18 @@
     }
 
 
+    .cep-marks-section {
+        margin:
+            24px
+            0
+            24px;
+
+        padding:
+            3px
+            0;
+    }
+
+
     .cep-marks-grid {
         grid-template-columns:
             1fr;
@@ -852,6 +868,14 @@
     .cep-section-heading {
         margin-bottom:
             23px;
+    }
+
+
+    .cep-marks-section {
+        margin:
+            22px
+            0
+            22px;
     }
 
 }

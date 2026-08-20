@@ -259,7 +259,7 @@ function SubmissionAnalyticsPage() {
                         <div>
 
                             <span className="sap-section-kicker">
-                                EXAM PERFORMANCE
+                                EXAMINATION ANALYTICS
                             </span>
 
                             <h2 className="sap-section-title">

@@ -985,7 +985,7 @@ function ExamAnalyticsPage() {
                     <div>
 
                         <span className="eap-page-eyebrow">
-                            ADMINISTRATION
+                            ASSESSMENT MANAGEMENT
                         </span>
 
                         <h1 className="eap-page-title">
@@ -1395,7 +1395,7 @@ function ExamAnalyticsPage() {
                         <div>
 
                             <span className="eap-section-kicker">
-                                EXAM MANAGEMENT
+                                EXAMINATION MANAGEMENT
                             </span>
 
                             <h2 className="eap-section-title">
@@ -1695,7 +1695,7 @@ function ExamAnalyticsPage() {
                                 <div>
 
                                     <span className="eap-modal-kicker">
-                                        ASSESSMENT SCHEDULING
+                                        SCHEDULING
                                     </span>
 
                                     <h2>

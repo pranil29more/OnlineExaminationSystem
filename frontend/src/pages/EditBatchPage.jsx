@@ -219,7 +219,7 @@ function EditBatchPage() {
                 <header className="ebp-header">
 
                     <span className="ebp-eyebrow">
-                        Batch Management
+                        BATCH MANAGEMENT
                     </span>
 
                     <h1 className="ebp-title">
@@ -245,7 +245,7 @@ function EditBatchPage() {
                         <div className="ebp-section-heading">
 
                             <span className="ebp-section-eyebrow">
-                                Batch Configuration
+                                BATCH CONFIGURATION
                             </span>
 
                             <h2 className="ebp-section-title">

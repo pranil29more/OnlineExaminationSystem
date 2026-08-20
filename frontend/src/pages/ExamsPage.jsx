@@ -907,7 +907,7 @@ function ExamsPage() {
                         <span className="ep-page-eyebrow">
                             {role === "Candidate"
                                 ? "ASSESSMENTS"
-                                : "EXAMINATION MANAGEMENT"}
+                                : "EXAMINATION OVERVIEW"}
                         </span>
 
                         <h1 className="ep-page-title">

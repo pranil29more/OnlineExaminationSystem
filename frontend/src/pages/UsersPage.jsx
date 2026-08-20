@@ -283,7 +283,7 @@ function UsersPage() {
                     <div>
 
                         <span className="ump-page-eyebrow">
-                            Administration
+                            ACCESS CONTROL
                         </span>
 
                         <h1 className="ump-page-title">

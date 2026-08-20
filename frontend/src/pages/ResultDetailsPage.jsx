@@ -104,7 +104,7 @@ function ResultDetailsPage() {
                 <header className="rdp-page-header">
 
                     <span className="rdp-page-eyebrow">
-                        RESULT DETAILS
+                        PERFORMANCE DETAILS
                     </span>
 
                     <h1 className="rdp-page-title">

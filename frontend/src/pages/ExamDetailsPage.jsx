@@ -471,7 +471,7 @@ function ExamDetailsPage() {
                             <div>
 
                                 <span className="edp-section-kicker">
-                                    Assessment Content
+                                    EXAMINATION CONTENT
                                 </span>
 
                                 <h2 className="edp-section-title">

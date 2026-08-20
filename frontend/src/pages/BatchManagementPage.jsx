@@ -193,7 +193,7 @@ function BatchManagementPage() {
                     <div>
 
                         <span className="bmp-eyebrow">
-                            Administration
+                            TRAINING CONTROL
                         </span>
 
                         <h1 className="bmp-title">

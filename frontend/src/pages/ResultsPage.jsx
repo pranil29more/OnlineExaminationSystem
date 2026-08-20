@@ -120,7 +120,7 @@ function ResultsPage() {
                     <div>
 
                         <span className="rp-page-eyebrow">
-                            RESULTS
+                            RESULT OVERVIEW
                         </span>
 
                         <h1 className="rp-page-title">

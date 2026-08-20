@@ -186,6 +186,11 @@ function EditExamPage() {
                     <div className="eep-form-section">
 
                         <div className="eep-section-heading">
+
+                            <span className="eep-section-eyebrow">
+                                EXAMINATION CONFIGURATION
+                            </span>
+
                             <h2>
                                 Exam Information
                             </h2>
