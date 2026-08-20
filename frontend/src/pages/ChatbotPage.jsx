@@ -17,9 +17,7 @@ function ChatbotPage() {
 
     const [messages, setMessages] = useState(() => {
         const savedMessages =
-            localStorage.getItem(
-                chatHistoryKey
-            );
+            localStorage.getItem(chatHistoryKey);
 
         return savedMessages
             ? JSON.parse(savedMessages)
@@ -43,14 +41,14 @@ function ChatbotPage() {
             chatHistoryKey,
             JSON.stringify(messages)
         );
-    }, [
-        messages,
-        chatHistoryKey,
-    ]);
+    }, [messages, chatHistoryKey]);
 
     const sendMessage = async () => {
+        const trimmedMessage =
+            message.trim();
+
         if (
-            message.trim() === "" ||
+            trimmedMessage === "" ||
             loading
         ) {
             return;
@@ -58,7 +56,7 @@ function ChatbotPage() {
 
         const userMessage = {
             sender: "user",
-            text: message,
+            text: trimmedMessage,
         };
 
         setMessages((prevMessages) => [
@@ -66,18 +64,27 @@ function ChatbotPage() {
             userMessage,
         ]);
 
-        const currentMessage =
-            message;
-
         setMessage("");
 
         setLoading(true);
 
         try {
             const token =
-                localStorage.getItem(
-                    "token"
-                );
+                localStorage.getItem("token");
+
+            if (!token) {
+                setMessages((prevMessages) => [
+                    ...prevMessages,
+                    {
+                        sender: "ai",
+                        text:
+                            "Your administrator session has expired. Please log in again.",
+                        source: "system",
+                    },
+                ]);
+
+                return;
+            }
 
             const response = await fetch(
                 `${API_BASE_URL}/chat`,
@@ -94,7 +101,7 @@ function ChatbotPage() {
 
                     body: JSON.stringify({
                         message:
-                            currentMessage,
+                            trimmedMessage,
                     }),
                 }
             );
@@ -102,9 +109,32 @@ function ChatbotPage() {
             const data =
                 await response.json();
 
+            if (!response.ok) {
+                const errorMessage =
+                    data?.error ||
+                    data?.message ||
+                    "The AI Examination Assistant could not process your request.";
+
+                setMessages((prevMessages) => [
+                    ...prevMessages,
+                    {
+                        sender: "ai",
+                        text: errorMessage,
+                        source: "system",
+                    },
+                ]);
+
+                return;
+            }
+
             const aiMessage = {
                 sender: "ai",
-                text: data.response,
+                text:
+                    data?.response ||
+                    "The AI Examination Assistant returned an empty response.",
+                source:
+                    data?.source ||
+                    "ai",
             };
 
             setMessages((prevMessages) => [
@@ -112,14 +142,18 @@ function ChatbotPage() {
                 aiMessage,
             ]);
         } catch (error) {
-            console.error(error);
+            console.error(
+                "Chat request error:",
+                error
+            );
 
             setMessages((prevMessages) => [
                 ...prevMessages,
                 {
                     sender: "ai",
                     text:
-                        "Something went wrong while contacting the AI Assistant.",
+                        "Something went wrong while contacting the AI Examination Assistant. Please try again.",
+                    source: "system",
                 },
             ]);
         } finally {
@@ -130,7 +164,7 @@ function ChatbotPage() {
     const clearChat = () => {
         const confirmClear =
             window.confirm(
-                "Are you sure you want to clear this conversation?"
+                "Are you sure you want to clear this administrator conversation?"
             );
 
         if (!confirmClear) {
@@ -145,11 +179,26 @@ function ChatbotPage() {
     };
 
     const handleKeyDown = (event) => {
-        if (event.key === "Enter") {
+        if (
+            event.key === "Enter" &&
+            !event.shiftKey
+        ) {
             event.preventDefault();
 
             sendMessage();
         }
+    };
+
+    const getSourceLabel = (source) => {
+        if (source === "database") {
+            return "Database";
+        }
+
+        if (source === "ai") {
+            return "AI Assistant";
+        }
+
+        return "System";
     };
 
     return (
@@ -158,10 +207,6 @@ function ChatbotPage() {
             <Navbar />
 
             <main className="cp-container">
-
-                {/* ==========================================
-                    Page Header
-                ========================================== */}
 
                 <header className="cp-page-header">
 
@@ -174,18 +219,13 @@ function ChatbotPage() {
                     </h1>
 
                     <p className="cp-page-description">
-                        Your intelligent learning
-                        companion for examinations,
-                        programming, aptitude, and
-                        interview preparation.
+                        Your intelligent administrative
+                        assistant for reviewing examinations,
+                        candidates, batches, schedules,
+                        results, and system analytics.
                     </p>
 
                 </header>
-
-
-                {/* ==========================================
-                    Welcome State
-                ========================================== */}
 
                 {messages.length === 0 ? (
 
@@ -198,46 +238,44 @@ function ChatbotPage() {
                             </div>
 
                             <span className="cp-welcome-kicker">
-                                SMART LEARNING
+                                ADMINISTRATION ASSISTANT
                             </span>
 
                             <h2 className="cp-welcome-title">
-                                Welcome!
+                                Welcome, Administrator!
                             </h2>
 
                             <p className="cp-welcome-text">
-                                I'm your AI
-                                Examination
+                                I'm your AI Examination
                                 Assistant.
                             </p>
 
                             <p className="cp-welcome-description">
-                                I can help you
-                                understand
-                                programming,
-                                explain difficult
-                                concepts, prepare
-                                for interviews,
-                                solve aptitude
-                                questions, and
-                                assist with your
-                                examinations.
+                                I can help you access
+                                examination data, review
+                                candidate performance,
+                                analyze submissions,
+                                monitor batches and
+                                assessment schedules,
+                                and provide system-level
+                                examination statistics.
+                                You can also ask me general
+                                technical and educational
+                                questions.
                             </p>
 
                         </div>
-
 
                         <div className="cp-input-container">
 
                             <input
                                 className="cp-chat-input"
                                 type="text"
-                                placeholder="Ask your question..."
+                                placeholder="Ask about exams, candidates, results, batches, or system statistics..."
                                 value={message}
                                 onChange={(event) =>
                                     setMessage(
-                                        event.target
-                                            .value
+                                        event.target.value
                                     )
                                 }
                                 onKeyDown={
@@ -252,7 +290,10 @@ function ChatbotPage() {
                                 onClick={
                                     sendMessage
                                 }
-                                disabled={loading}
+                                disabled={
+                                    loading ||
+                                    message.trim() === ""
+                                }
                                 aria-label="Send message"
                             >
                                 <IoSend />
@@ -263,10 +304,6 @@ function ChatbotPage() {
                     </section>
 
                 ) : (
-
-                    /* ==========================================
-                       Conversation
-                    ========================================== */
 
                     <section className="cp-chat-card">
 
@@ -284,7 +321,6 @@ function ChatbotPage() {
 
                             </div>
 
-
                             <button
                                 type="button"
                                 className="cp-clear-chat-btn"
@@ -297,7 +333,6 @@ function ChatbotPage() {
                             </button>
 
                         </header>
-
 
                         <div className="cp-chat-container">
 
@@ -316,20 +351,31 @@ function ChatbotPage() {
                                         }
                                     >
 
+                                        <div className="cp-message-label">
+
+                                            {msg.sender ===
+                                            "user"
+                                                ? "Administrator"
+                                                : "AI Assistant"}
+
+                                        </div>
+
                                         {msg.sender ===
-                                        "ai" ? (
-
-                                            <div className="cp-message-label">
-                                                AI Assistant
-                                            </div>
-
-                                        ) : (
-
-                                            <div className="cp-message-label">
-                                                You
-                                            </div>
-
-                                        )}
+                                            "ai" &&
+                                            msg.source && (
+                                                <div
+                                                    className={
+                                                        msg.source ===
+                                                        "database"
+                                                            ? "cp-message-source cp-database-source"
+                                                            : "cp-message-source"
+                                                    }
+                                                >
+                                                    {getSourceLabel(
+                                                        msg.source
+                                                    )}
+                                                </div>
+                                            )}
 
                                         <ReactMarkdown
                                             remarkPlugins={[
@@ -342,10 +388,8 @@ function ChatbotPage() {
                                         </ReactMarkdown>
 
                                     </div>
-
                                 )
                             )}
-
 
                             {loading && (
 
@@ -359,13 +403,13 @@ function ChatbotPage() {
 
                                     <span>
                                         AI Assistant is
-                                        thinking...
+                                        analyzing your
+                                        request...
                                     </span>
 
                                 </div>
 
                             )}
-
 
                             <div
                                 ref={
@@ -375,18 +419,16 @@ function ChatbotPage() {
 
                         </div>
 
-
                         <div className="cp-input-container">
 
                             <input
                                 className="cp-chat-input"
                                 type="text"
-                                placeholder="Ask your question..."
+                                placeholder="Ask about exams, candidates, results, batches, or system statistics..."
                                 value={message}
                                 onChange={(event) =>
                                     setMessage(
-                                        event.target
-                                            .value
+                                        event.target.value
                                     )
                                 }
                                 onKeyDown={
@@ -401,7 +443,10 @@ function ChatbotPage() {
                                 onClick={
                                     sendMessage
                                 }
-                                disabled={loading}
+                                disabled={
+                                    loading ||
+                                    message.trim() === ""
+                                }
                                 aria-label="Send message"
                             >
                                 <IoSend />

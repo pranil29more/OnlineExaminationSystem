@@ -427,7 +427,12 @@
         8px;
 
     background:
-        rgba(15, 23, 42, 0.65);
+        rgba(
+            15,
+            23,
+            42,
+            0.65
+        );
 
     color:
         #94a3b8;
@@ -440,7 +445,12 @@
 
     box-shadow:
         0 4px 10px
-        rgba(0, 0, 0, 0.12);
+        rgba(
+            0,
+            0,
+            0,
+            0.12
+        );
 
     transition:
         background 0.2s ease,
@@ -450,10 +460,6 @@
         transform 0.2s ease;
 }
 
-
-/* =========================================================
-   Hover
-========================================================= */
 
 .cp-clear-chat-btn:hover {
     background:
@@ -470,13 +476,14 @@
 
     box-shadow:
         0 6px 14px
-        rgba(0, 0, 0, 0.18);
+        rgba(
+            0,
+            0,
+            0,
+            0.18
+        );
 }
 
-
-/* =========================================================
-   Active
-========================================================= */
 
 .cp-clear-chat-btn:active {
     background:
@@ -490,13 +497,14 @@
 
     box-shadow:
         0 3px 8px
-        rgba(0, 0, 0, 0.16);
+        rgba(
+            0,
+            0,
+            0,
+            0.16
+        );
 }
 
-
-/* =========================================================
-   Focus
-========================================================= */
 
 .cp-clear-chat-btn:focus-visible {
     outline:
@@ -592,6 +600,9 @@
     word-break:
         break-word;
 
+    overflow-wrap:
+        anywhere;
+
     animation:
         cpFadeIn
         0.2s ease;
@@ -651,6 +662,10 @@
 }
 
 
+/* =========================================================
+   Message Label
+========================================================= */
+
 .cp-message-label {
     margin-bottom:
         6px;
@@ -677,6 +692,92 @@
 }
 
 
+/* =========================================================
+   Message Source Badge
+========================================================= */
+
+.cp-message-source {
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    width:
+        fit-content;
+
+    margin:
+        0
+        0
+        10px;
+
+    padding:
+        4px
+        8px;
+
+    background:
+        rgba(
+            59,
+            130,
+            246,
+            0.10
+        );
+
+    border:
+        1px solid
+        rgba(
+            96,
+            165,
+            250,
+            0.25
+        );
+
+    border-radius:
+        6px;
+
+    color:
+        #93c5fd;
+
+    font-size:
+        9px;
+
+    font-weight:
+        800;
+
+    text-transform:
+        uppercase;
+
+    letter-spacing:
+        0.6px;
+}
+
+
+.cp-database-source {
+    background:
+        rgba(
+            34,
+            197,
+            94,
+            0.09
+        );
+
+    border-color:
+        rgba(
+            74,
+            222,
+            128,
+            0.25
+        );
+
+    color:
+        #86efac;
+}
+
+
+/* =========================================================
+   Markdown — Paragraphs
+========================================================= */
+
 .cp-user-message p,
 .cp-ai-message p {
     margin:
@@ -691,6 +792,127 @@
 }
 
 
+/* =========================================================
+   Markdown — Headings
+========================================================= */
+
+.cp-ai-message h1,
+.cp-ai-message h2,
+.cp-ai-message h3,
+.cp-ai-message h4,
+.cp-ai-message h5,
+.cp-ai-message h6 {
+    margin:
+        16px 0 8px;
+
+    color:
+        #f8fafc;
+
+    font-weight:
+        750;
+
+    line-height:
+        1.35;
+}
+
+
+.cp-ai-message h1 {
+    font-size:
+        21px;
+}
+
+
+.cp-ai-message h2 {
+    font-size:
+        19px;
+}
+
+
+.cp-ai-message h3 {
+    font-size:
+        17px;
+}
+
+
+.cp-ai-message h4,
+.cp-ai-message h5,
+.cp-ai-message h6 {
+    font-size:
+        15px;
+}
+
+
+.cp-ai-message h1:first-child,
+.cp-ai-message h2:first-child,
+.cp-ai-message h3:first-child {
+    margin-top:
+        0;
+}
+
+
+/* =========================================================
+   Markdown — Lists
+========================================================= */
+
+.cp-user-message ul,
+.cp-user-message ol,
+.cp-ai-message ul,
+.cp-ai-message ol {
+    margin:
+        8px 0
+        12px;
+
+    padding-left:
+        22px;
+}
+
+
+.cp-user-message li,
+.cp-ai-message li {
+    margin-bottom:
+        5px;
+
+    padding-left:
+        2px;
+}
+
+
+.cp-user-message li:last-child,
+.cp-ai-message li:last-child {
+    margin-bottom:
+        0;
+}
+
+
+/* =========================================================
+   Markdown — Links
+========================================================= */
+
+.cp-ai-message a {
+    color:
+        #93c5fd;
+
+    text-decoration:
+        underline;
+
+    text-underline-offset:
+        2px;
+
+    transition:
+        color 0.2s ease;
+}
+
+
+.cp-ai-message a:hover {
+    color:
+        #bfdbfe;
+}
+
+
+/* =========================================================
+   Markdown — Inline Code
+========================================================= */
+
 .cp-ai-message code {
     padding:
         2px
@@ -699,23 +921,41 @@
     background:
         #0f172a;
 
+    border:
+        1px solid
+        #334155;
+
     border-radius:
         5px;
 
     color:
         #93c5fd;
+
+    font-family:
+        "Courier New",
+        monospace;
+
+    font-size:
+        0.9em;
 }
 
 
+/* =========================================================
+   Markdown — Code Blocks
+========================================================= */
+
 .cp-ai-message pre {
+    max-width:
+        100%;
+
     overflow-x:
         auto;
 
     margin:
-        10px 0;
+        12px 0;
 
     padding:
-        13px;
+        14px;
 
     background:
         #0b1220;
@@ -725,7 +965,208 @@
         #334155;
 
     border-radius:
-        8px;
+        9px;
+
+    scrollbar-width:
+        thin;
+}
+
+
+.cp-ai-message pre::-webkit-scrollbar {
+    height:
+        6px;
+}
+
+
+.cp-ai-message pre::-webkit-scrollbar-track {
+    background:
+        #0b1220;
+}
+
+
+.cp-ai-message pre::-webkit-scrollbar-thumb {
+    background:
+        #475569;
+
+    border-radius:
+        6px;
+}
+
+
+.cp-ai-message pre code {
+    display:
+        block;
+
+    padding:
+        0;
+
+    background:
+        transparent;
+
+    border:
+        none;
+
+    border-radius:
+        0;
+
+    color:
+        #cbd5e1;
+
+    font-size:
+        13px;
+
+    line-height:
+        1.6;
+
+    white-space:
+        pre;
+}
+
+
+/* =========================================================
+   Markdown — Tables
+========================================================= */
+
+.cp-ai-message table {
+    display:
+        block;
+
+    width:
+        100%;
+
+    max-width:
+        100%;
+
+    margin:
+        12px 0;
+
+    overflow-x:
+        auto;
+
+    border-collapse:
+        collapse;
+
+    font-size:
+        13px;
+
+    white-space:
+        nowrap;
+}
+
+
+.cp-ai-message th,
+.cp-ai-message td {
+    padding:
+        8px
+        10px;
+
+    border:
+        1px solid
+        #475569;
+
+    text-align:
+        left;
+
+    vertical-align:
+        top;
+}
+
+
+.cp-ai-message th {
+    background:
+        #243247;
+
+    color:
+        #f8fafc;
+
+    font-weight:
+        750;
+}
+
+
+.cp-ai-message td {
+    background:
+        #172033;
+
+    color:
+        #cbd5e1;
+}
+
+
+.cp-ai-message tr:nth-child(even) td {
+    background:
+        #1a2639;
+}
+
+
+/* =========================================================
+   Markdown — Blockquote
+========================================================= */
+
+.cp-ai-message blockquote {
+    margin:
+        12px 0;
+
+    padding:
+        8px
+        14px;
+
+    background:
+        rgba(
+            59,
+            130,
+            246,
+            0.06
+        );
+
+    border-left:
+        3px solid
+        #3b82f6;
+
+    color:
+        #cbd5e1;
+}
+
+
+.cp-ai-message blockquote p {
+    margin:
+        0;
+}
+
+
+/* =========================================================
+   Markdown — Horizontal Rule
+========================================================= */
+
+.cp-ai-message hr {
+    margin:
+        16px 0;
+
+    border:
+        none;
+
+    border-top:
+        1px solid
+        #334155;
+}
+
+
+/* =========================================================
+   Markdown — Strong / Emphasis
+========================================================= */
+
+.cp-ai-message strong {
+    color:
+        #f8fafc;
+
+    font-weight:
+        750;
+}
+
+
+.cp-ai-message em {
+    color:
+        #cbd5e1;
 }
 
 
@@ -1102,6 +1543,12 @@
             85%;
     }
 
+
+    .cp-ai-message table {
+        font-size:
+            12px;
+    }
+
 }
 
 
@@ -1172,6 +1619,32 @@
             12px;
     }
 
+
+    .cp-ai-message table {
+        font-size:
+            11px;
+    }
+
+
+    .cp-ai-message th,
+    .cp-ai-message td {
+        padding:
+            7px
+            8px;
+    }
+
+
+    .cp-ai-message pre {
+        padding:
+            11px;
+    }
+
+
+    .cp-ai-message pre code {
+        font-size:
+            12px;
+    }
+
 }
 
 
@@ -1204,6 +1677,19 @@
     .cp-chat-container {
         height:
             400px;
+    }
+
+
+    .cp-user-message,
+    .cp-ai-message {
+        max-width:
+            95%;
+    }
+
+
+    .cp-message-source {
+        font-size:
+            8px;
     }
 
 }
