@@ -164,7 +164,7 @@ function ChatbotPage() {
     const clearChat = () => {
         const confirmClear =
             window.confirm(
-                "Are you sure you want to clear this administrator conversation?"
+                "Are you sure you want to clear this conversation?"
             );
 
         if (!confirmClear) {
@@ -238,7 +238,7 @@ function ChatbotPage() {
                             </div>
 
                             <span className="cp-welcome-kicker">
-                                ADMINISTRATION ASSISTANT
+                                AI ASSISTANT
                             </span>
 
                             <h2 className="cp-welcome-title">

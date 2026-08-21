@@ -14,9 +14,23 @@ function CreateUserPage() {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [role, setRole] = useState("Candidate");
 
+    const [userCreating, setUserCreating] =
+        useState(false);
+
     const navigate = useNavigate();
 
-    const handleCreateUser = async () => {
+
+    // =========================================================
+    // Create User
+    // =========================================================
+
+    const handleCreateUser = async (e) => {
+
+        e.preventDefault();
+
+        if (userCreating) {
+            return;
+        }
 
         if (
             !name ||
@@ -25,32 +39,42 @@ function CreateUserPage() {
             !confirmPassword
         ) {
 
-            alert("Please fill all fields.");
+            alert(
+                "Please fill all fields."
+            );
 
             return;
-
         }
 
         if (password !== confirmPassword) {
 
-            alert("Passwords do not match.");
+            alert(
+                "Passwords do not match."
+            );
 
             return;
-
         }
 
         try {
 
-            const token = localStorage.getItem("token");
+            setUserCreating(true);
+
+            const token =
+                localStorage.getItem("token");
 
             const response = await fetch(
                 `${API_BASE_URL}/admin/create-user`,
                 {
                     method: "POST",
+
                     headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
+                        "Content-Type":
+                            "application/json",
+
+                        Authorization:
+                            `Bearer ${token}`,
                     },
+
                     body: JSON.stringify({
                         name,
                         email,
@@ -60,17 +84,23 @@ function CreateUserPage() {
                 }
             );
 
-            const data = await response.json();
+            const data =
+                await response.json();
 
             if (response.ok) {
 
-                alert("User created successfully.");
+                alert(
+                    "User created successfully."
+                );
 
                 navigate("/users");
 
             } else {
 
-                alert(data.message);
+                alert(
+                    data.message ||
+                    "Unable to create user."
+                );
 
             }
 
@@ -78,95 +108,251 @@ function CreateUserPage() {
 
             console.error(error);
 
-            alert("Unable to create user.");
+            alert(
+                "Unable to create user."
+            );
+
+        } finally {
+
+            setUserCreating(false);
 
         }
-
     };
 
+
     return (
-        <div>
+
+        <div className="cup-page">
 
             <Navbar />
 
-            <div className="page-container">
+            <main className="cup-container">
 
-                <h1 className="page-title">
-                    Create User
-                </h1>
+                <header className="cup-header">
 
-                <div className="create-user-card">
+                    <span className="cup-eyebrow">
+                        CONFIGURATION
+                    </span>
 
-                    <input
-                        className="create-user-input"
-                        type="text"
-                        placeholder="Full Name"
-                        value={name}
-                        onChange={(e) =>
-                            setName(e.target.value)
-                        }
-                    />
-
-                    <input
-                        className="create-user-input"
-                        type="email"
-                        placeholder="Email Address"
-                        value={email}
-                        onChange={(e) =>
-                            setEmail(e.target.value)
-                        }
-                    />
-
-                    <input
-                        className="create-user-input"
-                        type="password"
-                        placeholder="Password"
-                        value={password}
-                        onChange={(e) =>
-                            setPassword(e.target.value)
-                        }
-                    />
-
-                    <input
-                        className="create-user-input"
-                        type="password"
-                        placeholder="Confirm Password"
-                        value={confirmPassword}
-                        onChange={(e) =>
-                            setConfirmPassword(e.target.value)
-                        }
-                    />
-
-                    <select
-                        className="create-user-input"
-                        value={role}
-                        onChange={(e) =>
-                            setRole(e.target.value)
-                        }
-                    >
-                        <option value="Candidate">
-                            Candidate
-                        </option>
-
-                        <option value="Examiner">
-                            Examiner
-                        </option>
-                    </select>
-
-                    <button
-                        className="create-user-btn"
-                        onClick={handleCreateUser}
-                    >
+                    <h1 className="cup-title">
                         Create User
-                    </button>
+                    </h1>
 
-                </div>
+                    <p className="cup-description">
+                        Create a new user account and
+                        configure the user's credentials
+                        and system role.
+                    </p>
 
-            </div>
+                </header>
+
+
+                <form
+                    className="cup-form-card"
+                    onSubmit={handleCreateUser}
+                >
+
+                    <div className="cup-form-section">
+
+                        <div className="cup-section-heading">
+
+                            <span className="cup-section-eyebrow">
+                                ACCOUNT SETUP
+                            </span>
+
+                            <h2 className="cup-section-title">
+                                User Information
+                            </h2>
+
+                            <p className="cup-section-description">
+                                Enter the user's basic
+                                information, login credentials,
+                                and access role.
+                            </p>
+
+                        </div>
+
+
+                        {/* =================================================
+                            Full Name
+                        ================================================= */}
+
+                        <div className="cup-field">
+
+                            <label
+                                className="cup-field-label"
+                                htmlFor="user-name"
+                            >
+                                Full Name
+                            </label>
+
+                            <input
+                                id="user-name"
+                                className="cup-form-input"
+                                type="text"
+                                placeholder="Enter full name"
+                                value={name}
+                                onChange={(e) =>
+                                    setName(
+                                        e.target.value
+                                    )
+                                }
+                                required
+                            />
+
+                        </div>
+
+
+                        {/* =================================================
+                            Email
+                        ================================================= */}
+
+                        <div className="cup-field">
+
+                            <label
+                                className="cup-field-label"
+                                htmlFor="user-email"
+                            >
+                                Email Address
+                            </label>
+
+                            <input
+                                id="user-email"
+                                className="cup-form-input"
+                                type="email"
+                                placeholder="Enter email address"
+                                value={email}
+                                onChange={(e) =>
+                                    setEmail(
+                                        e.target.value
+                                    )
+                                }
+                                required
+                            />
+
+                        </div>
+
+
+                        {/* =================================================
+                            Password
+                        ================================================= */}
+
+                        <div className="cup-field">
+
+                            <label
+                                className="cup-field-label"
+                                htmlFor="user-password"
+                            >
+                                Password
+                            </label>
+
+                            <input
+                                id="user-password"
+                                className="cup-form-input"
+                                type="password"
+                                placeholder="Enter password"
+                                value={password}
+                                onChange={(e) =>
+                                    setPassword(
+                                        e.target.value
+                                    )
+                                }
+                                required
+                            />
+
+                        </div>
+
+
+                        {/* =================================================
+                            Confirm Password
+                        ================================================= */}
+
+                        <div className="cup-field">
+
+                            <label
+                                className="cup-field-label"
+                                htmlFor="confirm-password"
+                            >
+                                Confirm Password
+                            </label>
+
+                            <input
+                                id="confirm-password"
+                                className="cup-form-input"
+                                type="password"
+                                placeholder="Re-enter password"
+                                value={confirmPassword}
+                                onChange={(e) =>
+                                    setConfirmPassword(
+                                        e.target.value
+                                    )
+                                }
+                                required
+                            />
+
+                        </div>
+
+
+                        {/* =================================================
+                            User Role
+                        ================================================= */}
+
+                        <div className="cup-field">
+
+                            <label
+                                className="cup-field-label"
+                                htmlFor="user-role"
+                            >
+                                User Role
+                            </label>
+
+                            <select
+                                id="user-role"
+                                className="cup-form-input"
+                                value={role}
+                                onChange={(e) =>
+                                    setRole(
+                                        e.target.value
+                                    )
+                                }
+                            >
+
+                                <option value="Candidate">
+                                    Candidate
+                                </option>
+
+                                <option value="Examiner">
+                                    Examiner
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        {/* =================================================
+                            Create User Button
+                        ================================================= */}
+
+                        <button
+                            type="submit"
+                            className="cup-create-btn"
+                            disabled={userCreating}
+                        >
+                            {userCreating
+                                ? "Creating User..."
+                                : "Create User"}
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </main>
 
         </div>
-    );
 
+    );
 }
 
 export default CreateUserPage;

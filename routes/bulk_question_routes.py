@@ -12,10 +12,6 @@ bulk_question_bp = Blueprint(
 )
 
 
-# ==============================================
-# Bulk Upload Questions
-# ==============================================
-
 @bulk_question_bp.route(
     "/bulk-upload-questions",
     methods=["POST"],
@@ -461,17 +457,11 @@ def bulk_upload_questions():
 
             # ======================================
             # Duplicate Options Validation
+            #
+            # CASE-SENSITIVE
             # ======================================
 
-            normalized_options = [
-                option.casefold()
-                for option in options
-            ]
-
-            if (
-                len(set(normalized_options))
-                != 4
-            ):
+            if len(set(options)) != 4:
 
                 cur.close()
 
@@ -487,16 +477,15 @@ def bulk_upload_questions():
 
             # ======================================
             # Correct Answer Validation
+            #
+            # CASE-SENSITIVE
             # ======================================
 
             matching_option = None
 
             for option in options:
 
-                if (
-                    option.casefold()
-                    == correct_answer.casefold()
-                ):
+                if option == correct_answer:
 
                     matching_option = option
 
@@ -510,7 +499,7 @@ def bulk_upload_questions():
                     jsonify(
                         {
                             "message":
-                            f"Correct Answer in row {excel_row_number} must match one of Option A, B, C, or D."
+                            f"Correct Answer in row {excel_row_number} must exactly match one of Option A, B, C, or D."
                         }
                     ),
                     400,
@@ -598,11 +587,16 @@ def bulk_upload_questions():
                 "options"
             ]:
 
+                # ======================================
+                # CASE-SENSITIVE Correct Answer Match
+                # ======================================
+
                 is_correct = (
-                    option.casefold()
-                    == question[
+                    option
+                    ==
+                    question[
                         "correct_answer"
-                    ].casefold()
+                    ]
                 )
 
                 cur.execute(
