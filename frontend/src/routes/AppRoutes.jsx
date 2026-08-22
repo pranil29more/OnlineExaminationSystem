@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
+import ActivateAccountPage from "../pages/ActivateAccountPage";
 import DashboardPage from "../pages/DashboardPage";
 import UsersPage from "../pages/UsersPage";
 import ExamAnalyticsPage from "../pages/ExamAnalyticsPage";
@@ -37,9 +38,14 @@ function AppRoutes() {
                 />
 
                 <Route
+                    path="/activate-account/:activationToken"
+                    element={<ActivateAccountPage />}
+                />
+
+                {/* <Route
                     path="/register"
                     element={<RegisterPage />}
-                />
+                /> */}
 
                 <Route
                     path="/dashboard"

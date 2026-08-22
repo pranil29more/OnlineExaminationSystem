@@ -1,100 +1,121 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, current_app
 from flask_jwt_extended import (
     create_access_token,
     jwt_required,
     get_jwt_identity,
 )
+from flask_mail import Message
 
 from extensions import mysql, bcrypt
+from config import Config
+
+import secrets
+
 
 auth_bp = Blueprint("auth", __name__)
 
 
-@auth_bp.route("/register", methods=["POST"])
-def register():
+# @auth_bp.route("/register", methods=["POST"])
+# def register():
 
-    data = request.get_json()
+# data = request.get_json()
 
-    name = data.get("name")
-    email = data.get("email")
-    password = data.get("password")
-    role = "Candidate"
+# name = data.get("name")
+# email = data.get("email")
+# password = data.get("password")
+# role = "Candidate"
 
-    # Optional
-    batch_id = data.get("batch_id")
+# # Optional
+# batch_id = data.get("batch_id")
 
-    hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
+# hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
 
-    cur = mysql.connection.cursor()
+# cur = mysql.connection.cursor()
 
-    check_query = """
-    SELECT user_id
-    FROM users
-    WHERE email = %s
-    """
+# check_query = """
+# SELECT user_id
+# FROM users
+# WHERE email = %s
+# """
 
-    cur.execute(check_query, (email,))
+# cur.execute(check_query, (email,))
 
-    existing_user = cur.fetchone()
+# existing_user = cur.fetchone()
 
-    if existing_user:
+# if existing_user:
 
-        cur.close()
+# cur.close()
 
-        return jsonify({"message": "Email already registered"}), 409
+# return jsonify({"message": "Email already registered"}), 409
 
-    # ==========================================
-    # Validate Batch (only if batch_id provided)
-    # ==========================================
+# # ==========================================
+# # Validate Batch (only if batch_id provided)
+# # ==========================================
 
-    if batch_id is not None:
+# if batch_id is not None:
 
-        batch_query = """
-        SELECT batch_id
-        FROM batches
-        WHERE batch_id = %s
-        """
+# batch_query = """
+# SELECT batch_id
+# FROM batches
+# WHERE batch_id = %s
+# """
 
-        cur.execute(batch_query, (batch_id,))
+# cur.execute(batch_query, (batch_id,))
 
-        batch = cur.fetchone()
+# batch = cur.fetchone()
 
-        if not batch:
+# if not batch:
 
-            cur.close()
+# cur.close()
 
-            return jsonify({"message": "Invalid Batch"}), 400
+# return jsonify({"message": "Invalid Batch"}), 400
 
-    # ==========================================
-    # Insert User
-    # ==========================================
+# # ==========================================
+# # Insert User
+# # ==========================================
 
-    query = """
-    INSERT INTO users
-    (
-        name,
-        email,
-        password,
-        role,
-        batch_id
-    )
-    VALUES
-    (
-        %s,
-        %s,
-        %s,
-        %s,
-        %s
-    )
-    """
+# query = """
+# INSERT INTO users
+# (
+# name,
+# email,
+# password,
+# role,
+# batch_id
+# )
+# VALUES
+# (
+# %s,
+# %s,
+# %s,
+# %s,
+# %s
+# )
+# """
 
-    cur.execute(query, (name, email, hashed_password, role, batch_id))
+# cur.execute(query, (name, email, hashed_password, role, batch_id))
 
-    mysql.connection.commit()
+# mysql.connection.commit()
 
-    cur.close()
+# cur.close()
 
-    return jsonify({"message": "User registered successfully"}), 201
+# return jsonify({"message": "User registered successfully"}), 201
+
+
+# @auth_bp.route("/register", methods=["POST"])
+# def register():
+
+#     return (
+#         jsonify(
+#             {
+#                 "message":
+#                 "Self-registration is disabled. "
+#                 "Please contact the administrator "
+#                 "for account activation."
+#             }
+#         ),
+#         403,
+#     )
 
 
 @auth_bp.route("/admin/create-user", methods=["POST"])
@@ -103,20 +124,45 @@ def admin_create_user():
 
     current_user_id = get_jwt_identity()
 
-    data = request.get_json()
+    data = request.get_json(
+        silent=True
+    )
+
+    if not data:
+
+        return jsonify(
+            {
+                "message":
+                "Invalid request."
+            }
+        ), 400
 
     name = data.get("name")
     email = data.get("email")
-    password = data.get("password")
     role = data.get("role")
 
-    allowed_roles = ["Candidate", "Examiner"]
+    allowed_roles = [
+        "Candidate",
+        "Examiner",
+    ]
 
     if role not in allowed_roles:
-        return jsonify({"message": "Invalid role selected"}), 400
 
-    if not name or not email or not password:
-        return jsonify({"message": "All fields are required"}), 400
+        return jsonify(
+            {
+                "message":
+                "Invalid role selected"
+            }
+        ), 400
+
+    if not name or not email:
+
+        return jsonify(
+            {
+                "message":
+                "Name and email are required"
+            }
+        ), 400
 
     cur = mysql.connection.cursor()
 
@@ -130,14 +176,23 @@ def admin_create_user():
     WHERE user_id = %s
     """
 
-    cur.execute(admin_query, (current_user_id,))
+    cur.execute(
+        admin_query,
+        (current_user_id,)
+    )
 
     admin = cur.fetchone()
 
     if not admin or admin[0] != "Admin":
+
         cur.close()
 
-        return jsonify({"message": "Access denied. Admin only."}), 403
+        return jsonify(
+            {
+                "message":
+                "Access denied. Admin only."
+            }
+        ), 403
 
     # ==========================================
     # Check Duplicate Email
@@ -149,25 +204,44 @@ def admin_create_user():
     WHERE email = %s
     """
 
-    cur.execute(check_query, (email,))
+    cur.execute(
+        check_query,
+        (email,)
+    )
 
     existing_user = cur.fetchone()
 
     if existing_user:
+
         cur.close()
 
-        return jsonify({"message": "Email already registered"}), 409
+        return jsonify(
+            {
+                "message":
+                "Email already registered"
+            }
+        ), 409
 
     # ==========================================
-    # Hash Password
+    # Generate Activation Token
     # ==========================================
 
-    hashed_password = bcrypt.generate_password_hash(
-        password
-    ).decode("utf-8")
+    activation_token = secrets.token_urlsafe(32)
 
     # ==========================================
-    # Create User
+    # Temporary Unusable Password
+    # ==========================================
+
+    temporary_password = secrets.token_urlsafe(32)
+
+    hashed_password = (
+        bcrypt.generate_password_hash(
+            temporary_password
+        ).decode("utf-8")
+    )
+
+    # ==========================================
+    # Create Pending User
     # ==========================================
 
     insert_query = """
@@ -177,7 +251,10 @@ def admin_create_user():
         email,
         password,
         role,
-        is_active
+        is_active,
+        account_status,
+        activation_token,
+        activation_token_expires_at
     )
     VALUES
     (
@@ -185,7 +262,10 @@ def admin_create_user():
         %s,
         %s,
         %s,
-        %s
+        %s,
+        %s,
+        %s,
+        DATE_ADD(UTC_TIMESTAMP(), INTERVAL 24 HOUR)
     )
     """
 
@@ -197,6 +277,8 @@ def admin_create_user():
             hashed_password,
             role,
             True,
+            "Pending",
+            activation_token,
         ),
     )
 
@@ -206,11 +288,272 @@ def admin_create_user():
 
     cur.close()
 
+    # ==========================================
+    # Create Activation Link
+    # ==========================================
+
+    activation_link = (
+        f"{Config.FRONTEND_URL}"
+        f"/activate-account/"
+        f"{activation_token}"
+    )
+
+    # ==========================================
+    # Send Activation Email
+    # ==========================================
+
+    try:
+
+        message = Message(
+            subject="Activate Your OES Account",
+            recipients=[email],
+        )
+
+        message.body = f"""
+Hello {name},
+
+Your account has been created for the Online Examination System.
+
+Role: {role}
+
+Your account is currently pending activation.
+
+Please click the link below to activate your account and create your password:
+
+{activation_link}
+
+This activation link will expire in 24 hours.
+
+If you did not expect this account, please contact the system administrator.
+
+Regards,
+Online Examination System
+"""
+
+        message.html = f"""
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>
+        Activate Your OES Account
+    </title>
+
+</head>
+
+<body
+    style="
+        margin: 0;
+        padding: 0;
+        background-color: #f4f6f8;
+        font-family: Arial, sans-serif;
+    "
+>
+
+    <div
+        style="
+            max-width: 600px;
+            margin: 40px auto;
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 35px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        "
+    >
+
+        <h2
+            style="
+                color: #1f2937;
+                margin-bottom: 10px;
+            "
+        >
+            Welcome to the Online Examination System
+        </h2>
+
+        <p
+            style="
+                color: #4b5563;
+                font-size: 15px;
+                line-height: 1.6;
+            "
+        >
+            Hello <strong>{name}</strong>,
+        </p>
+
+        <p
+            style="
+                color: #4b5563;
+                font-size: 15px;
+                line-height: 1.6;
+            "
+        >
+            Your account has been created successfully.
+        </p>
+
+        <div
+            style="
+                background-color: #f3f4f6;
+                padding: 15px;
+                border-radius: 8px;
+                margin: 20px 0;
+            "
+        >
+
+            <p
+                style="
+                    margin: 5px 0;
+                    color: #374151;
+                "
+            >
+                <strong>Email:</strong>
+                {email}
+            </p>
+
+            <p
+                style="
+                    margin: 5px 0;
+                    color: #374151;
+                "
+            >
+                <strong>Role:</strong>
+                {role}
+            </p>
+
+            <p
+                style="
+                    margin: 5px 0;
+                    color: #374151;
+                "
+            >
+                <strong>Status:</strong>
+                Pending Activation
+            </p>
+
+        </div>
+
+        <p
+            style="
+                color: #4b5563;
+                font-size: 15px;
+                line-height: 1.6;
+            "
+        >
+            Click the button below to activate your account
+            and create your password.
+        </p>
+
+        <div
+            style="
+                text-align: center;
+                margin: 30px 0;
+            "
+        >
+
+            <a
+                href="{activation_link}"
+                style="
+                    display: inline-block;
+                    background-color: #2563eb;
+                    color: #ffffff;
+                    text-decoration: none;
+                    padding: 13px 25px;
+                    border-radius: 6px;
+                    font-size: 15px;
+                    font-weight: bold;
+                "
+            >
+                Activate My Account
+            </a>
+
+        </div>
+
+        <p
+            style="
+                color: #6b7280;
+                font-size: 13px;
+                line-height: 1.5;
+            "
+        >
+            This activation link will expire in
+            <strong>24 hours</strong>.
+        </p>
+
+        <p
+            style="
+                color: #6b7280;
+                font-size: 13px;
+                line-height: 1.5;
+            "
+        >
+            If you did not expect this account,
+            please contact the system administrator.
+        </p>
+
+        <hr
+            style="
+                border: none;
+                border-top: 1px solid #e5e7eb;
+                margin: 30px 0;
+            "
+        >
+
+        <p
+            style="
+                color: #9ca3af;
+                font-size: 12px;
+                text-align: center;
+            "
+        >
+            Online Examination System
+        </p>
+
+    </div>
+
+</body>
+
+</html>
+"""
+
+        mail = current_app.extensions["mail"]
+
+        mail.send(message)
+
+    except Exception as error:
+
+        current_app.logger.error(
+            "Activation email could not be sent: %s",
+            error
+        )
+
+        return (
+            jsonify(
+                {
+                    "message":
+                    "User created successfully, "
+                    "but the activation email could not be sent.",
+                    "user_id":
+                    new_user_id,
+                    "account_status":
+                    "Pending",
+                }
+            ),
+            201,
+        )
+
     return (
         jsonify(
             {
-                "message": "User created successfully",
-                "user_id": new_user_id,
+                "message":
+                "User created successfully. "
+                "Activation email sent.",
+                "user_id":
+                new_user_id,
+                "account_status":
+                "Pending",
             }
         ),
         201,
@@ -220,15 +563,32 @@ def admin_create_user():
 @auth_bp.route("/login", methods=["POST"])
 def login():
 
-    data = request.get_json()
+    data = request.get_json(
+        silent=True
+    )
+
+    if not data:
+
+        return jsonify(
+            {
+                "message":
+                "Invalid request."
+            }
+        ), 400
 
     email = data.get("email")
     password = data.get("password")
 
-    cur = mysql.connection.cursor()
+    if not email or not password:
 
-    cur.execute("SELECT DATABASE();")
-    print("Connected Database:", cur.fetchone())
+        return jsonify(
+            {
+                "message":
+                "Email and password are required."
+            }
+        ), 400
+
+    cur = mysql.connection.cursor()
 
     query = """
     SELECT
@@ -237,51 +597,368 @@ def login():
         email,
         password,
         role,
-        is_active
+        is_active,
+        account_status
     FROM users
     WHERE email = %s
     """
 
-    cur.execute(query, (email,))
+    cur.execute(
+        query,
+        (email,)
+    )
+
     user = cur.fetchone()
 
     cur.close()
 
     if not user:
-        return jsonify({"message": "Invalid email or password"}), 401
 
-    stored_password = user[3]
+        return jsonify(
+            {
+                "message":
+                "Invalid email or password"
+            }
+        ), 401
 
-    if not bcrypt.check_password_hash(stored_password, password):
-        return jsonify({"message": "Invalid email or password"}), 401
+    # ==========================================
+    # Account Activation Check
+    # ==========================================
 
-    if not user[5]:
+    if user[6] == "Pending":
+
         return (
             jsonify(
                 {
-                    "message": "Your account has been deactivated. Please contact the administrator."
+                    "message":
+                    "Your account has not been activated yet. "
+                    "Please check your email for the activation link."
                 }
             ),
             403,
         )
 
-    access_token = create_access_token(identity=str(user[0]))
+    # ==========================================
+    # Password Verification
+    # ==========================================
+
+    stored_password = user[3]
+
+    if not bcrypt.check_password_hash(
+        stored_password,
+        password
+    ):
+
+        return jsonify(
+            {
+                "message":
+                "Invalid email or password"
+            }
+        ), 401
+
+    # ==========================================
+    # Administrative Account Status
+    # ==========================================
+
+    if not user[5]:
+
+        return (
+            jsonify(
+                {
+                    "message":
+                    "Your account has been deactivated. "
+                    "Please contact the administrator."
+                }
+            ),
+            403,
+        )
+
+    # ==========================================
+    # Create JWT
+    # ==========================================
+
+    access_token = create_access_token(
+        identity=str(user[0])
+    )
 
     return (
         jsonify(
             {
-                "message": "Login successful",
-                "token": access_token,
-                "user": {
-                    "user_id": user[0],
-                    "name": user[1],
-                    "email": user[2],
-                    "role": user[4],
+                "message":
+                "Login successful",
+
+                "token":
+                access_token,
+
+                "user":
+                {
+                    "user_id":
+                    user[0],
+
+                    "name":
+                    user[1],
+
+                    "email":
+                    user[2],
+
+                    "role":
+                    user[4],
+
+                    "account_status":
+                    user[6],
                 },
             }
         ),
         200,
     )
+
+
+@auth_bp.route(
+    "/activate-account/<string:activation_token>",
+    methods=["GET"]
+)
+def verify_activation_token(activation_token):
+
+    if not activation_token:
+
+        return jsonify(
+            {
+                "message":
+                "Invalid activation link."
+            }
+        ), 400
+
+    cur = mysql.connection.cursor()
+
+    query = """
+    SELECT
+        user_id,
+        name,
+        email,
+        role,
+        account_status,
+        activation_token_expires_at,
+        CASE
+            WHEN activation_token_expires_at IS NOT NULL
+                 AND activation_token_expires_at > UTC_TIMESTAMP()
+            THEN 1
+            ELSE 0
+        END AS token_valid
+    FROM users
+    WHERE activation_token = %s
+    """
+
+    cur.execute(
+        query,
+        (activation_token,)
+    )
+
+    user = cur.fetchone()
+
+    cur.close()
+
+    # ==========================================
+    # Token Not Found
+    # ==========================================
+
+    if not user:
+
+        return jsonify(
+            {
+                "message":
+                "Invalid or expired activation link."
+            }
+        ), 400
+
+    # ==========================================
+    # Check Account Status
+    # ==========================================
+
+    if user[4] == "Active":
+
+        return jsonify(
+            {
+                "message":
+                "This account has already been activated."
+            }
+        ), 400
+
+    # ==========================================
+    # Check Token Expiry
+    # ==========================================
+
+    if not user[5] or not user[6]:
+
+        return jsonify(
+            {
+                "message":
+                "This activation link has expired. "
+                "Please contact the administrator "
+                "for a new activation link."
+            }
+        ), 400
+
+    # ==========================================
+    # Valid Activation Token
+    # ==========================================
+
+    return jsonify(
+        {
+            "message":
+            "Activation link is valid.",
+
+            "user_id":
+            user[0],
+
+            "name":
+            user[1],
+
+            "email":
+            user[2],
+
+            "role":
+            user[3],
+
+            "account_status":
+            user[4],
+        }
+    ), 200
+
+
+@auth_bp.route(
+    "/activate-account/<string:activation_token>",
+    methods=["POST"]
+)
+def activate_account(activation_token):
+
+    data = request.get_json(
+        silent=True
+    )
+
+    if not data:
+
+        return jsonify(
+            {
+                "message":
+                "Invalid request."
+            }
+        ), 400
+
+    new_password = data.get("password")
+
+    if not new_password:
+
+        return jsonify(
+            {
+                "message":
+                "Password is required."
+            }
+        ), 400
+
+    if len(new_password) < 8:
+
+        return jsonify(
+            {
+                "message":
+                "Password must be at least 8 characters long."
+            }
+        ), 400
+
+    cur = mysql.connection.cursor()
+
+    # ==========================================
+    # Find Valid Pending User
+    # ==========================================
+
+    query = """
+    SELECT
+        user_id,
+        account_status
+    FROM users
+    WHERE activation_token = %s
+      AND activation_token_expires_at > UTC_TIMESTAMP()
+    """
+
+    cur.execute(
+        query,
+        (activation_token,)
+    )
+
+    user = cur.fetchone()
+
+    if not user:
+
+        cur.close()
+
+        return jsonify(
+            {
+                "message":
+                "Invalid or expired activation link."
+            }
+        ), 400
+
+    user_id = user[0]
+    account_status = user[1]
+
+    # ==========================================
+    # Check Account Status
+    # ==========================================
+
+    if account_status == "Active":
+
+        cur.close()
+
+        return jsonify(
+            {
+                "message":
+                "This account has already been activated."
+            }
+        ), 400
+
+    # ==========================================
+    # Hash New Password
+    # ==========================================
+
+    hashed_password = (
+        bcrypt.generate_password_hash(
+            new_password
+        ).decode("utf-8")
+    )
+
+    # ==========================================
+    # Activate Account
+    # ==========================================
+
+    update_query = """
+    UPDATE users
+    SET
+        password = %s,
+        account_status = 'Active',
+        is_active = 1,
+        activation_token = NULL,
+        activation_token_expires_at = NULL
+    WHERE user_id = %s
+    """
+
+    cur.execute(
+        update_query,
+        (
+            hashed_password,
+            user_id
+        )
+    )
+
+    mysql.connection.commit()
+
+    cur.close()
+
+    return jsonify(
+        {
+            "message":
+            "Account activated successfully. "
+            "You can now login."
+        }
+    ), 200
 
 
 @auth_bp.route("/profile", methods=["GET"])
@@ -293,26 +970,51 @@ def profile():
     cur = mysql.connection.cursor()
 
     query = """
-    SELECT user_id, name, email, role
+    SELECT
+        user_id,
+        name,
+        email,
+        role,
+        account_status
     FROM users
     WHERE user_id = %s
     """
 
-    cur.execute(query, (current_user_id,))
+    cur.execute(
+        query,
+        (current_user_id,)
+    )
+
     user = cur.fetchone()
 
     cur.close()
 
     if not user:
-        return jsonify({"message": "User not found"}), 404
+
+        return jsonify(
+            {
+                "message":
+                "User not found"
+            }
+        ), 404
 
     return (
         jsonify(
             {
-                "user_id": user[0],
-                "name": user[1],
-                "email": user[2],
-                "role": user[3],
+                "user_id":
+                user[0],
+
+                "name":
+                user[1],
+
+                "email":
+                user[2],
+
+                "role":
+                user[3],
+
+                "account_status":
+                user[4],
             }
         ),
         200,
@@ -333,20 +1035,41 @@ def admin_only():
     WHERE user_id = %s
     """
 
-    cur.execute(query, (current_user_id,))
+    cur.execute(
+        query,
+        (current_user_id,)
+    )
+
     user = cur.fetchone()
 
     cur.close()
 
     if not user:
-        return jsonify({"message": "User not found"}), 404
+
+        return jsonify(
+            {
+                "message":
+                "User not found"
+            }
+        ), 404
 
     role = user[0]
 
     if role != "Admin":
-        return jsonify({"message": "Access denied. Admin only."}), 403
 
-    return jsonify({"message": "Welcome Admin!"}), 200
+        return jsonify(
+            {
+                "message":
+                "Access denied. Admin only."
+            }
+        ), 403
+
+    return jsonify(
+        {
+            "message":
+            "Welcome Admin!"
+        }
+    ), 200
 
 
 @auth_bp.route("/examiner-only", methods=["GET"])
@@ -363,23 +1086,48 @@ def examiner_only():
     WHERE user_id = %s
     """
 
-    cur.execute(query, (current_user_id,))
+    cur.execute(
+        query,
+        (current_user_id,)
+    )
+
     user = cur.fetchone()
 
     cur.close()
 
     if not user:
-        return jsonify({"message": "User not found"}), 404
+
+        return jsonify(
+            {
+                "message":
+                "User not found"
+            }
+        ), 404
 
     role = user[0]
 
-    if role not in ["Admin", "Examiner"]:
+    if role not in [
+        "Admin",
+        "Examiner"
+    ]:
+
         return (
-            jsonify({"message": "Access denied. Examiner or Admin only."}),
+            jsonify(
+                {
+                    "message":
+                    "Access denied. "
+                    "Examiner or Admin only."
+                }
+            ),
             403,
         )
 
-    return jsonify({"message": "Welcome Examiner!"}), 200
+    return jsonify(
+        {
+            "message":
+            "Welcome Examiner!"
+        }
+    ), 200
 
 
 @auth_bp.route("/users", methods=["GET"])
@@ -396,7 +1144,10 @@ def get_users():
     WHERE user_id = %s
     """
 
-    cur.execute(role_query, (current_user_id,))
+    cur.execute(
+        role_query,
+        (current_user_id,)
+    )
 
     user = cur.fetchone()
 
@@ -404,29 +1155,40 @@ def get_users():
 
         cur.close()
 
-        return jsonify({"message": "User not found"}), 404
+        return jsonify(
+            {
+                "message":
+                "User not found"
+            }
+        ), 404
 
     if user[0] != "Admin":
 
         cur.close()
 
-        return jsonify({"message": "Access denied"}), 403
+        return jsonify(
+            {
+                "message":
+                "Access denied"
+            }
+        ), 403
 
     query = """
     SELECT
-    u.user_id,
-    u.name,
-    u.email,
-    u.role,
-    u.batch_id,
-    b.batch_name,
-    u.is_active
-FROM users u
-LEFT JOIN batches b
-    ON u.batch_id = b.batch_id
-ORDER BY
-    u.role,
-    u.name
+        u.user_id,
+        u.name,
+        u.email,
+        u.role,
+        u.batch_id,
+        b.batch_name,
+        u.is_active,
+        u.account_status
+    FROM users u
+    LEFT JOIN batches b
+        ON u.batch_id = b.batch_id
+    ORDER BY
+        u.role,
+        u.name
     """
 
     cur.execute(query)
@@ -441,20 +1203,41 @@ ORDER BY
 
         user_list.append(
             {
-                "user_id": user[0],
-                "name": user[1],
-                "email": user[2],
-                "role": user[3],
-                "batch_id": user[4],
-                "batch_name": user[5],
-                "is_active": bool(user[6]),
+                "user_id":
+                user[0],
+
+                "name":
+                user[1],
+
+                "email":
+                user[2],
+
+                "role":
+                user[3],
+
+                "batch_id":
+                user[4],
+
+                "batch_name":
+                user[5],
+
+                "is_active":
+                bool(user[6]),
+
+                "account_status":
+                user[7],
             }
         )
 
-    return jsonify(user_list), 200
+    return jsonify(
+        user_list
+    ), 200
 
 
-@auth_bp.route("/toggle-user-status/<int:user_id>", methods=["PUT"])
+@auth_bp.route(
+    "/toggle-user-status/<int:user_id>",
+    methods=["PUT"]
+)
 @jwt_required()
 def toggle_user_status(user_id):
 
@@ -462,46 +1245,76 @@ def toggle_user_status(user_id):
 
     cur = mysql.connection.cursor()
 
-    # Check current user is Admin
+    # ==========================================
+    # Check Current User is Admin
+    # ==========================================
+
     cur.execute(
         """
         SELECT role
         FROM users
         WHERE user_id = %s
         """,
-        (current_user_id,),
+        (current_user_id,)
     )
 
     admin = cur.fetchone()
 
     if not admin or admin[0] != "Admin":
-        cur.close()
-        return jsonify({"message": "Access denied"}), 403
 
-    # Get target user
+        cur.close()
+
+        return jsonify(
+            {
+                "message":
+                "Access denied"
+            }
+        ), 403
+
+    # ==========================================
+    # Get Target User
+    # ==========================================
+
     cur.execute(
         """
         SELECT role, is_active
         FROM users
         WHERE user_id = %s
         """,
-        (user_id,),
+        (user_id,)
     )
 
     user = cur.fetchone()
 
     if not user:
-        cur.close()
-        return jsonify({"message": "User not found"}), 404
 
-    # Protect Admin accounts
-    if user[0] == "Admin":
         cur.close()
+
         return jsonify(
-            {"message": "Admin account status cannot be changed"}
+            {
+                "message":
+                "User not found"
+            }
+        ), 404
+
+    # ==========================================
+    # Protect Admin Accounts
+    # ==========================================
+
+    if user[0] == "Admin":
+
+        cur.close()
+
+        return jsonify(
+            {
+                "message":
+                "Admin account status cannot be changed"
+            }
         ), 403
 
-    new_status = not bool(user[1])
+    new_status = not bool(
+        user[1]
+    )
 
     cur.execute(
         """
@@ -509,7 +1322,10 @@ def toggle_user_status(user_id):
         SET is_active = %s
         WHERE user_id = %s
         """,
-        (new_status, user_id),
+        (
+            new_status,
+            user_id
+        )
     )
 
     mysql.connection.commit()
@@ -518,17 +1334,24 @@ def toggle_user_status(user_id):
 
     return jsonify(
         {
-            "message": (
+            "message":
+            (
                 "User activated successfully"
                 if new_status
-                else "User deactivated successfully"
+                else
+                "User deactivated successfully"
             ),
-            "is_active": new_status,
+
+            "is_active":
+            new_status,
         }
     ), 200
 
 
-@auth_bp.route("/delete-user/<int:user_id>", methods=["DELETE"])
+@auth_bp.route(
+    "/delete-user/<int:user_id>",
+    methods=["DELETE"]
+)
 @jwt_required()
 def delete_user(user_id):
 
@@ -536,13 +1359,20 @@ def delete_user(user_id):
 
     cur = mysql.connection.cursor()
 
+    # ==========================================
+    # Verify Admin
+    # ==========================================
+
     role_query = """
     SELECT role
     FROM users
     WHERE user_id = %s
     """
 
-    cur.execute(role_query, (current_user_id,))
+    cur.execute(
+        role_query,
+        (current_user_id,)
+    )
 
     admin = cur.fetchone()
 
@@ -550,13 +1380,27 @@ def delete_user(user_id):
 
         cur.close()
 
-        return jsonify({"message": "User not found"}), 404
+        return jsonify(
+            {
+                "message":
+                "User not found"
+            }
+        ), 404
 
     if admin[0] != "Admin":
 
         cur.close()
 
-        return jsonify({"message": "Access denied"}), 403
+        return jsonify(
+            {
+                "message":
+                "Access denied"
+            }
+        ), 403
+
+    # ==========================================
+    # Get Target User
+    # ==========================================
 
     user_query = """
     SELECT role
@@ -564,7 +1408,10 @@ def delete_user(user_id):
     WHERE user_id = %s
     """
 
-    cur.execute(user_query, (user_id,))
+    cur.execute(
+        user_query,
+        (user_id,)
+    )
 
     user = cur.fetchone()
 
@@ -572,13 +1419,31 @@ def delete_user(user_id):
 
         cur.close()
 
-        return jsonify({"message": "User not found"}), 404
+        return jsonify(
+            {
+                "message":
+                "User not found"
+            }
+        ), 404
+
+    # ==========================================
+    # Protect Admin Accounts
+    # ==========================================
 
     if user[0] == "Admin":
 
         cur.close()
 
-        return jsonify({"message": "Admin accounts cannot be deleted"}), 403
+        return jsonify(
+            {
+                "message":
+                "Admin accounts cannot be deleted"
+            }
+        ), 403
+
+    # ==========================================
+    # Delete Candidate Answers
+    # ==========================================
 
     submission_query = """
     SELECT submission_id
@@ -586,7 +1451,10 @@ def delete_user(user_id):
     WHERE user_id = %s
     """
 
-    cur.execute(submission_query, (user_id,))
+    cur.execute(
+        submission_query,
+        (user_id,)
+    )
 
     submissions = cur.fetchall()
 
@@ -597,24 +1465,46 @@ def delete_user(user_id):
         WHERE submission_id = %s
         """
 
-        cur.execute(delete_answers_query, (submission[0],))
+        cur.execute(
+            delete_answers_query,
+            (submission[0],)
+        )
+
+    # ==========================================
+    # Delete Submissions
+    # ==========================================
 
     delete_submissions_query = """
     DELETE FROM submissions
     WHERE user_id = %s
     """
 
-    cur.execute(delete_submissions_query, (user_id,))
+    cur.execute(
+        delete_submissions_query,
+        (user_id,)
+    )
+
+    # ==========================================
+    # Delete User
+    # ==========================================
 
     delete_user_query = """
     DELETE FROM users
     WHERE user_id = %s
     """
 
-    cur.execute(delete_user_query, (user_id,))
+    cur.execute(
+        delete_user_query,
+        (user_id,)
+    )
 
     mysql.connection.commit()
 
     cur.close()
 
-    return jsonify({"message": "User deleted successfully"}), 200
+    return jsonify(
+        {
+            "message":
+            "User deleted successfully"
+        }
+    ), 200

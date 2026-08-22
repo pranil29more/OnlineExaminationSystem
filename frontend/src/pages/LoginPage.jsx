@@ -188,7 +188,7 @@ function LoginPage() {
                     </div>
 
 
-                    <div className="lpg-register-section">
+                    {/* <div className="lpg-register-section">
 
                         <p className="lpg-register-text">
                             Don't have an account?
@@ -208,7 +208,7 @@ function LoginPage() {
                                 : "Create New Account"}
                         </button>
 
-                    </div>
+                    </div> */}
 
                 </section>
 

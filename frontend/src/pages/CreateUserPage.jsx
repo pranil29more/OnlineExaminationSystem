@@ -8,21 +8,20 @@ import "../styles/CreateUserPage.css";
 
 function CreateUserPage() {
 
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
-    const [role, setRole] = useState("Candidate");
+    const [name, setName] =
+        useState("");
+
+    const [email, setEmail] =
+        useState("");
+
+    const [role, setRole] =
+        useState("Candidate");
 
     const [userCreating, setUserCreating] =
         useState(false);
 
     const navigate = useNavigate();
 
-
-    // =========================================================
-    // Create User
-    // =========================================================
 
     const handleCreateUser = async (e) => {
 
@@ -32,24 +31,10 @@ function CreateUserPage() {
             return;
         }
 
-        if (
-            !name ||
-            !email ||
-            !password ||
-            !confirmPassword
-        ) {
+        if (!name || !email) {
 
             alert(
-                "Please fill all fields."
-            );
-
-            return;
-        }
-
-        if (password !== confirmPassword) {
-
-            alert(
-                "Passwords do not match."
+                "Please fill all required fields."
             );
 
             return;
@@ -78,7 +63,6 @@ function CreateUserPage() {
                     body: JSON.stringify({
                         name,
                         email,
-                        password,
                         role,
                     }),
                 }
@@ -87,22 +71,22 @@ function CreateUserPage() {
             const data =
                 await response.json();
 
-            if (response.ok) {
-
-                alert(
-                    "User created successfully."
-                );
-
-                navigate("/users");
-
-            } else {
+            if (!response.ok) {
 
                 alert(
                     data.message ||
                     "Unable to create user."
                 );
 
+                return;
             }
+
+            alert(
+                data.message ||
+                "User created successfully. Account activation is pending."
+            );
+
+            navigate("/users");
 
         } catch (error) {
 
@@ -117,6 +101,7 @@ function CreateUserPage() {
             setUserCreating(false);
 
         }
+
     };
 
 
@@ -140,8 +125,8 @@ function CreateUserPage() {
 
                     <p className="cup-description">
                         Create a new user account and
-                        configure the user's credentials
-                        and system role.
+                        configure the user's basic
+                        information and system role.
                     </p>
 
                 </header>
@@ -166,16 +151,14 @@ function CreateUserPage() {
 
                             <p className="cup-section-description">
                                 Enter the user's basic
-                                information, login credentials,
-                                and access role.
+                                information and access role.
+                                The user will create their
+                                password during account
+                                activation.
                             </p>
 
                         </div>
 
-
-                        {/* =================================================
-                            Full Name
-                        ================================================= */}
 
                         <div className="cup-field">
 
@@ -197,15 +180,14 @@ function CreateUserPage() {
                                         e.target.value
                                     )
                                 }
+                                disabled={
+                                    userCreating
+                                }
                                 required
                             />
 
                         </div>
 
-
-                        {/* =================================================
-                            Email
-                        ================================================= */}
 
                         <div className="cup-field">
 
@@ -227,75 +209,14 @@ function CreateUserPage() {
                                         e.target.value
                                     )
                                 }
-                                required
-                            />
-
-                        </div>
-
-
-                        {/* =================================================
-                            Password
-                        ================================================= */}
-
-                        <div className="cup-field">
-
-                            <label
-                                className="cup-field-label"
-                                htmlFor="user-password"
-                            >
-                                Password
-                            </label>
-
-                            <input
-                                id="user-password"
-                                className="cup-form-input"
-                                type="password"
-                                placeholder="Enter password"
-                                value={password}
-                                onChange={(e) =>
-                                    setPassword(
-                                        e.target.value
-                                    )
+                                disabled={
+                                    userCreating
                                 }
                                 required
                             />
 
                         </div>
 
-
-                        {/* =================================================
-                            Confirm Password
-                        ================================================= */}
-
-                        <div className="cup-field">
-
-                            <label
-                                className="cup-field-label"
-                                htmlFor="confirm-password"
-                            >
-                                Confirm Password
-                            </label>
-
-                            <input
-                                id="confirm-password"
-                                className="cup-form-input"
-                                type="password"
-                                placeholder="Re-enter password"
-                                value={confirmPassword}
-                                onChange={(e) =>
-                                    setConfirmPassword(
-                                        e.target.value
-                                    )
-                                }
-                                required
-                            />
-
-                        </div>
-
-
-                        {/* =================================================
-                            User Role
-                        ================================================= */}
 
                         <div className="cup-field">
 
@@ -315,6 +236,9 @@ function CreateUserPage() {
                                         e.target.value
                                     )
                                 }
+                                disabled={
+                                    userCreating
+                                }
                             >
 
                                 <option value="Candidate">
@@ -330,14 +254,24 @@ function CreateUserPage() {
                         </div>
 
 
-                        {/* =================================================
-                            Create User Button
-                        ================================================= */}
+                        <div className="cup-field">
+
+                            <p className="cup-section-description">
+                                The account will be created
+                                with a Pending status. The
+                                user will set their password
+                                through the activation link.
+                            </p>
+
+                        </div>
+
 
                         <button
                             type="submit"
                             className="cup-create-btn"
-                            disabled={userCreating}
+                            disabled={
+                                userCreating
+                            }
                         >
                             {userCreating
                                 ? "Creating User..."
