@@ -223,8 +223,7 @@ function UsersPage() {
             }
 
             alert(
-                data.message ||
-                "Account activation cancelled successfully."
+                "Activation cancelled successfully."
             );
 
             await fetchUsers();

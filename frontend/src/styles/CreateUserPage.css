@@ -313,18 +313,37 @@
    Select
 ========================================================= */
 
-.cup-form-input[type="select"] {
-    cursor:
-        pointer;
-}
-
-
 .cup-page select.cup-form-input {
+    min-height:
+        44px;
+
+    line-height:
+        1.4;
+
     color-scheme:
         dark;
 
     cursor:
         pointer;
+}
+
+
+.cup-page select.cup-form-input:hover {
+    border-color:
+        #64748b;
+}
+
+
+.cup-page select.cup-form-input:focus {
+    border-color:
+        #3b82f6;
+
+    background:
+        #101a2c;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(59, 130, 246, 0.12);
 }
 
 
