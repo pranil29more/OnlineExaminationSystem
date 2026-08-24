@@ -4,118 +4,37 @@ from flask_jwt_extended import (
     jwt_required,
     get_jwt_identity,
 )
-from flask_mail import Message
 
 from extensions import mysql, bcrypt
 from config import Config
 
+from brevo import Brevo
+from brevo.transactional_emails import (
+    SendTransacEmailRequestSender,
+    SendTransacEmailRequestToItem,
+)
+
+import os
 import secrets
 
 
 auth_bp = Blueprint("auth", __name__)
 
 
-# @auth_bp.route("/register", methods=["POST"])
-# def register():
+@auth_bp.route("/register", methods=["POST"])
+def register():
 
-# data = request.get_json()
-
-# name = data.get("name")
-# email = data.get("email")
-# password = data.get("password")
-# role = "Candidate"
-
-# # Optional
-# batch_id = data.get("batch_id")
-
-# hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
-
-# cur = mysql.connection.cursor()
-
-# check_query = """
-# SELECT user_id
-# FROM users
-# WHERE email = %s
-# """
-
-# cur.execute(check_query, (email,))
-
-# existing_user = cur.fetchone()
-
-# if existing_user:
-
-# cur.close()
-
-# return jsonify({"message": "Email already registered"}), 409
-
-# # ==========================================
-# # Validate Batch (only if batch_id provided)
-# # ==========================================
-
-# if batch_id is not None:
-
-# batch_query = """
-# SELECT batch_id
-# FROM batches
-# WHERE batch_id = %s
-# """
-
-# cur.execute(batch_query, (batch_id,))
-
-# batch = cur.fetchone()
-
-# if not batch:
-
-# cur.close()
-
-# return jsonify({"message": "Invalid Batch"}), 400
-
-# # ==========================================
-# # Insert User
-# # ==========================================
-
-# query = """
-# INSERT INTO users
-# (
-# name,
-# email,
-# password,
-# role,
-# batch_id
-# )
-# VALUES
-# (
-# %s,
-# %s,
-# %s,
-# %s,
-# %s
-# )
-# """
-
-# cur.execute(query, (name, email, hashed_password, role, batch_id))
-
-# mysql.connection.commit()
-
-# cur.close()
-
-# return jsonify({"message": "User registered successfully"}), 201
-
-
-# @auth_bp.route("/register", methods=["POST"])
-# def register():
-
-#     return (
-#         jsonify(
-#             {
-#                 "message":
-#                 "Self-registration is disabled. "
-#                 "Please contact the administrator "
-#                 "for account activation."
-#             }
-#         ),
-#         403,
-#     )
+    return (
+        jsonify(
+            {
+                "message":
+                "Self-registration is disabled. "
+                "Please contact the administrator "
+                "for account activation."
+            }
+        ),
+        403,
+    )
 
 
 @auth_bp.route("/admin/create-user", methods=["POST"])
@@ -166,10 +85,6 @@ def admin_create_user():
 
     cur = mysql.connection.cursor()
 
-    # ==========================================
-    # Verify Admin
-    # ==========================================
-
     admin_query = """
     SELECT role
     FROM users
@@ -193,10 +108,6 @@ def admin_create_user():
                 "Access denied. Admin only."
             }
         ), 403
-
-    # ==========================================
-    # Check Duplicate Email
-    # ==========================================
 
     check_query = """
     SELECT user_id
@@ -222,15 +133,7 @@ def admin_create_user():
             }
         ), 409
 
-    # ==========================================
-    # Generate Activation Token
-    # ==========================================
-
     activation_token = secrets.token_urlsafe(32)
-
-    # ==========================================
-    # Temporary Unusable Password
-    # ==========================================
 
     temporary_password = secrets.token_urlsafe(32)
 
@@ -239,10 +142,6 @@ def admin_create_user():
             temporary_password
         ).decode("utf-8")
     )
-
-    # ==========================================
-    # Create Pending User
-    # ==========================================
 
     insert_query = """
     INSERT INTO users
@@ -288,49 +187,13 @@ def admin_create_user():
 
     cur.close()
 
-    # ==========================================
-    # Create Activation Link
-    # ==========================================
-
     activation_link = (
         f"{Config.FRONTEND_URL}"
         f"/activate-account/"
         f"{activation_token}"
     )
 
-    # ==========================================
-    # Send Activation Email
-    # ==========================================
-
-    try:
-
-        message = Message(
-            subject="Activate Your OES Account",
-            recipients=[email],
-        )
-
-        message.body = f"""
-Hello {name},
-
-Your account has been created for the Online Examination System.
-
-Role: {role}
-
-Your account is currently pending activation.
-
-Please click the link below to activate your account and create your password:
-
-{activation_link}
-
-This activation link will expire in 24 hours.
-
-If you did not expect this account, please contact the system administrator.
-
-Regards,
-Online Examination System
-"""
-
-        message.html = f"""
+    message_html = f"""
 <!DOCTYPE html>
 
 <html>
@@ -518,9 +381,71 @@ Online Examination System
 </html>
 """
 
-        mail = current_app.extensions["mail"]
+    message_text = f"""
+Hello {name},
 
-        mail.send(message)
+Your account has been created for the Online Examination System.
+
+Role: {role}
+
+Your account is currently pending activation.
+
+Please click the link below to activate your account
+and create your password:
+
+{activation_link}
+
+This activation link will expire in 24 hours.
+
+If you did not expect this account, please contact the system administrator.
+
+Regards,
+Online Examination System
+"""
+
+    try:
+
+        api_key = os.getenv("BREVO_API_KEY")
+
+        if not api_key:
+
+            raise Exception(
+                "BREVO_API_KEY is missing from environment variables."
+            )
+
+        sender_email = os.getenv(
+            "BREVO_SENDER_EMAIL",
+            "oes.activation@gmail.com"
+        )
+
+        client = Brevo(
+            api_key=api_key
+        )
+
+        response = client.transactional_emails.send_transac_email(
+            subject="Activate Your OES Account",
+
+            html_content=message_html,
+
+            text_content=message_text,
+
+            sender=SendTransacEmailRequestSender(
+                name="Online Examination System",
+                email=sender_email,
+            ),
+
+            to=[
+                SendTransacEmailRequestToItem(
+                    email=email,
+                    name=name,
+                )
+            ],
+        )
+
+        current_app.logger.info(
+            "Activation email sent successfully. Message ID: %s",
+            getattr(response, "message_id", None)
+        )
 
     except Exception as error:
 
@@ -535,8 +460,10 @@ Online Examination System
                     "message":
                     "User created successfully, "
                     "but the activation email could not be sent.",
+
                     "user_id":
                     new_user_id,
+
                     "account_status":
                     "Pending",
                 }
@@ -550,8 +477,10 @@ Online Examination System
                 "message":
                 "User created successfully. "
                 "Activation email sent.",
+
                 "user_id":
                 new_user_id,
+
                 "account_status":
                 "Pending",
             }
@@ -621,10 +550,6 @@ def login():
             }
         ), 401
 
-    # ==========================================
-    # Account Activation Check
-    # ==========================================
-
     if user[6] == "Pending":
 
         return (
@@ -637,10 +562,6 @@ def login():
             ),
             403,
         )
-
-    # ==========================================
-    # Password Verification
-    # ==========================================
 
     stored_password = user[3]
 
@@ -656,10 +577,6 @@ def login():
             }
         ), 401
 
-    # ==========================================
-    # Administrative Account Status
-    # ==========================================
-
     if not user[5]:
 
         return (
@@ -672,10 +589,6 @@ def login():
             ),
             403,
         )
-
-    # ==========================================
-    # Create JWT
-    # ==========================================
 
     access_token = create_access_token(
         identity=str(user[0])
@@ -757,10 +670,6 @@ def verify_activation_token(activation_token):
 
     cur.close()
 
-    # ==========================================
-    # Token Not Found
-    # ==========================================
-
     if not user:
 
         return jsonify(
@@ -770,10 +679,6 @@ def verify_activation_token(activation_token):
             }
         ), 400
 
-    # ==========================================
-    # Check Account Status
-    # ==========================================
-
     if user[4] == "Active":
 
         return jsonify(
@@ -782,10 +687,6 @@ def verify_activation_token(activation_token):
                 "This account has already been activated."
             }
         ), 400
-
-    # ==========================================
-    # Check Token Expiry
-    # ==========================================
 
     if not user[5] or not user[6]:
 
@@ -797,10 +698,6 @@ def verify_activation_token(activation_token):
                 "for a new activation link."
             }
         ), 400
-
-    # ==========================================
-    # Valid Activation Token
-    # ==========================================
 
     return jsonify(
         {
@@ -866,10 +763,6 @@ def activate_account(activation_token):
 
     cur = mysql.connection.cursor()
 
-    # ==========================================
-    # Find Valid Pending User
-    # ==========================================
-
     query = """
     SELECT
         user_id,
@@ -900,10 +793,6 @@ def activate_account(activation_token):
     user_id = user[0]
     account_status = user[1]
 
-    # ==========================================
-    # Check Account Status
-    # ==========================================
-
     if account_status == "Active":
 
         cur.close()
@@ -915,19 +804,11 @@ def activate_account(activation_token):
             }
         ), 400
 
-    # ==========================================
-    # Hash New Password
-    # ==========================================
-
     hashed_password = (
         bcrypt.generate_password_hash(
             new_password
         ).decode("utf-8")
     )
-
-    # ==========================================
-    # Activate Account
-    # ==========================================
 
     update_query = """
     UPDATE users
@@ -1245,10 +1126,6 @@ def toggle_user_status(user_id):
 
     cur = mysql.connection.cursor()
 
-    # ==========================================
-    # Check Current User is Admin
-    # ==========================================
-
     cur.execute(
         """
         SELECT role
@@ -1271,10 +1148,6 @@ def toggle_user_status(user_id):
             }
         ), 403
 
-    # ==========================================
-    # Get Target User
-    # ==========================================
-
     cur.execute(
         """
         SELECT role, is_active
@@ -1296,10 +1169,6 @@ def toggle_user_status(user_id):
                 "User not found"
             }
         ), 404
-
-    # ==========================================
-    # Protect Admin Accounts
-    # ==========================================
 
     if user[0] == "Admin":
 
@@ -1359,10 +1228,6 @@ def delete_user(user_id):
 
     cur = mysql.connection.cursor()
 
-    # ==========================================
-    # Verify Admin
-    # ==========================================
-
     role_query = """
     SELECT role
     FROM users
@@ -1398,10 +1263,6 @@ def delete_user(user_id):
             }
         ), 403
 
-    # ==========================================
-    # Get Target User
-    # ==========================================
-
     user_query = """
     SELECT role
     FROM users
@@ -1426,10 +1287,6 @@ def delete_user(user_id):
             }
         ), 404
 
-    # ==========================================
-    # Protect Admin Accounts
-    # ==========================================
-
     if user[0] == "Admin":
 
         cur.close()
@@ -1440,10 +1297,6 @@ def delete_user(user_id):
                 "Admin accounts cannot be deleted"
             }
         ), 403
-
-    # ==========================================
-    # Delete Candidate Answers
-    # ==========================================
 
     submission_query = """
     SELECT submission_id
@@ -1470,10 +1323,6 @@ def delete_user(user_id):
             (submission[0],)
         )
 
-    # ==========================================
-    # Delete Submissions
-    # ==========================================
-
     delete_submissions_query = """
     DELETE FROM submissions
     WHERE user_id = %s
@@ -1483,10 +1332,6 @@ def delete_user(user_id):
         delete_submissions_query,
         (user_id,)
     )
-
-    # ==========================================
-    # Delete User
-    # ==========================================
 
     delete_user_query = """
     DELETE FROM users

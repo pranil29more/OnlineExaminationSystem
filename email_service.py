@@ -1,40 +1,40 @@
-from flask_mail import Mail, Message
+# from flask_mail import Mail, Message
 
-from config import Config
-
-
-mail = Mail()
+# from config import Config
 
 
-def send_activation_email(
-    recipient_email,
-    recipient_name,
-    activation_link
-):
+# mail = Mail()
 
-    message = Message(
-        subject="Activate Your OES Account",
-        recipients=[
-            recipient_email
-        ],
-        sender=Config.MAIL_USERNAME,
-    )
 
-    message.body = f"""
-Hello {recipient_name},
+# def send_activation_email(
+#     recipient_email,
+#     recipient_name,
+#     activation_link
+# ):
 
-Your account has been created in the Online Examination System.
+#     message = Message(
+#         subject="Activate Your OES Account",
+#         recipients=[
+#             recipient_email
+#         ],
+#         sender=Config.MAIL_USERNAME,
+#     )
 
-Please activate your account using the link below:
+#     message.body = f"""
+# Hello {recipient_name},
 
-{activation_link}
+# Your account has been created in the Online Examination System.
 
-This activation link will expire in 24 hours.
+# Please activate your account using the link below:
 
-If you did not expect this email, please contact the administrator.
+# {activation_link}
 
-Regards,
-Online Examination System
-"""
+# This activation link will expire in 24 hours.
 
-    mail.send(message)
+# If you did not expect this email, please contact the administrator.
+
+# Regards,
+# Online Examination System
+# """
+
+#     mail.send(message)
