@@ -1,9 +1,10 @@
 import pandas as pd
 
 from flask import Blueprint, request, jsonify
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_jwt_extended import jwt_required
 
 from extensions import mysql
+from utils.decorators import role_required
 
 
 bulk_question_bp = Blueprint(
@@ -17,61 +18,12 @@ bulk_question_bp = Blueprint(
     methods=["POST"],
 )
 @jwt_required()
+@role_required("Admin", "Examiner")
 def bulk_upload_questions():
-
-    current_user_id = get_jwt_identity()
 
     cur = mysql.connection.cursor()
 
     try:
-
-        # ==========================================
-        # Verify Admin / Examiner
-        # ==========================================
-
-        role_query = """
-        SELECT role
-        FROM users
-        WHERE user_id = %s
-        """
-
-        cur.execute(
-            role_query,
-            (current_user_id,),
-        )
-
-        user = cur.fetchone()
-
-        if not user:
-
-            cur.close()
-
-            return (
-                jsonify(
-                    {
-                        "message":
-                        "User not found."
-                    }
-                ),
-                404,
-            )
-
-        if user[0] not in [
-            "Admin",
-            "Examiner",
-        ]:
-
-            cur.close()
-
-            return (
-                jsonify(
-                    {
-                        "message":
-                        "Access denied. Admin or Examiner only."
-                    }
-                ),
-                403,
-            )
 
         # ==========================================
         # Read Form Data
@@ -242,6 +194,7 @@ def bulk_upload_questions():
                     {
                         "message":
                         "Unable to read the Excel file.",
+
                         "error":
                         str(error),
                     }
@@ -250,7 +203,7 @@ def bulk_upload_questions():
             )
 
         # ==========================================
-        # Mentor's Required Excel Format
+        # Required Excel Format
         # ==========================================
 
         required_columns = [
@@ -279,6 +232,7 @@ def bulk_upload_questions():
                     {
                         "message":
                         "Invalid questions file format.",
+
                         "required_columns":
                         required_columns,
                     }
@@ -323,7 +277,6 @@ def bulk_upload_questions():
 
         for index, row in dataframe.iterrows():
 
-            # Excel row 1 contains headings.
             excel_row_number = index + 2
 
             difficulty = row[
@@ -512,16 +465,16 @@ def bulk_upload_questions():
             validated_questions.append(
                 {
                     "difficulty":
-                        normalized_difficulty,
+                    normalized_difficulty,
 
                     "question_text":
-                        question_text,
+                    question_text,
 
                     "options":
-                        options,
+                    options,
 
                     "correct_answer":
-                        matching_option,
+                    matching_option,
                 }
             )
 

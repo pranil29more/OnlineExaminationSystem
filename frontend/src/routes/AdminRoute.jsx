@@ -1,19 +1,24 @@
-import { Navigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
-import PageLoader from "../components/PageLoader";
+import RoleRoute from "./RoleRoute";
 
-function AdminRoute({ children }) {
-    const { role, loading } = useAuth();
 
-    if (loading) {
-        return <PageLoader message="Verifying Access..." />;
-    }
+function AdminRoute({
+    children
+}) {
 
-    if (role !== "Admin" && role !== "Examiner") {
-        return <Navigate to="/exams" replace />;
-    }
+    return (
 
-    return children;
+        <RoleRoute
+            allowedRoles={[
+                "Admin",
+                "Examiner"
+            ]}
+        >
+
+            {children}
+
+        </RoleRoute>
+    );
 }
+
 
 export default AdminRoute;

@@ -14,6 +14,8 @@ from brevo.transactional_emails import (
     SendTransacEmailRequestToItem,
 )
 
+from utils.decorators import role_required
+
 import os
 import secrets
 
@@ -37,11 +39,13 @@ def register():
     )
 
 
-@auth_bp.route("/admin/create-user", methods=["POST"])
+@auth_bp.route(
+    "/admin/create-user",
+    methods=["POST"],
+)
 @jwt_required()
+@role_required("Admin")
 def admin_create_user():
-
-    current_user_id = get_jwt_identity()
 
     data = request.get_json(
         silent=True
@@ -84,30 +88,6 @@ def admin_create_user():
         ), 400
 
     cur = mysql.connection.cursor()
-
-    admin_query = """
-    SELECT role
-    FROM users
-    WHERE user_id = %s
-    """
-
-    cur.execute(
-        admin_query,
-        (current_user_id,)
-    )
-
-    admin = cur.fetchone()
-
-    if not admin or admin[0] != "Admin":
-
-        cur.close()
-
-        return jsonify(
-            {
-                "message":
-                "Access denied. Admin only."
-            }
-        ), 403
 
     check_query = """
     SELECT user_id
@@ -164,7 +144,10 @@ def admin_create_user():
         %s,
         %s,
         %s,
-        DATE_ADD(UTC_TIMESTAMP(), INTERVAL 24 HOUR)
+        DATE_ADD(
+            UTC_TIMESTAMP(),
+            INTERVAL 24 HOUR
+        )
     )
     """
 
@@ -405,7 +388,9 @@ Online Examination System
 
     try:
 
-        api_key = os.getenv("BREVO_API_KEY")
+        api_key = os.getenv(
+            "BREVO_API_KEY"
+        )
 
         if not api_key:
 
@@ -422,29 +407,47 @@ Online Examination System
             api_key=api_key
         )
 
-        response = client.transactional_emails.send_transac_email(
-            subject="Activate Your OES Account",
+        response = (
+            client.transactional_emails
+            .send_transac_email(
+                subject=
+                    "Activate Your OES Account",
 
-            html_content=message_html,
+                html_content=
+                    message_html,
 
-            text_content=message_text,
+                text_content=
+                    message_text,
 
-            sender=SendTransacEmailRequestSender(
-                name="Online Examination System",
-                email=sender_email,
-            ),
+                sender=
+                    SendTransacEmailRequestSender(
+                        name=
+                            "Online Examination System",
 
-            to=[
-                SendTransacEmailRequestToItem(
-                    email=email,
-                    name=name,
-                )
-            ],
+                        email=
+                            sender_email,
+                    ),
+
+                to=[
+                    SendTransacEmailRequestToItem(
+                        email=
+                            email,
+
+                        name=
+                            name,
+                    )
+                ],
+            )
         )
 
         current_app.logger.info(
-            "Activation email sent successfully. Message ID: %s",
-            getattr(response, "message_id", None)
+            "Activation email sent successfully. "
+            "Message ID: %s",
+            getattr(
+                response,
+                "message_id",
+                None
+            )
         )
 
     except Exception as error:
@@ -489,7 +492,10 @@ Online Examination System
     )
 
 
-@auth_bp.route("/login", methods=["POST"])
+@auth_bp.route(
+    "/login",
+    methods=["POST"]
+)
 def login():
 
     data = request.get_json(
@@ -630,7 +636,9 @@ def login():
     "/activate-account/<string:activation_token>",
     methods=["GET"]
 )
-def verify_activation_token(activation_token):
+def verify_activation_token(
+    activation_token
+):
 
     if not activation_token:
 
@@ -726,7 +734,9 @@ def verify_activation_token(activation_token):
     "/activate-account/<string:activation_token>",
     methods=["POST"]
 )
-def activate_account(activation_token):
+def activate_account(
+    activation_token
+):
 
     data = request.get_json(
         silent=True
@@ -741,7 +751,9 @@ def activate_account(activation_token):
             }
         ), 400
 
-    new_password = data.get("password")
+    new_password = data.get(
+        "password"
+    )
 
     if not new_password:
 
@@ -842,7 +854,10 @@ def activate_account(activation_token):
     ), 200
 
 
-@auth_bp.route("/profile", methods=["GET"])
+@auth_bp.route(
+    "/profile",
+    methods=["GET"]
+)
 @jwt_required()
 def profile():
 
@@ -902,48 +917,13 @@ def profile():
     )
 
 
-@auth_bp.route("/admin-only", methods=["GET"])
+@auth_bp.route(
+    "/admin-only",
+    methods=["GET"]
+)
 @jwt_required()
+@role_required("Admin")
 def admin_only():
-
-    current_user_id = get_jwt_identity()
-
-    cur = mysql.connection.cursor()
-
-    query = """
-    SELECT role
-    FROM users
-    WHERE user_id = %s
-    """
-
-    cur.execute(
-        query,
-        (current_user_id,)
-    )
-
-    user = cur.fetchone()
-
-    cur.close()
-
-    if not user:
-
-        return jsonify(
-            {
-                "message":
-                "User not found"
-            }
-        ), 404
-
-    role = user[0]
-
-    if role != "Admin":
-
-        return jsonify(
-            {
-                "message":
-                "Access denied. Admin only."
-            }
-        ), 403
 
     return jsonify(
         {
@@ -953,55 +933,16 @@ def admin_only():
     ), 200
 
 
-@auth_bp.route("/examiner-only", methods=["GET"])
+@auth_bp.route(
+    "/examiner-only",
+    methods=["GET"]
+)
 @jwt_required()
+@role_required(
+    "Admin",
+    "Examiner"
+)
 def examiner_only():
-
-    current_user_id = get_jwt_identity()
-
-    cur = mysql.connection.cursor()
-
-    query = """
-    SELECT role
-    FROM users
-    WHERE user_id = %s
-    """
-
-    cur.execute(
-        query,
-        (current_user_id,)
-    )
-
-    user = cur.fetchone()
-
-    cur.close()
-
-    if not user:
-
-        return jsonify(
-            {
-                "message":
-                "User not found"
-            }
-        ), 404
-
-    role = user[0]
-
-    if role not in [
-        "Admin",
-        "Examiner"
-    ]:
-
-        return (
-            jsonify(
-                {
-                    "message":
-                    "Access denied. "
-                    "Examiner or Admin only."
-                }
-            ),
-            403,
-        )
 
     return jsonify(
         {
@@ -1011,48 +952,15 @@ def examiner_only():
     ), 200
 
 
-@auth_bp.route("/users", methods=["GET"])
+@auth_bp.route(
+    "/users",
+    methods=["GET"]
+)
 @jwt_required()
+@role_required("Admin")
 def get_users():
 
-    current_user_id = get_jwt_identity()
-
     cur = mysql.connection.cursor()
-
-    role_query = """
-    SELECT role
-    FROM users
-    WHERE user_id = %s
-    """
-
-    cur.execute(
-        role_query,
-        (current_user_id,)
-    )
-
-    user = cur.fetchone()
-
-    if not user:
-
-        cur.close()
-
-        return jsonify(
-            {
-                "message":
-                "User not found"
-            }
-        ), 404
-
-    if user[0] != "Admin":
-
-        cur.close()
-
-        return jsonify(
-            {
-                "message":
-                "Access denied"
-            }
-        ), 403
 
     query = """
     SELECT
@@ -1120,37 +1028,18 @@ def get_users():
     methods=["PUT"]
 )
 @jwt_required()
-def toggle_user_status(user_id):
-
-    current_user_id = get_jwt_identity()
+@role_required("Admin")
+def toggle_user_status(
+    user_id
+):
 
     cur = mysql.connection.cursor()
 
     cur.execute(
         """
-        SELECT role
-        FROM users
-        WHERE user_id = %s
-        """,
-        (current_user_id,)
-    )
-
-    admin = cur.fetchone()
-
-    if not admin or admin[0] != "Admin":
-
-        cur.close()
-
-        return jsonify(
-            {
-                "message":
-                "Access denied"
-            }
-        ), 403
-
-    cur.execute(
-        """
-        SELECT role, is_active
+        SELECT
+            role,
+            is_active
         FROM users
         WHERE user_id = %s
         """,
@@ -1222,55 +1111,20 @@ def toggle_user_status(user_id):
     methods=["DELETE"]
 )
 @jwt_required()
-def delete_user(user_id):
-
-    current_user_id = get_jwt_identity()
+@role_required("Admin")
+def delete_user(
+    user_id
+):
 
     cur = mysql.connection.cursor()
 
-    role_query = """
-    SELECT role
-    FROM users
-    WHERE user_id = %s
-    """
-
     cur.execute(
-        role_query,
-        (current_user_id,)
-    )
-
-    admin = cur.fetchone()
-
-    if not admin:
-
-        cur.close()
-
-        return jsonify(
-            {
-                "message":
-                "User not found"
-            }
-        ), 404
-
-    if admin[0] != "Admin":
-
-        cur.close()
-
-        return jsonify(
-            {
-                "message":
-                "Access denied"
-            }
-        ), 403
-
-    user_query = """
-    SELECT role
-    FROM users
-    WHERE user_id = %s
-    """
-
-    cur.execute(
-        user_query,
+        """
+        SELECT
+            role
+        FROM users
+        WHERE user_id = %s
+        """,
         (user_id,)
     )
 
@@ -1299,7 +1153,8 @@ def delete_user(user_id):
         ), 403
 
     submission_query = """
-    SELECT submission_id
+    SELECT
+        submission_id
     FROM submissions
     WHERE user_id = %s
     """

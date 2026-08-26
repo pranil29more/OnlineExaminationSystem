@@ -158,7 +158,9 @@
         100%;
 
     animation:
-        cepFormFadeIn 0.2s ease;
+        cepFormFadeIn
+        0.2s
+        ease;
 }
 
 
@@ -373,11 +375,10 @@
 
 
 /* =========================================================
-   Inputs / Select
+   Input
 ========================================================= */
 
-.cep-input,
-.cep-select {
+.cep-input {
     width:
         100%;
 
@@ -432,15 +433,13 @@
 }
 
 
-.cep-input:hover,
-.cep-select:hover {
+.cep-input:hover {
     border-color:
         #64748b;
 }
 
 
-.cep-input:focus,
-.cep-select:focus {
+.cep-input:focus {
     border-color:
         #3b82f6;
 
@@ -453,18 +452,29 @@
 }
 
 
-.cep-select {
-    cursor:
-        pointer;
+/* =========================================================
+   Number Input
+========================================================= */
+
+.cep-input[type="number"] {
+    appearance:
+        textfield;
+
+    -moz-appearance:
+        textfield;
 }
 
 
-.cep-select option {
-    background:
-        #0f172a;
+.cep-input[type="number"]::-webkit-inner-spin-button,
+.cep-input[type="number"]::-webkit-outer-spin-button {
+    margin:
+        0;
 
-    color:
-        #f8fafc;
+    appearance:
+        none;
+
+    -webkit-appearance:
+        none;
 }
 
 
@@ -574,21 +584,163 @@
 
 
 /* =========================================================
-   Number Input
+   Exam Type Selector
 ========================================================= */
 
-.cep-input[type="number"] {
-    appearance:
-        textfield;
-}
+.cep-exam-type-switch {
+    display:
+        grid;
 
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
 
-.cep-input[type="number"]::-webkit-inner-spin-button,
-.cep-input[type="number"]::-webkit-outer-spin-button {
+    gap:
+        8px;
+
+    width:
+        100%;
+
+    box-sizing:
+        border-box;
+
     margin:
         0;
 
-    appearance:
+    padding:
+        5px;
+
+    background:
+        #0f172a;
+
+    border:
+        1px solid
+        #334155;
+
+    border-radius:
+        10px;
+}
+
+
+/* =========================================================
+   Exam Type Buttons
+========================================================= */
+
+.cep-exam-type-btn {
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    min-height:
+        42px;
+
+    padding:
+        0
+        14px;
+
+    border:
+        1px solid
+        transparent;
+
+    border-radius:
+        8px;
+
+    background:
+        transparent;
+
+    color:
+        #94a3b8;
+
+    font-family:
+        inherit;
+
+    font-size:
+        12px;
+
+    font-weight:
+        750;
+
+    line-height:
+        1;
+
+    cursor:
+        pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease,
+        opacity 0.2s ease;
+}
+
+
+.cep-exam-type-btn:hover:not(:disabled) {
+    color:
+        #e2e8f0;
+
+    background:
+        #1e293b;
+}
+
+
+.cep-exam-type-btn.active {
+    background:
+        #2563eb;
+
+    border-color:
+        #3b82f6;
+
+    color:
+        #ffffff;
+
+    box-shadow:
+        0 5px 12px
+        rgba(37, 99, 235, 0.22);
+}
+
+
+.cep-exam-type-btn.active:hover:not(:disabled) {
+    background:
+        #3b82f6;
+
+    border-color:
+        #60a5fa;
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 8px 18px
+        rgba(37, 99, 235, 0.30);
+}
+
+
+.cep-exam-type-btn:active:not(:disabled) {
+    transform:
+        translateY(0);
+}
+
+
+.cep-exam-type-btn:disabled {
+    opacity:
+        0.5;
+
+    cursor:
+        not-allowed;
+
+    transform:
+        none;
+
+    box-shadow:
         none;
 }
 
@@ -726,8 +878,7 @@
 ========================================================= */
 
 .cep-page button:focus-visible,
-.cep-page input:focus-visible,
-.cep-page select:focus-visible {
+.cep-page input:focus-visible {
     outline:
         2px solid
         rgba(96, 165, 250, 0.8);
@@ -832,6 +983,12 @@
             0;
     }
 
+
+    .cep-exam-type-switch {
+        grid-template-columns:
+            1fr;
+    }
+
 }
 
 
@@ -876,6 +1033,12 @@
             22px
             0
             22px;
+    }
+
+
+    .cep-exam-type-btn {
+        min-height:
+            40px;
     }
 
 }

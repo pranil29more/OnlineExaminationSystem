@@ -11,10 +11,16 @@ function CreateExamPage() {
     const navigate = useNavigate();
 
     const [title, setTitle] = useState("");
-    const [duration, setDuration] = useState("");
-    const [totalMarks, setTotalMarks] = useState("");
+
+    const [duration, setDuration] =
+        useState("");
+
+    const [totalMarks, setTotalMarks] =
+        useState("");
+
     const [passingMarks, setPassingMarks] =
         useState("");
+
     const [examType, setExamType] =
         useState("Practice");
 
@@ -254,6 +260,69 @@ function CreateExamPage() {
 
 
                         {/* =================================================
+                            Exam Type
+                        ================================================= */}
+
+                        <div className="cep-field">
+
+                            <label className="cep-field-label">
+                                Exam Type
+                            </label>
+
+                            <div className="cep-exam-type-switch">
+
+                                <button
+                                    type="button"
+                                    className={`cep-exam-type-btn ${
+                                        examType === "Practice"
+                                            ? "active"
+                                            : ""
+                                    }`}
+                                    onClick={() =>
+                                        setExamType(
+                                            "Practice"
+                                        )
+                                    }
+                                    disabled={
+                                        creatingExam
+                                    }
+                                >
+                                    Practice Exam
+                                </button>
+
+                                <button
+                                    type="button"
+                                    className={`cep-exam-type-btn ${
+                                        examType === "Actual"
+                                            ? "active"
+                                            : ""
+                                    }`}
+                                    onClick={() =>
+                                        setExamType(
+                                            "Actual"
+                                        )
+                                    }
+                                    disabled={
+                                        creatingExam
+                                    }
+                                >
+                                    Actual Assessment
+                                </button>
+
+                            </div>
+
+                            <p className="cep-field-hint">
+                                Practice exams are available
+                                for candidate practice, while
+                                Actual Assessments can be
+                                scheduled for candidates or
+                                batches.
+                            </p>
+
+                        </div>
+
+
+                        {/* =================================================
                             Exam Title
                         ================================================= */}
 
@@ -400,54 +469,6 @@ function CreateExamPage() {
                                 </div>
 
                             </div>
-
-                        </div>
-
-
-                        {/* =================================================
-                            Exam Type
-                        ================================================= */}
-
-                        <div className="cep-field">
-
-                            <label
-                                htmlFor="cep-exam-type"
-                                className="cep-field-label"
-                            >
-                                Exam Type
-                            </label>
-
-                            <select
-                                id="cep-exam-type"
-                                className="cep-select"
-                                value={examType}
-                                onChange={(event) =>
-                                    setExamType(
-                                        event.target.value
-                                    )
-                                }
-                                disabled={
-                                    creatingExam
-                                }
-                            >
-
-                                <option value="Practice">
-                                    Practice Exam
-                                </option>
-
-                                <option value="Actual">
-                                    Actual Assessment
-                                </option>
-
-                            </select>
-
-                            <p className="cep-field-hint">
-                                Practice exams are available
-                                for candidate practice, while
-                                Actual Assessments can be
-                                scheduled for candidates or
-                                batches.
-                            </p>
 
                         </div>
 

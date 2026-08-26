@@ -2,12 +2,21 @@ from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from extensions import mysql
+from utils.decorators import role_required
 
 result_bp = Blueprint("result", __name__)
 
 
-@result_bp.route("/results", methods=["GET"])
+@result_bp.route(
+    "/results",
+    methods=["GET"],
+)
 @jwt_required()
+@role_required(
+    "Admin",
+    "Examiner",
+    "Candidate",
+)
 def get_results():
 
     current_user_id = get_jwt_identity()
@@ -20,7 +29,10 @@ def get_results():
     WHERE user_id = %s
     """
 
-    cur.execute(role_query, (current_user_id,))
+    cur.execute(
+        role_query,
+        (current_user_id,),
+    )
 
     user = cur.fetchone()
 
@@ -28,11 +40,19 @@ def get_results():
 
         cur.close()
 
-        return jsonify({"message": "User not found"}), 404
+        return jsonify(
+            {
+                "message":
+                    "User not found"
+            }
+        ), 404
 
     role = user[0]
 
-    if role in ["Admin", "Examiner"]:
+    if role in [
+        "Admin",
+        "Examiner",
+    ]:
 
         query = """
         SELECT
@@ -62,14 +82,29 @@ def get_results():
 
             result_list.append(
                 {
-                    "submission_id": result[0],
-                    "exam_id": result[1],
-                    "exam_title": result[2],
-                    "candidate_name": result[3],
-                    "score": result[4],
-                    "total_marks": result[5],
-                    "passing_marks": result[6],
-                    "submitted_at": str(result[7]),
+                    "submission_id":
+                        result[0],
+
+                    "exam_id":
+                        result[1],
+
+                    "exam_title":
+                        result[2],
+
+                    "candidate_name":
+                        result[3],
+
+                    "score":
+                        result[4],
+
+                    "total_marks":
+                        result[5],
+
+                    "passing_marks":
+                        result[6],
+
+                    "submitted_at":
+                        str(result[7]),
                 }
             )
 
@@ -91,7 +126,10 @@ def get_results():
         ORDER BY s.submitted_at DESC
         """
 
-        cur.execute(query, (current_user_id,))
+        cur.execute(
+            query,
+            (current_user_id,),
+        )
 
         results = cur.fetchall()
 
@@ -101,23 +139,46 @@ def get_results():
 
             result_list.append(
                 {
-                    "submission_id": result[0],
-                    "exam_id": result[1],
-                    "exam_title": result[2],
-                    "score": result[3],
-                    "total_marks": result[4],
-                    "passing_marks": result[5],
-                    "submitted_at": str(result[6]),
+                    "submission_id":
+                        result[0],
+
+                    "exam_id":
+                        result[1],
+
+                    "exam_title":
+                        result[2],
+
+                    "score":
+                        result[3],
+
+                    "total_marks":
+                        result[4],
+
+                    "passing_marks":
+                        result[5],
+
+                    "submitted_at":
+                        str(result[6]),
                 }
             )
 
     cur.close()
 
-    return jsonify(result_list), 200
+    return jsonify(
+        result_list
+    ), 200
 
 
-@result_bp.route("/result/<int:submission_id>", methods=["GET"])
+@result_bp.route(
+    "/result/<int:submission_id>",
+    methods=["GET"],
+)
 @jwt_required()
+@role_required(
+    "Admin",
+    "Examiner",
+    "Candidate",
+)
 def get_result(submission_id):
 
     current_user_id = get_jwt_identity()
@@ -130,7 +191,10 @@ def get_result(submission_id):
     WHERE user_id = %s
     """
 
-    cur.execute(role_query, (current_user_id,))
+    cur.execute(
+        role_query,
+        (current_user_id,),
+    )
 
     user = cur.fetchone()
 
@@ -138,76 +202,97 @@ def get_result(submission_id):
 
         cur.close()
 
-        return jsonify({"message": "User not found"}), 404
+        return jsonify(
+            {
+                "message":
+                    "User not found"
+            }
+        ), 404
 
     role = user[0]
 
-    # =========================
+    # ==========================================
     # Admin / Examiner
-    # =========================
+    # ==========================================
 
-    if role in ["Admin", "Examiner"]:
+    if role in [
+        "Admin",
+        "Examiner",
+    ]:
 
         submission_query = """
         SELECT
-    s.submission_id,
-    s.exam_id,
-    e.title,
-    u.name,
-    b.batch_name,
-    s.score,
-    e.total_marks,
-    e.passing_marks,
-    ROUND(
-        (s.score * 100.0) / e.total_marks,
-        2
-    ) AS percentage,
-    s.submitted_at
-FROM submissions s
-JOIN users u
-    ON s.user_id = u.user_id
-JOIN exams e
-    ON s.exam_id = e.exam_id
-LEFT JOIN batches b
-    ON u.batch_id = b.batch_id
-WHERE s.submission_id = %s
+            s.submission_id,
+            s.exam_id,
+            e.title,
+            u.name,
+            b.batch_name,
+            s.score,
+            e.total_marks,
+            e.passing_marks,
+            ROUND(
+                (s.score * 100.0) / e.total_marks,
+                2
+            ) AS percentage,
+            s.submitted_at
+        FROM submissions s
+        JOIN users u
+            ON s.user_id = u.user_id
+        JOIN exams e
+            ON s.exam_id = e.exam_id
+        LEFT JOIN batches b
+            ON u.batch_id = b.batch_id
+        WHERE s.submission_id = %s
         """
 
-        cur.execute(submission_query, (submission_id,))
+        cur.execute(
+            submission_query,
+            (submission_id,),
+        )
 
-    # =========================
+    # ==========================================
     # Candidate
-    # =========================
+    #
+    # Candidate can only access their own
+    # submission.
+    # ==========================================
 
     else:
 
         submission_query = """
         SELECT
-    s.submission_id,
-    s.exam_id,
-    e.title,
-    u.name,
-    b.batch_name,
-    s.score,
-    e.total_marks,
-    e.passing_marks,
-    ROUND(
-        (s.score * 100.0) / e.total_marks,
-        2
-    ) AS percentage,
-    s.submitted_at
-FROM submissions s
-JOIN users u
-    ON s.user_id = u.user_id
-JOIN exams e
-    ON s.exam_id = e.exam_id
-LEFT JOIN batches b
-    ON u.batch_id = b.batch_id
-WHERE s.submission_id = %s
-AND s.user_id = %s
+            s.submission_id,
+            s.exam_id,
+            e.title,
+            u.name,
+            b.batch_name,
+            s.score,
+            e.total_marks,
+            e.passing_marks,
+            ROUND(
+                (s.score * 100.0) / e.total_marks,
+                2
+            ) AS percentage,
+            s.submitted_at
+        FROM submissions s
+        JOIN users u
+            ON s.user_id = u.user_id
+        JOIN exams e
+            ON s.exam_id = e.exam_id
+        LEFT JOIN batches b
+            ON u.batch_id = b.batch_id
+        WHERE
+            s.submission_id = %s
+            AND s.user_id = %s
         """
 
-        cur.execute(submission_query, (submission_id, current_user_id))
+        cur.execute(
+            submission_query,
+            (
+                submission_id,
+                current_user_id,
+            ),
+        )
 
     submission = cur.fetchone()
 
@@ -215,20 +300,43 @@ AND s.user_id = %s
 
         cur.close()
 
-        return jsonify({"message": "Result not found"}), 404
+        return jsonify(
+            {
+                "message":
+                    "Result not found"
+            }
+        ), 404
+
+    exam_id = submission[1]
+
+    # ==========================================
+    # Fetch ALL Questions
+    #
+    # LEFT JOIN ensures unanswered questions
+    # are also returned.
+    # ==========================================
 
     answers_query = """
     SELECT
+        q.question_id,
         q.question_text,
         a.answer_text,
         a.is_correct
-    FROM answers a
-    JOIN questions q
-        ON a.question_id = q.question_id
-    WHERE a.submission_id = %s
+    FROM questions q
+    LEFT JOIN answers a
+        ON q.question_id = a.question_id
+        AND a.submission_id = %s
+    WHERE q.exam_id = %s
+    ORDER BY q.question_id
     """
 
-    cur.execute(answers_query, (submission_id,))
+    cur.execute(
+        answers_query,
+        (
+            submission_id,
+            exam_id,
+        ),
+    )
 
     answers = cur.fetchall()
 
@@ -238,63 +346,93 @@ AND s.user_id = %s
 
     for answer in answers:
 
+        question_id = answer[0]
+
+        question_text = answer[1]
+
+        answer_text = answer[2]
+
+        is_correct = answer[3]
+
+        is_answered = (
+            answer_text is not None
+            and str(answer_text).strip() != ""
+        )
+
         answer_list.append(
             {
-                "question_text": answer[0],
-                "answer_text": answer[1],
-                "is_correct": bool(answer[2]),
+                "question_id":
+                    question_id,
+
+                "question_text":
+                    question_text,
+
+                "answer_text":
+                    answer_text,
+
+                "is_answered":
+                    is_answered,
+
+                "is_correct":
+                    bool(is_correct)
+                    if is_answered
+                    else False,
             }
         )
 
     return (
         jsonify(
             {
-                "submission_id": submission[0],
-                "exam_id": submission[1],
-                "exam_title": submission[2],
-                "candidate_name": submission[3],
-                "batch_name": submission[4],
-                "score": submission[5],
-                "total_marks": submission[6],
-                "passing_marks": submission[7],
-                "percentage": submission[8],
-                "submitted_at": str(submission[9]),
-                "answers": answer_list,
+                "submission_id":
+                    submission[0],
+
+                "exam_id":
+                    submission[1],
+
+                "exam_title":
+                    submission[2],
+
+                "candidate_name":
+                    submission[3],
+
+                "batch_name":
+                    submission[4],
+
+                "score":
+                    submission[5],
+
+                "total_marks":
+                    submission[6],
+
+                "passing_marks":
+                    submission[7],
+
+                "percentage":
+                    submission[8],
+
+                "submitted_at":
+                    str(submission[9]),
+
+                "answers":
+                    answer_list,
             }
         ),
         200,
     )
 
 
-@result_bp.route("/exam-results/<int:exam_id>", methods=["GET"])
+@result_bp.route(
+    "/exam-results/<int:exam_id>",
+    methods=["GET"],
+)
 @jwt_required()
+@role_required(
+    "Admin",
+    "Examiner",
+)
 def get_exam_results(exam_id):
 
-    current_user_id = get_jwt_identity()
-
     cur = mysql.connection.cursor()
-
-    role_query = """
-    SELECT role
-    FROM users
-    WHERE user_id = %s
-    """
-
-    cur.execute(role_query, (current_user_id,))
-
-    user = cur.fetchone()
-
-    if not user:
-
-        cur.close()
-
-        return jsonify({"message": "User not found"}), 404
-
-    if user[0] not in ["Admin", "Examiner"]:
-
-        cur.close()
-
-        return jsonify({"message": "Access denied"}), 403
 
     # ==========================================
     # Fetch Exam Details
@@ -310,7 +448,10 @@ def get_exam_results(exam_id):
     WHERE exam_id = %s
     """
 
-    cur.execute(exam_query, (exam_id,))
+    cur.execute(
+        exam_query,
+        (exam_id,),
+    )
 
     exam = cur.fetchone()
 
@@ -318,7 +459,12 @@ def get_exam_results(exam_id):
 
         cur.close()
 
-        return jsonify({"message": "Exam not found"}), 404
+        return jsonify(
+            {
+                "message":
+                    "Exam not found"
+            }
+        ), 404
 
     # ==========================================
     # Fetch Student Results
@@ -339,7 +485,10 @@ def get_exam_results(exam_id):
         s.submitted_at DESC
     """
 
-    cur.execute(results_query, (exam_id,))
+    cur.execute(
+        results_query,
+        (exam_id,),
+    )
 
     results = cur.fetchall()
 
@@ -351,10 +500,17 @@ def get_exam_results(exam_id):
 
         result_list.append(
             {
-                "submission_id": result[0],
-                "candidate_name": result[1],
-                "score": result[2],
-                "submitted_at": str(result[3]),
+                "submission_id":
+                    result[0],
+
+                "candidate_name":
+                    result[1],
+
+                "score":
+                    result[2],
+
+                "submitted_at":
+                    str(result[3]),
             }
         )
 
@@ -362,53 +518,44 @@ def get_exam_results(exam_id):
         jsonify(
             {
                 "exam": {
-                    "exam_id": exam[0],
-                    "title": exam[1],
-                    "total_marks": exam[2],
-                    "passing_marks": exam[3],
+                    "exam_id":
+                        exam[0],
+
+                    "title":
+                        exam[1],
+
+                    "total_marks":
+                        exam[2],
+
+                    "passing_marks":
+                        exam[3],
                 },
-                "results": result_list,
+
+                "results":
+                    result_list,
             }
         ),
         200,
     )
 
 
-@result_bp.route("/candidate-results/<int:user_id>", methods=["GET"])
+@result_bp.route(
+    "/candidate-results/<int:user_id>",
+    methods=["GET"],
+)
 @jwt_required()
+@role_required(
+    "Admin",
+    "Examiner",
+)
 def candidate_results(user_id):
 
-    current_user_id = get_jwt_identity()
-
-    batch_id = request.args.get("batch_id", type=int)
+    batch_id = request.args.get(
+        "batch_id",
+        type=int,
+    )
 
     cur = mysql.connection.cursor()
-
-    # ==========================================
-    # Verify Admin / Examiner
-    # ==========================================
-
-    role_query = """
-    SELECT role
-    FROM users
-    WHERE user_id = %s
-    """
-
-    cur.execute(role_query, (current_user_id,))
-
-    current_user = cur.fetchone()
-
-    if not current_user:
-
-        cur.close()
-
-        return jsonify({"message": "User not found"}), 404
-
-    if current_user[0] not in ["Admin", "Examiner"]:
-
-        cur.close()
-
-        return jsonify({"message": "Access denied."}), 403
 
     # ==========================================
     # Fetch Candidate
@@ -427,7 +574,10 @@ def candidate_results(user_id):
     WHERE u.user_id = %s
     """
 
-    cur.execute(candidate_query, (user_id,))
+    cur.execute(
+        candidate_query,
+        (user_id,),
+    )
 
     candidate = cur.fetchone()
 
@@ -435,7 +585,12 @@ def candidate_results(user_id):
 
         cur.close()
 
-        return jsonify({"message": "Candidate not found"}), 404
+        return jsonify(
+            {
+                "message":
+                    "Candidate not found"
+            }
+        ), 404
 
     # ==========================================
     # Candidate Summary
@@ -485,7 +640,10 @@ def candidate_results(user_id):
 
         cur.execute(
             summary_query,
-            (user_id, batch_id)
+            (
+                user_id,
+                batch_id,
+            ),
         )
 
     else:
@@ -525,7 +683,7 @@ def candidate_results(user_id):
 
         cur.execute(
             summary_query,
-            (user_id,)
+            (user_id,),
         )
 
     summary = cur.fetchone()
@@ -576,7 +734,10 @@ def candidate_results(user_id):
 
         cur.execute(
             history_query,
-            (user_id, batch_id)
+            (
+                user_id,
+                batch_id,
+            ),
         )
 
     else:
@@ -614,7 +775,7 @@ def candidate_results(user_id):
 
         cur.execute(
             history_query,
-            (user_id,)
+            (user_id,),
         )
 
     history = cur.fetchall()
@@ -625,14 +786,29 @@ def candidate_results(user_id):
 
         history_list.append(
             {
-                "submission_id": row[0],
-                "exam_id": row[1],
-                "exam_title": row[2],
-                "score": row[3],
-                "total_marks": row[4],
-                "percentage": row[5],
-                "status": row[6],
-                "submitted_at": str(row[7]),
+                "submission_id":
+                    row[0],
+
+                "exam_id":
+                    row[1],
+
+                "exam_title":
+                    row[2],
+
+                "score":
+                    row[3],
+
+                "total_marks":
+                    row[4],
+
+                "percentage":
+                    row[5],
+
+                "status":
+                    row[6],
+
+                "submitted_at":
+                    str(row[7]),
             }
         )
 
@@ -642,20 +818,41 @@ def candidate_results(user_id):
         jsonify(
             {
                 "candidate": {
-                    "user_id": candidate[0],
-                    "name": candidate[1],
-                    "email": candidate[2],
-                    "batch_name": candidate[3],
-                    "technology": candidate[4],
+                    "user_id":
+                        candidate[0],
+
+                    "name":
+                        candidate[1],
+
+                    "email":
+                        candidate[2],
+
+                    "batch_name":
+                        candidate[3],
+
+                    "technology":
+                        candidate[4],
                 },
+
                 "summary": {
-                    "assessment_count": summary[0],
-                    "average_score": summary[1],
-                    "highest_score": summary[2],
-                    "lowest_score": summary[3],
+                    "assessment_count":
+                        summary[0],
+
+                    "average_score":
+                        summary[1],
+
+                    "highest_score":
+                        summary[2],
+
+                    "lowest_score":
+                        summary[3],
                 },
-                "history": history_list,
-                "batch_id": batch_id,
+
+                "history":
+                    history_list,
+
+                "batch_id":
+                    batch_id,
             }
         ),
         200,

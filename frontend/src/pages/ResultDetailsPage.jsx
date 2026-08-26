@@ -42,6 +42,16 @@ function ResultDetailsPage() {
             const data =
                 await response.json();
 
+            if (!response.ok) {
+
+                console.error(
+                    data.message ||
+                        "Unable to load result."
+                );
+
+                return;
+            }
+
             setResult(data);
 
         } catch (error) {
@@ -75,16 +85,59 @@ function ResultDetailsPage() {
         result.passing_marks;
 
 
+    // ==========================================
+    // Answer Status Helpers
+    // ==========================================
+
+    const isAnswerUnanswered = (
+        answer
+    ) => {
+
+        if (
+            answer.is_answered === false
+        ) {
+            return true;
+        }
+
+        if (
+            answer.answer_text === null ||
+            answer.answer_text === undefined
+        ) {
+            return true;
+        }
+
+        if (
+            String(answer.answer_text)
+                .trim() === ""
+        ) {
+            return true;
+        }
+
+        return false;
+    };
+
+
     const correctAnswers =
         result.answers.filter(
             (answer) =>
-                answer.is_correct
+                !isAnswerUnanswered(answer) &&
+                Boolean(answer.is_correct)
+        ).length;
+
+
+    const unansweredAnswers =
+        result.answers.filter(
+            (answer) =>
+                isAnswerUnanswered(answer)
         ).length;
 
 
     const incorrectAnswers =
-        result.answers.length -
-        correctAnswers;
+        result.answers.filter(
+            (answer) =>
+                !isAnswerUnanswered(answer) &&
+                !Boolean(answer.is_correct)
+        ).length;
 
 
     return (
@@ -334,6 +387,16 @@ function ResultDetailsPage() {
                                 } Incorrect
                             </span>
 
+                            <span className="rdp-answer-divider">
+                                |
+                            </span>
+
+                            <span className="rdp-unanswered-count">
+                                {
+                                    unansweredAnswers
+                                } Unanswered
+                            </span>
+
                         </div>
 
                     </div>
@@ -346,94 +409,141 @@ function ResultDetailsPage() {
                     <div className="rdp-answers-grid">
 
                         {result.answers.map(
-                            (answer, index) => (
+                            (answer, index) => {
 
-                                <article
-                                    key={index}
-                                    className={
-                                        `rdp-answer-card ${
-                                            answer.is_correct
-                                                ? "rdp-answer-correct"
-                                                : "rdp-answer-incorrect"
-                                        }`
-                                    }
-                                >
+                                const unanswered =
+                                    isAnswerUnanswered(
+                                        answer
+                                    );
+
+                                const correct =
+                                    !unanswered &&
+                                    Boolean(
+                                        answer.is_correct
+                                    );
+
+                                const incorrect =
+                                    !unanswered &&
+                                    !correct;
 
 
-                                    <div className="rdp-answer-card-header">
+                                return (
 
-                                        <div>
+                                    <article
+                                        key={
+                                            answer.question_id ||
+                                            index
+                                        }
+                                        className={
+                                            `rdp-answer-card ${
+                                                correct
+                                                    ? "rdp-answer-correct"
+                                                    : unanswered
+                                                      ? "rdp-answer-unanswered"
+                                                      : "rdp-answer-incorrect"
+                                            }`
+                                        }
+                                    >
 
-                                            <span className="rdp-question-number">
-                                                Question{" "}
+
+                                        <div className="rdp-answer-card-header">
+
+                                            <div>
+
+                                                <span className="rdp-question-number">
+                                                    Question{" "}
+                                                    {
+                                                        index + 1
+                                                    }
+                                                </span>
+
+                                                <h3 className="rdp-question-title">
+                                                    {
+                                                        answer.question_text
+                                                    }
+                                                </h3>
+
+                                            </div>
+
+
+                                            <span
+                                                className={
+                                                    correct
+                                                        ? "rdp-answer-status rdp-correct"
+                                                        : unanswered
+                                                          ? "rdp-answer-status rdp-unanswered"
+                                                          : "rdp-answer-status rdp-incorrect"
+                                                }
+                                            >
                                                 {
-                                                    index + 1
+                                                    correct
+                                                        ? "Correct"
+                                                        : unanswered
+                                                          ? "Unanswered"
+                                                          : "Incorrect"
                                                 }
                                             </span>
-
-                                            <h3 className="rdp-question-title">
-                                                {
-                                                    answer.question_text
-                                                }
-                                            </h3>
 
                                         </div>
 
 
-                                        <span
-                                            className={
-                                                answer.is_correct
-                                                    ? "rdp-answer-status rdp-correct"
-                                                    : "rdp-answer-status rdp-incorrect"
-                                            }
-                                        >
-                                            {
-                                                answer.is_correct
-                                                    ? "Correct"
-                                                    : "Incorrect"
-                                            }
-                                        </span>
-
-                                    </div>
-
-
-                                    <div className="rdp-answer-content">
-
-                                        <span className="rdp-detail-label">
+                                        {/* ==========================================
                                             Selected Answer
-                                        </span>
+                                            
+                                            IMPORTANT:
+                                            Unanswered questions do NOT get this
+                                            section at all.
+                                        ========================================== */}
 
-                                        <p className="rdp-answer-text">
-                                            {
-                                                answer.answer_text
-                                            }
-                                        </p>
+                                        {!unanswered && (
 
-                                    </div>
+                                            <div className="rdp-answer-content">
 
+                                                <span className="rdp-detail-label">
+                                                    Selected Answer
+                                                </span>
 
-                                    <div className="rdp-answer-footer">
+                                                <p className="rdp-answer-text">
+                                                    {
+                                                        answer.answer_text
+                                                    }
+                                                </p>
 
-                                        <span
-                                            className={
-                                                answer.is_correct
-                                                    ? "rdp-answer-result rdp-correct-result"
-                                                    : "rdp-answer-result rdp-incorrect-result"
-                                            }
-                                        >
-                                            {
-                                                answer.is_correct
-                                                    ? "✓ Correct Answer"
-                                                    : "✕ Incorrect Answer"
-                                            }
-                                        </span>
+                                            </div>
 
-                                    </div>
+                                        )}
 
 
-                                </article>
+                                        <div className="rdp-answer-footer">
 
-                            )
+                                            <span
+                                                className={
+                                                    correct
+                                                        ? "rdp-answer-result rdp-correct-result"
+                                                        : unanswered
+                                                          ? "rdp-answer-result rdp-unanswered-result"
+                                                          : "rdp-answer-result rdp-incorrect-result"
+                                                }
+                                            >
+
+                                                {
+                                                    correct
+                                                        ? "✓ Correct Answer"
+                                                        : unanswered
+                                                          ? "Not Answered"
+                                                          : "✕ Incorrect Answer"
+                                                }
+
+                                            </span>
+
+                                        </div>
+
+
+                                    </article>
+
+                                );
+
+                            }
                         )}
 
                     </div>

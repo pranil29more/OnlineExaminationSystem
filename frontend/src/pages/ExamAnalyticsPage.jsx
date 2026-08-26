@@ -17,10 +17,6 @@ function ExamAnalyticsPage() {
     const [candidates, setCandidates] = useState([]);
 
 
-    // ==========================================
-    // Create Schedule States
-    // ==========================================
-
     const [showScheduleModal, setShowScheduleModal] =
         useState(false);
 
@@ -45,10 +41,6 @@ function ExamAnalyticsPage() {
     const [scheduling, setScheduling] =
         useState(false);
 
-
-    // ==========================================
-    // Edit Schedule States
-    // ==========================================
 
     const [showEditModal, setShowEditModal] =
         useState(false);
@@ -84,17 +76,9 @@ function ExamAnalyticsPage() {
         useState(null);
 
 
-    // ==========================================
-    // Exam Management States
-    // ==========================================
-
     const [deletingExamId, setDeletingExamId] =
         useState(null);
 
-
-    // ==========================================
-    // Initial Data
-    // ==========================================
 
     useEffect(() => {
         fetchAnalytics();
@@ -103,10 +87,6 @@ function ExamAnalyticsPage() {
         fetchCandidates();
     }, []);
 
-
-    // ==========================================
-    // Fetch Exam Analytics
-    // ==========================================
 
     const fetchAnalytics = async () => {
 
@@ -145,10 +125,6 @@ function ExamAnalyticsPage() {
         }
     };
 
-
-    // ==========================================
-    // Fetch Assessment Schedules
-    // ==========================================
 
     const fetchSchedules = async () => {
 
@@ -190,10 +166,6 @@ function ExamAnalyticsPage() {
     };
 
 
-    // ==========================================
-    // Fetch Batches
-    // ==========================================
-
     const fetchBatches = async () => {
 
         try {
@@ -232,10 +204,6 @@ function ExamAnalyticsPage() {
     };
 
 
-    // ==========================================
-    // Fetch Candidates
-    // ==========================================
-
     const fetchCandidates = async () => {
 
         try {
@@ -273,10 +241,6 @@ function ExamAnalyticsPage() {
         }
     };
 
-
-    // ==========================================
-    // Delete Exam
-    // ==========================================
 
     const handleDeleteExam = async (exam) => {
 
@@ -343,10 +307,6 @@ function ExamAnalyticsPage() {
     };
 
 
-    // ==========================================
-    // Create Schedule Modal
-    // ==========================================
-
     const openScheduleModal = () => {
 
         setSelectedExamId("");
@@ -385,10 +345,6 @@ function ExamAnalyticsPage() {
         setSelectedCandidateId("");
     };
 
-
-    // ==========================================
-    // Create Assessment Schedule
-    // ==========================================
 
     const handleScheduleAssessment = async (
         event
@@ -543,10 +499,6 @@ function ExamAnalyticsPage() {
     };
 
 
-    // ==========================================
-    // Convert MySQL Date To datetime-local
-    // ==========================================
-
     const formatDateTimeLocal = (value) => {
 
         if (!value) {
@@ -558,10 +510,6 @@ function ExamAnalyticsPage() {
             .slice(0, 16);
     };
 
-
-    // ==========================================
-    // Open Edit Schedule Modal
-    // ==========================================
 
     const openEditScheduleModal = (
         schedule
@@ -607,10 +555,6 @@ function ExamAnalyticsPage() {
     };
 
 
-    // ==========================================
-    // Close Edit Schedule Modal
-    // ==========================================
-
     const closeEditScheduleModal = () => {
 
         if (updatingSchedule) {
@@ -628,10 +572,6 @@ function ExamAnalyticsPage() {
     };
 
 
-    // ==========================================
-    // Edit Assignment Type
-    // ==========================================
-
     const handleEditAssignmentTypeChange = (
         type
     ) => {
@@ -642,10 +582,6 @@ function ExamAnalyticsPage() {
         setEditCandidateId("");
     };
 
-
-    // ==========================================
-    // Update Assessment Schedule
-    // ==========================================
 
     const handleUpdateSchedule = async (
         event
@@ -792,10 +728,6 @@ function ExamAnalyticsPage() {
     };
 
 
-    // ==========================================
-    // Cancel Assessment Schedule
-    // ==========================================
-
     const handleCancelSchedule = async (
         schedule
     ) => {
@@ -864,10 +796,6 @@ function ExamAnalyticsPage() {
         }
     };
 
-
-    // ==========================================
-    // Remove Ended Assessment Schedule
-    // ==========================================
 
     const handleRemoveSchedule = async (
         schedule
@@ -938,20 +866,12 @@ function ExamAnalyticsPage() {
     };
 
 
-    // ==========================================
-    // Actual Exams Only
-    // ==========================================
-
     const actualExams =
         analytics?.exam_wise?.filter(
             (exam) =>
                 exam.exam_type === "Actual"
         ) || [];
 
-
-    // ==========================================
-    // Loader
-    // ==========================================
 
     if (!analytics) {
 
@@ -976,10 +896,6 @@ function ExamAnalyticsPage() {
 
             <main className="eap-page-container">
 
-                {/* ==========================================
-                    Page Header
-                ========================================== */}
-
                 <header className="eap-page-header">
 
                     <div>
@@ -1003,10 +919,6 @@ function ExamAnalyticsPage() {
 
                 </header>
 
-
-                {/* ==========================================
-                    Exam Library Summary
-                ========================================== */}
 
                 <section className="eap-summary-card">
 
@@ -1111,10 +1023,6 @@ function ExamAnalyticsPage() {
 
                 </section>
 
-
-                {/* ==========================================
-                    Assessment Scheduling
-                ========================================== */}
 
                 <section className="eap-section">
 
@@ -1384,10 +1292,6 @@ function ExamAnalyticsPage() {
                 </section>
 
 
-                {/* ==========================================
-                    Exam Library
-                ========================================== */}
-
                 <section className="eap-section eap-library-section">
 
                     <div className="eap-section-header">
@@ -1620,14 +1524,12 @@ function ExamAnalyticsPage() {
                                         <div className="eap-exam-footer">
 
                                             <span className="eap-created-by">
+                                                Created by:{" "}
 
-        Created by:{" "}
-
-        <strong>
-            {exam.created_by_name || "-"}
-        </strong>
-
-    </span>
+                                                <strong>
+                                                    {exam.created_by_name || "-"}
+                                                </strong>
+                                            </span>
 
 
                                             <div className="eap-exam-actions">
@@ -1679,10 +1581,6 @@ function ExamAnalyticsPage() {
 
                 </section>
 
-
-                {/* ==========================================
-                    Create Schedule Modal
-                ========================================== */}
 
                 {showScheduleModal && (
 
@@ -2047,10 +1945,6 @@ function ExamAnalyticsPage() {
 
                 )}
 
-
-                {/* ==========================================
-                    Edit Schedule Modal
-                ========================================== */}
 
                 {showEditModal && (
 

@@ -1243,6 +1243,50 @@ input:focus-visible {
 
 
 /* =========================================================
+   Exam Auto-Submit Lock
+========================================================= */
+
+.edp-exam-locked {
+
+    cursor:
+        not-allowed !important;
+}
+
+
+.edp-exam-locked
+.edp-questions-section {
+
+    pointer-events:
+        none;
+
+    user-select:
+        none;
+
+    opacity:
+        0.65;
+
+    cursor:
+        not-allowed !important;
+}
+
+
+.edp-exam-locked
+.edp-candidate-option {
+
+    cursor:
+        not-allowed !important;
+}
+
+
+.edp-exam-locked
+.edp-submit-section {
+
+    cursor:
+        not-allowed !important;
+}
+
+
+/* =========================================================
    Responsive — Tablet
 ========================================================= */
 

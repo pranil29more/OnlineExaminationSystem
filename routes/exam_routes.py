@@ -2,61 +2,44 @@ from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from extensions import mysql
+from utils.decorators import role_required
 
 exam_bp = Blueprint("exam", __name__)
 
 
 @exam_bp.route("/create-exam", methods=["POST"])
 @jwt_required()
+@role_required("Admin", "Examiner")
 def create_exam():
 
     current_user_id = get_jwt_identity()
 
     cur = mysql.connection.cursor()
 
-    role_query = """
-    SELECT role
-    FROM users
-    WHERE user_id = %s
-    """
-
-    cur.execute(role_query, (current_user_id,))
-    user = cur.fetchone()
-
-    if not user:
-        cur.close()
-
-        return jsonify({"message": "User not found"}), 404
-
-    role = user[0]
-
-    if role not in ["Admin", "Examiner"]:
-        cur.close()
-
-        return (
-            jsonify({"message": "Access denied. Admin or Examiner only."}),
-            403,
-        )
-
-    data = request.get_json()
+    data = request.get_json() or {}
 
     title = data.get("title")
     duration = data.get("duration")
     total_marks = data.get("total_marks")
     passing_marks = data.get("passing_marks")
-    exam_type = data.get("exam_type", "Practice")
+    exam_type = data.get(
+        "exam_type",
+        "Practice",
+    )
 
-    if exam_type not in ["Practice", "Actual"]:
+    if exam_type not in [
+        "Practice",
+        "Actual",
+    ]:
+
         cur.close()
 
-        return (
-            jsonify(
-                {
-                    "message": "Invalid exam type. Exam type must be Practice or Actual."
-                }
-            ),
-            400,
-        )
+        return jsonify(
+            {
+                "message":
+                    "Invalid exam type. Exam type must be Practice or Actual."
+            }
+        ), 400
 
     insert_query = """
     INSERT INTO exams
@@ -97,49 +80,29 @@ def create_exam():
 
     cur.close()
 
-    return (
-        jsonify(
-            {
-                "message": "Exam created successfully",
-                "exam_id": exam_id,
-                "exam_type": exam_type,
-            }
-        ),
-        201,
-    )
+    return jsonify(
+        {
+            "message":
+                "Exam created successfully",
+
+            "exam_id":
+                exam_id,
+
+            "exam_type":
+                exam_type,
+        }
+    ), 201
 
 
-@exam_bp.route("/update-exam/<int:exam_id>", methods=["PUT"])
+@exam_bp.route(
+    "/update-exam/<int:exam_id>",
+    methods=["PUT"],
+)
 @jwt_required()
+@role_required("Admin", "Examiner")
 def update_exam(exam_id):
 
-    current_user_id = get_jwt_identity()
-
     cur = mysql.connection.cursor()
-
-    role_query = """
-    SELECT role
-    FROM users
-    WHERE user_id = %s
-    """
-
-    cur.execute(role_query, (current_user_id,))
-    user = cur.fetchone()
-
-    if not user:
-        cur.close()
-
-        return jsonify({"message": "User not found"}), 404
-
-    role = user[0]
-
-    if role not in ["Admin", "Examiner"]:
-        cur.close()
-
-        return (
-            jsonify({"message": "Access denied. Admin or Examiner only."}),
-            403,
-        )
 
     exam_check_query = """
     SELECT exam_id
@@ -147,7 +110,10 @@ def update_exam(exam_id):
     WHERE exam_id = %s
     """
 
-    cur.execute(exam_check_query, (exam_id,))
+    cur.execute(
+        exam_check_query,
+        (exam_id,),
+    )
 
     exam = cur.fetchone()
 
@@ -155,9 +121,14 @@ def update_exam(exam_id):
 
         cur.close()
 
-        return jsonify({"message": "Exam not found"}), 404
+        return jsonify(
+            {
+                "message":
+                    "Exam not found"
+            }
+        ), 404
 
-    data = request.get_json()
+    data = request.get_json() or {}
 
     title = data.get("title")
     duration = data.get("duration")
@@ -175,59 +146,71 @@ def update_exam(exam_id):
     """
 
     cur.execute(
-        update_query, (title, duration, total_marks, passing_marks, exam_id)
+        update_query,
+        (
+            title,
+            duration,
+            total_marks,
+            passing_marks,
+            exam_id,
+        ),
     )
 
     mysql.connection.commit()
 
     cur.close()
 
-    return (
-        jsonify({"message": "Exam updated successfully", "exam_id": exam_id}),
-        200,
-    )
+    return jsonify(
+        {
+            "message":
+                "Exam updated successfully",
+
+            "exam_id":
+                exam_id,
+        }
+    ), 200
 
 
-@exam_bp.route("/add-question", methods=["POST"])
+@exam_bp.route(
+    "/add-question",
+    methods=["POST"],
+)
 @jwt_required()
+@role_required("Admin", "Examiner")
 def add_question():
-
-    current_user_id = get_jwt_identity()
 
     cur = mysql.connection.cursor()
 
-    role_query = """
-    SELECT role
-    FROM users
-    WHERE user_id = %s
-    """
-
-    cur.execute(role_query, (current_user_id,))
-    user = cur.fetchone()
-
-    if not user:
-        cur.close()
-
-        return jsonify({"message": "User not found"}), 404
-
-    role = user[0]
-
-    if role not in ["Admin", "Examiner"]:
-        cur.close()
-
-        return (
-            jsonify({"message": "Access denied. Admin or Examiner only."}),
-            403,
-        )
-
-    data = request.get_json()
+    data = request.get_json() or {}
 
     exam_id = data.get("exam_id")
-    question_text = data.get("question_text")
-    difficulty = data.get("difficulty")
+
+    question_text = data.get(
+        "question_text"
+    )
+
+    difficulty = data.get(
+        "difficulty"
+    )
+
     marks = data.get("marks")
+
     options = data.get("options")
-    correct_option = data.get("correct_option")
+
+    correct_option = data.get(
+        "correct_option"
+    )
+
+    if not isinstance(options, list) or not options:
+
+        cur.close()
+
+        return jsonify(
+            {
+                "message":
+                    "At least one option is required."
+            }
+        ), 400
 
     question_query = """
     INSERT INTO questions
@@ -248,13 +231,23 @@ def add_question():
     )
     """
 
-    cur.execute(question_query, (exam_id, question_text, difficulty, marks))
+    cur.execute(
+        question_query,
+        (
+            exam_id,
+            question_text,
+            difficulty,
+            marks,
+        ),
+    )
 
     question_id = cur.lastrowid
 
     for option in options:
 
-        is_correct = option == correct_option
+        is_correct = (
+            option == correct_option
+        )
 
         option_query = """
         INSERT INTO options
@@ -271,54 +264,39 @@ def add_question():
         )
         """
 
-        cur.execute(option_query, (question_id, option, is_correct))
+        cur.execute(
+            option_query,
+            (
+                question_id,
+                option,
+                is_correct,
+            ),
+        )
 
     mysql.connection.commit()
 
     cur.close()
 
-    return (
-        jsonify(
-            {
-                "message": "Question added successfully",
-                "question_id": question_id,
-            }
-        ),
-        201,
-    )
+    return jsonify(
+        {
+            "message":
+                "Question added successfully",
+
+            "question_id":
+                question_id,
+        }
+    ), 201
 
 
-@exam_bp.route("/delete-question/<int:question_id>", methods=["DELETE"])
+@exam_bp.route(
+    "/delete-question/<int:question_id>",
+    methods=["DELETE"],
+)
 @jwt_required()
+@role_required("Admin", "Examiner")
 def delete_question(question_id):
 
-    current_user_id = get_jwt_identity()
-
     cur = mysql.connection.cursor()
-
-    role_query = """
-    SELECT role
-    FROM users
-    WHERE user_id = %s
-    """
-
-    cur.execute(role_query, (current_user_id,))
-    user = cur.fetchone()
-
-    if not user:
-        cur.close()
-
-        return jsonify({"message": "User not found"}), 404
-
-    role = user[0]
-
-    if role not in ["Admin", "Examiner"]:
-        cur.close()
-
-        return (
-            jsonify({"message": "Access denied. Admin or Examiner only."}),
-            403,
-        )
 
     question_query = """
     SELECT question_id
@@ -326,7 +304,10 @@ def delete_question(question_id):
     WHERE question_id = %s
     """
 
-    cur.execute(question_query, (question_id,))
+    cur.execute(
+        question_query,
+        (question_id,),
+    )
 
     question = cur.fetchone()
 
@@ -334,69 +315,64 @@ def delete_question(question_id):
 
         cur.close()
 
-        return jsonify({"message": "Question not found"}), 404
+        return jsonify(
+            {
+                "message":
+                    "Question not found"
+            }
+        ), 404
 
     delete_answers_query = """
     DELETE FROM answers
     WHERE question_id = %s
     """
 
-    cur.execute(delete_answers_query, (question_id,))
+    cur.execute(
+        delete_answers_query,
+        (question_id,),
+    )
 
     delete_options_query = """
     DELETE FROM options
     WHERE question_id = %s
     """
 
-    cur.execute(delete_options_query, (question_id,))
+    cur.execute(
+        delete_options_query,
+        (question_id,),
+    )
 
     delete_question_query = """
     DELETE FROM questions
     WHERE question_id = %s
     """
 
-    cur.execute(delete_question_query, (question_id,))
+    cur.execute(
+        delete_question_query,
+        (question_id,),
+    )
 
     mysql.connection.commit()
 
     cur.close()
 
-    return jsonify({"message": "Question deleted successfully"}), 200
+    return jsonify(
+        {
+            "message":
+                "Question deleted successfully"
+        }
+    ), 200
 
 
-@exam_bp.route("/update-question/<int:question_id>", methods=["PUT"])
+@exam_bp.route(
+    "/update-question/<int:question_id>",
+    methods=["PUT"],
+)
 @jwt_required()
+@role_required("Admin", "Examiner")
 def update_question(question_id):
 
-    current_user_id = get_jwt_identity()
-
     cur = mysql.connection.cursor()
-
-    role_query = """
-    SELECT role
-    FROM users
-    WHERE user_id = %s
-    """
-
-    cur.execute(role_query, (current_user_id,))
-    user = cur.fetchone()
-
-    if not user:
-
-        cur.close()
-
-        return jsonify({"message": "User not found"}), 404
-
-    role = user[0]
-
-    if role not in ["Admin", "Examiner"]:
-
-        cur.close()
-
-        return (
-            jsonify({"message": "Access denied. Admin or Examiner only."}),
-            403,
-        )
 
     question_check_query = """
     SELECT question_id
@@ -404,7 +380,10 @@ def update_question(question_id):
     WHERE question_id = %s
     """
 
-    cur.execute(question_check_query, (question_id,))
+    cur.execute(
+        question_check_query,
+        (question_id,),
+    )
 
     question = cur.fetchone()
 
@@ -412,15 +391,41 @@ def update_question(question_id):
 
         cur.close()
 
-        return jsonify({"message": "Question not found"}), 404
+        return jsonify(
+            {
+                "message":
+                    "Question not found"
+            }
+        ), 404
 
-    data = request.get_json()
+    data = request.get_json() or {}
 
-    question_text = data.get("question_text")
-    difficulty = data.get("difficulty")
+    question_text = data.get(
+        "question_text"
+    )
+
+    difficulty = data.get(
+        "difficulty"
+    )
+
     marks = data.get("marks")
+
     options = data.get("options")
-    correct_option = data.get("correct_option")
+
+    correct_option = data.get(
+        "correct_option"
+    )
+
+    if not isinstance(options, list) or not options:
+
+        cur.close()
+
+        return jsonify(
+            {
+                "message":
+                    "At least one option is required."
+            }
+        ), 400
 
     update_question_query = """
     UPDATE questions
@@ -432,7 +437,13 @@ def update_question(question_id):
     """
 
     cur.execute(
-        update_question_query, (question_text, difficulty, marks, question_id)
+        update_question_query,
+        (
+            question_text,
+            difficulty,
+            marks,
+            question_id,
+        ),
     )
 
     delete_options_query = """
@@ -440,11 +451,16 @@ def update_question(question_id):
     WHERE question_id = %s
     """
 
-    cur.execute(delete_options_query, (question_id,))
+    cur.execute(
+        delete_options_query,
+        (question_id,),
+    )
 
     for option in options:
 
-        is_correct = option == correct_option
+        is_correct = (
+            option == correct_option
+        )
 
         option_query = """
         INSERT INTO options
@@ -461,25 +477,40 @@ def update_question(question_id):
         )
         """
 
-        cur.execute(option_query, (question_id, option, is_correct))
+        cur.execute(
+            option_query,
+            (
+                question_id,
+                option,
+                is_correct,
+            ),
+        )
 
     mysql.connection.commit()
 
     cur.close()
 
-    return (
-        jsonify(
-            {
-                "message": "Question updated successfully",
-                "question_id": question_id,
-            }
-        ),
-        200,
-    )
+    return jsonify(
+        {
+            "message":
+                "Question updated successfully",
+
+            "question_id":
+                question_id,
+        }
+    ), 200
 
 
-@exam_bp.route("/exams", methods=["GET"])
+@exam_bp.route(
+    "/exams",
+    methods=["GET"],
+)
 @jwt_required()
+@role_required(
+    "Admin",
+    "Examiner",
+    "Candidate",
+)
 def get_exams():
 
     cur = mysql.connection.cursor()
@@ -524,32 +555,59 @@ def get_exams():
 
         exam_list.append(
             {
-                "exam_id": exam[0],
-                "title": exam[1],
-                "duration": exam[2],
-                "total_marks": exam[3],
-                "passing_marks": exam[4],
-                "created_by": exam[5],
-                "exam_type": exam[6],
+                "exam_id":
+                    exam[0],
+
+                "title":
+                    exam[1],
+
+                "duration":
+                    exam[2],
+
+                "total_marks":
+                    exam[3],
+
+                "passing_marks":
+                    exam[4],
+
+                "created_by":
+                    exam[5],
+
+                "exam_type":
+                    exam[6],
+
                 "scheduled_start": (
                     str(exam[7])
                     if exam[7]
                     else None
                 ),
+
                 "scheduled_end": (
                     str(exam[8])
                     if exam[8]
                     else None
                 ),
-                "is_scheduled": is_scheduled,
+
+                "is_scheduled":
+                    is_scheduled,
             }
         )
 
-    return jsonify(exam_list), 200
+    return jsonify(
+        exam_list
+    ), 200
 
 
-@exam_bp.route("/exam/<int:exam_id>", methods=["GET"])
+@exam_bp.route(
+    "/exam/<int:exam_id>",
+    methods=["GET"],
+)
 @jwt_required()
+@role_required(
+    "Admin",
+    "Examiner",
+    "Candidate",
+)
 def get_exam(exam_id):
 
     current_user_id = get_jwt_identity()
@@ -568,7 +626,10 @@ def get_exam(exam_id):
     WHERE user_id = %s
     """
 
-    cur.execute(user_query, (current_user_id,))
+    cur.execute(
+        user_query,
+        (current_user_id,),
+    )
 
     user = cur.fetchone()
 
@@ -576,7 +637,12 @@ def get_exam(exam_id):
 
         cur.close()
 
-        return jsonify({"message": "User not found"}), 404
+        return jsonify(
+            {
+                "message":
+                    "User not found"
+            }
+        ), 404
 
     user_role = user[0]
     user_batch_id = user[1]
@@ -597,7 +663,10 @@ def get_exam(exam_id):
     WHERE exam_id = %s
     """
 
-    cur.execute(exam_query, (exam_id,))
+    cur.execute(
+        exam_query,
+        (exam_id,),
+    )
 
     exam = cur.fetchone()
 
@@ -605,7 +674,12 @@ def get_exam(exam_id):
 
         cur.close()
 
-        return jsonify({"message": "Exam not found"}), 404
+        return jsonify(
+            {
+                "message":
+                    "Exam not found"
+            }
+        ), 404
 
     exam_type = exam[5]
 
@@ -613,103 +687,153 @@ def get_exam(exam_id):
     # Candidate Access Control
     # ==========================================
 
-    if user_role == "Candidate" and exam_type == "Actual":
+    if (
+        user_role == "Candidate"
+        and exam_type == "Actual"
+    ):
 
-        schedule_query = """
+        # ======================================
+        # Check For Existing Active Attempt
+        # ======================================
+
+        active_submission_query = """
         SELECT
-            schedule_id,
-            scheduled_start,
-            scheduled_end
-        FROM assessment_schedules
+            submission_id
+        FROM submissions
         WHERE
-            exam_id = %s
-            AND
-            (
-                candidate_id = %s
-                OR
-                (
-                    batch_id = %s
-                    AND candidate_id IS NULL
-                )
-            )
-        ORDER BY scheduled_start DESC
+            user_id = %s
+            AND exam_id = %s
+            AND status = 'In Progress'
+        ORDER BY submission_id DESC
         LIMIT 1
         """
 
         cur.execute(
-            schedule_query,
+            active_submission_query,
             (
-                exam_id,
                 current_user_id,
-                user_batch_id,
+                exam_id,
             ),
         )
 
-        schedule = cur.fetchone()
+        active_submission = cur.fetchone()
 
-        if not schedule:
+        has_active_attempt = (
+            active_submission is not None
+        )
 
-            cur.close()
+        # ======================================
+        # Only Enforce Schedule For New Attempts
+        # ======================================
 
-            return (
-                jsonify(
-                    {
-                        "message":
-                        "This assessment has not been scheduled for you."
-                    }
+        if not has_active_attempt:
+
+            schedule_query = """
+            SELECT
+                schedule_id,
+                scheduled_start,
+                scheduled_end
+            FROM assessment_schedules
+            WHERE
+                exam_id = %s
+                AND
+                (
+                    candidate_id = %s
+
+                    OR
+
+                    (
+                        batch_id = %s
+                        AND candidate_id IS NULL
+                    )
+                )
+            ORDER BY
+                scheduled_start DESC
+            LIMIT 1
+            """
+
+            cur.execute(
+                schedule_query,
+                (
+                    exam_id,
+                    current_user_id,
+                    user_batch_id,
                 ),
-                403,
             )
 
-        scheduled_start = schedule[1]
-        scheduled_end = schedule[2]
+            schedule = cur.fetchone()
 
-        # ==========================================
-        # Check Assessment Time Window
-        # ==========================================
+            if not schedule:
 
-        time_query = """
-SELECT DATE_ADD(
-    UTC_TIMESTAMP(),
-    INTERVAL 330 MINUTE
-)
-"""
+                cur.close()
 
-        cur.execute(time_query)
-
-        current_time = cur.fetchone()[0]
-
-        if current_time < scheduled_start:
-
-            cur.close()
-
-            return (
-                jsonify(
+                return jsonify(
                     {
                         "message":
-                        "This assessment has not started yet.",
+                            "This assessment has not been scheduled for you."
+                    }
+                ), 403
+
+            scheduled_start = schedule[1]
+            scheduled_end = schedule[2]
+
+            # ==================================
+            # Current India Time
+            # ==================================
+
+            time_query = """
+            SELECT
+                DATE_ADD(
+                    UTC_TIMESTAMP(),
+                    INTERVAL 330 MINUTE
+                )
+            """
+
+            cur.execute(time_query)
+
+            current_time = cur.fetchone()[0]
+
+            # ==================================
+            # Before Schedule Start
+            # ==================================
+
+            if current_time < scheduled_start:
+
+                cur.close()
+
+                return jsonify(
+                    {
+                        "message":
+                            "This assessment has not started yet.",
+
                         "scheduled_start":
-                        str(scheduled_start),
+                            str(scheduled_start),
                     }
-                ),
-                403,
-            )
+                ), 403
 
-        if current_time > scheduled_end:
+            # ==================================
+            # After Schedule End
+            # ==================================
 
-            cur.close()
+            if current_time > scheduled_end:
 
-            return (
-                jsonify(
+                cur.close()
+
+                return jsonify(
                     {
                         "message":
-                        "This assessment has ended.",
+                            "This assessment has ended.",
+
                         "scheduled_end":
-                        str(scheduled_end),
+                            str(scheduled_end),
                     }
-                ),
-                403,
-            )
+                ), 403
+
+        # ======================================
+        # Active Attempt
+        #
+        # No schedule-end validation happens.
+        # ======================================
 
     # ==========================================
     # Fetch Questions
@@ -725,7 +849,10 @@ SELECT DATE_ADD(
     WHERE exam_id = %s
     """
 
-    cur.execute(question_query, (exam_id,))
+    cur.execute(
+        question_query,
+        (exam_id,),
+    )
 
     questions = cur.fetchall()
 
@@ -748,7 +875,10 @@ SELECT DATE_ADD(
         ORDER BY option_id
         """
 
-        cur.execute(option_query, (question_id,))
+        cur.execute(
+            option_query,
+            (question_id,),
+        )
 
         options = cur.fetchall()
 
@@ -758,47 +888,69 @@ SELECT DATE_ADD(
 
             option_list.append(
                 {
-                    "option_id": option[0],
-                    "option_text": option[1],
+                    "option_id":
+                        option[0],
+
+                    "option_text":
+                        option[1],
                 }
             )
 
         question_list.append(
             {
-                "question_id": question[0],
-                "question_text": question[1],
-                "difficulty": question[2],
-                "marks": question[3],
-                "options": option_list,
+                "question_id":
+                    question[0],
+
+                "question_text":
+                    question[1],
+
+                "difficulty":
+                    question[2],
+
+                "marks":
+                    question[3],
+
+                "options":
+                    option_list,
             }
         )
 
     cur.close()
 
-    # ==========================================
-    # Response
-    # ==========================================
+    return jsonify(
+        {
+            "exam": {
+                "exam_id":
+                    exam[0],
 
-    return (
-        jsonify(
-            {
-                "exam": {
-                    "exam_id": exam[0],
-                    "title": exam[1],
-                    "duration": exam[2],
-                    "total_marks": exam[3],
-                    "passing_marks": exam[4],
-                    "exam_type": exam[5],
-                },
-                "questions": question_list,
-            }
-        ),
-        200,
-    )
+                "title":
+                    exam[1],
+
+                "duration":
+                    exam[2],
+
+                "total_marks":
+                    exam[3],
+
+                "passing_marks":
+                    exam[4],
+
+                "exam_type":
+                    exam[5],
+            },
+
+            "questions":
+                question_list,
+        }
+    ), 200
 
 
-@exam_bp.route("/question/<int:question_id>", methods=["GET"])
+@exam_bp.route(
+    "/question/<int:question_id>",
+    methods=["GET"],
+)
 @jwt_required()
+@role_required("Admin", "Examiner")
 def get_question(question_id):
 
     cur = mysql.connection.cursor()
@@ -813,7 +965,10 @@ def get_question(question_id):
     WHERE question_id = %s
     """
 
-    cur.execute(question_query, (question_id,))
+    cur.execute(
+        question_query,
+        (question_id,),
+    )
 
     question = cur.fetchone()
 
@@ -821,7 +976,12 @@ def get_question(question_id):
 
         cur.close()
 
-        return jsonify({"message": "Question not found"}), 404
+        return jsonify(
+            {
+                "message":
+                    "Question not found"
+            }
+        ), 404
 
     option_query = """
     SELECT
@@ -832,82 +992,79 @@ def get_question(question_id):
     ORDER BY option_id
     """
 
-    cur.execute(option_query, (question_id,))
+    cur.execute(
+        option_query,
+        (question_id,),
+    )
 
     options = cur.fetchall()
 
     option_list = []
+
     correct_option = ""
 
     for option in options:
 
-        option_list.append(option[0])
+        option_list.append(
+            option[0]
+        )
 
         if option[1]:
-            correct_option = option[0]
+
+            correct_option = (
+                option[0]
+            )
 
     cur.close()
 
-    return (
-        jsonify(
-            {
-                "question_id": question[0],
-                "question_text": question[1],
-                "difficulty": question[2],
-                "marks": question[3],
-                "options": option_list,
-                "correct_option": correct_option,
-            }
-        ),
-        200,
-    )
+    return jsonify(
+        {
+            "question_id":
+                question[0],
+
+            "question_text":
+                question[1],
+
+            "difficulty":
+                question[2],
+
+            "marks":
+                question[3],
+
+            "options":
+                option_list,
+
+            "correct_option":
+                correct_option,
+        }
+    ), 200
 
 
-@exam_bp.route("/delete-exam/<int:exam_id>", methods=["DELETE"])
+@exam_bp.route(
+    "/delete-exam/<int:exam_id>",
+    methods=["DELETE"],
+)
 @jwt_required()
+@role_required("Admin", "Examiner")
 def delete_exam(exam_id):
 
-    current_user_id = get_jwt_identity()
-
     cur = mysql.connection.cursor()
-
-    # ==========================================
-    # Verify User Role
-    # ==========================================
-
-    role_query = """
-    SELECT role
-    FROM users
-    WHERE user_id = %s
-    """
-
-    cur.execute(role_query, (current_user_id,))
-
-    user = cur.fetchone()
-
-    if not user:
-
-        cur.close()
-
-        return jsonify({"message": "User not found"}), 404
-
-    if user[0] not in ["Admin", "Examiner"]:
-
-        cur.close()
-
-        return jsonify({"message": "Access denied"}), 403
 
     # ==========================================
     # Verify Exam Exists
     # ==========================================
 
     exam_query = """
-    SELECT exam_id
+    SELECT
+        exam_id
     FROM exams
     WHERE exam_id = %s
     """
 
-    cur.execute(exam_query, (exam_id,))
+    cur.execute(
+        exam_query,
+        (exam_id,),
+    )
 
     exam = cur.fetchone()
 
@@ -915,27 +1072,36 @@ def delete_exam(exam_id):
 
         cur.close()
 
-        return jsonify({"message": "Exam not found"}), 404
+        return jsonify(
+            {
+                "message":
+                    "Exam not found"
+            }
+        ), 404
 
     try:
 
-        # ==========================================
+        # ======================================
         # Fetch Questions
-        # ==========================================
+        # ======================================
 
         question_query = """
-        SELECT question_id
+        SELECT
+            question_id
         FROM questions
         WHERE exam_id = %s
         """
 
-        cur.execute(question_query, (exam_id,))
+        cur.execute(
+            question_query,
+            (exam_id,),
+        )
 
         questions = cur.fetchall()
 
-        # ==========================================
+        # ======================================
         # Delete Question Dependencies
-        # ==========================================
+        # ======================================
 
         for question in questions:
 
@@ -961,9 +1127,9 @@ def delete_exam(exam_id):
                 (question_id,),
             )
 
-        # ==========================================
+        # ======================================
         # Delete Questions
-        # ==========================================
+        # ======================================
 
         delete_questions_query = """
         DELETE FROM questions
@@ -975,9 +1141,9 @@ def delete_exam(exam_id):
             (exam_id,),
         )
 
-        # ==========================================
+        # ======================================
         # Delete Submissions
-        # ==========================================
+        # ======================================
 
         delete_submissions_query = """
         DELETE FROM submissions
@@ -989,9 +1155,9 @@ def delete_exam(exam_id):
             (exam_id,),
         )
 
-        # ==========================================
+        # ======================================
         # Delete Assessment Schedules
-        # ==========================================
+        # ======================================
 
         delete_schedules_query = """
         DELETE FROM assessment_schedules
@@ -1003,9 +1169,9 @@ def delete_exam(exam_id):
             (exam_id,),
         )
 
-        # ==========================================
+        # ======================================
         # Delete Exam
-        # ==========================================
+        # ======================================
 
         delete_exam_query = """
         DELETE FROM exams
@@ -1017,9 +1183,9 @@ def delete_exam(exam_id):
             (exam_id,),
         )
 
-        # ==========================================
+        # ======================================
         # Commit Transaction
-        # ==========================================
+        # ======================================
 
         mysql.connection.commit()
 
@@ -1029,23 +1195,18 @@ def delete_exam(exam_id):
 
         cur.close()
 
-        return (
-            jsonify(
-                {
-                    "message": str(error)
-                }
-            ),
-            500,
-        )
+        return jsonify(
+            {
+                "message":
+                    str(error)
+            }
+        ), 500
 
     cur.close()
 
-    return (
-        jsonify(
-            {
-                "message":
-                    "Exam deleted successfully"
-            }
-        ),
-        200,
-    )
+    return jsonify(
+        {
+            "message":
+                "Exam deleted successfully"
+        }
+    ), 200

@@ -67,6 +67,7 @@ from routes.ai_routes import ai_bp
 
 from routes.schedule_routes import schedule_bp
 from routes.bulk_question_routes import bulk_question_bp
+from routes.bulk_user_routes import bulk_user_bp
 
 
 app.register_blueprint(auth_bp)
@@ -79,6 +80,7 @@ app.register_blueprint(ai_bp)
 
 app.register_blueprint(schedule_bp)
 app.register_blueprint(bulk_question_bp)
+app.register_blueprint(bulk_user_bp)
 
 
 @app.route("/")

@@ -5,15 +5,13 @@ from flask import (
     send_file,
 )
 
-from flask_jwt_extended import (
-    jwt_required,
-    get_jwt_identity,
-)
+from flask_jwt_extended import jwt_required
 
 import io
 import pandas as pd
 
 from extensions import mysql
+from utils.decorators import role_required
 
 
 batch_bp = Blueprint(
@@ -22,57 +20,19 @@ batch_bp = Blueprint(
 )
 
 
-# ==============================================
-# Create Batch
-# ==============================================
-
-@batch_bp.route("/create-batch", methods=["POST"])
+@batch_bp.route(
+    "/create-batch",
+    methods=["POST"]
+)
 @jwt_required()
+@role_required("Admin")
 def create_batch():
-
-    current_user_id = get_jwt_identity()
 
     cur = mysql.connection.cursor()
 
-    # ==========================================
-    # Verify User Role
-    # ==========================================
-
-    role_query = """
-    SELECT role
-    FROM users
-    WHERE user_id = %s
-    """
-
-    cur.execute(role_query, (current_user_id,))
-
-    user = cur.fetchone()
-
-    if not user:
-
-        cur.close()
-
-        return jsonify({"message": "User not found"}), 404
-
-    if user[0] != "Admin":
-
-        cur.close()
-
-        return (
-            jsonify(
-                {
-                    "message":
-                    "Only Admin can create batches."
-                }
-            ),
-            403,
-        )
-
-    # ==========================================
-    # Read Request Data
-    # ==========================================
-
-    data = request.get_json()
+    data = request.get_json(
+        silent=True
+    ) or {}
 
     batch_name = data.get("batch_name")
     technology = data.get("technology")
@@ -80,10 +40,6 @@ def create_batch():
     description = data.get("description")
     start_date = data.get("start_date")
     end_date = data.get("end_date")
-
-    # ==========================================
-    # Validation
-    # ==========================================
 
     if (
         not batch_name
@@ -120,17 +76,16 @@ def create_batch():
             400,
         )
 
-    # ==========================================
-    # Prevent Duplicate Batch Names
-    # ==========================================
-
     check_query = """
     SELECT batch_id
     FROM batches
     WHERE batch_name = %s
     """
 
-    cur.execute(check_query, (batch_name,))
+    cur.execute(
+        check_query,
+        (batch_name,)
+    )
 
     existing = cur.fetchone()
 
@@ -147,10 +102,6 @@ def create_batch():
             ),
             400,
         )
-
-    # ==========================================
-    # Calculate Initial Status Automatically
-    # ==========================================
 
     status_query = """
     SELECT
@@ -174,10 +125,6 @@ def create_batch():
     )
 
     status = cur.fetchone()[0]
-
-    # ==========================================
-    # Insert Batch
-    # ==========================================
 
     insert_query = """
     INSERT INTO batches
@@ -225,63 +172,25 @@ def create_batch():
         jsonify(
             {
                 "message":
-                    "Batch created successfully.",
-                "batch_id": batch_id,
+                "Batch created successfully.",
+
+                "batch_id":
+                batch_id,
             }
         ),
         201,
     )
 
 
-# ==============================================
-# Get All Batches
-# ==============================================
-
-@batch_bp.route("/batches", methods=["GET"])
+@batch_bp.route(
+    "/batches",
+    methods=["GET"]
+)
 @jwt_required()
+@role_required("Admin")
 def get_batches():
 
-    current_user_id = get_jwt_identity()
-
     cur = mysql.connection.cursor()
-
-    # ==========================================
-    # Verify User Role
-    # ==========================================
-
-    role_query = """
-    SELECT role
-    FROM users
-    WHERE user_id = %s
-    """
-
-    cur.execute(role_query, (current_user_id,))
-
-    user = cur.fetchone()
-
-    if not user:
-
-        cur.close()
-
-        return jsonify({"message": "User not found"}), 404
-
-    if user[0] != "Admin":
-
-        cur.close()
-
-        return (
-            jsonify(
-                {
-                    "message":
-                    "Only Admin can view batches."
-                }
-            ),
-            403,
-        )
-
-    # ==========================================
-    # Synchronize Batch Statuses
-    # ==========================================
 
     status_update_query = """
     UPDATE batches
@@ -297,13 +206,11 @@ def get_batches():
         END
     """
 
-    cur.execute(status_update_query)
+    cur.execute(
+        status_update_query
+    )
 
     mysql.connection.commit()
-
-    # ==========================================
-    # Fetch All Batches
-    # ==========================================
 
     batch_query = """
     SELECT
@@ -316,9 +223,11 @@ def get_batches():
         b.end_date,
         b.status,
 
-        COUNT(DISTINCT u.user_id) AS candidate_count,
+        COUNT(DISTINCT u.user_id)
+            AS candidate_count,
 
-        COUNT(DISTINCT s.schedule_id) AS assignment_count
+        COUNT(DISTINCT s.schedule_id)
+            AS assignment_count
 
     FROM batches b
 
@@ -342,9 +251,13 @@ def get_batches():
         b.batch_id DESC
     """
 
-    cur.execute(batch_query)
+    cur.execute(
+        batch_query
+    )
 
     batches = cur.fetchall()
+
+    cur.close()
 
     batch_list = []
 
@@ -352,73 +265,52 @@ def get_batches():
 
         batch_list.append(
             {
-                "batch_id": batch[0],
-                "batch_name": batch[1],
-                "technology": batch[2],
-                "trainer_name": batch[3],
-                "description": batch[4],
-                "start_date": str(batch[5]),
-                "end_date": str(batch[6]),
-                "status": batch[7],
-                "candidate_count": batch[8],
-                "assignment_count": batch[9],
+                "batch_id":
+                    batch[0],
+
+                "batch_name":
+                    batch[1],
+
+                "technology":
+                    batch[2],
+
+                "trainer_name":
+                    batch[3],
+
+                "description":
+                    batch[4],
+
+                "start_date":
+                    str(batch[5]),
+
+                "end_date":
+                    str(batch[6]),
+
+                "status":
+                    batch[7],
+
+                "candidate_count":
+                    batch[8],
+
+                "assignment_count":
+                    batch[9],
             }
         )
 
-    cur.close()
+    return jsonify(
+        batch_list
+    ), 200
 
-    return jsonify(batch_list), 200
 
-
-# ==============================================
-# Get Batch
-# ==============================================
-
-@batch_bp.route("/batch/<int:batch_id>", methods=["GET"])
+@batch_bp.route(
+    "/batch/<int:batch_id>",
+    methods=["GET"]
+)
 @jwt_required()
+@role_required("Admin")
 def get_batch(batch_id):
 
-    current_user_id = get_jwt_identity()
-
     cur = mysql.connection.cursor()
-
-    # ==========================================
-    # Verify Admin
-    # ==========================================
-
-    role_query = """
-    SELECT role
-    FROM users
-    WHERE user_id = %s
-    """
-
-    cur.execute(role_query, (current_user_id,))
-
-    user = cur.fetchone()
-
-    if not user:
-
-        cur.close()
-
-        return jsonify({"message": "User not found"}), 404
-
-    if user[0] != "Admin":
-
-        cur.close()
-
-        return (
-            jsonify(
-                {
-                    "message":
-                    "Only Admin can view batch details."
-                }
-            ),
-            403,
-        )
-
-    # ==========================================
-    # Synchronize Batch Status
-    # ==========================================
 
     status_update_query = """
     UPDATE batches
@@ -442,10 +334,6 @@ def get_batch(batch_id):
 
     mysql.connection.commit()
 
-    # ==========================================
-    # Fetch Batch
-    # ==========================================
-
     query = """
     SELECT
         batch_id,
@@ -456,13 +344,14 @@ def get_batch(batch_id):
         start_date,
         end_date,
         status
-
     FROM batches
-
     WHERE batch_id = %s
     """
 
-    cur.execute(query, (batch_id,))
+    cur.execute(
+        query,
+        (batch_id,)
+    )
 
     batch = cur.fetchone()
 
@@ -483,80 +372,44 @@ def get_batch(batch_id):
     return (
         jsonify(
             {
-                "batch_id": batch[0],
-                "batch_name": batch[1],
-                "technology": batch[2],
-                "trainer_name": batch[3],
-                "description": batch[4],
-                "start_date": str(batch[5]),
-                "end_date": str(batch[6]),
-                "status": batch[7],
+                "batch_id":
+                    batch[0],
+
+                "batch_name":
+                    batch[1],
+
+                "technology":
+                    batch[2],
+
+                "trainer_name":
+                    batch[3],
+
+                "description":
+                    batch[4],
+
+                "start_date":
+                    str(batch[5]),
+
+                "end_date":
+                    str(batch[6]),
+
+                "status":
+                    batch[7],
             }
         ),
         200,
     )
 
 
-# ==============================================
-# Batch Details
-# ==============================================
-
 @batch_bp.route(
     "/batch-details/<int:batch_id>",
     methods=["GET"],
 )
 @jwt_required()
+@role_required("Admin")
 def get_batch_details(batch_id):
 
-    current_user_id = get_jwt_identity()
-
     cur = mysql.connection.cursor()
-
-    # ==========================================
-    # Verify Admin
-    # ==========================================
-
-    role_query = """
-    SELECT role
-    FROM users
-    WHERE user_id = %s
-    """
-
-    cur.execute(
-        role_query,
-        (current_user_id,),
-    )
-
-    user = cur.fetchone()
-
-    if not user:
-
-        cur.close()
-
-        return jsonify(
-            {
-                "message":
-                    "User not found"
-            }
-        ), 404
-
-    if user[0] != "Admin":
-
-        cur.close()
-
-        return (
-            jsonify(
-                {
-                    "message":
-                        "Only Admin can access batch details."
-                }
-            ),
-            403,
-        )
-
-    # ==========================================
-    # Synchronize Batch Status
-    # ==========================================
 
     status_update_query = """
     UPDATE batches
@@ -580,10 +433,6 @@ def get_batch_details(batch_id):
 
     mysql.connection.commit()
 
-    # ==========================================
-    # Fetch Batch
-    # ==========================================
-
     batch_query = """
     SELECT
         batch_id,
@@ -594,9 +443,7 @@ def get_batch_details(batch_id):
         start_date,
         end_date,
         status
-
     FROM batches
-
     WHERE batch_id = %s
     """
 
@@ -615,21 +462,11 @@ def get_batch_details(batch_id):
             jsonify(
                 {
                     "message":
-                        "Batch not found"
+                    "Batch not found"
                 }
             ),
             404,
         )
-
-    # ==========================================
-    # Fetch Batch Candidates
-    #
-    # Candidates are determined ONLY by their
-    # batch assignment.
-    #
-    # Performance statistics include ONLY
-    # Actual assessments scheduled for THIS batch.
-    # ==========================================
 
     candidate_query = """
     SELECT
@@ -661,7 +498,10 @@ def get_batch_details(batch_id):
                     (
                         s.score * 100.0
                     )
-                    / NULLIF(e.total_marks, 0)
+                    / NULLIF(
+                        e.total_marks,
+                        0
+                    )
                 ),
                 2
             ) AS average_score
@@ -684,7 +524,8 @@ def get_batch_details(batch_id):
 
     ) performance
 
-        ON u.user_id = performance.user_id
+        ON u.user_id =
+            performance.user_id
 
     WHERE
         u.batch_id = %s
@@ -703,10 +544,6 @@ def get_batch_details(batch_id):
 
     candidates = cur.fetchall()
 
-    # ==========================================
-    # Build Candidate List
-    # ==========================================
-
     candidate_list = []
 
     for candidate in candidates:
@@ -723,20 +560,20 @@ def get_batch_details(batch_id):
                     candidate[2],
 
                 "assessment_count":
-                    int(candidate[3] or 0),
+                    int(
+                        candidate[3] or 0
+                    ),
 
                 "average_score":
-                    float(candidate[4])
+                    float(
+                        candidate[4]
+                    )
                     if candidate[4] is not None
                     else None,
             }
         )
 
     cur.close()
-
-    # ==========================================
-    # Final Response
-    # ==========================================
 
     return (
         jsonify(
@@ -778,76 +615,32 @@ def get_batch_details(batch_id):
     )
 
 
-# ==============================================
-# Available Candidates
-# ==============================================
-
 @batch_bp.route(
     "/available-candidates",
     methods=["GET"],
 )
 @jwt_required()
+@role_required("Admin")
 def get_available_candidates():
 
-    current_user_id = get_jwt_identity()
-
     cur = mysql.connection.cursor()
-
-    # ==========================================
-    # Verify Admin
-    # ==========================================
-
-    role_query = """
-    SELECT role
-    FROM users
-    WHERE user_id = %s
-    """
-
-    cur.execute(role_query, (current_user_id,))
-
-    user = cur.fetchone()
-
-    if not user:
-
-        cur.close()
-
-        return jsonify({"message": "User not found"}), 404
-
-    if user[0] != "Admin":
-
-        cur.close()
-
-        return (
-            jsonify(
-                {
-                    "message":
-                    "Only Admin can access this resource."
-                }
-            ),
-            403,
-        )
-
-    # ==========================================
-    # Fetch Unassigned Candidates
-    # ==========================================
 
     query = """
     SELECT
         user_id,
         name,
         email
-
     FROM users
-
     WHERE
         role = 'Candidate'
         AND batch_id IS NULL
-
     ORDER BY
         name
     """
 
-    cur.execute(query)
+    cur.execute(
+        query
+    )
 
     candidates = cur.fetchall()
 
@@ -859,76 +652,43 @@ def get_available_candidates():
 
         result.append(
             {
-                "user_id": candidate[0],
-                "name": candidate[1],
-                "email": candidate[2],
+                "user_id":
+                    candidate[0],
+
+                "name":
+                    candidate[1],
+
+                "email":
+                    candidate[2],
             }
         )
 
-    return jsonify(result), 200
+    return jsonify(
+        result
+    ), 200
 
-
-# ==============================================
-# Assign Candidate
-# ==============================================
 
 @batch_bp.route(
     "/assign-candidate",
     methods=["PUT"],
 )
 @jwt_required()
+@role_required("Admin")
 def assign_candidate():
-
-    current_user_id = get_jwt_identity()
 
     cur = mysql.connection.cursor()
 
-    # ==========================================
-    # Verify Admin
-    # ==========================================
+    data = request.get_json(
+        silent=True
+    ) or {}
 
-    role_query = """
-    SELECT role
-    FROM users
-    WHERE user_id = %s
-    """
+    batch_id = data.get(
+        "batch_id"
+    )
 
-    cur.execute(role_query, (current_user_id,))
-
-    user = cur.fetchone()
-
-    if not user:
-
-        cur.close()
-
-        return jsonify({"message": "User not found"}), 404
-
-    if user[0] != "Admin":
-
-        cur.close()
-
-        return (
-            jsonify(
-                {
-                    "message":
-                    "Only Admin can assign candidates."
-                }
-            ),
-            403,
-        )
-
-    # ==========================================
-    # Read Request
-    # ==========================================
-
-    data = request.get_json()
-
-    batch_id = data.get("batch_id")
-    user_ids = data.get("user_ids")
-
-    # ==========================================
-    # Validation
-    # ==========================================
+    user_ids = data.get(
+        "user_ids"
+    )
 
     if not batch_id:
 
@@ -944,7 +704,10 @@ def assign_candidate():
             400,
         )
 
-    if not user_ids or len(user_ids) == 0:
+    if (
+        not user_ids
+        or len(user_ids) == 0
+    ):
 
         cur.close()
 
@@ -957,10 +720,6 @@ def assign_candidate():
             ),
             400,
         )
-
-    # ==========================================
-    # Verify Batch Exists
-    # ==========================================
 
     batch_query = """
     SELECT batch_id
@@ -989,10 +748,6 @@ def assign_candidate():
             404,
         )
 
-    # ==========================================
-    # Assign Candidates
-    # ==========================================
-
     update_query = """
     UPDATE users
     SET batch_id = %s
@@ -1013,7 +768,9 @@ def assign_candidate():
             ),
         )
 
-        assigned_count += cur.rowcount
+        assigned_count += (
+            cur.rowcount
+        )
 
     mysql.connection.commit()
 
@@ -1023,75 +780,36 @@ def assign_candidate():
         jsonify(
             {
                 "message":
-                    f"{assigned_count} candidate(s) assigned successfully."
+                f"{assigned_count} "
+                "candidate(s) assigned successfully."
             }
         ),
         200,
     )
 
 
-# ==============================================
-# Unassign Candidate
-# ==============================================
-
 @batch_bp.route(
     "/unassign-candidate",
     methods=["PUT"],
 )
 @jwt_required()
+@role_required("Admin")
 def unassign_candidate():
-
-    current_user_id = get_jwt_identity()
 
     cur = mysql.connection.cursor()
 
-    # ==========================================
-    # Verify Admin
-    # ==========================================
+    data = request.get_json(
+        silent=True
+    ) or {}
 
-    role_query = """
-    SELECT role
-    FROM users
-    WHERE user_id = %s
-    """
+    user_ids = data.get(
+        "user_ids"
+    )
 
-    cur.execute(role_query, (current_user_id,))
-
-    user = cur.fetchone()
-
-    if not user:
-
-        cur.close()
-
-        return jsonify({"message": "User not found"}), 404
-
-    if user[0] != "Admin":
-
-        cur.close()
-
-        return (
-            jsonify(
-                {
-                    "message":
-                    "Only Admin can unassign candidates."
-                }
-            ),
-            403,
-        )
-
-    # ==========================================
-    # Read Request
-    # ==========================================
-
-    data = request.get_json()
-
-    user_ids = data.get("user_ids")
-
-    # ==========================================
-    # Validation
-    # ==========================================
-
-    if not user_ids or len(user_ids) == 0:
+    if (
+        not user_ids
+        or len(user_ids) == 0
+    ):
 
         cur.close()
 
@@ -1104,10 +822,6 @@ def unassign_candidate():
             ),
             400,
         )
-
-    # ==========================================
-    # Unassign Candidates
-    # ==========================================
 
     update_query = """
     UPDATE users
@@ -1123,10 +837,12 @@ def unassign_candidate():
 
         cur.execute(
             update_query,
-            (user_id,),
+            (user_id,)
         )
 
-        unassigned_count += cur.rowcount
+        unassigned_count += (
+            cur.rowcount
+        )
 
     mysql.connection.commit()
 
@@ -1136,78 +852,51 @@ def unassign_candidate():
         jsonify(
             {
                 "message":
-                    f"{unassigned_count} candidate(s) unassigned successfully."
+                f"{unassigned_count} "
+                "candidate(s) unassigned successfully."
             }
         ),
         200,
     )
 
 
-# ==============================================
-# Update Batch
-# ==============================================
-
 @batch_bp.route(
     "/update-batch/<int:batch_id>",
     methods=["PUT"],
 )
 @jwt_required()
+@role_required("Admin")
 def update_batch(batch_id):
-
-    current_user_id = get_jwt_identity()
 
     cur = mysql.connection.cursor()
 
-    # ==========================================
-    # Verify Admin
-    # ==========================================
+    data = request.get_json(
+        silent=True
+    ) or {}
 
-    role_query = """
-    SELECT role
-    FROM users
-    WHERE user_id = %s
-    """
+    batch_name = data.get(
+        "batch_name"
+    )
 
-    cur.execute(role_query, (current_user_id,))
+    technology = data.get(
+        "technology"
+    )
 
-    user = cur.fetchone()
+    trainer_name = data.get(
+        "trainer_name"
+    )
 
-    if not user:
+    description = data.get(
+        "description"
+    )
 
-        cur.close()
+    start_date = data.get(
+        "start_date"
+    )
 
-        return jsonify({"message": "User not found"}), 404
-
-    if user[0] != "Admin":
-
-        cur.close()
-
-        return (
-            jsonify(
-                {
-                    "message":
-                    "Only Admin can update batches."
-                }
-            ),
-            403,
-        )
-
-    # ==========================================
-    # Read Request Data
-    # ==========================================
-
-    data = request.get_json()
-
-    batch_name = data.get("batch_name")
-    technology = data.get("technology")
-    trainer_name = data.get("trainer_name")
-    description = data.get("description")
-    start_date = data.get("start_date")
-    end_date = data.get("end_date")
-
-    # ==========================================
-    # Validation
-    # ==========================================
+    end_date = data.get(
+        "end_date"
+    )
 
     if (
         not batch_name
@@ -1244,10 +933,6 @@ def update_batch(batch_id):
             400,
         )
 
-    # ==========================================
-    # Verify Batch Exists
-    # ==========================================
-
     check_query = """
     SELECT batch_id
     FROM batches
@@ -1275,10 +960,6 @@ def update_batch(batch_id):
             404,
         )
 
-    # ==========================================
-    # Calculate Status Automatically
-    # ==========================================
-
     status_query = """
     SELECT
         CASE
@@ -1302,10 +983,6 @@ def update_batch(batch_id):
 
     status = cur.fetchone()[0]
 
-    # ==========================================
-    # Update Batch
-    # ==========================================
-
     update_query = """
     UPDATE batches
     SET
@@ -1316,7 +993,6 @@ def update_batch(batch_id):
         start_date = %s,
         end_date = %s,
         status = %s
-
     WHERE batch_id = %s
     """
 
@@ -1342,65 +1018,22 @@ def update_batch(batch_id):
         jsonify(
             {
                 "message":
-                    "Batch updated successfully."
+                "Batch updated successfully."
             }
         ),
         200,
     )
 
 
-# ==============================================
-# Delete Batch
-# ==============================================
-
 @batch_bp.route(
     "/delete-batch/<int:batch_id>",
     methods=["DELETE"],
 )
 @jwt_required()
+@role_required("Admin")
 def delete_batch(batch_id):
 
-    current_user_id = get_jwt_identity()
-
     cur = mysql.connection.cursor()
-
-    # ==========================================
-    # Verify Admin
-    # ==========================================
-
-    role_query = """
-    SELECT role
-    FROM users
-    WHERE user_id = %s
-    """
-
-    cur.execute(role_query, (current_user_id,))
-
-    user = cur.fetchone()
-
-    if not user:
-
-        cur.close()
-
-        return jsonify({"message": "User not found"}), 404
-
-    if user[0] != "Admin":
-
-        cur.close()
-
-        return (
-            jsonify(
-                {
-                    "message":
-                    "Only Admin can delete batches."
-                }
-            ),
-            403,
-        )
-
-    # ==========================================
-    # Verify Batch Exists
-    # ==========================================
 
     check_query = """
     SELECT batch_id
@@ -1429,10 +1062,6 @@ def delete_batch(batch_id):
             404,
         )
 
-    # ==========================================
-    # Delete Batch
-    # ==========================================
-
     delete_query = """
     DELETE FROM batches
     WHERE batch_id = %s
@@ -1451,68 +1080,25 @@ def delete_batch(batch_id):
         jsonify(
             {
                 "message":
-                    "Batch deleted successfully"
+                "Batch deleted successfully"
             }
         ),
         200,
     )
 
 
-# ==============================================
-# Batch Report
-# ==============================================
-
 @batch_bp.route(
     "/batch-report/<int:batch_id>",
     methods=["GET"],
 )
 @jwt_required()
+@role_required(
+    "Admin",
+    "Examiner"
+)
 def get_batch_report(batch_id):
 
-    current_user_id = get_jwt_identity()
-
     cur = mysql.connection.cursor()
-
-    # ==========================================
-    # Verify Admin / Examiner
-    # ==========================================
-
-    role_query = """
-    SELECT role
-    FROM users
-    WHERE user_id = %s
-    """
-
-    cur.execute(
-        role_query,
-        (current_user_id,),
-    )
-
-    user = cur.fetchone()
-
-    if not user:
-
-        cur.close()
-
-        return jsonify(
-            {
-                "message": "User not found"
-            }
-        ), 404
-
-    if user[0] not in ["Admin", "Examiner"]:
-
-        cur.close()
-
-        return jsonify(
-            {
-                "message": "Access denied"
-            }
-        ), 403
-
-    # ==========================================
-    # Fetch Batch Details
-    # ==========================================
 
     batch_query = """
     SELECT
@@ -1541,18 +1127,10 @@ def get_batch_report(batch_id):
 
         return jsonify(
             {
-                "message": "Batch not found"
+                "message":
+                "Batch not found"
             }
         ), 404
-
-    # ==========================================
-    # Batch Summary
-    #
-    # IMPORTANT:
-    # Only submissions belonging to Actual
-    # assessments scheduled for THIS batch
-    # are included.
-    # ==========================================
 
     summary_query = """
     SELECT
@@ -1585,7 +1163,10 @@ def get_batch_report(batch_id):
                 (
                     s.score * 100.0
                 )
-                / NULLIF(e.total_marks, 0)
+                / NULLIF(
+                    e.total_marks,
+                    0
+                )
             ),
             2
         ) AS average_score,
@@ -1595,7 +1176,10 @@ def get_batch_report(batch_id):
                 (
                     s.score * 100.0
                 )
-                / NULLIF(e.total_marks, 0)
+                / NULLIF(
+                    e.total_marks,
+                    0
+                )
             ),
             2
         ) AS highest_score,
@@ -1605,7 +1189,10 @@ def get_batch_report(batch_id):
                 (
                     s.score * 100.0
                 )
-                / NULLIF(e.total_marks, 0)
+                / NULLIF(
+                    e.total_marks,
+                    0
+                )
             ),
             2
         ) AS lowest_score,
@@ -1664,14 +1251,6 @@ def get_batch_report(batch_id):
 
     summary = cur.fetchone()
 
-    # ==========================================
-    # Candidate Performance
-    #
-    # Each candidate is evaluated ONLY against
-    # submissions for Actual assessments that
-    # were scheduled for this batch.
-    # ==========================================
-
     candidate_query = """
     SELECT
 
@@ -1687,7 +1266,10 @@ def get_batch_report(batch_id):
                 (
                     s.score * 100.0
                 )
-                / NULLIF(e.total_marks, 0)
+                / NULLIF(
+                    e.total_marks,
+                    0
+                )
             ),
             2
         ) AS average_score,
@@ -1697,7 +1279,10 @@ def get_batch_report(batch_id):
                 (
                     s.score * 100.0
                 )
-                / NULLIF(e.total_marks, 0)
+                / NULLIF(
+                    e.total_marks,
+                    0
+                )
             ),
             2
         ) AS highest_score,
@@ -1707,7 +1292,10 @@ def get_batch_report(batch_id):
                 (
                     s.score * 100.0
                 )
-                / NULLIF(e.total_marks, 0)
+                / NULLIF(
+                    e.total_marks,
+                    0
+                )
             ),
             2
         ) AS lowest_score,
@@ -1772,16 +1360,6 @@ def get_batch_report(batch_id):
 
     candidates = cur.fetchall()
 
-    # ==========================================
-    # Assessment Performance
-    #
-    # Start from assessments scheduled for
-    # THIS batch, rather than submissions.
-    #
-    # This means an assessment still appears
-    # even if nobody has submitted it yet.
-    # ==========================================
-
     assessment_query = """
     SELECT
 
@@ -1798,7 +1376,10 @@ def get_batch_report(batch_id):
                 (
                     s.score * 100.0
                 )
-                / NULLIF(e.total_marks, 0)
+                / NULLIF(
+                    e.total_marks,
+                    0
+                )
             ),
             2
         ) AS average_score,
@@ -1808,7 +1389,10 @@ def get_batch_report(batch_id):
                 (
                     s.score * 100.0
                 )
-                / NULLIF(e.total_marks, 0)
+                / NULLIF(
+                    e.total_marks,
+                    0
+                )
             ),
             2
         ) AS highest_score,
@@ -1818,7 +1402,10 @@ def get_batch_report(batch_id):
                 (
                     s.score * 100.0
                 )
-                / NULLIF(e.total_marks, 0)
+                / NULLIF(
+                    e.total_marks,
+                    0
+                )
             ),
             2
         ) AS lowest_score,
@@ -1848,8 +1435,7 @@ def get_batch_report(batch_id):
         SELECT DISTINCT
             exam_id
         FROM assessment_schedules
-        WHERE
-            batch_id = %s
+        WHERE batch_id = %s
     ) scheduled
 
     JOIN exams e
@@ -1891,10 +1477,6 @@ def get_batch_report(batch_id):
 
     cur.close()
 
-    # ==========================================
-    # Build Candidate List
-    # ==========================================
-
     candidate_list = []
 
     for index, candidate in enumerate(
@@ -1902,48 +1484,51 @@ def get_batch_report(batch_id):
         start=1,
     ):
 
-        average_score = (
-            float(candidate[4])
-            if candidate[4] is not None
-            else None
-        )
-
-        highest_score = (
-            float(candidate[5])
-            if candidate[5] is not None
-            else None
-        )
-
-        lowest_score = (
-            float(candidate[6])
-            if candidate[6] is not None
-            else None
-        )
-
         candidate_list.append(
             {
-                "rank": index,
-                "user_id": candidate[0],
-                "name": candidate[1],
-                "email": candidate[2],
-                "assessment_count": int(
-                    candidate[3] or 0
-                ),
-                "average_score": average_score,
-                "highest_score": highest_score,
-                "lowest_score": lowest_score,
-                "pass_count": int(
-                    candidate[7] or 0
-                ),
-                "fail_count": int(
-                    candidate[8] or 0
-                ),
+                "rank":
+                    index,
+
+                "user_id":
+                    candidate[0],
+
+                "name":
+                    candidate[1],
+
+                "email":
+                    candidate[2],
+
+                "assessment_count":
+                    int(
+                        candidate[3] or 0
+                    ),
+
+                "average_score":
+                    float(candidate[4])
+                    if candidate[4] is not None
+                    else None,
+
+                "highest_score":
+                    float(candidate[5])
+                    if candidate[5] is not None
+                    else None,
+
+                "lowest_score":
+                    float(candidate[6])
+                    if candidate[6] is not None
+                    else None,
+
+                "pass_count":
+                    int(
+                        candidate[7] or 0
+                    ),
+
+                "fail_count":
+                    int(
+                        candidate[8] or 0
+                    ),
             }
         )
-
-    # ==========================================
-    # Build Assessment List
-    # ==========================================
 
     assessment_list = []
 
@@ -1975,10 +1560,17 @@ def get_batch_report(batch_id):
 
         assessment_list.append(
             {
-                "exam_id": assessment[0],
-                "title": assessment[1],
-                "total_marks": assessment[2],
-                "passing_marks": assessment[3],
+                "exam_id":
+                    assessment[0],
+
+                "title":
+                    assessment[1],
+
+                "total_marks":
+                    assessment[2],
+
+                "passing_marks":
+                    assessment[3],
 
                 "submission_count":
                     submission_count,
@@ -2008,10 +1600,6 @@ def get_batch_report(batch_id):
                     pass_percentage,
             }
         )
-
-    # ==========================================
-    # Calculate Overall Summary Values
-    # ==========================================
 
     total_candidates = int(
         summary[0] or 0
@@ -2045,26 +1633,33 @@ def get_batch_report(batch_id):
         else 0
     )
 
-    # ==========================================
-    # Final Response
-    # ==========================================
-
     return (
         jsonify(
             {
                 "batch": {
-                    "batch_id": batch[0],
-                    "batch_name": batch[1],
-                    "technology": batch[2],
-                    "trainer_name": batch[3],
-                    "description": batch[4],
-                    "start_date": str(
-                        batch[5]
-                    ),
-                    "end_date": str(
-                        batch[6]
-                    ),
-                    "status": batch[7],
+                    "batch_id":
+                        batch[0],
+
+                    "batch_name":
+                        batch[1],
+
+                    "technology":
+                        batch[2],
+
+                    "trainer_name":
+                        batch[3],
+
+                    "description":
+                        batch[4],
+
+                    "start_date":
+                        str(batch[5]),
+
+                    "end_date":
+                        str(batch[6]),
+
+                    "status":
+                        batch[7],
                 },
 
                 "summary": {
@@ -2113,52 +1708,54 @@ def get_batch_report(batch_id):
     )
 
 
-# ==============================================
-# Download Batch Report - Excel
-# ==============================================
-
 @batch_bp.route(
     "/batch-report/<int:batch_id>/download/excel",
     methods=["GET"],
 )
 @jwt_required()
-def download_batch_report_excel(batch_id):
+@role_required(
+    "Admin",
+    "Examiner"
+)
+def download_batch_report_excel(
+    batch_id
+):
 
-    # ==========================================
-    # Get Existing Batch Report Data
-    # ==========================================
+    response = get_batch_report(
+        batch_id
+    )
 
-    response = get_batch_report(batch_id)
-
-    if isinstance(response, tuple):
+    if isinstance(
+        response,
+        tuple
+    ):
 
         response_object = response[0]
         status_code = response[1]
 
         if status_code != 200:
+
             return response
 
     else:
 
         response_object = response
 
-    report_data = response_object.get_json()
-
-    # ==========================================
-    # Batch Information
-    # ==========================================
+    report_data = (
+        response_object.get_json()
+    )
 
     batch = report_data["batch"]
 
     summary = report_data["summary"]
 
-    candidates = report_data["candidates"]
+    candidates = (
+        report_data["candidates"]
+    )
 
-    assessments = report_data["assessments"]
-
-    # ==========================================
-    # Create Excel File
-    # ==========================================
+    assessments = (
+        report_data["assessments"]
+    )
 
     output = io.BytesIO()
 
@@ -2166,10 +1763,6 @@ def download_batch_report_excel(batch_id):
         output,
         engine="openpyxl",
     ) as writer:
-
-        # ======================================
-        # Batch Summary Sheet
-        # ======================================
 
         summary_data = [
             {
@@ -2192,31 +1785,49 @@ def download_batch_report_excel(batch_id):
                     batch["end_date"],
 
                 "Total Candidates":
-                    summary["total_candidates"],
+                    summary[
+                        "total_candidates"
+                    ],
 
                 "Total Assessments":
-                    summary["total_assessments"],
+                    summary[
+                        "total_assessments"
+                    ],
 
                 "Total Submissions":
-                    summary["total_submissions"],
+                    summary[
+                        "total_submissions"
+                    ],
 
                 "Average Score (%)":
-                    summary["average_score"],
+                    summary[
+                        "average_score"
+                    ],
 
                 "Highest Score (%)":
-                    summary["highest_score"],
+                    summary[
+                        "highest_score"
+                    ],
 
                 "Lowest Score (%)":
-                    summary["lowest_score"],
+                    summary[
+                        "lowest_score"
+                    ],
 
                 "Pass Count":
-                    summary["pass_count"],
+                    summary[
+                        "pass_count"
+                    ],
 
                 "Fail Count":
-                    summary["fail_count"],
+                    summary[
+                        "fail_count"
+                    ],
 
                 "Pass Percentage (%)":
-                    summary["pass_percentage"],
+                    summary[
+                        "pass_percentage"
+                    ],
             }
         ]
 
@@ -2229,10 +1840,6 @@ def download_batch_report_excel(batch_id):
             sheet_name="Batch Summary",
             index=False,
         )
-
-        # ======================================
-        # Candidate Performance Sheet
-        # ======================================
 
         candidate_data = []
 
@@ -2250,22 +1857,34 @@ def download_batch_report_excel(batch_id):
                         candidate["email"],
 
                     "Assessments":
-                        candidate["assessment_count"],
+                        candidate[
+                            "assessment_count"
+                        ],
 
                     "Average Score (%)":
-                        candidate["average_score"],
+                        candidate[
+                            "average_score"
+                        ],
 
                     "Highest Score (%)":
-                        candidate["highest_score"],
+                        candidate[
+                            "highest_score"
+                        ],
 
                     "Lowest Score (%)":
-                        candidate["lowest_score"],
+                        candidate[
+                            "lowest_score"
+                        ],
 
                     "Passed":
-                        candidate["pass_count"],
+                        candidate[
+                            "pass_count"
+                        ],
 
                     "Failed":
-                        candidate["fail_count"],
+                        candidate[
+                            "fail_count"
+                        ],
                 }
             )
 
@@ -2279,10 +1898,6 @@ def download_batch_report_excel(batch_id):
             index=False,
         )
 
-        # ======================================
-        # Assessment Performance Sheet
-        # ======================================
-
         assessment_data = []
 
         for assessment in assessments:
@@ -2293,31 +1908,49 @@ def download_batch_report_excel(batch_id):
                         assessment["title"],
 
                     "Total Marks":
-                        assessment["total_marks"],
+                        assessment[
+                            "total_marks"
+                        ],
 
                     "Passing Marks":
-                        assessment["passing_marks"],
+                        assessment[
+                            "passing_marks"
+                        ],
 
                     "Submissions":
-                        assessment["submission_count"],
+                        assessment[
+                            "submission_count"
+                        ],
 
                     "Average Score (%)":
-                        assessment["average_score"],
+                        assessment[
+                            "average_score"
+                        ],
 
                     "Highest Score (%)":
-                        assessment["highest_score"],
+                        assessment[
+                            "highest_score"
+                        ],
 
                     "Lowest Score (%)":
-                        assessment["lowest_score"],
+                        assessment[
+                            "lowest_score"
+                        ],
 
                     "Passed":
-                        assessment["pass_count"],
+                        assessment[
+                            "pass_count"
+                        ],
 
                     "Failed":
-                        assessment["fail_count"],
+                        assessment[
+                            "fail_count"
+                        ],
 
                     "Pass Rate (%)":
-                        assessment["pass_percentage"],
+                        assessment[
+                            "pass_percentage"
+                        ],
                 }
             )
 
@@ -2331,10 +1964,6 @@ def download_batch_report_excel(batch_id):
             index=False,
         )
 
-    # ==========================================
-    # Prepare File
-    # ==========================================
-
     output.seek(0)
 
     filename = (
@@ -2346,10 +1975,6 @@ def download_batch_report_excel(batch_id):
         " ",
         "_",
     )
-
-    # ==========================================
-    # Return Excel File
-    # ==========================================
 
     return send_file(
         output,

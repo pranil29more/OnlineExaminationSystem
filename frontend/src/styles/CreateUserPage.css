@@ -11,7 +11,8 @@
 .cup-page {
     min-height: 100vh;
 
-    color: #f8fafc;
+    color:
+        #f8fafc;
 }
 
 
@@ -40,52 +41,73 @@
 ========================================================= */
 
 .cup-header {
-    margin-bottom: 32px;
+    margin-bottom:
+        32px;
 }
 
 
 .cup-eyebrow {
-    display: block;
+    display:
+        block;
 
-    margin-bottom: 8px;
+    margin-bottom:
+        8px;
 
-    color: #60a5fa;
+    color:
+        #60a5fa;
 
-    font-size: 11px;
+    font-size:
+        11px;
 
-    font-weight: 800;
+    font-weight:
+        800;
 
-    text-transform: uppercase;
+    text-transform:
+        uppercase;
 
-    letter-spacing: 1.3px;
+    letter-spacing:
+        1.3px;
 }
 
 
 .cup-title {
-    margin: 0 0 10px;
+    margin:
+        0
+        0
+        10px;
 
-    color: #f8fafc;
+    color:
+        #f8fafc;
 
-    font-size: 40px;
+    font-size:
+        40px;
 
-    line-height: 1.2;
+    line-height:
+        1.2;
 
-    font-weight: 800;
+    font-weight:
+        800;
 
-    letter-spacing: -0.7px;
+    letter-spacing:
+        -0.7px;
 }
 
 
 .cup-description {
-    max-width: 700px;
+    max-width:
+        700px;
 
-    margin: 0;
+    margin:
+        0;
 
-    color: #94a3b8;
+    color:
+        #94a3b8;
 
-    font-size: 14px;
+    font-size:
+        14px;
 
-    line-height: 1.65;
+    line-height:
+        1.65;
 }
 
 
@@ -94,19 +116,24 @@
 ========================================================= */
 
 .cup-form-card {
-    width: 100%;
+    width:
+        100%;
 
-    box-sizing: border-box;
+    box-sizing:
+        border-box;
 
-    padding: 30px;
+    padding:
+        30px;
 
-    background: #1e293b;
+    background:
+        #1e293b;
 
     border:
         1px solid
         #334155;
 
-    border-radius: 16px;
+    border-radius:
+        16px;
 
     box-shadow:
         0 10px 24px
@@ -115,10 +142,10 @@
 
 
 /* =========================================================
-   Form Section
+   Mode Content
 ========================================================= */
 
-.cup-form-section {
+.cup-mode-content {
     animation:
         cupFadeIn
         0.2s
@@ -129,14 +156,16 @@
 @keyframes cupFadeIn {
 
     from {
-        opacity: 0;
+        opacity:
+            0;
 
         transform:
             translateY(4px);
     }
 
     to {
-        opacity: 1;
+        opacity:
+            1;
 
         transform:
             translateY(0);
@@ -146,13 +175,132 @@
 
 
 /* =========================================================
+   Main Mode Switch
+========================================================= */
+
+.cup-mode-switch {
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap:
+        8px;
+
+    margin:
+        0
+        0
+        30px;
+
+    padding:
+        5px;
+
+    background:
+        #0f172a;
+
+    border:
+        1px solid
+        #334155;
+
+    border-radius:
+        10px;
+}
+
+
+/* =========================================================
+   Main Mode Buttons
+========================================================= */
+
+.cup-mode-btn {
+    min-height:
+        40px;
+
+    padding:
+        0
+        14px;
+
+    border:
+        1px solid
+        transparent;
+
+    border-radius:
+        8px;
+
+    background:
+        transparent;
+
+    color:
+        #94a3b8;
+
+    font-family:
+        inherit;
+
+    font-size:
+        12px;
+
+    font-weight:
+        750;
+
+    cursor:
+        pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.cup-mode-btn:hover:not(:disabled) {
+    color:
+        #e2e8f0;
+
+    background:
+        #1e293b;
+}
+
+
+.cup-mode-btn.active {
+    background:
+        #2563eb;
+
+    border-color:
+        #3b82f6;
+
+    color:
+        #ffffff;
+
+    box-shadow:
+        0 5px 12px
+        rgba(37, 99, 235, 0.22);
+}
+
+
+.cup-mode-btn.active:hover:not(:disabled) {
+    background:
+        #3b82f6;
+
+    border-color:
+        #60a5fa;
+}
+
+
+/* =========================================================
    Section Heading
 ========================================================= */
 
 .cup-section-heading {
-    margin-bottom: 28px;
+    margin-bottom:
+        25px;
 
-    padding-bottom: 20px;
+    padding-bottom:
+        20px;
 
     border-bottom:
         1px solid
@@ -161,58 +309,79 @@
 
 
 .cup-section-eyebrow {
-    display: block;
+    display:
+        block;
 
-    margin-bottom: 7px;
+    margin-bottom:
+        7px;
 
-    color: #60a5fa;
+    color:
+        #60a5fa;
 
-    font-size: 10px;
+    font-size:
+        10px;
 
-    font-weight: 800;
+    font-weight:
+        800;
 
-    text-transform: uppercase;
+    text-transform:
+        uppercase;
 
-    letter-spacing: 1px;
+    letter-spacing:
+        1px;
 }
 
 
 .cup-section-title {
-    display: block;
+    display:
+        block;
 
-    width: 100%;
+    width:
+        100%;
 
     margin:
         0
         0
         7px;
 
-    padding: 0;
+    padding:
+        0;
 
-    box-sizing: border-box;
+    box-sizing:
+        border-box;
 
-    color: #f8fafc;
+    color:
+        #f8fafc;
 
-    font-size: 22px;
+    font-size:
+        22px;
 
-    font-weight: 800;
+    font-weight:
+        800;
 
-    line-height: 1.3;
+    line-height:
+        1.3;
 
-    text-align: left;
+    text-align:
+        left;
 
-    letter-spacing: -0.2px;
+    letter-spacing:
+        -0.2px;
 }
 
 
 .cup-section-description {
-    margin: 0;
+    margin:
+        0;
 
-    color: #94a3b8;
+    color:
+        #94a3b8;
 
-    font-size: 13px;
+    font-size:
+        13px;
 
-    line-height: 1.6;
+    line-height:
+        1.6;
 }
 
 
@@ -221,24 +390,32 @@
 ========================================================= */
 
 .cup-field {
-    width: 100%;
+    width:
+        100%;
 
-    margin-bottom: 19px;
+    margin-bottom:
+        19px;
 }
 
 
 .cup-field-label {
-    display: block;
+    display:
+        block;
 
-    margin-bottom: 9px;
+    margin-bottom:
+        9px;
 
-    color: #e2e8f0;
+    color:
+        #e2e8f0;
 
-    font-size: 13px;
+    font-size:
+        13px;
 
-    font-weight: 750;
+    font-weight:
+        750;
 
-    line-height: 1.4;
+    line-height:
+        1.4;
 }
 
 
@@ -247,23 +424,28 @@
 ========================================================= */
 
 .cup-form-input {
-    width: 100%;
+    width:
+        100%;
 
-    min-height: 46px;
+    min-height:
+        46px;
 
     padding:
         0
         14px;
 
-    box-sizing: border-box;
+    box-sizing:
+        border-box;
 
     border:
         1px solid
         #475569;
 
-    border-radius: 9px;
+    border-radius:
+        9px;
 
-    outline: none;
+    outline:
+        none;
 
     background:
         #0f172a;
@@ -310,49 +492,141 @@
 
 
 /* =========================================================
-   Select
+   User Type Selector
 ========================================================= */
 
-.cup-page select.cup-form-input {
-    min-height:
-        44px;
+.cup-role-switch {
+    display:
+        grid;
 
-    line-height:
-        1.4;
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
 
-    color-scheme:
-        dark;
+    gap:
+        8px;
 
-    cursor:
-        pointer;
-}
+    width:
+        100%;
 
+    box-sizing:
+        border-box;
 
-.cup-page select.cup-form-input:hover {
-    border-color:
-        #64748b;
-}
+    padding:
+        5px;
 
-
-.cup-page select.cup-form-input:focus {
-    border-color:
-        #3b82f6;
-
-    background:
-        #101a2c;
-
-    box-shadow:
-        0 0 0 3px
-        rgba(59, 130, 246, 0.12);
-}
-
-
-.cup-page select.cup-form-input option {
     background:
         #0f172a;
 
+    border:
+        1px solid
+        #334155;
+
+    border-radius:
+        10px;
+}
+
+
+/* =========================================================
+   User Type Buttons
+========================================================= */
+
+.cup-role-btn {
+    min-height:
+        40px;
+
+    padding:
+        0
+        14px;
+
+    border:
+        1px solid
+        transparent;
+
+    border-radius:
+        8px;
+
+    background:
+        transparent;
+
     color:
-        #f8fafc;
+        #94a3b8;
+
+    font-family:
+        inherit;
+
+    font-size:
+        12px;
+
+    font-weight:
+        750;
+
+    cursor:
+        pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.cup-role-btn:hover:not(:disabled) {
+    color:
+        #e2e8f0;
+
+    background:
+        #1e293b;
+}
+
+
+.cup-role-btn.active {
+    background:
+        #2563eb;
+
+    border-color:
+        #3b82f6;
+
+    color:
+        #ffffff;
+
+    box-shadow:
+        0 5px 12px
+        rgba(37, 99, 235, 0.22);
+}
+
+
+.cup-role-btn.active:hover:not(:disabled) {
+    background:
+        #3b82f6;
+
+    border-color:
+        #60a5fa;
+}
+
+
+/* =========================================================
+   Form Hint
+========================================================= */
+
+.cup-form-hint {
+    margin:
+        -4px
+        0
+        18px;
+
+    color:
+        #94a3b8;
+
+    font-size:
+        12px;
+
+    line-height:
+        1.55;
 }
 
 
@@ -360,7 +634,8 @@
    Create User Button
 ========================================================= */
 
-.cup-create-btn {
+.cup-create-btn,
+.cup-upload-btn {
     display:
         flex;
 
@@ -370,33 +645,18 @@
     justify-content:
         center;
 
-    width:
-        220px;
-
     min-height:
         42px;
 
-    margin:
-        30px
-        auto
-        0;
+    box-sizing:
+        border-box;
 
     padding:
         0
         20px;
 
-    box-sizing:
-        border-box;
-
-    border:
-        1px solid
-        #3b82f6;
-
     border-radius:
         9px;
-
-    background:
-        #2563eb;
 
     color:
         #ffffff;
@@ -405,7 +665,7 @@
         inherit;
 
     font-size:
-        13px;
+        12px;
 
     font-weight:
         750;
@@ -416,19 +676,43 @@
     cursor:
         pointer;
 
-    box-shadow:
-        0 5px 12px
-        rgba(37, 99, 235, 0.20);
-
     transition:
         background 0.2s ease,
         border-color 0.2s ease,
+        color 0.2s ease,
         box-shadow 0.2s ease,
-        transform 0.2s ease;
+        transform 0.2s ease,
+        opacity 0.2s ease;
 }
 
 
-.cup-create-btn:hover {
+/* =========================================================
+   Create User — Blue
+========================================================= */
+
+.cup-create-btn {
+    width:
+        220px;
+
+    margin:
+        30px
+        auto
+        0;
+
+    border:
+        1px solid
+        #3b82f6;
+
+    background:
+        #2563eb;
+
+    box-shadow:
+        0 5px 12px
+        rgba(37, 99, 235, 0.20);
+}
+
+
+.cup-create-btn:hover:not(:disabled) {
     background:
         #3b82f6;
 
@@ -444,15 +728,379 @@
 }
 
 
-.cup-create-btn:active {
-    transform:
-        translateY(0);
+/* =========================================================
+   Bulk Format Card
+========================================================= */
+
+.cup-format-card {
+    margin-bottom:
+        25px;
+
+    padding:
+        18px;
+
+    background:
+        rgba(15, 23, 42, 0.65);
+
+    border:
+        1px solid
+        #334155;
+
+    border-radius:
+        12px;
 }
 
 
-.cup-create-btn:disabled {
+/* =========================================================
+   Format Title
+========================================================= */
+
+.cup-format-title {
+    margin-bottom:
+        14px;
+
+    color:
+        #f8fafc;
+
+    font-size:
+        14px;
+
+    font-weight:
+        750;
+}
+
+
+/* =========================================================
+   Excel Column Chips
+========================================================= */
+
+.cup-column-list {
+    display:
+        flex;
+
+    flex-wrap:
+        wrap;
+
+    gap:
+        8px;
+}
+
+
+.cup-column-list span {
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    min-height:
+        32px;
+
+    padding:
+        0
+        11px;
+
+    background:
+        rgba(59, 130, 246, 0.10);
+
+    border:
+        1px solid
+        rgba(96, 165, 250, 0.50);
+
+    border-radius:
+        8px;
+
+    color:
+        #93c5fd;
+
+    font-size:
+        11px;
+
+    font-weight:
+        750;
+
+    letter-spacing:
+        0.1px;
+
+    box-shadow:
+        0 4px 10px
+        rgba(37, 99, 235, 0.08);
+}
+
+
+/* =========================================================
+   Bulk Format Note
+========================================================= */
+
+.cup-format-note {
+    margin:
+        15px
+        0
+        0;
+
+    padding-top:
+        14px;
+
+    border-top:
+        1px solid
+        #334155;
+
+    color:
+        #94a3b8;
+
+    font-size:
+        12px;
+
+    line-height:
+        1.6;
+}
+
+
+/* =========================================================
+   Bulk File Upload
+========================================================= */
+
+.cup-upload-box {
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        16px;
+
+    min-height:
+        88px;
+
+    box-sizing:
+        border-box;
+
+    margin-bottom:
+        25px;
+
+    padding:
+        16px;
+
+    background:
+        #0f172a;
+
+    border:
+        1px dashed
+        #475569;
+
+    border-radius:
+        12px;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.cup-upload-box:hover {
+    border-color:
+        #3b82f6;
+
+    background:
+        rgba(59, 130, 246, 0.04);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(59, 130, 246, 0.06);
+}
+
+
+.cup-file-input {
+    display:
+        none;
+}
+
+
+.cup-file-label {
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    flex-shrink:
+        0;
+
+    min-height:
+        38px;
+
+    padding:
+        0
+        14px;
+
+    background:
+        #2563eb;
+
+    border:
+        1px solid
+        #3b82f6;
+
+    border-radius:
+        8px;
+
+    color:
+        #ffffff;
+
+    font-family:
+        inherit;
+
+    font-size:
+        11px;
+
+    font-weight:
+        750;
+
+    cursor:
+        pointer;
+
+    box-shadow:
+        0 5px 12px
+        rgba(37, 99, 235, 0.18);
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.cup-file-label:hover {
+    background:
+        #3b82f6;
+
+    border-color:
+        #60a5fa;
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 8px 18px
+        rgba(37, 99, 235, 0.28);
+}
+
+
+/* =========================================================
+   Selected File Information
+========================================================= */
+
+.cup-file-info {
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        5px;
+
+    min-width:
+        0;
+}
+
+
+.cup-file-info strong {
+    max-width:
+        100%;
+
+    overflow:
+        hidden;
+
+    text-overflow:
+        ellipsis;
+
+    white-space:
+        nowrap;
+
+    color:
+        #e2e8f0;
+
+    font-size:
+        13px;
+
+    font-weight:
+        700;
+}
+
+
+.cup-file-info span {
+    color:
+        #94a3b8;
+
+    font-size:
+        11px;
+
+    line-height:
+        1.4;
+}
+
+
+/* =========================================================
+   Upload Users — Green
+========================================================= */
+
+.cup-upload-btn {
+    width:
+        240px;
+
+    margin:
+        30px
+        auto
+        0;
+
+    border:
+        1px solid
+        #22c55e;
+
+    background:
+        #16a34a;
+
+    box-shadow:
+        0 5px 12px
+        rgba(34, 197, 94, 0.20);
+}
+
+
+.cup-upload-btn:hover:not(:disabled) {
+    background:
+        #22c55e;
+
+    border-color:
+        #4ade80;
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 8px 18px
+        rgba(34, 197, 94, 0.30);
+}
+
+
+/* =========================================================
+   Disabled Controls
+========================================================= */
+
+.cup-create-btn:disabled,
+.cup-upload-btn:disabled,
+.cup-mode-btn:disabled,
+.cup-role-btn:disabled {
     opacity:
-        0.55;
+        0.5;
 
     cursor:
         not-allowed;
@@ -461,24 +1109,7 @@
         none;
 
     box-shadow:
-        0 5px 12px
-        rgba(37, 99, 235, 0.10);
-}
-
-
-.cup-create-btn:disabled:hover {
-    background:
-        #2563eb;
-
-    border-color:
-        #3b82f6;
-
-    transform:
         none;
-
-    box-shadow:
-        0 5px 12px
-        rgba(37, 99, 235, 0.10);
 }
 
 
@@ -487,8 +1118,7 @@
 ========================================================= */
 
 .cup-page button:focus-visible,
-.cup-page input:focus-visible,
-.cup-page select:focus-visible {
+.cup-page input:focus-visible {
     outline:
         2px solid
         rgba(96, 165, 250, 0.8);
@@ -564,7 +1194,44 @@
     }
 
 
-    .cup-create-btn {
+    .cup-mode-switch {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .cup-role-switch {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .cup-upload-box {
+        align-items:
+            stretch;
+
+        flex-direction:
+            column;
+    }
+
+
+    .cup-file-label {
+        width:
+            100%;
+
+        box-sizing:
+            border-box;
+    }
+
+
+    .cup-file-info {
+        text-align:
+            center;
+    }
+
+
+    .cup-create-btn,
+    .cup-upload-btn {
         width:
             100%;
     }
@@ -604,6 +1271,21 @@
     .cup-section-title {
         font-size:
             20px;
+    }
+
+
+    .cup-column-list {
+        flex-direction:
+            column;
+    }
+
+
+    .cup-column-list span {
+        width:
+            100%;
+
+        box-sizing:
+            border-box;
     }
 
 }

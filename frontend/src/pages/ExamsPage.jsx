@@ -50,7 +50,9 @@ function ExamsPage() {
     // ==========================================
 
     useEffect(() => {
+
         fetchExams();
+
     }, [role]);
 
 
@@ -130,9 +132,13 @@ function ExamsPage() {
                         "Actual"
                 );
 
-            setPracticeExams(practice);
+            setPracticeExams(
+                practice
+            );
 
-            setActualAssessments(actual);
+            setActualAssessments(
+                actual
+            );
 
         } catch (error) {
 
@@ -213,39 +219,17 @@ function ExamsPage() {
 
 
         // ==========================================
-        // Candidate - Actual Assessment Status
-        // ==========================================
-
-        if (
-            exam.exam_type === "Actual" &&
-            exam.availability_status ===
-                "Upcoming"
-        ) {
-
-            alert(
-                `This assessment has not started yet.\n\nScheduled Start: ${exam.scheduled_start}`
-            );
-
-            return;
-        }
-
-
-        if (
-            exam.exam_type === "Actual" &&
-            exam.availability_status ===
-                "Ended"
-        ) {
-
-            alert(
-                `This assessment has ended.\n\nScheduled End: ${exam.scheduled_end}`
-            );
-
-            return;
-        }
-
-
-        // ==========================================
-        // Candidate - Exam Session
+        // Candidate
+        //
+        // IMPORTANT:
+        //
+        // Never reject an assessment based only
+        // on availability_status before checking
+        // the candidate's actual exam session.
+        //
+        // An assessment may display "Ended" while
+        // the candidate still has an active
+        // In Progress submission.
         // ==========================================
 
         try {
@@ -284,15 +268,24 @@ function ExamsPage() {
 
 
             // ==========================================
-            // Not Started
+            // IN PROGRESS
+            //
+            // This MUST be checked BEFORE schedule
+            // status.
+            //
+            // If the candidate has already started
+            // the assessment, they can resume it even
+            // if the assessment schedule has ended.
             // ==========================================
 
             if (
                 session.status ===
-                "Not Started"
+                "In Progress"
             ) {
 
-                setModalMode("start");
+                setModalMode(
+                    "resume"
+                );
 
                 setShowModal(true);
 
@@ -301,15 +294,66 @@ function ExamsPage() {
 
 
             // ==========================================
-            // In Progress
+            // NOT STARTED
             // ==========================================
 
             if (
                 session.status ===
-                "In Progress"
+                "Not Started"
             ) {
 
-                setModalMode("resume");
+                // ==========================================
+                // Actual Assessment - Upcoming
+                // ==========================================
+
+                if (
+                    exam.exam_type ===
+                        "Actual" &&
+                    exam.availability_status ===
+                        "Upcoming"
+                ) {
+
+                    alert(
+                        `This assessment has not started yet.\n\nScheduled Start: ${exam.scheduled_start}`
+                    );
+
+                    setSelectedExam(null);
+
+                    return;
+                }
+
+
+                // ==========================================
+                // Actual Assessment - Ended
+                //
+                // There is no active attempt, so the
+                // candidate cannot start a new attempt.
+                // ==========================================
+
+                if (
+                    exam.exam_type ===
+                        "Actual" &&
+                    exam.availability_status ===
+                        "Ended"
+                ) {
+
+                    alert(
+                        `This assessment has ended.\n\nScheduled End: ${exam.scheduled_end}`
+                    );
+
+                    setSelectedExam(null);
+
+                    return;
+                }
+
+
+                // ==========================================
+                // Available / Practice
+                // ==========================================
+
+                setModalMode(
+                    "start"
+                );
 
                 setShowModal(true);
 
@@ -337,7 +381,7 @@ function ExamsPage() {
 
 
             // ==========================================
-            // Actual Assessment Completed
+            // Completed / Auto Submitted
             // ==========================================
 
             if (
@@ -347,7 +391,9 @@ function ExamsPage() {
                     "Auto Submitted"
             ) {
 
-                setModalMode("completed");
+                setModalMode(
+                    "completed"
+                );
 
                 setShowModal(true);
 
@@ -497,23 +543,41 @@ function ExamsPage() {
     ) => {
 
         const isActual =
-            exam.exam_type === "Actual";
+            exam.exam_type ===
+            "Actual";
 
-        const isDisabled =
+
+        // ==========================================
+        // IMPORTANT
+        //
+        // Keep the original schedule badge.
+        //
+        // Do NOT change:
+        //
+        // Upcoming
+        // Available
+        // Ended
+        //
+        // The badge represents the assessment
+        // schedule, not the candidate's submission.
+        // ==========================================
+
+        const isUpcoming =
             isActual &&
-            exam.availability_status !==
-                "Available";
+            exam.availability_status ===
+                "Upcoming";
 
         const isCardLoading =
             loadingExamId ===
             exam.exam_id;
+
 
         return (
 
             <div
                 key={exam.exam_id}
                 className={`ep-exam-card ${
-                    isDisabled
+                    isUpcoming
                         ? "ep-exam-card-disabled"
                         : ""
                 } ${
@@ -681,7 +745,8 @@ function ExamsPage() {
     ) => {
 
         const isActual =
-            exam.exam_type === "Actual";
+            exam.exam_type ===
+            "Actual";
 
         const isScheduled =
             isActual &&
@@ -956,17 +1021,21 @@ function ExamsPage() {
                             Showing{" "}
 
                             <strong>
-                                {filteredActualAssessments.length +
-                                    filteredPracticeExams.length}
+                                {
+                                    filteredActualAssessments.length +
+                                    filteredPracticeExams.length
+                                }
                             </strong>{" "}
 
                             matching{" "}
 
-                            {filteredActualAssessments.length +
+                            {
+                                filteredActualAssessments.length +
                                 filteredPracticeExams.length ===
-                            1
-                                ? "exam"
-                                : "exams"}
+                                1
+                                    ? "exam"
+                                    : "exams"
+                            }
 
                         </p>
 
@@ -1009,61 +1078,67 @@ function ExamsPage() {
                                 filteredActualAssessments.length
                             }{" "}
 
-                            {filteredActualAssessments.length ===
-                            1
-                                ? "Assessment"
-                                : "Assessments"}
+                            {
+                                filteredActualAssessments.length ===
+                                1
+                                    ? "Assessment"
+                                    : "Assessments"
+                            }
 
                         </span>
 
                     </div>
 
 
-                    {filteredActualAssessments.length ===
-                    0 ? (
+                    {
+                        filteredActualAssessments.length ===
+                        0 ? (
 
-                        <div
-                            key="actual-empty"
-                            className="ep-empty-state"
-                        >
+                            <div
+                                key="actual-empty"
+                                className="ep-empty-state"
+                            >
 
-                            <div className="ep-empty-icon">
-                                —
+                                <div className="ep-empty-icon">
+                                    —
+                                </div>
+
+                                <strong>
+                                    {search.trim()
+                                        ? "No actual assessments match your search."
+                                        : role ===
+                                            "Candidate"
+                                          ? "No actual assessments have been scheduled for you."
+                                          : "No actual assessments have been created."}
+                                </strong>
+
                             </div>
 
-                            <strong>
-                                {search.trim()
-                                    ? "No actual assessments match your search."
-                                    : role ===
-                                        "Candidate"
-                                      ? "No actual assessments have been scheduled for you."
-                                      : "No actual assessments have been created."}
-                            </strong>
+                        ) : (
 
-                        </div>
+                            <div
+                                key="actual-results"
+                                className="ep-exam-grid"
+                            >
 
-                    ) : (
+                                {
+                                    filteredActualAssessments.map(
+                                        (exam) =>
+                                            role ===
+                                            "Candidate"
+                                                ? renderCandidateExamCard(
+                                                      exam
+                                                  )
+                                                : renderManagementExamCard(
+                                                      exam
+                                                  )
+                                    )
+                                }
 
-                        <div
-                            key="actual-results"
-                            className="ep-exam-grid"
-                        >
+                            </div>
 
-                            {filteredActualAssessments.map(
-                                (exam) =>
-                                    role ===
-                                    "Candidate"
-                                        ? renderCandidateExamCard(
-                                              exam
-                                          )
-                                        : renderManagementExamCard(
-                                              exam
-                                          )
-                            )}
-
-                        </div>
-
-                    )}
+                        )
+                    }
 
                 </section>
 
@@ -1102,61 +1177,67 @@ function ExamsPage() {
                                 filteredPracticeExams.length
                             }{" "}
 
-                            {filteredPracticeExams.length ===
-                            1
-                                ? "Exam"
-                                : "Exams"}
+                            {
+                                filteredPracticeExams.length ===
+                                1
+                                    ? "Exam"
+                                    : "Exams"
+                            }
 
                         </span>
 
                     </div>
 
 
-                    {filteredPracticeExams.length ===
-                    0 ? (
+                    {
+                        filteredPracticeExams.length ===
+                        0 ? (
 
-                        <div
-                            key="practice-empty"
-                            className="ep-empty-state"
-                        >
+                            <div
+                                key="practice-empty"
+                                className="ep-empty-state"
+                            >
 
-                            <div className="ep-empty-icon">
-                                —
+                                <div className="ep-empty-icon">
+                                    —
+                                </div>
+
+                                <strong>
+                                    {search.trim()
+                                        ? "No practice exams match your search."
+                                        : role ===
+                                            "Candidate"
+                                          ? "No practice exams are currently available."
+                                          : "No practice exams have been created."}
+                                </strong>
+
                             </div>
 
-                            <strong>
-                                {search.trim()
-                                    ? "No practice exams match your search."
-                                    : role ===
-                                        "Candidate"
-                                      ? "No practice exams are currently available."
-                                      : "No practice exams have been created."}
-                            </strong>
+                        ) : (
 
-                        </div>
+                            <div
+                                key="practice-results"
+                                className="ep-exam-grid"
+                            >
 
-                    ) : (
+                                {
+                                    filteredPracticeExams.map(
+                                        (exam) =>
+                                            role ===
+                                            "Candidate"
+                                                ? renderCandidateExamCard(
+                                                      exam
+                                                  )
+                                                : renderManagementExamCard(
+                                                      exam
+                                                  )
+                                    )
+                                }
 
-                        <div
-                            key="practice-results"
-                            className="ep-exam-grid"
-                        >
+                            </div>
 
-                            {filteredPracticeExams.map(
-                                (exam) =>
-                                    role ===
-                                    "Candidate"
-                                        ? renderCandidateExamCard(
-                                              exam
-                                          )
-                                        : renderManagementExamCard(
-                                              exam
-                                          )
-                            )}
-
-                        </div>
-
-                    )}
+                        )
+                    }
 
                 </section>
 
@@ -1165,7 +1246,8 @@ function ExamsPage() {
                     Candidate Exam Modal
                 ========================================== */}
 
-                {showModal &&
+                {
+                    showModal &&
                     selectedExam && (
 
                         <div
@@ -1184,32 +1266,36 @@ function ExamsPage() {
 
                                     <span className="ep-modal-label">
 
-                                        {modalMode ===
-                                        "start"
-                                            ? "Ready to Begin"
-                                            : modalMode ===
-                                                "resume"
-                                              ? "Exam In Progress"
-                                              : modalMode ===
-                                                  "practice-completed"
-                                                ? "Practice Completed"
-                                                : "Already Attempted"}
+                                        {
+                                            modalMode ===
+                                            "start"
+                                                ? "Ready to Begin"
+                                                : modalMode ===
+                                                    "resume"
+                                                  ? "Exam In Progress"
+                                                  : modalMode ===
+                                                      "practice-completed"
+                                                    ? "Practice Completed"
+                                                    : "Already Attempted"
+                                        }
 
                                     </span>
 
 
                                     <h2>
 
-                                        {modalMode ===
-                                        "start"
-                                            ? "Start Exam"
-                                            : modalMode ===
-                                                "resume"
-                                              ? "Resume Exam"
-                                              : modalMode ===
-                                                  "practice-completed"
-                                                ? "Practice Exam Completed"
-                                                : "Exam Already Attempted"}
+                                        {
+                                            modalMode ===
+                                            "start"
+                                                ? "Start Exam"
+                                                : modalMode ===
+                                                    "resume"
+                                                  ? "Resume Exam"
+                                                  : modalMode ===
+                                                      "practice-completed"
+                                                    ? "Practice Exam Completed"
+                                                    : "Exam Already Attempted"
+                                        }
 
                                     </h2>
 
@@ -1285,130 +1371,138 @@ function ExamsPage() {
                                     }`}
                                 >
 
-                                    {modalMode ===
-                                        "start" && (
+                                    {
+                                        modalMode ===
+                                            "start" && (
 
-                                        <>
+                                            <>
 
-                                            <strong>
-                                                Before
-                                                you begin
-                                            </strong>
-
-                                            <p>
-                                                Once you
-                                                click{" "}
                                                 <strong>
-                                                    Start
-                                                    Exam
+                                                    Before
+                                                    you begin
                                                 </strong>
-                                                , the timer
-                                                will begin
-                                                immediately.
-                                            </p>
 
-                                            <p>
-                                                You cannot
-                                                pause the
-                                                examination
-                                                once it has
-                                                started.
-                                            </p>
+                                                <p>
+                                                    Once you
+                                                    click{" "}
+                                                    <strong>
+                                                        Start
+                                                        Exam
+                                                    </strong>
+                                                    , the timer
+                                                    will begin
+                                                    immediately.
+                                                </p>
 
-                                        </>
+                                                <p>
+                                                    You cannot
+                                                    pause the
+                                                    examination
+                                                    once it has
+                                                    started.
+                                                </p>
 
-                                    )}
+                                            </>
+
+                                        )
+                                    }
 
 
-                                    {modalMode ===
-                                        "resume" && (
+                                    {
+                                        modalMode ===
+                                            "resume" && (
 
-                                        <>
+                                            <>
 
-                                            <strong>
-                                                Your exam
-                                                is already
-                                                in progress.
-                                            </strong>
-
-                                            <p>
-                                                The timer
-                                                has
-                                                continued
-                                                running.
-                                            </p>
-
-                                            <p>
-                                                Click{" "}
                                                 <strong>
-                                                    Resume
-                                                    Exam
-                                                </strong>{" "}
-                                                to continue.
-                                            </p>
+                                                    Your exam
+                                                    is already
+                                                    in progress.
+                                                </strong>
 
-                                        </>
+                                                <p>
+                                                    The timer
+                                                    has
+                                                    continued
+                                                    running.
+                                                </p>
 
-                                    )}
+                                                <p>
+                                                    Click{" "}
+                                                    <strong>
+                                                        Resume
+                                                        Exam
+                                                    </strong>{" "}
+                                                    to continue.
+                                                </p>
 
+                                            </>
 
-                                    {modalMode ===
-                                        "practice-completed" && (
-
-                                        <>
-
-                                            <strong>
-                                                Practice
-                                                attempt
-                                                completed.
-                                            </strong>
-
-                                            <p>
-                                                You have
-                                                already
-                                                completed
-                                                this
-                                                practice
-                                                exam.
-                                            </p>
-
-                                            <p>
-                                                You can
-                                                attempt it
-                                                again for
-                                                further
-                                                practice.
-                                            </p>
-
-                                        </>
-
-                                    )}
+                                        )
+                                    }
 
 
-                                    {modalMode ===
-                                        "completed" && (
+                                    {
+                                        modalMode ===
+                                            "practice-completed" && (
 
-                                        <>
+                                            <>
 
-                                            <strong>
-                                                This
-                                                assessment
-                                                has already
-                                                been
-                                                attempted.
-                                            </strong>
+                                                <strong>
+                                                    Practice
+                                                    attempt
+                                                    completed.
+                                                </strong>
 
-                                            <p>
-                                                Multiple
-                                                attempts are
-                                                not allowed
-                                                for actual
-                                                assessments.
-                                            </p>
+                                                <p>
+                                                    You have
+                                                    already
+                                                    completed
+                                                    this
+                                                    practice
+                                                    exam.
+                                                </p>
 
-                                        </>
+                                                <p>
+                                                    You can
+                                                    attempt it
+                                                    again for
+                                                    further
+                                                    practice.
+                                                </p>
 
-                                    )}
+                                            </>
+
+                                        )
+                                    }
+
+
+                                    {
+                                        modalMode ===
+                                            "completed" && (
+
+                                            <>
+
+                                                <strong>
+                                                    This
+                                                    assessment
+                                                    has already
+                                                    been
+                                                    attempted.
+                                                </strong>
+
+                                                <p>
+                                                    Multiple
+                                                    attempts are
+                                                    not allowed
+                                                    for actual
+                                                    assessments.
+                                                </p>
+
+                                            </>
+
+                                        )
+                                    }
 
                                 </div>
 
@@ -1429,79 +1523,91 @@ function ExamsPage() {
                                     </button>
 
 
-                                    {modalMode ===
-                                        "start" && (
+                                    {
+                                        modalMode ===
+                                            "start" && (
 
-                                        <button
-                                            type="button"
-                                            className={`ep-modal-start ${
-                                                actionLoading
-                                                    ? "ep-modal-start-loading"
-                                                    : ""
-                                            }`}
-                                            onClick={
-                                                handleStartExam
-                                            }
-                                            disabled={
-                                                actionLoading
-                                            }
-                                        >
-                                            {actionLoading
-                                                ? "Starting..."
-                                                : "Start Exam"}
-                                        </button>
+                                            <button
+                                                type="button"
+                                                className={`ep-modal-start ${
+                                                    actionLoading
+                                                        ? "ep-modal-start-loading"
+                                                        : ""
+                                                }`}
+                                                onClick={
+                                                    handleStartExam
+                                                }
+                                                disabled={
+                                                    actionLoading
+                                                }
+                                            >
+                                                {
+                                                    actionLoading
+                                                        ? "Starting..."
+                                                        : "Start Exam"
+                                                }
+                                            </button>
 
-                                    )}
-
-
-                                    {modalMode ===
-                                        "resume" && (
-
-                                        <button
-                                            type="button"
-                                            className={`ep-modal-start ${
-                                                actionLoading
-                                                    ? "ep-modal-start-loading"
-                                                    : ""
-                                            }`}
-                                            onClick={
-                                                handleResumeExam
-                                            }
-                                            disabled={
-                                                actionLoading
-                                            }
-                                        >
-                                            {actionLoading
-                                                ? "Resuming..."
-                                                : "Resume Exam"}
-                                        </button>
-
-                                    )}
+                                        )
+                                    }
 
 
-                                    {modalMode ===
-                                        "practice-completed" && (
+                                    {
+                                        modalMode ===
+                                            "resume" && (
 
-                                        <button
-                                            type="button"
-                                            className={`ep-modal-start ${
-                                                actionLoading
-                                                    ? "ep-modal-start-loading"
-                                                    : ""
-                                            }`}
-                                            onClick={
-                                                handleStartExam
-                                            }
-                                            disabled={
-                                                actionLoading
-                                            }
-                                        >
-                                            {actionLoading
-                                                ? "Starting..."
-                                                : "Attempt Again"}
-                                        </button>
+                                            <button
+                                                type="button"
+                                                className={`ep-modal-start ${
+                                                    actionLoading
+                                                        ? "ep-modal-start-loading"
+                                                        : ""
+                                                }`}
+                                                onClick={
+                                                    handleResumeExam
+                                                }
+                                                disabled={
+                                                    actionLoading
+                                                }
+                                            >
+                                                {
+                                                    actionLoading
+                                                        ? "Resuming..."
+                                                        : "Resume Exam"
+                                                }
+                                            </button>
 
-                                    )}
+                                        )
+                                    }
+
+
+                                    {
+                                        modalMode ===
+                                            "practice-completed" && (
+
+                                            <button
+                                                type="button"
+                                                className={`ep-modal-start ${
+                                                    actionLoading
+                                                        ? "ep-modal-start-loading"
+                                                        : ""
+                                                }`}
+                                                onClick={
+                                                    handleStartExam
+                                                }
+                                                disabled={
+                                                    actionLoading
+                                                }
+                                            >
+                                                {
+                                                    actionLoading
+                                                        ? "Starting..."
+                                                        : "Attempt Again"
+                                                }
+                                            </button>
+
+                                        )
+                                    }
 
                                 </div>
 
@@ -1509,7 +1615,8 @@ function ExamsPage() {
 
                         </div>
 
-                    )}
+                    )
+                }
 
             </main>
 

@@ -1,130 +1,229 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {
+    BrowserRouter,
+    Routes,
+    Route
+} from "react-router-dom";
+
 import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
 import ActivateAccountPage from "../pages/ActivateAccountPage";
+
 import DashboardPage from "../pages/DashboardPage";
 import UsersPage from "../pages/UsersPage";
 import ExamAnalyticsPage from "../pages/ExamAnalyticsPage";
+
 import ExamsPage from "../pages/ExamsPage";
 import ExamDetailsPage from "../pages/ExamDetailsPage";
+
 import ResultsPage from "../pages/ResultsPage";
 import ResultDetailsPage from "../pages/ResultDetailsPage";
+
 import ProfilePage from "../pages/ProfilePage";
+
 import ChatbotPage from "../pages/ChatbotPage";
+
 import CreateExamPage from "../pages/CreateExamPage";
 import AddQuestionPage from "../pages/AddQuestionPage";
+
 import AdminRoute from "./AdminRoute";
+import RoleRoute from "./RoleRoute";
+
 import EditExamPage from "../pages/EditExamPage";
 import EditQuestionPage from "../pages/EditQuestionPage";
+
 import ExamResultsPage from "../pages/ExamResultsPage";
 import SubmissionAnalyticsPage from "../pages/SubmissionAnalyticsPage";
+
 import BatchManagementPage from "../pages/BatchManagementPage";
 import CreateBatchPage from "../pages/CreateBatchPage";
 import EditBatchPage from "../pages/EditBatchPage";
 import BatchDetailsPage from "../pages/BatchDetailsPage";
+
 import CandidateResultsPage from "../pages/CandidateResultsPage";
+
 import ScrollToTop from "../components/ScrollToTop";
+
 import CreateUserPage from "../pages/CreateUserPage";
 
+
 function AppRoutes() {
+
     return (
+
         <BrowserRouter>
+
             <ScrollToTop />
 
             <Routes>
+
+
+                {/* ==========================================
+                    Public Routes
+                ========================================== */}
+
                 <Route
                     path="/"
-                    element={<LoginPage />}
+                    element={
+                        <LoginPage />
+                    }
                 />
+
 
                 <Route
                     path="/activate-account/:activationToken"
-                    element={<ActivateAccountPage />}
+                    element={
+                        <ActivateAccountPage />
+                    }
                 />
 
-                {/* <Route
-                    path="/register"
-                    element={<RegisterPage />}
-                /> */}
+
+                {/* ==========================================
+                    Admin Only
+                ========================================== */}
 
                 <Route
                     path="/dashboard"
                     element={
-                        <AdminRoute>
+                        <RoleRoute
+                            allowedRoles={[
+                                "Admin"
+                            ]}
+                        >
                             <DashboardPage />
-                        </AdminRoute>
+                        </RoleRoute>
                     }
                 />
+
 
                 <Route
                     path="/users"
                     element={
-                        <AdminRoute>
+                        <RoleRoute
+                            allowedRoles={[
+                                "Admin"
+                            ]}
+                        >
                             <UsersPage />
-                        </AdminRoute>
+                        </RoleRoute>
                     }
                 />
+
 
                 <Route
                     path="/create-user"
                     element={
-                        <AdminRoute>
+                        <RoleRoute
+                            allowedRoles={[
+                                "Admin"
+                            ]}
+                        >
                             <CreateUserPage />
-                        </AdminRoute>
+                        </RoleRoute>
                     }
                 />
+
 
                 <Route
                     path="/submission-analytics"
                     element={
-                        <AdminRoute>
+                        <RoleRoute
+                            allowedRoles={[
+                                "Admin"
+                            ]}
+                        >
                             <SubmissionAnalyticsPage />
-                        </AdminRoute>
+                        </RoleRoute>
                     }
                 />
+
 
                 <Route
                     path="/exam-analytics"
                     element={
-                        <AdminRoute>
+                        <RoleRoute
+                            allowedRoles={[
+                                "Admin"
+                            ]}
+                        >
                             <ExamAnalyticsPage />
-                        </AdminRoute>
+                        </RoleRoute>
                     }
                 />
 
-                <Route
-                    path="/exams"
-                    element={<ExamsPage />}
-                />
 
                 <Route
-                    path="/exam/:examId"
-                    element={<ExamDetailsPage />}
-                />
-
-                <Route
-                    path="/results"
-                    element={<ResultsPage />}
-                />
-
-                <Route
-                    path="/result/:submissionId"
-                    element={<ResultDetailsPage />}
-                />
-
-                <Route
-                    path="/results/exam/:examId"
+                    path="/batch-management"
                     element={
-                        <AdminRoute>
-                            <ExamResultsPage />
-                        </AdminRoute>
+                        <RoleRoute
+                            allowedRoles={[
+                                "Admin"
+                            ]}
+                        >
+                            <BatchManagementPage />
+                        </RoleRoute>
                     }
                 />
 
+
                 <Route
-                    path="/profile"
-                    element={<ProfilePage />}
+                    path="/create-batch"
+                    element={
+                        <RoleRoute
+                            allowedRoles={[
+                                "Admin"
+                            ]}
+                        >
+                            <CreateBatchPage />
+                        </RoleRoute>
+                    }
                 />
+
+
+                <Route
+                    path="/edit-batch/:batchId"
+                    element={
+                        <RoleRoute
+                            allowedRoles={[
+                                "Admin"
+                            ]}
+                        >
+                            <EditBatchPage />
+                        </RoleRoute>
+                    }
+                />
+
+
+                <Route
+                    path="/batch-details/:batchId"
+                    element={
+                        <RoleRoute
+                            allowedRoles={[
+                                "Admin"
+                            ]}
+                        >
+                            <BatchDetailsPage />
+                        </RoleRoute>
+                    }
+                />
+
+
+                <Route
+                    path="/candidate-results/:userId"
+                    element={
+                        <RoleRoute
+                            allowedRoles={[
+                                "Admin"
+                            ]}
+                        >
+                            <CandidateResultsPage />
+                        </RoleRoute>
+                    }
+                />
+
+
+                {/* ==========================================
+                    Admin + Examiner
+                ========================================== */}
 
                 <Route
                     path="/create-exam"
@@ -135,6 +234,7 @@ function AppRoutes() {
                     }
                 />
 
+
                 <Route
                     path="/edit-exam/:examId"
                     element={
@@ -143,6 +243,7 @@ function AppRoutes() {
                         </AdminRoute>
                     }
                 />
+
 
                 <Route
                     path="/add-question"
@@ -153,6 +254,7 @@ function AppRoutes() {
                     }
                 />
 
+
                 <Route
                     path="/edit-question/:questionId"
                     element={
@@ -162,58 +264,124 @@ function AppRoutes() {
                     }
                 />
 
+
                 <Route
-                    path="/batch-management"
+                    path="/results/exam/:examId"
                     element={
                         <AdminRoute>
-                            <BatchManagementPage />
+                            <ExamResultsPage />
                         </AdminRoute>
                     }
                 />
 
+
+                {/* ==========================================
+                    Admin + Examiner + Candidate
+                ========================================== */}
+
                 <Route
-                    path="/create-batch"
+                    path="/exams"
                     element={
-                        <AdminRoute>
-                            <CreateBatchPage />
-                        </AdminRoute>
+                        <RoleRoute
+                            allowedRoles={[
+                                "Admin",
+                                "Examiner",
+                                "Candidate"
+                            ]}
+                        >
+                            <ExamsPage />
+                        </RoleRoute>
                     }
                 />
 
+
                 <Route
-                    path="/edit-batch/:batchId"
+                    path="/exam/:examId"
                     element={
-                        <AdminRoute>
-                            <EditBatchPage />
-                        </AdminRoute>
+                        <RoleRoute
+                            allowedRoles={[
+                                "Admin",
+                                "Examiner",
+                                "Candidate"
+                            ]}
+                        >
+                            <ExamDetailsPage />
+                        </RoleRoute>
                     }
                 />
 
+
                 <Route
-                    path="/batch-details/:batchId"
+                    path="/results"
                     element={
-                        <AdminRoute>
-                            <BatchDetailsPage />
-                        </AdminRoute>
+                        <RoleRoute
+                            allowedRoles={[
+                                "Admin",
+                                "Examiner",
+                                "Candidate"
+                            ]}
+                        >
+                            <ResultsPage />
+                        </RoleRoute>
                     }
                 />
 
+
                 <Route
-                    path="/candidate-results/:userId"
+                    path="/result/:submissionId"
                     element={
-                        <AdminRoute>
-                            <CandidateResultsPage />
-                        </AdminRoute>
+                        <RoleRoute
+                            allowedRoles={[
+                                "Admin",
+                                "Examiner",
+                                "Candidate"
+                            ]}
+                        >
+                            <ResultDetailsPage />
+                        </RoleRoute>
                     }
                 />
+
+
+                <Route
+                    path="/profile"
+                    element={
+                        <RoleRoute
+                            allowedRoles={[
+                                "Admin",
+                                "Examiner",
+                                "Candidate"
+                            ]}
+                        >
+                            <ProfilePage />
+                        </RoleRoute>
+                    }
+                />
+
+
+                {/* ==========================================
+                    Admin Only — Chatbot
+                ========================================== */}
 
                 <Route
                     path="/chatbot"
-                    element={<ChatbotPage />}
+                    element={
+                        <RoleRoute
+                            allowedRoles={[
+                                "Admin"
+                            ]}
+                        >
+                            <ChatbotPage />
+                        </RoleRoute>
+                    }
                 />
+
+
             </Routes>
+
         </BrowserRouter>
     );
 }
+
 
 export default AppRoutes;

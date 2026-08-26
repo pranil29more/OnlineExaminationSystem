@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from extensions import mysql
+from utils.decorators import role_required
 
 import os
 import re
@@ -40,32 +41,6 @@ def contains_any(text, phrases):
         phrase in text
         for phrase in phrases
     )
-
-
-def get_admin_user(user_id):
-
-    cur = mysql.connection.cursor()
-
-    query = """
-    SELECT
-        user_id,
-        name,
-        email,
-        role
-    FROM users
-    WHERE user_id = %s
-    """
-
-    cur.execute(
-        query,
-        (user_id,)
-    )
-
-    user = cur.fetchone()
-
-    cur.close()
-
-    return user
 
 
 def get_all_exams():
@@ -2291,10 +2266,6 @@ def detect_intent(
         message
     )
 
-    # ==================================================
-    # 1. CANDIDATES IN A SPECIFIC BATCH
-    # ==================================================
-
     if (
         contains_any(
             question,
@@ -2327,10 +2298,6 @@ def detect_intent(
     ):
 
         return "candidates_by_batch"
-
-    # ==================================================
-    # 2. BATCH PERFORMANCE
-    # ==================================================
 
     batch_words = [
         "batch",
@@ -2394,10 +2361,6 @@ def detect_intent(
 
         return "batch_performance"
 
-    # ==================================================
-    # 3. ALL CANDIDATES
-    # ==================================================
-
     if contains_any(
         question,
         [
@@ -2427,10 +2390,6 @@ def detect_intent(
 
         return "all_candidates"
 
-    # ==================================================
-    # 4. CANDIDATE COUNT
-    # ==================================================
-
     if contains_any(
         question,
         [
@@ -2448,10 +2407,6 @@ def detect_intent(
     ):
 
         return "candidate_count"
-
-    # ==================================================
-    # 5. SPECIFIC CANDIDATE PERFORMANCE
-    # ==================================================
 
     if contains_any(
         question,
@@ -2478,10 +2433,6 @@ def detect_intent(
 
         return "candidate_details"
 
-    # ==================================================
-    # 6. ALL EXAMS
-    # ==================================================
-
     if contains_any(
         question,
         [
@@ -2499,10 +2450,6 @@ def detect_intent(
     ):
 
         return "all_exams"
-
-    # ==================================================
-    # 7. DASHBOARD
-    # ==================================================
 
     if contains_any(
         question,
@@ -2529,10 +2476,6 @@ def detect_intent(
 
         return "dashboard"
 
-    # ==================================================
-    # 8. GENERAL CANDIDATE RESULTS
-    # ==================================================
-
     if contains_any(
         question,
         [
@@ -2556,10 +2499,6 @@ def detect_intent(
 
         return "candidate_results"
 
-    # ==================================================
-    # 9. EXAM ANALYTICS
-    # ==================================================
-
     if contains_any(
         question,
         [
@@ -2581,10 +2520,6 @@ def detect_intent(
 
         return "submission_analytics"
 
-    # ==================================================
-    # 10. SCHEDULES
-    # ==================================================
-
     if contains_any(
         question,
         [
@@ -2604,10 +2539,6 @@ def detect_intent(
 
         return "schedules"
 
-    # ==================================================
-    # 11. BATCH DETAILS
-    # ==================================================
-
     if contains_any(
         question,
         [
@@ -2623,10 +2554,6 @@ def detect_intent(
     ):
 
         return "batch_details"
-
-    # ==================================================
-    # 12. GENERAL BATCHES
-    # ==================================================
 
     if contains_any(
         question,
@@ -2646,10 +2573,6 @@ def detect_intent(
 
         return "batches"
 
-    # ==================================================
-    # 13. EXAM DETAILS
-    # ==================================================
-
     if contains_any(
         question,
         [
@@ -2666,20 +2589,12 @@ def detect_intent(
 
         return "exam_details"
 
-    # ==================================================
-    # 14. EXAM MENTION
-    # ==================================================
-
     if (
         "exam" in question
         or "test" in question
     ):
 
         return "exam_details"
-
-    # ==================================================
-    # 15. EDUCATIONAL
-    # ==================================================
 
     return "educational"
 
@@ -2821,50 +2736,17 @@ User Question:
     methods=["POST"]
 )
 @jwt_required()
+@role_required("Admin")
 def chat():
 
     try:
 
-        current_user_id = get_jwt_identity()
-
-        user = get_admin_user(
-            current_user_id
-        )
-
-        if not user:
-
-            return jsonify(
-                {
-                    "error":
-                    "User not found."
-                }
-            ), 404
-
-        if user[3] != "Admin":
-
-            return jsonify(
-                {
-                    "error":
-                    "Only Admin can access "
-                    "the AI Assistant."
-                }
-            ), 403
-
-        data = request.get_json(
-            silent=True
-        )
-
-        if not data:
-
-            return jsonify(
-                {
-                    "error":
-                    "Invalid request."
-                }
-            ), 400
-
         user_message = str(
-            data.get(
+            (
+                request.get_json(
+                    silent=True
+                ) or {}
+            ).get(
                 "message",
                 ""
             )
