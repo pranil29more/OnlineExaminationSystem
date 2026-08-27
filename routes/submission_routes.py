@@ -626,17 +626,36 @@ def save_answer():
     #
     # The frontend timer is NOT trusted.
     #
-    # Actual deadline:
+    # The actual deadline is:
     #
     # start_time + exam duration
+    #
+    # IMPORTANT:
+    #
+    # Both the deadline and current time are
+    # calculated inside MySQL so they remain
+    # compatible with the existing IST handling.
+    #
+    # This avoids Python comparing a datetime
+    # object against a string returned by MySQL.
     # ==========================================
 
     deadline_query = """
     SELECT
-        DATE_ADD(
-            %s,
-            INTERVAL %s MINUTE
-        )
+        CASE
+            WHEN
+                DATE_ADD(
+                    %s,
+                    INTERVAL %s MINUTE
+                )
+                <=
+                DATE_ADD(
+                    UTC_TIMESTAMP(),
+                    INTERVAL 330 MINUTE
+                )
+            THEN 1
+            ELSE 0
+        END
     """
 
     cur.execute(
@@ -647,21 +666,14 @@ def save_answer():
         ),
     )
 
-    deadline = cur.fetchone()[0]
+    deadline_result = cur.fetchone()
 
-    current_time_query = """
-    SELECT
-        DATE_ADD(
-            UTC_TIMESTAMP(),
-            INTERVAL 330 MINUTE
-        )
-    """
+    is_expired = (
+        deadline_result
+        and int(deadline_result[0]) == 1
+    )
 
-    cur.execute(current_time_query)
-
-    current_time = cur.fetchone()[0]
-
-    if current_time >= deadline:
+    if is_expired:
 
         cur.close()
 

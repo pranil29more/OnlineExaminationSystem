@@ -28,20 +28,77 @@ function ExamDetailsPage() {
     const [submissionId, setSubmissionId] =
         useState(null);
 
-    const [endTime, setEndTime] = useState(null);
+    const [endTime, setEndTime] =
+        useState(null);
 
     const [isSubmitting, setIsSubmitting] =
         useState(false);
 
-    const hasAutoSubmitted = useRef(false);
+    const [loadingExam, setLoadingExam] =
+        useState(true);
 
+    const hasAutoSubmitted =
+        useRef(false);
+
+    const pendingSaves =
+        useRef(new Set());
+
+    const answerRequestVersions =
+        useRef({});
+
+
+    // =====================================================
+    // Parse Backend IST Time Safely
+    //
+    // Backend stores/returns submission start_time
+    // in IST (+05:30).
+    //
+    // Explicitly attach +05:30 so the browser does
+    // NOT guess the timezone.
+    // =====================================================
+
+    const parseISTTime = (value) => {
+
+        if (!value) {
+            return NaN;
+        }
+
+        const normalized =
+            String(value)
+                .trim()
+                .replace(" ", "T");
+
+        if (
+            normalized.endsWith("Z") ||
+            /[+-]\d{2}:\d{2}$/.test(normalized)
+        ) {
+
+            return new Date(
+                normalized
+            ).getTime();
+
+        }
+
+        return new Date(
+            `${normalized}+05:30`
+        ).getTime();
+    };
+
+
+    // =====================================================
+    // Fetch Exam
+    // =====================================================
 
     useEffect(() => {
 
         fetchExam();
 
-    }, []);
+    }, [examId]);
 
+
+    // =====================================================
+    // Exam Timer
+    // =====================================================
 
     useEffect(() => {
 
@@ -58,9 +115,13 @@ function ExamDetailsPage() {
 
             if (remaining <= 0) {
 
-                setTimeLeft("00:00");
+                setTimeLeft(
+                    "00:00"
+                );
 
-                setTimerState("critical");
+                setTimerState(
+                    "critical"
+                );
 
 
                 if (
@@ -70,7 +131,9 @@ function ExamDetailsPage() {
                     hasAutoSubmitted.current =
                         true;
 
-                    setIsSubmitting(true);
+                    setIsSubmitting(
+                        true
+                    );
 
                     handleSubmitExam();
                 }
@@ -97,7 +160,9 @@ function ExamDetailsPage() {
                 );
 
 
-            if (totalSeconds <= 300) {
+            if (
+                totalSeconds <= 300
+            ) {
 
                 setTimerState(
                     "critical"
@@ -120,10 +185,14 @@ function ExamDetailsPage() {
 
 
             setTimeLeft(
-                `${String(minutes).padStart(
+                `${String(
+                    minutes
+                ).padStart(
                     2,
                     "0"
-                )}:${String(seconds).padStart(
+                )}:${String(
+                    seconds
+                ).padStart(
                     2,
                     "0"
                 )}`
@@ -143,20 +212,36 @@ function ExamDetailsPage() {
 
         return () => {
 
-            clearInterval(timer);
+            clearInterval(
+                timer
+            );
 
         };
 
     }, [endTime]);
 
 
+    // =====================================================
+    // Fetch Exam + Candidate Session
+    // =====================================================
+
     const fetchExam = async () => {
 
         try {
 
-            const token =
-                localStorage.getItem("token");
+            setLoadingExam(
+                true
+            );
 
+            const token =
+                localStorage.getItem(
+                    "token"
+                );
+
+
+            // =================================================
+            // Fetch Exam
+            // =================================================
 
             const examResponse =
                 await fetch(
@@ -174,14 +259,18 @@ function ExamDetailsPage() {
                 await examResponse.json();
 
 
-            if (!examResponse.ok) {
+            if (
+                !examResponse.ok
+            ) {
 
                 alert(
                     examData.message ||
                         "Unable to access this assessment."
                 );
 
-                navigate("/exams");
+                navigate(
+                    "/exams"
+                );
 
                 return;
             }
@@ -198,14 +287,17 @@ function ExamDetailsPage() {
                     "Unable to load assessment details."
                 );
 
-                navigate("/exams");
+                navigate(
+                    "/exams"
+                );
 
                 return;
             }
 
 
-            setExam(examData);
-
+            // =================================================
+            // Fetch Profile
+            // =================================================
 
             const profileResponse =
                 await fetch(
@@ -223,19 +315,52 @@ function ExamDetailsPage() {
                 await profileResponse.json();
 
 
-            setRole(
-                profileData.role
-            );
-
-
             if (
-                profileData.role !==
-                "Candidate"
+                !profileResponse.ok
             ) {
+
+                alert(
+                    profileData.message ||
+                        "Unable to load user profile."
+                );
+
+                navigate(
+                    "/exams"
+                );
 
                 return;
             }
 
+
+            const currentRole =
+                profileData.role || "";
+
+
+            setRole(
+                currentRole
+            );
+
+
+            // =================================================
+            // Admin / Examiner
+            // =================================================
+
+            if (
+                currentRole !==
+                "Candidate"
+            ) {
+
+                setExam(
+                    examData
+                );
+
+                return;
+            }
+
+
+            // =================================================
+            // Candidate Session
+            // =================================================
 
             const sessionResponse =
                 await fetch(
@@ -254,22 +379,95 @@ function ExamDetailsPage() {
 
 
             if (
-                sessionData.status ===
-                "Not Started"
+                !sessionResponse.ok
             ) {
+
+                alert(
+                    sessionData.message ||
+                        "Unable to load exam session."
+                );
+
+                navigate(
+                    "/exams"
+                );
 
                 return;
             }
 
+
+            // =================================================
+            // Not Started
+            // =================================================
+
+            if (
+                sessionData.status ===
+                "Not Started"
+            ) {
+
+                setExam(
+                    examData
+                );
+
+                return;
+            }
+
+
+            // =================================================
+            // Practice Completed
+            // =================================================
 
             if (
                 sessionData.status ===
                 "Practice Completed"
             ) {
 
+                setExam(
+                    examData
+                );
+
                 return;
             }
 
+
+            // =================================================
+            // Completed / Auto Submitted
+            // =================================================
+
+            if (
+                sessionData.status ===
+                    "Completed" ||
+                sessionData.status ===
+                    "Auto Submitted"
+            ) {
+
+                setExam(
+                    examData
+                );
+
+                return;
+            }
+
+
+            // =================================================
+            // Unknown Session State
+            // =================================================
+
+            if (
+                sessionData.status !==
+                "In Progress"
+            ) {
+
+                setExam(
+                    examData
+                );
+
+                return;
+            }
+
+
+            // =================================================
+            // Validate Active Session Data
+            // =================================================
 
             if (
                 !sessionData.submission_id ||
@@ -277,51 +475,114 @@ function ExamDetailsPage() {
                 !sessionData.duration
             ) {
 
+                alert(
+                    "Unable to restore your active examination session."
+                );
+
+                navigate(
+                    "/exams"
+                );
+
                 return;
             }
 
+
+            // =================================================
+            // Restore Submission ID
+            // =================================================
 
             setSubmissionId(
                 sessionData.submission_id
             );
 
 
+            // =================================================
+            // Restore Saved Answers
+            // =================================================
+
+            const restoredAnswers =
+                {};
+
+
             if (
-                sessionData.answers
+                Array.isArray(
+                    sessionData.answers
+                )
             ) {
-
-                const restoredAnswers =
-                    {};
-
 
                 sessionData.answers.forEach(
                     (answer) => {
 
-                        restoredAnswers[
-                            answer.question_id
-                        ] =
-                            answer.answer_text;
+                        if (
+                            answer.question_id !==
+                                null &&
+                            answer.answer_text !==
+                                null
+                        ) {
+
+                            restoredAnswers[
+                                answer.question_id
+                            ] =
+                                answer.answer_text;
+
+                        }
 
                     }
                 );
 
-
-                setAnswers(
-                    restoredAnswers
-                );
             }
 
 
+            setAnswers(
+                restoredAnswers
+            );
+
+
+            // =================================================
+            // Calculate Actual Attempt Deadline
+            //
+            // IMPORTANT:
+            //
+            // start_time is IST.
+            //
+            // parseISTTime() explicitly interprets it
+            // as IST (+05:30).
+            //
+            // Deadline =
+            //
+            // start_time + exam duration
+            // =================================================
+
             const start =
-                new Date(
+                parseISTTime(
                     sessionData.start_time
-                ).getTime();
+                );
 
 
             const duration =
                 Number(
                     sessionData.duration
                 );
+
+
+            if (
+                Number.isNaN(start) ||
+                !Number.isFinite(
+                    duration
+                ) ||
+                duration <= 0
+            ) {
+
+                alert(
+                    "Unable to restore the examination timer."
+                );
+
+                navigate(
+                    "/exams"
+                );
+
+                return;
+            }
 
 
             const end =
@@ -335,13 +596,69 @@ function ExamDetailsPage() {
                 end
             );
 
+
+            // =================================================
+            // Only render active exam after everything
+            // required for the session has been restored.
+            // =================================================
+
+            setExam(
+                examData
+            );
+
         } catch (error) {
 
-            console.error(error);
+            console.error(
+                error
+            );
 
+            alert(
+                "Unable to load assessment."
+            );
+
+            navigate(
+                "/exams"
+            );
+
+        } finally {
+
+            setLoadingExam(
+                false
+            );
         }
     };
 
+
+    // =====================================================
+    // Wait For Pending Answer Saves
+    //
+    // Prevents auto-submit from evaluating answers while
+    // the final /save-answer request is still in flight.
+    // =====================================================
+
+    const waitForPendingSaves = async () => {
+
+        const requests =
+            Array.from(
+                pendingSaves.current
+            );
+
+        if (
+            requests.length === 0
+        ) {
+
+            return;
+        }
+
+        await Promise.allSettled(
+            requests
+        );
+    };
+
+
+    // =====================================================
+    // Handle Answer Change
+    // =====================================================
 
     const handleAnswerChange = async (
         questionId,
@@ -357,6 +674,51 @@ function ExamDetailsPage() {
         }
 
 
+        // =================================================
+        // Submission Protection
+        // =================================================
+
+        if (!submissionId) {
+
+            alert(
+                "Your exam session is not ready. Please refresh the page."
+            );
+
+            return;
+        }
+
+
+        const previousAnswer =
+            answers[
+                questionId
+            ];
+
+
+        // =================================================
+        // Create Request Version
+        //
+        // Prevents an older failed request from
+        // overwriting a newer selection.
+        // =================================================
+
+        const currentVersion =
+            (
+                answerRequestVersions.current[
+                    questionId
+                ] || 0
+            ) + 1;
+
+
+        answerRequestVersions.current[
+            questionId
+        ] =
+            currentVersion;
+
+
+        // =================================================
+        // Update UI Immediately
+        // =================================================
+
         setAnswers(
             (previous) => ({
                 ...previous,
@@ -367,13 +729,14 @@ function ExamDetailsPage() {
         );
 
 
-        try {
+        const token =
+            localStorage.getItem(
+                "token"
+            );
 
-            const token =
-                localStorage.getItem("token");
 
-
-            await fetch(
+        const saveRequest =
+            fetch(
                 `${API_BASE_URL}/save-answer`,
                 {
                     method: "POST",
@@ -399,17 +762,164 @@ function ExamDetailsPage() {
                 }
             );
 
+
+        // =================================================
+        // Track Pending Save
+        // =================================================
+
+        pendingSaves.current.add(
+            saveRequest
+        );
+
+
+        try {
+
+            const response =
+                await saveRequest;
+
+
+            const data =
+                await response.json();
+
+
+            // =================================================
+            // Save Failed
+            // =================================================
+
+            if (
+                !response.ok
+            ) {
+
+                // Only rollback if this is still the
+                // latest request for this question.
+                if (
+                    answerRequestVersions
+                        .current[
+                            questionId
+                        ] ===
+                    currentVersion
+                ) {
+
+                    setAnswers(
+                        (previous) => {
+
+                            const restored =
+                                {
+                                    ...previous,
+                                };
+
+
+                            if (
+                                previousAnswer ===
+                                undefined
+                            ) {
+
+                                delete restored[
+                                    questionId
+                                ];
+
+                            } else {
+
+                                restored[
+                                    questionId
+                                ] =
+                                    previousAnswer;
+                            }
+
+
+                            return restored;
+                        }
+                    );
+
+                }
+
+
+                alert(
+                    data.message ||
+                        "Unable to save your answer."
+                );
+
+                return;
+            }
+
         } catch (error) {
 
-            console.error(error);
+            console.error(
+                error
+            );
+
+
+            // =================================================
+            // Network Failure
+            //
+            // Again, only rollback if this request is
+            // still the latest request for this question.
+            // =================================================
+
+            if (
+                answerRequestVersions
+                    .current[
+                        questionId
+                    ] ===
+                currentVersion
+            ) {
+
+                setAnswers(
+                    (previous) => {
+
+                        const restored =
+                            {
+                                ...previous,
+                            };
+
+
+                        if (
+                            previousAnswer ===
+                            undefined
+                        ) {
+
+                            delete restored[
+                                questionId
+                            ];
+
+                        } else {
+
+                            restored[
+                                questionId
+                            ] =
+                                previousAnswer;
+                        }
+
+
+                        return restored;
+                    }
+                );
+
+            }
+
+
+            alert(
+                "Unable to save your answer. Please check your connection."
+            );
+
+        } finally {
+
+            pendingSaves.current.delete(
+                saveRequest
+            );
 
         }
     };
 
 
+    // =====================================================
+    // Submit Exam
+    // =====================================================
+
     const handleSubmitExam = async () => {
 
-        if (isSubmitting &&
+        if (
+            isSubmitting &&
             !hasAutoSubmitted.current
         ) {
 
@@ -417,13 +927,30 @@ function ExamDetailsPage() {
         }
 
 
-        setIsSubmitting(true);
+        setIsSubmitting(
+            true
+        );
 
 
         try {
 
+            // =================================================
+            // CRITICAL:
+            //
+            // Wait for any answer-save request that was
+            // already in progress.
+            //
+            // This prevents the final selected answer
+            // from being missed during auto-submit.
+            // =================================================
+
+            await waitForPendingSaves();
+
+
             const token =
-                localStorage.getItem("token");
+                localStorage.getItem(
+                    "token"
+                );
 
 
             const response =
@@ -452,7 +979,9 @@ function ExamDetailsPage() {
                 await response.json();
 
 
-            if (response.ok) {
+            if (
+                response.ok
+            ) {
 
                 alert(
                     hasAutoSubmitted.current
@@ -466,23 +995,30 @@ function ExamDetailsPage() {
                 );
 
 
-            } else {
-
-                setIsSubmitting(false);
-
-
-                alert(
-                    data.message ||
-                        "Unable to submit exam."
-                );
+                return;
             }
+
+
+            setIsSubmitting(
+                false
+            );
+
+
+            alert(
+                data.message ||
+                    "Unable to submit exam."
+            );
 
         } catch (error) {
 
-            console.error(error);
+            console.error(
+                error
+            );
 
 
-            setIsSubmitting(false);
+            setIsSubmitting(
+                false
+            );
 
 
             alert(
@@ -492,7 +1028,14 @@ function ExamDetailsPage() {
     };
 
 
-    if (!exam) {
+    // =====================================================
+    // Loading
+    // =====================================================
+
+    if (
+        loadingExam ||
+        !exam
+    ) {
 
         return (
 
@@ -508,6 +1051,10 @@ function ExamDetailsPage() {
         );
     }
 
+
+    // =====================================================
+    // Render
+    // =====================================================
 
     return (
 
@@ -690,6 +1237,7 @@ function ExamDetailsPage() {
                                     1
                                         ? "Question"
                                         : "Questions"
+
                                 }
 
                             </span>

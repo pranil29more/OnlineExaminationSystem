@@ -297,7 +297,6 @@ function AddQuestionPage() {
 
         if (
             questionAdding ||
-            doneProcessing ||
             bulkUploading
         ) {
             return;
@@ -311,8 +310,6 @@ function AddQuestionPage() {
 
             return;
         }
-
-        setDoneProcessing(true);
 
         handleFinishNavigation();
     };
@@ -836,21 +833,16 @@ function AddQuestionPage() {
                                 </button>
 
                                 <button
-                                    type="button"
-                                    className="aqp-done-btn"
-                                    onClick={
-                                        handleDone
-                                    }
-                                    disabled={
-                                        questionAdding ||
-                                        doneProcessing ||
-                                        bulkUploading
-                                    }
-                                >
-                                    {doneProcessing
-                                        ? "Finishing..."
-                                        : "Done"}
-                                </button>
+    type="button"
+    className="aqp-done-btn"
+    onClick={handleDone}
+    disabled={
+        questionAdding ||
+        bulkUploading
+    }
+>
+    Done
+</button>
 
                             </div>
 
