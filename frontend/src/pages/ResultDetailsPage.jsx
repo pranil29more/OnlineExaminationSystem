@@ -1,31 +1,23 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-
 import API_BASE_URL from "../services/api";
 import Navbar from "../components/Navbar";
 import PageLoader from "../components/PageLoader";
-
 import "../styles/ResultDetailsPage.css";
 
-
 function ResultDetailsPage() {
-
     const { submissionId } =
         useParams();
 
     const [result, setResult] =
         useState(null);
 
-
     useEffect(() => {
         fetchResult();
     }, []);
 
-
     const fetchResult = async () => {
-
         try {
-
             const token =
                 localStorage.getItem("token");
 
@@ -43,7 +35,6 @@ function ResultDetailsPage() {
                 await response.json();
 
             if (!response.ok) {
-
                 console.error(
                     data.message ||
                         "Unable to load result."
@@ -53,37 +44,26 @@ function ResultDetailsPage() {
             }
 
             setResult(data);
-
         } catch (error) {
-
             console.error(error);
-
         }
     };
 
-
     if (!result) {
-
         return (
-
             <div>
-
                 <Navbar />
 
                 <PageLoader
                     message="Loading Result..."
                 />
-
             </div>
-
         );
     }
-
 
     const isPassed =
         result.score >=
         result.passing_marks;
-
 
     // ==========================================
     // Answer Status Helpers
@@ -92,7 +72,6 @@ function ResultDetailsPage() {
     const isAnswerUnanswered = (
         answer
     ) => {
-
         if (
             answer.is_answered === false
         ) {
@@ -116,7 +95,6 @@ function ResultDetailsPage() {
         return false;
     };
 
-
     const correctAnswers =
         result.answers.filter(
             (answer) =>
@@ -124,13 +102,11 @@ function ResultDetailsPage() {
                 Boolean(answer.is_correct)
         ).length;
 
-
     const unansweredAnswers =
         result.answers.filter(
             (answer) =>
                 isAnswerUnanswered(answer)
         ).length;
-
 
     const incorrectAnswers =
         result.answers.filter(
@@ -139,23 +115,17 @@ function ResultDetailsPage() {
                 !Boolean(answer.is_correct)
         ).length;
 
-
     return (
-
         <div className="rdp-page">
-
             <Navbar />
 
-
             <main className="rdp-page-container">
-
 
                 {/* ==========================================
                     Page Header
                 ========================================== */}
 
                 <header className="rdp-page-header">
-
                     <span className="rdp-page-eyebrow">
                         PERFORMANCE DETAILS
                     </span>
@@ -169,20 +139,15 @@ function ResultDetailsPage() {
                         performance and detailed
                         answers for this submission.
                     </p>
-
                 </header>
-
 
                 {/* ==========================================
                     Result Summary
                 ========================================== */}
 
                 <section className="rdp-summary-card">
-
                     <div className="rdp-summary-header">
-
                         <div>
-
                             <span className="rdp-summary-label">
                                 RESULT SUMMARY
                             </span>
@@ -199,9 +164,7 @@ function ResultDetailsPage() {
                                     result.submission_id
                                 }
                             </p>
-
                         </div>
-
 
                         <span
                             className={
@@ -216,24 +179,19 @@ function ResultDetailsPage() {
                                     : "Fail"
                             }
                         </span>
-
                     </div>
-
 
                     {/* ==========================================
                         Score Overview
                     ========================================== */}
 
                     <div className="rdp-score-overview">
-
                         <div className="rdp-score-main">
-
                             <span className="rdp-score-label">
                                 Score
                             </span>
 
                             <strong className="rdp-score-value">
-
                                 {
                                     result.score
                                 }
@@ -245,14 +203,10 @@ function ResultDetailsPage() {
                                         result.total_marks
                                     }
                                 </span>
-
                             </strong>
-
                         </div>
 
-
                         <div className="rdp-score-main">
-
                             <span className="rdp-score-label">
                                 Percentage
                             </span>
@@ -262,22 +216,16 @@ function ResultDetailsPage() {
                                     result.percentage
                                 }%
                             </strong>
-
                         </div>
-
                     </div>
-
 
                     {/* ==========================================
                         Summary Details
                     ========================================== */}
 
                     <div className="rdp-summary-details">
-
                         {result.candidate_name && (
-
                             <div className="rdp-summary-detail">
-
                                 <span className="rdp-detail-label">
                                     Candidate
                                 </span>
@@ -287,14 +235,10 @@ function ResultDetailsPage() {
                                         result.candidate_name
                                     }
                                 </strong>
-
                             </div>
-
                         )}
 
-
                         <div className="rdp-summary-detail">
-
                             <span className="rdp-detail-label">
                                 Batch
                             </span>
@@ -304,12 +248,9 @@ function ResultDetailsPage() {
                                     result.batch_name
                                 }
                             </strong>
-
                         </div>
 
-
                         <div className="rdp-summary-detail">
-
                             <span className="rdp-detail-label">
                                 Passing Marks
                             </span>
@@ -319,12 +260,9 @@ function ResultDetailsPage() {
                                     result.passing_marks
                                 }
                             </strong>
-
                         </div>
 
-
                         <div className="rdp-summary-detail">
-
                             <span className="rdp-detail-label">
                                 Submitted
                             </span>
@@ -334,24 +272,17 @@ function ResultDetailsPage() {
                                     result.submitted_at
                                 }
                             </strong>
-
                         </div>
-
                     </div>
-
                 </section>
-
 
                 {/* ==========================================
                     Answer Review
                 ========================================== */}
 
                 <section className="rdp-answers-section">
-
                     <div className="rdp-answers-header">
-
                         <div>
-
                             <span className="rdp-section-kicker">
                                 ANSWERS
                             </span>
@@ -365,12 +296,9 @@ function ResultDetailsPage() {
                                 and the submitted
                                 answer.
                             </p>
-
                         </div>
 
-
                         <div className="rdp-answer-count">
-
                             <span className="rdp-correct-count">
                                 {
                                     correctAnswers
@@ -396,21 +324,16 @@ function ResultDetailsPage() {
                                     unansweredAnswers
                                 } Unanswered
                             </span>
-
                         </div>
-
                     </div>
-
 
                     {/* ==========================================
                         Answers
                     ========================================== */}
 
                     <div className="rdp-answers-grid">
-
                         {result.answers.map(
                             (answer, index) => {
-
                                 const unanswered =
                                     isAnswerUnanswered(
                                         answer
@@ -426,9 +349,7 @@ function ResultDetailsPage() {
                                     !unanswered &&
                                     !correct;
 
-
                                 return (
-
                                     <article
                                         key={
                                             answer.question_id ||
@@ -445,11 +366,8 @@ function ResultDetailsPage() {
                                         }
                                     >
 
-
                                         <div className="rdp-answer-card-header">
-
                                             <div>
-
                                                 <span className="rdp-question-number">
                                                     Question{" "}
                                                     {
@@ -462,9 +380,7 @@ function ResultDetailsPage() {
                                                         answer.question_text
                                                     }
                                                 </h3>
-
                                             </div>
-
 
                                             <span
                                                 className={
@@ -483,22 +399,18 @@ function ResultDetailsPage() {
                                                           : "Incorrect"
                                                 }
                                             </span>
-
                                         </div>
-
 
                                         {/* ==========================================
                                             Selected Answer
-                                            
+
                                             IMPORTANT:
                                             Unanswered questions do NOT get this
                                             section at all.
                                         ========================================== */}
 
                                         {!unanswered && (
-
                                             <div className="rdp-answer-content">
-
                                                 <span className="rdp-detail-label">
                                                     Selected Answer
                                                 </span>
@@ -508,14 +420,10 @@ function ResultDetailsPage() {
                                                         answer.answer_text
                                                     }
                                                 </p>
-
                                             </div>
-
                                         )}
 
-
                                         <div className="rdp-answer-footer">
-
                                             <span
                                                 className={
                                                     correct
@@ -525,7 +433,6 @@ function ResultDetailsPage() {
                                                           : "rdp-answer-result rdp-incorrect-result"
                                                 }
                                             >
-
                                                 {
                                                     correct
                                                         ? "✓ Correct Answer"
@@ -533,28 +440,19 @@ function ResultDetailsPage() {
                                                           ? "Not Answered"
                                                           : "✕ Incorrect Answer"
                                                 }
-
                                             </span>
-
                                         </div>
 
-
                                     </article>
-
                                 );
-
                             }
                         )}
-
                     </div>
-
                 </section>
 
             </main>
-
         </div>
     );
 }
-
 
 export default ResultDetailsPage;

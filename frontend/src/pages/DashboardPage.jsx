@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import API_BASE_URL from "../services/api";
 import Navbar from "../components/Navbar";
 import PageLoader from "../components/PageLoader";
-
 import "../styles/DashboardPage.css";
 
 function DashboardPage() {
-    const [dashboard, setDashboard] = useState(null);
+    const [dashboard, setDashboard] =
+        useState(null);
 
     const navigate = useNavigate();
 
@@ -33,6 +32,7 @@ function DashboardPage() {
 
             if (response.status === 403) {
                 navigate("/exams");
+
                 return;
             }
 
@@ -48,30 +48,25 @@ function DashboardPage() {
     if (!dashboard) {
         return (
             <div className="adp-page">
-
                 <Navbar />
 
                 <PageLoader
                     message="Loading Dashboard..."
                 />
-
             </div>
         );
     }
 
     return (
         <div className="adp-page">
-
             <Navbar />
 
             <main className="adp-dashboard-container">
-
                 {/* =================================================
                     Page Header
                 ================================================= */}
 
                 <header className="adp-page-header">
-
                     <span className="adp-page-eyebrow">
                         ADMINISTRATION
                     </span>
@@ -85,27 +80,21 @@ function DashboardPage() {
                         batches, and submission activity
                         from a single overview.
                     </p>
-
                 </header>
-
 
                 {/* =================================================
                     Dashboard Statistics
                 ================================================= */}
 
                 <div className="adp-dashboard-wrapper">
-
                     <div className="adp-dashboard-circle">
-
                         <div
                             className="adp-dashboard-quarter adp-users"
                             onClick={() =>
                                 navigate("/users")
                             }
                         >
-
                             <div className="adp-quarter-content">
-
                                 <div className="adp-quarter-label">
                                     USERS
                                 </div>
@@ -115,11 +104,8 @@ function DashboardPage() {
                                         dashboard.total_users
                                     }
                                 </div>
-
                             </div>
-
                         </div>
-
 
                         <div
                             className="adp-dashboard-quarter adp-exams"
@@ -129,9 +115,7 @@ function DashboardPage() {
                                 )
                             }
                         >
-
                             <div className="adp-quarter-content">
-
                                 <div className="adp-quarter-label">
                                     EXAMS
                                 </div>
@@ -141,11 +125,8 @@ function DashboardPage() {
                                         dashboard.total_exams
                                     }
                                 </div>
-
                             </div>
-
                         </div>
-
 
                         <div
                             className="adp-dashboard-quarter adp-questions"
@@ -155,9 +136,7 @@ function DashboardPage() {
                                 )
                             }
                         >
-
                             <div className="adp-quarter-content">
-
                                 <div className="adp-quarter-label">
                                     BATCHES
                                 </div>
@@ -167,11 +146,8 @@ function DashboardPage() {
                                         dashboard.total_batches
                                     }
                                 </div>
-
                             </div>
-
                         </div>
-
 
                         <div
                             className="adp-dashboard-quarter adp-submissions"
@@ -181,9 +157,7 @@ function DashboardPage() {
                                 )
                             }
                         >
-
                             <div className="adp-quarter-content">
-
                                 <div className="adp-quarter-label">
                                     SUBMISSIONS
                                 </div>
@@ -193,22 +167,15 @@ function DashboardPage() {
                                         dashboard.total_submissions
                                     }
                                 </div>
-
                             </div>
-
                         </div>
-
 
                         <div className="adp-dashboard-center">
                             <span></span>
                         </div>
-
                     </div>
-
                 </div>
-
             </main>
-
         </div>
     );
 }

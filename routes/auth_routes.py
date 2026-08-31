@@ -4,18 +4,14 @@ from flask_jwt_extended import (
     jwt_required,
     get_jwt_identity,
 )
-
 from extensions import mysql, bcrypt
 from config import Config
-
 from brevo import Brevo
 from brevo.transactional_emails import (
     SendTransacEmailRequestSender,
     SendTransacEmailRequestToItem,
 )
-
 from utils.decorators import role_required
-
 import os
 import secrets
 

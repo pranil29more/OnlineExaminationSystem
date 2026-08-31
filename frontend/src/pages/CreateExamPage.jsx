@@ -1,13 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import API_BASE_URL from "../services/api";
 import Navbar from "../components/Navbar";
-
 import "../styles/CreateExamPage.css";
 
 function CreateExamPage() {
-
     const navigate = useNavigate();
 
     const [title, setTitle] = useState("");
@@ -27,24 +24,20 @@ function CreateExamPage() {
     const [creatingExam, setCreatingExam] =
         useState(false);
 
-
     // =========================================================
     // Create Exam
     // =========================================================
 
     const handleCreateExam = async () => {
-
         if (creatingExam) {
             return;
         }
-
 
         // =========================================================
         // Validation
         // =========================================================
 
         if (!title.trim()) {
-
             alert(
                 "Please enter the exam title."
             );
@@ -52,12 +45,10 @@ function CreateExamPage() {
             return;
         }
 
-
         if (
             !duration ||
             Number(duration) <= 0
         ) {
-
             alert(
                 "Please enter valid duration."
             );
@@ -65,12 +56,10 @@ function CreateExamPage() {
             return;
         }
 
-
         if (
             !totalMarks ||
             Number(totalMarks) <= 0
         ) {
-
             alert(
                 "Please enter valid total marks."
             );
@@ -78,12 +67,10 @@ function CreateExamPage() {
             return;
         }
 
-
         if (
             !passingMarks ||
             Number(passingMarks) <= 0
         ) {
-
             alert(
                 "Please enter valid passing marks."
             );
@@ -91,12 +78,10 @@ function CreateExamPage() {
             return;
         }
 
-
         if (
             Number(passingMarks) >
             Number(totalMarks)
         ) {
-
             alert(
                 "Passing marks cannot be greater than total marks."
             );
@@ -104,9 +89,7 @@ function CreateExamPage() {
             return;
         }
 
-
         if (!examType) {
-
             alert(
                 "Please select an exam type."
             );
@@ -114,13 +97,11 @@ function CreateExamPage() {
             return;
         }
 
-
         // =========================================================
         // API Request
         // =========================================================
 
         try {
-
             setCreatingExam(true);
 
             const token =
@@ -162,7 +143,6 @@ function CreateExamPage() {
                 await response.json();
 
             if (response.ok) {
-
                 alert(
                     "Exam Created Successfully"
                 );
@@ -170,47 +150,33 @@ function CreateExamPage() {
                 navigate(
                     `/add-question?examId=${data.exam_id}`
                 );
-
             } else {
-
                 alert(
                     data.message ||
                         "Unable to create exam."
                 );
-
             }
-
         } catch (error) {
-
             console.error(error);
 
             alert(
                 "Unable to create exam."
             );
-
         } finally {
-
             setCreatingExam(false);
-
         }
-
     };
 
-
     return (
-
         <div className="cep-page">
-
             <Navbar />
 
             <main className="cep-container">
-
                 {/* =================================================
                     Page Header
                 ================================================= */}
 
                 <header className="cep-page-header">
-
                     <span className="cep-eyebrow">
                         CONFIGURATION
                     </span>
@@ -224,24 +190,19 @@ function CreateExamPage() {
                         assessment settings, and marking
                         structure before adding questions.
                     </p>
-
                 </header>
-
 
                 {/* =================================================
                     Form Card
                 ================================================= */}
 
                 <section className="cep-form-card">
-
                     <div className="cep-form-section">
-
                         {/* =================================================
                             Section Heading
                         ================================================= */}
 
                         <div className="cep-section-heading">
-
                             <span className="cep-section-eyebrow">
                                 Assessment Setup
                             </span>
@@ -255,22 +216,18 @@ function CreateExamPage() {
                                 and assessment settings for
                                 the new examination.
                             </p>
-
                         </div>
-
 
                         {/* =================================================
                             Exam Type
                         ================================================= */}
 
                         <div className="cep-field">
-
                             <label className="cep-field-label">
                                 Exam Type
                             </label>
 
                             <div className="cep-exam-type-switch">
-
                                 <button
                                     type="button"
                                     className={`cep-exam-type-btn ${
@@ -308,7 +265,6 @@ function CreateExamPage() {
                                 >
                                     Actual Assessment
                                 </button>
-
                             </div>
 
                             <p className="cep-field-hint">
@@ -318,16 +274,13 @@ function CreateExamPage() {
                                 scheduled for candidates or
                                 batches.
                             </p>
-
                         </div>
-
 
                         {/* =================================================
                             Exam Title
                         ================================================= */}
 
                         <div className="cep-field">
-
                             <label
                                 htmlFor="cep-exam-title"
                                 className="cep-field-label"
@@ -350,16 +303,13 @@ function CreateExamPage() {
                                     creatingExam
                                 }
                             />
-
                         </div>
-
 
                         {/* =================================================
                             Duration
                         ================================================= */}
 
                         <div className="cep-field">
-
                             <label
                                 htmlFor="cep-duration"
                                 className="cep-field-label"
@@ -389,24 +339,19 @@ function CreateExamPage() {
                                 for candidates to complete
                                 the examination.
                             </p>
-
                         </div>
-
 
                         {/* =================================================
                             Marks Configuration
                         ================================================= */}
 
                         <div className="cep-marks-section">
-
                             <div className="cep-subsection-heading">
                                 Marks Configuration
                             </div>
 
                             <div className="cep-marks-grid">
-
                                 <div className="cep-field">
-
                                     <label
                                         htmlFor="cep-total-marks"
                                         className="cep-field-label"
@@ -433,12 +378,9 @@ function CreateExamPage() {
                                             creatingExam
                                         }
                                     />
-
                                 </div>
 
-
                                 <div className="cep-field">
-
                                     <label
                                         htmlFor="cep-passing-marks"
                                         className="cep-field-label"
@@ -465,20 +407,15 @@ function CreateExamPage() {
                                             creatingExam
                                         }
                                     />
-
                                 </div>
-
                             </div>
-
                         </div>
-
 
                         {/* =================================================
                             Submit
                         ================================================= */}
 
                         <div className="cep-submit-wrapper">
-
                             <button
                                 type="button"
                                 className="cep-submit-btn"
@@ -493,17 +430,11 @@ function CreateExamPage() {
                                     ? "Creating..."
                                     : "Create Exam"}
                             </button>
-
                         </div>
-
                     </div>
-
                 </section>
-
             </main>
-
         </div>
-
     );
 }
 

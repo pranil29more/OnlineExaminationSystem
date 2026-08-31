@@ -176,22 +176,17 @@ function BatchManagementPage() {
         );
     }
 
-
     return (
         <div className="bmp-page">
-
             <Navbar />
 
             <main className="bmp-container">
-
                 {/* ==========================================
                     Page Header
                 ========================================== */}
 
                 <div className="bmp-header">
-
                     <div>
-
                         <span className="bmp-eyebrow">
                             TRAINING CONTROL
                         </span>
@@ -205,9 +200,7 @@ function BatchManagementPage() {
                             training batches and their
                             assigned candidates.
                         </p>
-
                     </div>
-
 
                     <button
                         type="button"
@@ -218,18 +211,14 @@ function BatchManagementPage() {
                     >
                         + Create Batch
                     </button>
-
                 </div>
-
 
                 {/* ==========================================
                     Batch Grid
                 ========================================== */}
 
                 {batches.length === 0 ? (
-
                     <div className="bmp-empty-state">
-
                         <div className="bmp-empty-icon">
                             +
                         </div>
@@ -254,31 +243,23 @@ function BatchManagementPage() {
                         >
                             + Create Batch
                         </button>
-
                     </div>
-
                 ) : (
-
                     <div className="bmp-grid">
-
                         {batches.map(
                             (batch) => (
-
                                 <article
                                     key={
                                         batch.batch_id
                                     }
                                     className="bmp-card"
                                 >
-
                                     {/* ==================================
                                         Card Header
                                     ================================== */}
 
                                     <div className="bmp-card-header">
-
                                         <div className="bmp-card-heading">
-
                                             <span className="bmp-card-label">
                                                 Batch
                                             </span>
@@ -288,9 +269,7 @@ function BatchManagementPage() {
                                                     batch.batch_name
                                                 }
                                             </h2>
-
                                         </div>
-
 
                                         <span
                                             className={`bmp-status-badge bmp-status-${batch.status
@@ -304,9 +283,7 @@ function BatchManagementPage() {
                                                 batch.status
                                             }
                                         </span>
-
                                     </div>
-
 
                                     {/* ==================================
                                         Description
@@ -319,15 +296,12 @@ function BatchManagementPage() {
                                         }
                                     </p>
 
-
                                     {/* ==================================
                                         Batch Information
                                     ================================== */}
 
                                     <div className="bmp-info-grid">
-
                                         <div className="bmp-info-item">
-
                                             <span>
                                                 Technology
                                             </span>
@@ -337,12 +311,9 @@ function BatchManagementPage() {
                                                     batch.technology
                                                 }
                                             </strong>
-
                                         </div>
 
-
                                         <div className="bmp-info-item">
-
                                             <span>
                                                 Trainer
                                             </span>
@@ -352,12 +323,9 @@ function BatchManagementPage() {
                                                     batch.trainer_name
                                                 }
                                             </strong>
-
                                         </div>
 
-
                                         <div className="bmp-info-item">
-
                                             <span>
                                                 Candidates
                                             </span>
@@ -367,12 +335,9 @@ function BatchManagementPage() {
                                                     batch.candidate_count
                                                 }
                                             </strong>
-
                                         </div>
 
-
                                         <div className="bmp-info-item">
-
                                             <span>
                                                 Assignments
                                             </span>
@@ -382,12 +347,9 @@ function BatchManagementPage() {
                                                     batch.assignment_count
                                                 }
                                             </strong>
-
                                         </div>
 
-
                                         <div className="bmp-info-item bmp-info-item-wide">
-
                                             <span>
                                                 Duration
                                             </span>
@@ -401,18 +363,14 @@ function BatchManagementPage() {
                                                     batch.end_date
                                                 }
                                             </strong>
-
                                         </div>
-
                                     </div>
-
 
                                     {/* ==================================
                                         Actions
                                     ================================== */}
 
                                     <div className="bmp-actions">
-
                                         <button
                                             type="button"
                                             className="bmp-details-btn"
@@ -424,7 +382,6 @@ function BatchManagementPage() {
                                         >
                                             View Details
                                         </button>
-
 
                                         <button
                                             type="button"
@@ -438,43 +395,35 @@ function BatchManagementPage() {
                                             Edit
                                         </button>
 
-
                                         <button
-    type="button"
-    className="bmp-delete-btn"
-    onClick={() =>
-        handleDeleteBatch(
-            batch.batch_id
-        )
-    }
-    disabled={
-        isActionActive(
-            "delete",
-            batch.batch_id
-        )
-    }
->
-    {isActionActive(
-        "delete",
-        batch.batch_id
-    )
-        ? "Deleting..."
-        : "Delete"}
-</button>
-
+                                            type="button"
+                                            className="bmp-delete-btn"
+                                            onClick={() =>
+                                                handleDeleteBatch(
+                                                    batch.batch_id
+                                                )
+                                            }
+                                            disabled={
+                                                isActionActive(
+                                                    "delete",
+                                                    batch.batch_id
+                                                )
+                                            }
+                                        >
+                                            {isActionActive(
+                                                "delete",
+                                                batch.batch_id
+                                            )
+                                                ? "Deleting..."
+                                                : "Delete"}
+                                        </button>
                                     </div>
-
                                 </article>
-
                             )
                         )}
-
                     </div>
-
                 )}
-
             </main>
-
         </div>
     );
 }

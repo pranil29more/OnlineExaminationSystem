@@ -1,8 +1,8 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-
 from extensions import mysql
 from utils.decorators import role_required
+
 
 result_bp = Blueprint("result", __name__)
 
@@ -252,9 +252,6 @@ def get_result(submission_id):
 
     # ==========================================
     # Candidate
-    #
-    # Candidate can only access their own
-    # submission.
     # ==========================================
 
     else:
@@ -311,9 +308,6 @@ def get_result(submission_id):
 
     # ==========================================
     # Fetch ALL Questions
-    #
-    # LEFT JOIN ensures unanswered questions
-    # are also returned.
     # ==========================================
 
     answers_query = """

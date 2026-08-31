@@ -4,90 +4,70 @@ import {
     useEffect,
     useState
 } from "react";
-
 import API_BASE_URL from "../services/api";
 
 const AuthContext = createContext(null);
 
-export function AuthProvider({ children }) {
+export function AuthProvider({
+    children
+}) {
+    const [user, setUser] =
+        useState(null);
 
-    const [user, setUser] = useState(null);
-
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] =
+        useState(true);
 
     useEffect(() => {
-
         loadUser();
-
     }, []);
 
     const loadUser = async () => {
-
-        const token = localStorage.getItem("token");
+        const token =
+            localStorage.getItem("token");
 
         if (!token) {
-
             setUser(null);
-
             setLoading(false);
-
             return;
-
         }
 
         try {
-
             const response = await fetch(
-
                 `${API_BASE_URL}/profile`,
-
                 {
-
                     headers: {
-
-                        Authorization: `Bearer ${token}`
-
+                        Authorization:
+                            `Bearer ${token}`
                     }
-
                 }
-
             );
 
             if (!response.ok) {
-
                 setUser(null);
-
                 setLoading(false);
-
                 return;
-
             }
 
-            const data = await response.json();
+            const data =
+                await response.json();
 
             setUser(data);
-
-        }
-
-        catch (error) {
-
+        } catch (error) {
             console.error(error);
-
             setUser(null);
-
-        }
-
-        finally {
-
+        } finally {
             setLoading(false);
-
         }
-
     };
 
-    const login = (token, userData) => {
-
-        localStorage.setItem("token", token);
+    const login = (
+        token,
+        userData
+    ) => {
+        localStorage.setItem(
+            "token",
+            token
+        );
 
         localStorage.setItem(
             "userEmail",
@@ -95,21 +75,21 @@ export function AuthProvider({ children }) {
         );
 
         setUser(userData);
-
     };
 
     const logout = () => {
+        localStorage.removeItem(
+            "token"
+        );
 
-        localStorage.removeItem("token");
-
-        localStorage.removeItem("userEmail");
+        localStorage.removeItem(
+            "userEmail"
+        );
 
         setUser(null);
-
     };
 
     return (
-
         <AuthContext.Provider
             value={{
                 user,
@@ -120,17 +100,13 @@ export function AuthProvider({ children }) {
                 loadUser
             }}
         >
-
             {children}
-
         </AuthContext.Provider>
-
     );
-
 }
 
 export function useAuth() {
-
-    return useContext(AuthContext);
-
+    return useContext(
+        AuthContext
+    );
 }

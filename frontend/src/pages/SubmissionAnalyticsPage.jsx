@@ -1,28 +1,20 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
 import API_BASE_URL from "../services/api";
 import Navbar from "../components/Navbar";
 import PageLoader from "../components/PageLoader";
-
 import "../styles/SubmissionAnalyticsPage.css";
 
-
 function SubmissionAnalyticsPage() {
-
     const [analytics, setAnalytics] =
         useState(null);
-
 
     useEffect(() => {
         fetchAnalytics();
     }, []);
 
-
     const fetchAnalytics = async () => {
-
         try {
-
             const token =
                 localStorage.getItem("token");
 
@@ -40,7 +32,6 @@ function SubmissionAnalyticsPage() {
                 await response.json();
 
             if (!response.ok) {
-
                 console.error(
                     data.message ||
                         "Unable to load submission analytics."
@@ -50,18 +41,14 @@ function SubmissionAnalyticsPage() {
             }
 
             setAnalytics(data);
-
         } catch (error) {
-
             console.error(error);
         }
     };
 
-
     const totalPassed =
         analytics?.exam_wise?.reduce(
             (total, exam) => {
-
                 if (
                     typeof exam.passed ===
                     "number"
@@ -95,7 +82,6 @@ function SubmissionAnalyticsPage() {
             0
         ) || 0;
 
-
     const totalFailed =
         Math.max(
             0,
@@ -106,40 +92,30 @@ function SubmissionAnalyticsPage() {
                 totalPassed
         );
 
-
     if (!analytics) {
-
         return (
             <div className="sap-page">
-
                 <Navbar />
 
                 <PageLoader
                     message="Loading Submission Analytics..."
                 />
-
             </div>
         );
     }
 
-
     return (
         <div className="sap-page">
-
             <Navbar />
 
-
             <main className="sap-page-container">
-
 
                 {/* =================================================
                     Page Header
                 ================================================= */}
 
                 <div className="sap-page-header">
-
                     <div>
-
                         <span className="sap-page-eyebrow">
                             ASSESSMENT INSIGHTS
                         </span>
@@ -154,28 +130,20 @@ function SubmissionAnalyticsPage() {
                             performance across the
                             system.
                         </p>
-
                     </div>
-
                 </div>
-
 
                 {/* =================================================
                     Overall Summary
                 ================================================= */}
 
                 <section className="sap-summary-card">
-
-
                     <div className="sap-summary-header">
-
                         <div className="sap-summary-icon">
-
                             <svg
                                 viewBox="0 0 24 24"
                                 aria-hidden="true"
                             >
-
                                 <path
                                     d="M7 3h7l4 4v14H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"
                                 />
@@ -187,14 +155,10 @@ function SubmissionAnalyticsPage() {
                                 <path
                                     d="m8.5 15 2 2 4.5-5"
                                 />
-
                             </svg>
-
                         </div>
 
-
                         <div className="sap-summary-content">
-
                             <strong className="sap-summary-value">
                                 {
                                     analytics.total_submissions
@@ -204,17 +168,11 @@ function SubmissionAnalyticsPage() {
                             <span className="sap-summary-label">
                                 TOTAL SUBMISSIONS
                             </span>
-
                         </div>
-
                     </div>
 
-
                     <div className="sap-summary-breakdown">
-
-
                         <div className="sap-summary-metric sap-summary-passed">
-
                             <strong className="sap-summary-metric-value">
                                 {totalPassed}
                             </strong>
@@ -222,15 +180,11 @@ function SubmissionAnalyticsPage() {
                             <span className="sap-summary-metric-label">
                                 PASSED
                             </span>
-
                         </div>
-
 
                         <div className="sap-summary-divider"></div>
 
-
                         <div className="sap-summary-metric sap-summary-failed">
-
                             <strong className="sap-summary-metric-value">
                                 {totalFailed}
                             </strong>
@@ -238,26 +192,17 @@ function SubmissionAnalyticsPage() {
                             <span className="sap-summary-metric-label">
                                 FAILED
                             </span>
-
                         </div>
-
-
                     </div>
-
                 </section>
-
 
                 {/* =================================================
                     Exam Performance
                 ================================================= */}
 
                 <section className="sap-exam-section">
-
-
                     <div className="sap-section-header">
-
                         <div>
-
                             <span className="sap-section-kicker">
                                 EXAMINATION ANALYTICS
                             </span>
@@ -271,31 +216,23 @@ function SubmissionAnalyticsPage() {
                                 and performance across
                                 all examinations.
                             </p>
-
                         </div>
 
-
                         <span className="sap-exam-count">
-
                             {analytics.exam_wise.length}{" "}
 
                             {analytics.exam_wise.length === 1
                                 ? "Exam"
                                 : "Exams"}
-
                         </span>
-
                     </div>
-
 
                     {/* =================================================
                         Empty State
                     ================================================= */}
 
                     {analytics.exam_wise.length === 0 ? (
-
                         <div className="sap-empty-state">
-
                             <div className="sap-empty-icon">
                                 —
                             </div>
@@ -308,16 +245,11 @@ function SubmissionAnalyticsPage() {
                                 No submission data is
                                 available yet.
                             </p>
-
                         </div>
-
                     ) : (
-
                         <div className="sap-exam-grid">
-
                             {analytics.exam_wise.map(
                                 (exam) => {
-
                                     const examType =
                                         String(
                                             exam.exam_type ||
@@ -326,18 +258,15 @@ function SubmissionAnalyticsPage() {
                                             .trim()
                                             .toLowerCase();
 
-
                                     const isActual =
                                         examType.includes(
                                             "actual"
                                         );
 
-
                                     const isPractice =
                                         examType.includes(
                                             "practice"
                                         );
-
 
                                     const cardClass =
                                         isActual
@@ -346,9 +275,7 @@ function SubmissionAnalyticsPage() {
                                             ? "sap-practice"
                                             : "sap-default";
 
-
                                     return (
-
                                         <article
                                             key={
                                                 exam.exam_id
@@ -356,55 +283,45 @@ function SubmissionAnalyticsPage() {
                                             className={`sap-exam-card ${cardClass}`}
                                         >
 
-
                                             {/* ==========================================
-    Card Header
-========================================== */}
+                                                Card Header
+                                            ========================================== */}
 
-<div className="sap-card-header">
+                                            <div className="sap-card-header">
+                                                <div className="sap-card-title-area">
+                                                    <span className="sap-exam-id">
+                                                        EXAM #
+                                                        {exam.exam_id}
+                                                    </span>
 
-    <div className="sap-card-title-area">
+                                                    <h3 className="sap-exam-title">
+                                                        {exam.title}
+                                                    </h3>
+                                                </div>
 
-        <span className="sap-exam-id">
-            EXAM #
-            {exam.exam_id}
-        </span>
-
-        <h3 className="sap-exam-title">
-            {exam.title}
-        </h3>
-
-    </div>
-
-
-    <span
-        className={`sap-performance-badge ${
-            isActual
-                ? "sap-performance-actual"
-                : isPractice
-                ? "sap-performance-practice"
-                : ""
-        }`}
-    >
-        {isActual
-            ? "ACTUAL"
-            : isPractice
-            ? "PRACTICE"
-            : "EXAM"}
-    </span>
-
-</div>
-
+                                                <span
+                                                    className={`sap-performance-badge ${
+                                                        isActual
+                                                            ? "sap-performance-actual"
+                                                            : isPractice
+                                                            ? "sap-performance-practice"
+                                                            : ""
+                                                    }`}
+                                                >
+                                                    {isActual
+                                                        ? "ACTUAL"
+                                                        : isPractice
+                                                        ? "PRACTICE"
+                                                        : "EXAM"}
+                                                </span>
+                                            </div>
 
                                             {/* ==========================================
                                                 Statistics
                                             ========================================== */}
 
                                             <div className="sap-stat-grid">
-
-
                                                 <div className="sap-stat-item">
-
                                                     <span className="sap-stat-label">
                                                         Pass Rate
                                                     </span>
@@ -417,12 +334,9 @@ function SubmissionAnalyticsPage() {
                                                                 : `${exam.pass_rate}%`
                                                         }
                                                     </strong>
-
                                                 </div>
 
-
                                                 <div className="sap-stat-item">
-
                                                     <span className="sap-stat-label">
                                                         Average Score
                                                     </span>
@@ -432,12 +346,9 @@ function SubmissionAnalyticsPage() {
                                                             exam.average_score
                                                         }
                                                     </strong>
-
                                                 </div>
 
-
                                                 <div className="sap-stat-item">
-
                                                     <span className="sap-stat-label">
                                                         Highest Score
                                                     </span>
@@ -451,12 +362,9 @@ function SubmissionAnalyticsPage() {
                                                             exam.total_marks
                                                         }
                                                     </strong>
-
                                                 </div>
 
-
                                                 <div className="sap-stat-item">
-
                                                     <span className="sap-stat-label">
                                                         Submissions
                                                     </span>
@@ -466,26 +374,18 @@ function SubmissionAnalyticsPage() {
                                                             exam.submissions
                                                         }
                                                     </strong>
-
                                                 </div>
-
-
                                             </div>
-
 
                                             {/* ==========================================
                                                 Activity
                                             ========================================== */}
 
                                             <div className="sap-activity-area">
-
-
                                                 <div className="sap-activity-header">
-
                                                     <span className="sap-activity-title">
                                                         Submission Activity
                                                     </span>
-
 
                                                     <span
                                                         className={`sap-activity-status ${
@@ -495,7 +395,6 @@ function SubmissionAnalyticsPage() {
                                                                 : "no-attempts"
                                                         }`}
                                                     >
-
                                                         <span className="sap-status-dot"></span>
 
                                                         {
@@ -504,14 +403,10 @@ function SubmissionAnalyticsPage() {
                                                                 ? "Active"
                                                                 : "No Attempts"
                                                         }
-
                                                     </span>
-
                                                 </div>
 
-
                                                 <p className="sap-activity-description">
-
                                                     {
                                                         exam.submissions >
                                                         0
@@ -523,22 +418,15 @@ function SubmissionAnalyticsPage() {
                                                               } recorded for this examination.`
                                                             : "No candidates have submitted this examination yet."
                                                     }
-
                                                 </p>
-
-
                                             </div>
-
 
                                             {/* ==========================================
                                                 Footer
                                             ========================================== */}
 
                                             <div className="sap-card-footer">
-
-
                                                 <span className="sap-highest-scorer">
-
                                                     Highest Scorer:
 
                                                     <strong>
@@ -546,21 +434,17 @@ function SubmissionAnalyticsPage() {
                                                             exam.highest_scorer
                                                         }
                                                     </strong>
-
                                                 </span>
-
 
                                                 <Link
                                                     className="sap-view-results-btn"
                                                     to={`/results/exam/${exam.exam_id}`}
                                                 >
-
                                                     <svg
                                                         className="sap-eye-icon"
                                                         viewBox="0 0 24 24"
                                                         aria-hidden="true"
                                                     >
-
                                                         <path
                                                             d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"
                                                         />
@@ -570,38 +454,25 @@ function SubmissionAnalyticsPage() {
                                                             cy="12"
                                                             r="2.5"
                                                         />
-
                                                     </svg>
-
 
                                                     <span>
                                                         View Results
                                                     </span>
-
                                                 </Link>
-
-
                                             </div>
 
-
                                         </article>
-
                                     );
                                 }
                             )}
-
                         </div>
-
                     )}
-
                 </section>
 
-
             </main>
-
         </div>
     );
 }
-
 
 export default SubmissionAnalyticsPage;

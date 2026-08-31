@@ -3,59 +3,40 @@ import {
     Routes,
     Route
 } from "react-router-dom";
-
 import LoginPage from "../pages/LoginPage";
-import RegisterPage from "../pages/RegisterPage";
 import ActivateAccountPage from "../pages/ActivateAccountPage";
-
 import DashboardPage from "../pages/DashboardPage";
 import UsersPage from "../pages/UsersPage";
 import ExamAnalyticsPage from "../pages/ExamAnalyticsPage";
-
 import ExamsPage from "../pages/ExamsPage";
 import ExamDetailsPage from "../pages/ExamDetailsPage";
-
 import ResultsPage from "../pages/ResultsPage";
 import ResultDetailsPage from "../pages/ResultDetailsPage";
-
 import ProfilePage from "../pages/ProfilePage";
-
 import ChatbotPage from "../pages/ChatbotPage";
-
 import CreateExamPage from "../pages/CreateExamPage";
 import AddQuestionPage from "../pages/AddQuestionPage";
-
 import AdminRoute from "./AdminRoute";
 import RoleRoute from "./RoleRoute";
-
 import EditExamPage from "../pages/EditExamPage";
 import EditQuestionPage from "../pages/EditQuestionPage";
-
 import ExamResultsPage from "../pages/ExamResultsPage";
 import SubmissionAnalyticsPage from "../pages/SubmissionAnalyticsPage";
-
 import BatchManagementPage from "../pages/BatchManagementPage";
 import CreateBatchPage from "../pages/CreateBatchPage";
 import EditBatchPage from "../pages/EditBatchPage";
 import BatchDetailsPage from "../pages/BatchDetailsPage";
-
 import CandidateResultsPage from "../pages/CandidateResultsPage";
-
 import ScrollToTop from "../components/ScrollToTop";
-
 import CreateUserPage from "../pages/CreateUserPage";
 
-
 function AppRoutes() {
-
     return (
-
         <BrowserRouter>
 
             <ScrollToTop />
 
             <Routes>
-
 
                 {/* ==========================================
                     Public Routes
@@ -68,14 +49,12 @@ function AppRoutes() {
                     }
                 />
 
-
                 <Route
                     path="/activate-account/:activationToken"
                     element={
                         <ActivateAccountPage />
                     }
                 />
-
 
                 {/* ==========================================
                     Admin Only
@@ -94,7 +73,6 @@ function AppRoutes() {
                     }
                 />
 
-
                 <Route
                     path="/users"
                     element={
@@ -107,7 +85,6 @@ function AppRoutes() {
                         </RoleRoute>
                     }
                 />
-
 
                 <Route
                     path="/create-user"
@@ -122,7 +99,6 @@ function AppRoutes() {
                     }
                 />
 
-
                 <Route
                     path="/submission-analytics"
                     element={
@@ -135,7 +111,6 @@ function AppRoutes() {
                         </RoleRoute>
                     }
                 />
-
 
                 <Route
                     path="/exam-analytics"
@@ -150,7 +125,6 @@ function AppRoutes() {
                     }
                 />
 
-
                 <Route
                     path="/batch-management"
                     element={
@@ -163,7 +137,6 @@ function AppRoutes() {
                         </RoleRoute>
                     }
                 />
-
 
                 <Route
                     path="/create-batch"
@@ -178,7 +151,6 @@ function AppRoutes() {
                     }
                 />
 
-
                 <Route
                     path="/edit-batch/:batchId"
                     element={
@@ -191,7 +163,6 @@ function AppRoutes() {
                         </RoleRoute>
                     }
                 />
-
 
                 <Route
                     path="/batch-details/:batchId"
@@ -206,7 +177,6 @@ function AppRoutes() {
                     }
                 />
 
-
                 <Route
                     path="/candidate-results/:userId"
                     element={
@@ -219,7 +189,6 @@ function AppRoutes() {
                         </RoleRoute>
                     }
                 />
-
 
                 {/* ==========================================
                     Admin + Examiner
@@ -234,7 +203,6 @@ function AppRoutes() {
                     }
                 />
 
-
                 <Route
                     path="/edit-exam/:examId"
                     element={
@@ -243,7 +211,6 @@ function AppRoutes() {
                         </AdminRoute>
                     }
                 />
-
 
                 <Route
                     path="/add-question"
@@ -254,7 +221,6 @@ function AppRoutes() {
                     }
                 />
 
-
                 <Route
                     path="/edit-question/:questionId"
                     element={
@@ -264,7 +230,6 @@ function AppRoutes() {
                     }
                 />
 
-
                 <Route
                     path="/results/exam/:examId"
                     element={
@@ -273,7 +238,6 @@ function AppRoutes() {
                         </AdminRoute>
                     }
                 />
-
 
                 {/* ==========================================
                     Admin + Examiner + Candidate
@@ -294,7 +258,6 @@ function AppRoutes() {
                     }
                 />
 
-
                 <Route
                     path="/exam/:examId"
                     element={
@@ -309,7 +272,6 @@ function AppRoutes() {
                         </RoleRoute>
                     }
                 />
-
 
                 <Route
                     path="/results"
@@ -326,7 +288,6 @@ function AppRoutes() {
                     }
                 />
 
-
                 <Route
                     path="/result/:submissionId"
                     element={
@@ -342,7 +303,6 @@ function AppRoutes() {
                     }
                 />
 
-
                 <Route
                     path="/profile"
                     element={
@@ -357,7 +317,6 @@ function AppRoutes() {
                         </RoleRoute>
                     }
                 />
-
 
                 {/* ==========================================
                     Admin Only — Chatbot
@@ -376,12 +335,10 @@ function AppRoutes() {
                     }
                 />
 
-
             </Routes>
 
         </BrowserRouter>
     );
 }
-
 
 export default AppRoutes;

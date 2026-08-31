@@ -1,17 +1,12 @@
 import os
 import re
 import secrets
-
 import pandas as pd
-
 from flask import Blueprint, request, jsonify, current_app
 from flask_jwt_extended import jwt_required
-
 from extensions import mysql, bcrypt
 from utils.decorators import role_required
-
 from config import Config
-
 from brevo import Brevo
 from brevo.transactional_emails import (
     SendTransacEmailRequestSender,
@@ -19,10 +14,7 @@ from brevo.transactional_emails import (
 )
 
 
-bulk_user_bp = Blueprint(
-    "bulk_user",
-    __name__,
-)
+bulk_user_bp = Blueprint("bulk_user", __name__)
 
 
 @bulk_user_bp.route(

@@ -1,9 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import API_BASE_URL from "../services/api";
 import Navbar from "../components/Navbar";
-
 import "../styles/CreateBatchPage.css";
 
 function CreateBatchPage() {
@@ -30,13 +28,11 @@ function CreateBatchPage() {
     const [batchCreating, setBatchCreating] =
         useState(false);
 
-
     // =========================================================
     // Create Batch
     // =========================================================
 
     const handleCreateBatch = async (e) => {
-
         e.preventDefault();
 
         if (batchCreating) {
@@ -44,7 +40,6 @@ function CreateBatchPage() {
         }
 
         if (endDate < startDate) {
-
             alert(
                 "End date cannot be before the start date."
             );
@@ -53,7 +48,6 @@ function CreateBatchPage() {
         }
 
         try {
-
             setBatchCreating(true);
 
             const token =
@@ -96,7 +90,6 @@ function CreateBatchPage() {
                 await response.json();
 
             if (response.ok) {
-
                 alert(
                     "Batch created successfully!"
                 );
@@ -104,42 +97,29 @@ function CreateBatchPage() {
                 navigate(
                     "/batch-management"
                 );
-
             } else {
-
                 alert(
                     data.message ||
                         "Unable to create batch."
                 );
-
             }
-
         } catch (error) {
-
             console.error(error);
 
             alert(
                 "Unable to create batch."
             );
-
         } finally {
-
             setBatchCreating(false);
-
         }
     };
 
-
     return (
-
         <div className="cbp-page">
-
             <Navbar />
 
             <main className="cbp-container">
-
                 <header className="cbp-header">
-
                     <span className="cbp-eyebrow">
                         CONFIGURATION
                     </span>
@@ -153,9 +133,7 @@ function CreateBatchPage() {
                         trainer information, technology,
                         and training schedule.
                     </p>
-
                 </header>
-
 
                 <form
                     className="cbp-form-card"
@@ -163,11 +141,8 @@ function CreateBatchPage() {
                         handleCreateBatch
                     }
                 >
-
                     <div className="cbp-form-section">
-
                         <div className="cbp-section-heading">
-
                             <span className="cbp-section-eyebrow">
                                 BATCH SETUP
                             </span>
@@ -181,16 +156,13 @@ function CreateBatchPage() {
                                 required to create the
                                 training batch.
                             </p>
-
                         </div>
-
 
                         {/* =================================================
                             Batch Name
                         ================================================= */}
 
                         <div className="cbp-field">
-
                             <label
                                 className="cbp-field-label"
                                 htmlFor="batch-name"
@@ -211,16 +183,13 @@ function CreateBatchPage() {
                                 }
                                 required
                             />
-
                         </div>
-
 
                         {/* =================================================
                             Technology
                         ================================================= */}
 
                         <div className="cbp-field">
-
                             <label
                                 className="cbp-field-label"
                                 htmlFor="technology"
@@ -241,16 +210,13 @@ function CreateBatchPage() {
                                 }
                                 required
                             />
-
                         </div>
-
 
                         {/* =================================================
                             Trainer Name
                         ================================================= */}
 
                         <div className="cbp-field">
-
                             <label
                                 className="cbp-field-label"
                                 htmlFor="trainer-name"
@@ -271,16 +237,13 @@ function CreateBatchPage() {
                                 }
                                 required
                             />
-
                         </div>
-
 
                         {/* =================================================
                             Description
                         ================================================= */}
 
                         <div className="cbp-field">
-
                             <label
                                 className="cbp-field-label"
                                 htmlFor="description"
@@ -301,9 +264,7 @@ function CreateBatchPage() {
                                 }
                                 required
                             />
-
                         </div>
-
 
                         {/* =================================================
                             Training Schedule
@@ -314,9 +275,7 @@ function CreateBatchPage() {
                         </div>
 
                         <div className="cbp-date-grid">
-
                             <div className="cbp-field">
-
                                 <label
                                     className="cbp-field-label"
                                     htmlFor="start-date"
@@ -330,7 +289,6 @@ function CreateBatchPage() {
                                     type="date"
                                     value={startDate}
                                     onChange={(e) => {
-
                                         setStartDate(
                                             e.target.value
                                         );
@@ -340,20 +298,14 @@ function CreateBatchPage() {
                                             e.target.value >
                                                 endDate
                                         ) {
-
                                             setEndDate("");
-
                                         }
-
                                     }}
                                     required
                                 />
-
                             </div>
 
-
                             <div className="cbp-field">
-
                                 <label
                                     className="cbp-field-label"
                                     htmlFor="end-date"
@@ -377,11 +329,8 @@ function CreateBatchPage() {
                                     }
                                     required
                                 />
-
                             </div>
-
                         </div>
-
 
                         {/* =================================================
                             Create Batch Button
@@ -398,15 +347,10 @@ function CreateBatchPage() {
                                 ? "Creating Batch..."
                                 : "Create Batch"}
                         </button>
-
                     </div>
-
                 </form>
-
             </main>
-
         </div>
-
     );
 }
 

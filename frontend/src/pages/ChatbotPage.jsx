@@ -203,13 +203,10 @@ function ChatbotPage() {
 
     return (
         <div className="cp-page">
-
             <Navbar />
 
             <main className="cp-container">
-
                 <header className="cp-page-header">
-
                     <span className="cp-page-eyebrow">
                         AI ASSISTANT
                     </span>
@@ -224,15 +221,11 @@ function ChatbotPage() {
                         candidates, batches, schedules,
                         results, and system analytics.
                     </p>
-
                 </header>
 
                 {messages.length === 0 ? (
-
                     <section className="cp-welcome">
-
                         <div className="cp-welcome-card">
-
                             <div className="cp-welcome-icon">
                                 AI
                             </div>
@@ -263,11 +256,9 @@ function ChatbotPage() {
                                 technical and educational
                                 questions.
                             </p>
-
                         </div>
 
                         <div className="cp-input-container">
-
                             <input
                                 className="cp-chat-input"
                                 type="text"
@@ -298,19 +289,12 @@ function ChatbotPage() {
                             >
                                 <IoSend />
                             </button>
-
                         </div>
-
                     </section>
-
                 ) : (
-
                     <section className="cp-chat-card">
-
                         <header className="cp-conversation-header">
-
                             <div>
-
                                 <span className="cp-conversation-kicker">
                                     AI ASSISTANT
                                 </span>
@@ -318,7 +302,6 @@ function ChatbotPage() {
                                 <strong>
                                     Conversation
                                 </strong>
-
                             </div>
 
                             <button
@@ -331,14 +314,11 @@ function ChatbotPage() {
                             >
                                 <IoTrashOutline />
                             </button>
-
                         </header>
 
                         <div className="cp-chat-container">
-
                             {messages.map(
                                 (msg, index) => (
-
                                     <div
                                         key={
                                             index
@@ -350,14 +330,11 @@ function ChatbotPage() {
                                                 : "cp-ai-message"
                                         }
                                     >
-
                                         <div className="cp-message-label">
-
                                             {msg.sender ===
                                             "user"
                                                 ? "Administrator"
                                                 : "AI Assistant"}
-
                                         </div>
 
                                         {msg.sender ===
@@ -386,15 +363,12 @@ function ChatbotPage() {
                                                 msg.text
                                             }
                                         </ReactMarkdown>
-
                                     </div>
                                 )
                             )}
 
                             {loading && (
-
                                 <div className="cp-typing-indicator">
-
                                     <span className="cp-typing-dot"></span>
 
                                     <span className="cp-typing-dot"></span>
@@ -406,9 +380,7 @@ function ChatbotPage() {
                                         analyzing your
                                         request...
                                     </span>
-
                                 </div>
-
                             )}
 
                             <div
@@ -416,11 +388,9 @@ function ChatbotPage() {
                                     messagesEndRef
                                 }
                             />
-
                         </div>
 
                         <div className="cp-input-container">
-
                             <input
                                 className="cp-chat-input"
                                 type="text"
@@ -451,15 +421,10 @@ function ChatbotPage() {
                             >
                                 <IoSend />
                             </button>
-
                         </div>
-
                     </section>
-
                 )}
-
             </main>
-
         </div>
     );
 }

@@ -1,15 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-
 import API_BASE_URL from "../services/api";
 import Navbar from "../components/Navbar";
 import PageLoader from "../components/PageLoader";
-
 import "../styles/ExamDetailsPage.css";
 
-
 function ExamDetailsPage() {
-
     const { examId } = useParams();
 
     const navigate = useNavigate();
@@ -46,7 +42,6 @@ function ExamDetailsPage() {
     const answerRequestVersions =
         useRef({});
 
-
     // =====================================================
     // Parse Backend IST Time Safely
     //
@@ -58,7 +53,6 @@ function ExamDetailsPage() {
     // =====================================================
 
     const parseISTTime = (value) => {
-
         if (!value) {
             return NaN;
         }
@@ -72,11 +66,9 @@ function ExamDetailsPage() {
             normalized.endsWith("Z") ||
             /[+-]\d{2}:\d{2}$/.test(normalized)
         ) {
-
             return new Date(
                 normalized
             ).getTime();
-
         }
 
         return new Date(
@@ -84,37 +76,28 @@ function ExamDetailsPage() {
         ).getTime();
     };
 
-
     // =====================================================
     // Fetch Exam
     // =====================================================
 
     useEffect(() => {
-
         fetchExam();
-
     }, [examId]);
-
 
     // =====================================================
     // Exam Timer
     // =====================================================
 
     useEffect(() => {
-
         if (!endTime) {
             return;
         }
 
-
         const updateTimer = () => {
-
             const remaining =
                 endTime - Date.now();
 
-
             if (remaining <= 0) {
-
                 setTimeLeft(
                     "00:00"
                 );
@@ -123,11 +106,9 @@ function ExamDetailsPage() {
                     "critical"
                 );
 
-
                 if (
                     !hasAutoSubmitted.current
                 ) {
-
                     hasAutoSubmitted.current =
                         true;
 
@@ -141,48 +122,38 @@ function ExamDetailsPage() {
                 return;
             }
 
-
             const totalSeconds =
                 Math.floor(
                     remaining / 1000
                 );
-
 
             const minutes =
                 Math.floor(
                     remaining / 60000
                 );
 
-
             const seconds =
                 Math.floor(
                     (remaining % 60000) / 1000
                 );
 
-
             if (
                 totalSeconds <= 300
             ) {
-
                 setTimerState(
                     "critical"
                 );
-
             } else if (
                 totalSeconds <= 600
             ) {
-
                 setTimerState(
                     "warning"
                 );
-
             } else {
-
                 setTimerState(
                     "normal"
                 );
             }
-
 
             setTimeLeft(
                 `${String(
@@ -194,14 +165,11 @@ function ExamDetailsPage() {
                     seconds
                 ).padStart(
                     2,
-                    "0"
-                )}`
+                    "0")}`
             );
         };
 
-
         updateTimer();
-
 
         const timer =
             setInterval(
@@ -209,26 +177,19 @@ function ExamDetailsPage() {
                 1000
             );
 
-
         return () => {
-
             clearInterval(
                 timer
             );
-
         };
-
     }, [endTime]);
-
 
     // =====================================================
     // Fetch Exam + Candidate Session
     // =====================================================
 
     const fetchExam = async () => {
-
         try {
-
             setLoadingExam(
                 true
             );
@@ -237,7 +198,6 @@ function ExamDetailsPage() {
                 localStorage.getItem(
                     "token"
                 );
-
 
             // =================================================
             // Fetch Exam
@@ -254,15 +214,12 @@ function ExamDetailsPage() {
                     }
                 );
 
-
             const examData =
                 await examResponse.json();
-
 
             if (
                 !examResponse.ok
             ) {
-
                 alert(
                     examData.message ||
                         "Unable to access this assessment."
@@ -275,14 +232,12 @@ function ExamDetailsPage() {
                 return;
             }
 
-
             if (
                 !examData.exam ||
                 !Array.isArray(
                     examData.questions
                 )
             ) {
-
                 alert(
                     "Unable to load assessment details."
                 );
@@ -293,7 +248,6 @@ function ExamDetailsPage() {
 
                 return;
             }
-
 
             // =================================================
             // Fetch Profile
@@ -310,15 +264,12 @@ function ExamDetailsPage() {
                     }
                 );
 
-
             const profileData =
                 await profileResponse.json();
-
 
             if (
                 !profileResponse.ok
             ) {
-
                 alert(
                     profileData.message ||
                         "Unable to load user profile."
@@ -331,15 +282,12 @@ function ExamDetailsPage() {
                 return;
             }
 
-
             const currentRole =
                 profileData.role || "";
-
 
             setRole(
                 currentRole
             );
-
 
             // =================================================
             // Admin / Examiner
@@ -349,14 +297,12 @@ function ExamDetailsPage() {
                 currentRole !==
                 "Candidate"
             ) {
-
                 setExam(
                     examData
                 );
 
                 return;
             }
-
 
             // =================================================
             // Candidate Session
@@ -373,15 +319,12 @@ function ExamDetailsPage() {
                     }
                 );
 
-
             const sessionData =
                 await sessionResponse.json();
-
 
             if (
                 !sessionResponse.ok
             ) {
-
                 alert(
                     sessionData.message ||
                         "Unable to load exam session."
@@ -394,7 +337,6 @@ function ExamDetailsPage() {
                 return;
             }
 
-
             // =================================================
             // Not Started
             // =================================================
@@ -403,14 +345,12 @@ function ExamDetailsPage() {
                 sessionData.status ===
                 "Not Started"
             ) {
-
                 setExam(
                     examData
                 );
 
                 return;
             }
-
 
             // =================================================
             // Practice Completed
@@ -420,14 +360,12 @@ function ExamDetailsPage() {
                 sessionData.status ===
                 "Practice Completed"
             ) {
-
                 setExam(
                     examData
                 );
 
                 return;
             }
-
 
             // =================================================
             // Completed / Auto Submitted
@@ -439,14 +377,12 @@ function ExamDetailsPage() {
                 sessionData.status ===
                     "Auto Submitted"
             ) {
-
                 setExam(
                     examData
                 );
 
                 return;
             }
-
 
             // =================================================
             // Unknown Session State
@@ -456,14 +392,12 @@ function ExamDetailsPage() {
                 sessionData.status !==
                 "In Progress"
             ) {
-
                 setExam(
                     examData
                 );
 
                 return;
             }
-
 
             // =================================================
             // Validate Active Session Data
@@ -474,7 +408,6 @@ function ExamDetailsPage() {
                 !sessionData.start_time ||
                 !sessionData.duration
             ) {
-
                 alert(
                     "Unable to restore your active examination session."
                 );
@@ -486,7 +419,6 @@ function ExamDetailsPage() {
                 return;
             }
 
-
             // =================================================
             // Restore Submission ID
             // =================================================
@@ -495,7 +427,6 @@ function ExamDetailsPage() {
                 sessionData.submission_id
             );
 
-
             // =================================================
             // Restore Saved Answers
             // =================================================
@@ -503,40 +434,31 @@ function ExamDetailsPage() {
             const restoredAnswers =
                 {};
 
-
             if (
                 Array.isArray(
                     sessionData.answers
                 )
             ) {
-
                 sessionData.answers.forEach(
                     (answer) => {
-
                         if (
                             answer.question_id !==
                                 null &&
                             answer.answer_text !==
                                 null
                         ) {
-
                             restoredAnswers[
                                 answer.question_id
                             ] =
                                 answer.answer_text;
-
                         }
-
                     }
                 );
-
             }
-
 
             setAnswers(
                 restoredAnswers
             );
-
 
             // =================================================
             // Calculate Actual Attempt Deadline
@@ -558,12 +480,10 @@ function ExamDetailsPage() {
                     sessionData.start_time
                 );
 
-
             const duration =
                 Number(
                     sessionData.duration
                 );
-
 
             if (
                 Number.isNaN(start) ||
@@ -572,7 +492,6 @@ function ExamDetailsPage() {
                 ) ||
                 duration <= 0
             ) {
-
                 alert(
                     "Unable to restore the examination timer."
                 );
@@ -584,18 +503,15 @@ function ExamDetailsPage() {
                 return;
             }
 
-
             const end =
                 start +
                 duration *
                     60 *
                     1000;
 
-
             setEndTime(
                 end
             );
-
 
             // =================================================
             // Only render active exam after everything
@@ -605,9 +521,7 @@ function ExamDetailsPage() {
             setExam(
                 examData
             );
-
         } catch (error) {
-
             console.error(
                 error
             );
@@ -619,15 +533,12 @@ function ExamDetailsPage() {
             navigate(
                 "/exams"
             );
-
         } finally {
-
             setLoadingExam(
                 false
             );
         }
     };
-
 
     // =====================================================
     // Wait For Pending Answer Saves
@@ -637,7 +548,6 @@ function ExamDetailsPage() {
     // =====================================================
 
     const waitForPendingSaves = async () => {
-
         const requests =
             Array.from(
                 pendingSaves.current
@@ -646,7 +556,6 @@ function ExamDetailsPage() {
         if (
             requests.length === 0
         ) {
-
             return;
         }
 
@@ -654,7 +563,6 @@ function ExamDetailsPage() {
             requests
         );
     };
-
 
     // =====================================================
     // Handle Answer Change
@@ -664,22 +572,18 @@ function ExamDetailsPage() {
         questionId,
         optionText
     ) => {
-
         if (
             isSubmitting ||
             hasAutoSubmitted.current
         ) {
-
             return;
         }
-
 
         // =================================================
         // Submission Protection
         // =================================================
 
         if (!submissionId) {
-
             alert(
                 "Your exam session is not ready. Please refresh the page."
             );
@@ -687,12 +591,10 @@ function ExamDetailsPage() {
             return;
         }
 
-
         const previousAnswer =
             answers[
                 questionId
             ];
-
 
         // =================================================
         // Create Request Version
@@ -708,12 +610,10 @@ function ExamDetailsPage() {
                 ] || 0
             ) + 1;
 
-
         answerRequestVersions.current[
             questionId
         ] =
             currentVersion;
-
 
         // =================================================
         // Update UI Immediately
@@ -728,12 +628,10 @@ function ExamDetailsPage() {
             })
         );
 
-
         const token =
             localStorage.getItem(
                 "token"
             );
-
 
         const saveRequest =
             fetch(
@@ -762,7 +660,6 @@ function ExamDetailsPage() {
                 }
             );
 
-
         // =================================================
         // Track Pending Save
         // =================================================
@@ -771,16 +668,12 @@ function ExamDetailsPage() {
             saveRequest
         );
 
-
         try {
-
             const response =
                 await saveRequest;
 
-
             const data =
                 await response.json();
-
 
             // =================================================
             // Save Failed
@@ -789,7 +682,6 @@ function ExamDetailsPage() {
             if (
                 !response.ok
             ) {
-
                 // Only rollback if this is still the
                 // latest request for this question.
                 if (
@@ -799,40 +691,31 @@ function ExamDetailsPage() {
                         ] ===
                     currentVersion
                 ) {
-
                     setAnswers(
                         (previous) => {
-
                             const restored =
                                 {
                                     ...previous,
                                 };
 
-
                             if (
                                 previousAnswer ===
                                 undefined
                             ) {
-
                                 delete restored[
                                     questionId
                                 ];
-
                             } else {
-
                                 restored[
                                     questionId
                                 ] =
                                     previousAnswer;
                             }
 
-
                             return restored;
                         }
                     );
-
                 }
-
 
                 alert(
                     data.message ||
@@ -841,13 +724,10 @@ function ExamDetailsPage() {
 
                 return;
             }
-
         } catch (error) {
-
             console.error(
                 error
             );
-
 
             // =================================================
             // Network Failure
@@ -863,77 +743,59 @@ function ExamDetailsPage() {
                     ] ===
                 currentVersion
             ) {
-
                 setAnswers(
                     (previous) => {
-
                         const restored =
                             {
                                 ...previous,
                             };
 
-
                         if (
                             previousAnswer ===
                             undefined
                         ) {
-
                             delete restored[
                                 questionId
                             ];
-
                         } else {
-
                             restored[
                                 questionId
                             ] =
                                 previousAnswer;
                         }
 
-
                         return restored;
                     }
                 );
-
             }
-
 
             alert(
                 "Unable to save your answer. Please check your connection."
             );
-
         } finally {
-
             pendingSaves.current.delete(
                 saveRequest
             );
-
         }
     };
-
 
     // =====================================================
     // Submit Exam
     // =====================================================
 
     const handleSubmitExam = async () => {
-
         if (
             isSubmitting &&
             !hasAutoSubmitted.current
         ) {
-
             return;
         }
-
 
         setIsSubmitting(
             true
         );
 
-
         try {
-
             // =================================================
             // CRITICAL:
             //
@@ -946,12 +808,10 @@ function ExamDetailsPage() {
 
             await waitForPendingSaves();
 
-
             const token =
                 localStorage.getItem(
                     "token"
                 );
-
 
             const response =
                 await fetch(
@@ -974,59 +834,47 @@ function ExamDetailsPage() {
                     }
                 );
 
-
             const data =
                 await response.json();
-
 
             if (
                 response.ok
             ) {
-
                 alert(
                     hasAutoSubmitted.current
                         ? "Time is up. Exam submitted automatically."
                         : "Exam Submitted Successfully!"
                 );
 
-
                 navigate(
                     "/results"
                 );
 
-
                 return;
             }
-
 
             setIsSubmitting(
                 false
             );
-
 
             alert(
                 data.message ||
                     "Unable to submit exam."
             );
-
         } catch (error) {
-
             console.error(
                 error
             );
 
-
             setIsSubmitting(
                 false
             );
-
 
             alert(
                 "Unable to submit exam."
             );
         }
     };
-
 
     // =====================================================
     // Loading
@@ -1036,32 +884,24 @@ function ExamDetailsPage() {
         loadingExam ||
         !exam
     ) {
-
         return (
-
             <div>
-
                 <Navbar />
 
                 <PageLoader
                     message="Loading Exam..."
                 />
-
             </div>
         );
     }
-
 
     // =====================================================
     // Render
     // =====================================================
 
     return (
-
         <div>
-
             <Navbar />
-
 
             <main
                 className={`edp-page ${
@@ -1070,20 +910,13 @@ function ExamDetailsPage() {
                         : ""
                 }`}
             >
-
                 <div className="edp-page-container">
-
-
                     <section className="edp-exam-header">
-
                         <div className="edp-exam-header-top">
-
                             <div className="edp-exam-heading">
-
                                 <span className="edp-exam-eyebrow">
                                     Examination
                                 </span>
-
 
                                 <h1 className="edp-exam-title">
                                     {
@@ -1091,44 +924,32 @@ function ExamDetailsPage() {
                                     }
                                 </h1>
 
-
                                 <span className="edp-exam-id">
                                     Exam #
                                     {examId}
                                 </span>
-
                             </div>
-
 
                             {role ===
                                 "Candidate" && (
-
                                 <div
                                     className={`edp-timer-card edp-timer-${timerState}`}
                                 >
-
                                     <span className="edp-timer-label">
                                         Time Remaining
                                     </span>
-
 
                                     <strong className="edp-timer">
                                         {
                                             timeLeft
                                         }
                                     </strong>
-
                                 </div>
-
                             )}
-
                         </div>
 
-
                         <div className="edp-exam-details">
-
                             <div className="edp-exam-detail">
-
                                 <span>
                                     Duration
                                 </span>
@@ -1140,12 +961,9 @@ function ExamDetailsPage() {
                                     }{" "}
                                     mins
                                 </strong>
-
                             </div>
 
-
                             <div className="edp-exam-detail">
-
                                 <span>
                                     Total Marks
                                 </span>
@@ -1156,12 +974,9 @@ function ExamDetailsPage() {
                                             .total_marks
                                     }
                                 </strong>
-
                             </div>
 
-
                             <div className="edp-exam-detail">
-
                                 <span>
                                     Passing Marks
                                 </span>
@@ -1172,12 +987,9 @@ function ExamDetailsPage() {
                                             .passing_marks
                                     }
                                 </strong>
-
                             </div>
 
-
                             <div className="edp-exam-detail">
-
                                 <span>
                                     Questions
                                 </span>
@@ -1188,29 +1000,20 @@ function ExamDetailsPage() {
                                             .length
                                     }
                                 </strong>
-
                             </div>
-
                         </div>
-
                     </section>
 
-
                     <section className="edp-questions-section">
-
                         <div className="edp-section-header">
-
                             <div>
-
                                 <span className="edp-section-kicker">
                                     EXAMINATION CONTENT
                                 </span>
 
-
                                 <h2 className="edp-section-title">
                                     Questions
                                 </h2>
-
 
                                 <p className="edp-section-description">
                                     {
@@ -1220,78 +1023,58 @@ function ExamDetailsPage() {
                                             : "Review the questions configured for this examination."
                                     }
                                 </p>
-
                             </div>
 
-
                             <span className="edp-question-count">
-
                                 {
                                     exam.questions
                                         .length
                                 }{" "}
-
                                 {
                                     exam.questions
                                         .length ===
                                     1
                                         ? "Question"
                                         : "Questions"
-
                                 }
-
                             </span>
-
                         </div>
-
 
                         {
                             exam.questions
                                 .length ===
                             0 ? (
-
                                 <div className="edp-empty-state">
-
                                     <div className="edp-empty-icon">
                                         !
                                     </div>
 
-
                                     <strong>
                                         No Questions Available
                                     </strong>
-
 
                                     <p>
                                         No questions have
                                         been added to this
                                         examination yet.
                                     </p>
-
                                 </div>
-
                             ) : (
-
                                 <div className="edp-questions-grid">
-
                                     {
                                         exam.questions.map(
                                             (
                                                 question,
                                                 index
                                             ) => (
-
                                                 <article
                                                     key={
                                                         question.question_id
                                                     }
                                                     className="edp-question-card"
                                                 >
-
                                                     <div className="edp-question-header">
-
                                                         <div className="edp-question-heading">
-
                                                             <span className="edp-question-number">
                                                                 Question #
                                                                 {
@@ -1300,15 +1083,12 @@ function ExamDetailsPage() {
                                                                 }
                                                             </span>
 
-
                                                             <h3 className="edp-question-title">
                                                                 {
                                                                     question.question_text
                                                                 }
                                                             </h3>
-
                                                         </div>
-
 
                                                         <span className="edp-question-marks">
                                                             {
@@ -1316,18 +1096,13 @@ function ExamDetailsPage() {
                                                             }{" "}
                                                             Marks
                                                         </span>
-
                                                     </div>
 
-
                                                     <div className="edp-question-details">
-
                                                         <div className="edp-question-detail">
-
                                                             <span>
                                                                 Difficulty
                                                             </span>
-
 
                                                             <strong
                                                                 className={`edp-difficulty ${question.difficulty.toLowerCase()}`}
@@ -1336,44 +1111,33 @@ function ExamDetailsPage() {
                                                                     question.difficulty
                                                                 }
                                                             </strong>
-
                                                         </div>
 
-
                                                         <div className="edp-question-detail">
-
                                                             <span>
                                                                 Marks
                                                             </span>
-
 
                                                             <strong>
                                                                 {
                                                                     question.marks
                                                                 }
                                                             </strong>
-
                                                         </div>
-
                                                     </div>
 
-
                                                     <div className="edp-options-section">
-
                                                         <span className="edp-options-label">
                                                             Answer Options
                                                         </span>
 
-
                                                         <div className="edp-options-container">
-
                                                             {
                                                                 question.options.map(
                                                                     (
                                                                         option,
                                                                         optionIndex
                                                                     ) => (
-
                                                                         <label
                                                                             key={
                                                                                 option.option_id
@@ -1393,20 +1157,15 @@ function ExamDetailsPage() {
                                                                                     : ""
                                                                             }`}
                                                                         >
-
                                                                             {
                                                                                 role ===
                                                                                     "Candidate" && (
-
                                                                                     <input
                                                                                         type="radio"
-
                                                                                         name={`question-${question.question_id}`}
-
                                                                                         value={
                                                                                             option.option_text
                                                                                         }
-
                                                                                         checked={
                                                                                             answers[
                                                                                                 question
@@ -1414,73 +1173,52 @@ function ExamDetailsPage() {
                                                                                             ] ===
                                                                                             option.option_text
                                                                                         }
-
                                                                                         onChange={() =>
                                                                                             handleAnswerChange(
                                                                                                 question.question_id,
                                                                                                 option.option_text
                                                                                             )
                                                                                         }
-
                                                                                         disabled={
                                                                                             isSubmitting
                                                                                         }
                                                                                     />
-
                                                                                 )
                                                                             }
 
-
                                                                             <span className="edp-option-letter">
-
                                                                                 {
                                                                                     String.fromCharCode(
                                                                                         65 +
-                                                                                        optionIndex
+                                                                                            optionIndex
                                                                                     )
                                                                                 }
-
                                                                             </span>
 
-
                                                                             <span className="edp-option-text">
-
                                                                                 {
                                                                                     option.option_text
                                                                                 }
-
                                                                             </span>
-
                                                                         </label>
-
                                                                     )
                                                                 )
                                                             }
-
                                                         </div>
-
                                                     </div>
-
                                                 </article>
-
                                             )
                                         )
                                     }
-
                                 </div>
-
                             )
                         }
-
                     </section>
-
 
                     {
                         role ===
                             "Candidate" && (
-
                             <div className="edp-submit-section">
-
                                 <button
                                     type="button"
                                     className="edp-submit-btn"
@@ -1491,7 +1229,6 @@ function ExamDetailsPage() {
                                         isSubmitting
                                     }
                                 >
-
                                     {
                                         isSubmitting
                                             ? hasAutoSubmitted.current
@@ -1499,21 +1236,14 @@ function ExamDetailsPage() {
                                                 : "Submitting..."
                                             : "Submit Exam"
                                     }
-
                                 </button>
-
                             </div>
-
                         )
                     }
-
                 </div>
-
             </main>
-
         </div>
     );
 }
-
 
 export default ExamDetailsPage;

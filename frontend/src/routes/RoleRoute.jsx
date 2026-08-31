@@ -2,20 +2,16 @@ import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import PageLoader from "../components/PageLoader";
 
-
 function RoleRoute({
     children,
     allowedRoles
 }) {
-
     const {
         role,
         loading
     } = useAuth();
 
-
     if (loading) {
-
         return (
             <PageLoader
                 message="Verifying Access..."
@@ -23,9 +19,7 @@ function RoleRoute({
         );
     }
 
-
     if (!role) {
-
         return (
             <Navigate
                 to="/"
@@ -34,11 +28,9 @@ function RoleRoute({
         );
     }
 
-
     if (
         !allowedRoles.includes(role)
     ) {
-
         return (
             <Navigate
                 to="/exams"
@@ -47,9 +39,7 @@ function RoleRoute({
         );
     }
 
-
     return children;
 }
-
 
 export default RoleRoute;

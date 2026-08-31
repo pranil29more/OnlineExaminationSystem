@@ -4,10 +4,8 @@ import {
     useNavigate,
     useParams,
 } from "react-router-dom";
-
 import API_BASE_URL from "../services/api";
 import Navbar from "../components/Navbar";
-
 import "../styles/EditExamPage.css";
 
 function EditExamPage() {
@@ -58,7 +56,6 @@ function EditExamPage() {
     };
 
     const handleUpdateExam = async () => {
-
         if (updatingExam) {
             return;
         }
@@ -109,7 +106,6 @@ function EditExamPage() {
     };
 
     const handleDeleteQuestion = async (questionId) => {
-
         if (deletingQuestionId !== null) {
             return;
         }
@@ -164,7 +160,6 @@ function EditExamPage() {
             <Navbar />
 
             <div className="eep-container">
-
                 <div className="eep-header">
                     <span className="eep-eyebrow">
                         EXAMINATION MANAGEMENT
@@ -182,11 +177,8 @@ function EditExamPage() {
                 </div>
 
                 <div className="eep-form-card">
-
                     <div className="eep-form-section">
-
                         <div className="eep-section-heading">
-
                             <span className="eep-section-eyebrow">
                                 EXAMINATION CONFIGURATION
                             </span>
@@ -245,7 +237,6 @@ function EditExamPage() {
                         </div>
 
                         <div className="eep-marks-grid">
-
                             <div>
                                 <label className="eep-field-label">
                                     Total Marks
@@ -285,11 +276,9 @@ function EditExamPage() {
                                     }
                                 />
                             </div>
-
                         </div>
 
                         <div className="eep-exam-actions">
-
                             <button
                                 type="button"
                                 className="eep-update-btn"
@@ -314,15 +303,12 @@ function EditExamPage() {
                             >
                                 Add Question
                             </Link>
-
                         </div>
                     </div>
                 </div>
 
                 <section className="eep-questions-section">
-
                     <div className="eep-questions-heading">
-
                         <div>
                             <span className="eep-section-eyebrow">
                                 QUESTION BANK
@@ -345,7 +331,6 @@ function EditExamPage() {
                                 ? "Question"
                                 : "Questions"}
                         </span>
-
                     </div>
 
                     {questions.length === 0 ? (
@@ -355,7 +340,6 @@ function EditExamPage() {
                         </div>
                     ) : (
                         <div className="eep-questions-grid">
-
                             {questions.map((question) => (
                                 <div
                                     key={
@@ -363,9 +347,7 @@ function EditExamPage() {
                                     }
                                     className="eep-question-card"
                                 >
-
                                     <div className="eep-question-card-header">
-
                                         <div>
                                             <span className="eep-question-number">
                                                 Question #
@@ -388,11 +370,9 @@ function EditExamPage() {
                                                 question.difficulty
                                             }
                                         </span>
-
                                     </div>
 
                                     <div className="eep-question-details">
-
                                         <div className="eep-question-detail">
                                             <span className="eep-detail-label">
                                                 Difficulty
@@ -416,11 +396,9 @@ function EditExamPage() {
                                                 }
                                             </strong>
                                         </div>
-
                                     </div>
 
                                     <div className="eep-question-actions">
-
                                         <Link
                                             className="eep-edit-question-btn"
                                             to={`/edit-question/${question.question_id}`}
@@ -446,17 +424,12 @@ function EditExamPage() {
                                                 ? "Deleting..."
                                                 : "Delete"}
                                         </button>
-
                                     </div>
-
                                 </div>
                             ))}
-
                         </div>
                     )}
-
                 </section>
-
             </div>
         </div>
     );

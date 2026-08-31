@@ -1,13 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import API_BASE_URL from "../services/api";
 import Navbar from "../components/Navbar";
-
 import "../styles/CreateUserPage.css";
 
 function CreateUserPage() {
-
     const [name, setName] =
         useState("");
 
@@ -31,13 +28,11 @@ function CreateUserPage() {
 
     const navigate = useNavigate();
 
-
     // =========================================================
     // Manual User Creation
     // =========================================================
 
     const handleCreateUser = async (event) => {
-
         event.preventDefault();
 
         if (
@@ -48,7 +43,6 @@ function CreateUserPage() {
         }
 
         if (!name.trim() || !email.trim()) {
-
             alert(
                 "Please fill all required fields."
             );
@@ -57,7 +51,6 @@ function CreateUserPage() {
         }
 
         try {
-
             setUserCreating(true);
 
             const token =
@@ -92,10 +85,9 @@ function CreateUserPage() {
                 await response.json();
 
             if (!response.ok) {
-
                 alert(
                     data.message ||
-                    "Unable to create user."
+                        "Unable to create user."
                 );
 
                 return;
@@ -103,7 +95,7 @@ function CreateUserPage() {
 
             alert(
                 data.message ||
-                "User created successfully. Account activation is pending."
+                    "User created successfully. Account activation is pending."
             );
 
             setName("");
@@ -113,21 +105,16 @@ function CreateUserPage() {
             setRole("Candidate");
 
             navigate("/users");
-
         } catch (error) {
-
             console.error(error);
 
             alert(
                 "Unable to create user."
             );
-
         } finally {
-
             setUserCreating(false);
         }
     };
-
 
     // =========================================================
     // Bulk File Selection
@@ -136,12 +123,10 @@ function CreateUserPage() {
     const handleBulkFileChange = (
         event
     ) => {
-
         const selectedFile =
             event.target.files[0];
 
         if (!selectedFile) {
-
             setBulkFile(null);
 
             return;
@@ -153,7 +138,6 @@ function CreateUserPage() {
         if (
             !fileName.endsWith(".xlsx")
         ) {
-
             alert(
                 "Please select an .xlsx Excel file."
             );
@@ -168,13 +152,11 @@ function CreateUserPage() {
         setBulkFile(selectedFile);
     };
 
-
     // =========================================================
     // Bulk Upload Users
     // =========================================================
 
     const handleBulkUpload = async () => {
-
         if (
             bulkUploading ||
             userCreating
@@ -183,7 +165,6 @@ function CreateUserPage() {
         }
 
         if (!bulkFile) {
-
             alert(
                 "Please select an Excel file."
             );
@@ -192,7 +173,6 @@ function CreateUserPage() {
         }
 
         try {
-
             setBulkUploading(true);
 
             const token =
@@ -229,10 +209,9 @@ function CreateUserPage() {
                 await response.json();
 
             if (!response.ok) {
-
                 alert(
                     data.message ||
-                    "Unable to upload users."
+                        "Unable to upload users."
                 );
 
                 return;
@@ -240,7 +219,7 @@ function CreateUserPage() {
 
             alert(
                 data.message ||
-                "Users uploaded successfully."
+                    "Users uploaded successfully."
             );
 
             setBulkFile(null);
@@ -251,41 +230,31 @@ function CreateUserPage() {
                 );
 
             if (fileInput) {
-
                 fileInput.value = "";
             }
 
             navigate("/users");
-
         } catch (error) {
-
             console.error(error);
 
             alert(
                 "Unable to upload users."
             );
-
         } finally {
-
             setBulkUploading(false);
         }
     };
 
-
     return (
-
         <div className="cup-page">
-
             <Navbar />
 
             <main className="cup-container">
-
                 {/* =================================================
                     Page Header
                 ================================================= */}
 
                 <header className="cup-header">
-
                     <span className="cup-eyebrow">
                         CONFIGURATION
                     </span>
@@ -299,22 +268,18 @@ function CreateUserPage() {
                         multiple users using the prescribed
                         Excel format.
                     </p>
-
                 </header>
-
 
                 {/* =================================================
                     Main Card
                 ================================================= */}
 
                 <div className="cup-form-card">
-
                     {/* =================================================
                         Entry Mode
                     ================================================= */}
 
                     <div className="cup-mode-switch">
-
                         <button
                             type="button"
                             className={`cup-mode-btn ${
@@ -354,25 +319,20 @@ function CreateUserPage() {
                         >
                             Bulk Upload
                         </button>
-
                     </div>
-
 
                     {/* =================================================
                         Manual Entry
                     ================================================= */}
 
                     {entryMode === "manual" && (
-
                         <form
                             className="cup-mode-content"
                             onSubmit={
                                 handleCreateUser
                             }
                         >
-
                             <div className="cup-section-heading">
-
                                 <span className="cup-section-eyebrow">
                                     ACCOUNT SETUP
                                 </span>
@@ -388,22 +348,18 @@ function CreateUserPage() {
                                     will create their password
                                     during account activation.
                                 </p>
-
                             </div>
-
 
                             {/* =================================================
                                 User Type Selector
                             ================================================= */}
 
                             <div className="cup-field">
-
                                 <label className="cup-field-label">
                                     Select User Type
                                 </label>
 
                                 <div className="cup-role-switch">
-
                                     <button
                                         type="button"
                                         className={`cup-role-btn ${
@@ -443,18 +399,14 @@ function CreateUserPage() {
                                     >
                                         Examiner
                                     </button>
-
                                 </div>
-
                             </div>
-
 
                             {/* =================================================
                                 Full Name
                             ================================================= */}
 
                             <div className="cup-field">
-
                                 <label
                                     className="cup-field-label"
                                     htmlFor="user-name"
@@ -479,16 +431,13 @@ function CreateUserPage() {
                                     }
                                     required
                                 />
-
                             </div>
-
 
                             {/* =================================================
                                 Email
                             ================================================= */}
 
                             <div className="cup-field">
-
                                 <label
                                     className="cup-field-label"
                                     htmlFor="user-email"
@@ -513,9 +462,7 @@ function CreateUserPage() {
                                     }
                                     required
                                 />
-
                             </div>
-
 
                             <p className="cup-form-hint">
                                 The account will be created
@@ -524,7 +471,6 @@ function CreateUserPage() {
                                 through the activation link
                                 sent to their email address.
                             </p>
-
 
                             {/* =================================================
                                 Create Button
@@ -542,22 +488,16 @@ function CreateUserPage() {
                                     ? "Creating User..."
                                     : "Create User"}
                             </button>
-
                         </form>
-
                     )}
-
 
                     {/* =================================================
                         Bulk Upload
                     ================================================= */}
 
                     {entryMode === "bulk" && (
-
                         <div className="cup-mode-content">
-
                             <div className="cup-section-heading">
-
                                 <span className="cup-section-eyebrow">
                                     USER IMPORT
                                 </span>
@@ -571,22 +511,18 @@ function CreateUserPage() {
                                     or Examiners using the
                                     prescribed Excel format.
                                 </p>
-
                             </div>
-
 
                             {/* =================================================
                                 User Type
                             ================================================= */}
 
                             <div className="cup-field">
-
                                 <label className="cup-field-label">
                                     Select User Type
                                 </label>
 
                                 <div className="cup-role-switch">
-
                                     <button
                                         type="button"
                                         className={`cup-role-btn ${
@@ -626,24 +562,19 @@ function CreateUserPage() {
                                     >
                                         Examiner
                                     </button>
-
                                 </div>
-
                             </div>
-
 
                             {/* =================================================
                                 Excel Format
                             ================================================= */}
 
                             <div className="cup-format-card">
-
                                 <div className="cup-format-title">
                                     Required Excel Columns
                                 </div>
 
                                 <div className="cup-column-list">
-
                                     <span>
                                         Name
                                     </span>
@@ -651,7 +582,6 @@ function CreateUserPage() {
                                     <span>
                                         Email
                                     </span>
-
                                 </div>
 
                                 <p className="cup-format-note">
@@ -661,9 +591,7 @@ function CreateUserPage() {
                                     address must be unique and
                                     valid.
                                 </p>
-
                             </div>
-
 
                             {/* =================================================
                                 File Upload
@@ -674,7 +602,6 @@ function CreateUserPage() {
                             </label>
 
                             <div className="cup-upload-box">
-
                                 <input
                                     id="bulk-user-file"
                                     className="cup-file-input"
@@ -697,9 +624,7 @@ function CreateUserPage() {
                                 </label>
 
                                 <div className="cup-file-info">
-
                                     {bulkFile ? (
-
                                         <>
                                             <strong>
                                                 {
@@ -713,9 +638,7 @@ function CreateUserPage() {
                                                 upload
                                             </span>
                                         </>
-
                                     ) : (
-
                                         <>
                                             <strong>
                                                 No file selected
@@ -727,13 +650,9 @@ function CreateUserPage() {
                                                 supported
                                             </span>
                                         </>
-
                                     )}
-
                                 </div>
-
                             </div>
-
 
                             {/* =================================================
                                 Upload Button
@@ -754,15 +673,10 @@ function CreateUserPage() {
                                     ? "Uploading Users..."
                                     : "Upload Users"}
                             </button>
-
                         </div>
-
                     )}
-
                 </div>
-
             </main>
-
         </div>
     );
 }

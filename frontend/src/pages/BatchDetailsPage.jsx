@@ -55,11 +55,15 @@ function BatchDetailsPage() {
     const [downloadingReport, setDownloadingReport] =
         useState(false);
 
-    const [loadingAvailableCandidates, setLoadingAvailableCandidates] =
-        useState(false);
+    const [
+        loadingAvailableCandidates,
+        setLoadingAvailableCandidates,
+    ] = useState(false);
 
-    const [navigatingCandidateId, setNavigatingCandidateId] =
-        useState(null);
+    const [
+        navigatingCandidateId,
+        setNavigatingCandidateId,
+    ] = useState(null);
 
     useEffect(() => {
         fetchBatchDetails();
@@ -640,17 +644,13 @@ function BatchDetailsPage() {
         );
     }
 
-
     return (
         <div>
             <Navbar />
 
             <main className="bdp-page">
-
                 <div className="bdp-page-header">
-
                     <div>
-
                         <span className="bdp-page-eyebrow">
                             Batch Management
                         </span>
@@ -665,7 +665,6 @@ function BatchDetailsPage() {
                             monitor assessment
                             performance.
                         </p>
-
                     </div>
 
                     <span
@@ -678,16 +677,11 @@ function BatchDetailsPage() {
                     >
                         {batch.status}
                     </span>
-
                 </div>
 
-
                 <section className="bdp-overview-card">
-
                     <div className="bdp-section-heading">
-
                         <div>
-
                             <h2 className="bdp-section-title">
                                 Batch Overview
                             </h2>
@@ -697,16 +691,11 @@ function BatchDetailsPage() {
                                 configuration for this
                                 training batch.
                             </p>
-
                         </div>
-
                     </div>
 
-
                     <div className="bdp-overview-grid">
-
                         <div className="bdp-info-card">
-
                             <span className="bdp-info-label">
                                 Technology
                             </span>
@@ -714,12 +703,9 @@ function BatchDetailsPage() {
                             <strong>
                                 {batch.technology}
                             </strong>
-
                         </div>
 
-
                         <div className="bdp-info-card">
-
                             <span className="bdp-info-label">
                                 Trainer
                             </span>
@@ -727,12 +713,9 @@ function BatchDetailsPage() {
                             <strong>
                                 {batch.trainer_name}
                             </strong>
-
                         </div>
 
-
                         <div className="bdp-info-card">
-
                             <span className="bdp-info-label">
                                 Candidates
                             </span>
@@ -740,12 +723,9 @@ function BatchDetailsPage() {
                             <strong>
                                 {candidates.length}
                             </strong>
-
                         </div>
 
-
                         <div className="bdp-info-card">
-
                             <span className="bdp-info-label">
                                 Start Date
                             </span>
@@ -753,12 +733,9 @@ function BatchDetailsPage() {
                             <strong>
                                 {batch.start_date}
                             </strong>
-
                         </div>
 
-
                         <div className="bdp-info-card">
-
                             <span className="bdp-info-label">
                                 End Date
                             </span>
@@ -766,12 +743,9 @@ function BatchDetailsPage() {
                             <strong>
                                 {batch.end_date}
                             </strong>
-
                         </div>
 
-
                         <div className="bdp-info-card">
-
                             <span className="bdp-info-label">
                                 Assessments
                             </span>
@@ -780,14 +754,10 @@ function BatchDetailsPage() {
                                 {batchReport?.summary
                                     ?.total_assessments ?? 0}
                             </strong>
-
                         </div>
-
                     </div>
 
-
                     <div className="bdp-description-box">
-
                         <span className="bdp-info-label">
                             Description
                         </span>
@@ -796,18 +766,12 @@ function BatchDetailsPage() {
                             {batch.description ||
                                 "No description provided for this batch."}
                         </p>
-
                     </div>
-
                 </section>
 
-
                 <section className="bdp-candidates-section">
-
                     <div className="bdp-section-heading bdp-candidates-heading">
-
                         <div>
-
                             <h2 className="bdp-section-title">
                                 Candidates
                             </h2>
@@ -817,12 +781,9 @@ function BatchDetailsPage() {
                                 to this batch and review
                                 their assessment performance.
                             </p>
-
                         </div>
 
-
                         <div className="bdp-action-buttons">
-
                             <button
                                 type="button"
                                 className="bdp-assign-btn"
@@ -840,7 +801,6 @@ function BatchDetailsPage() {
                                     : "+ Assign Candidate"}
                             </button>
 
-
                             <button
                                 type="button"
                                 className="bdp-unassign-btn"
@@ -857,16 +817,11 @@ function BatchDetailsPage() {
                             >
                                 − Unassign Candidate
                             </button>
-
                         </div>
-
                     </div>
 
-
                     <div className="bdp-candidate-summary-row">
-
                         <div className="bdp-candidate-count-card">
-
                             <span>
                                 Assigned Candidates:
                             </span>
@@ -874,20 +829,15 @@ function BatchDetailsPage() {
                             <strong>
                                 {candidates.length}
                             </strong>
-
                         </div>
-
 
                         <div className="bdp-candidate-count-description">
                             Candidates currently
                             associated with this batch.
                         </div>
-
                     </div>
 
-
                     <div className="bdp-search-wrapper">
-
                         <input
                             type="text"
                             className="bdp-search"
@@ -903,18 +853,12 @@ function BatchDetailsPage() {
                                 unassigning
                             }
                         />
-
                     </div>
 
-
                     <div className="bdp-table-wrapper">
-
                         <table className="bdp-details-table">
-
                             <thead>
-
                                 <tr>
-
                                     <th>
                                         Candidate
                                     </th>
@@ -926,19 +870,13 @@ function BatchDetailsPage() {
                                     <th>
                                         Action
                                     </th>
-
                                 </tr>
-
                             </thead>
 
-
                             <tbody>
-
                                 {filteredCandidates.length ===
                                 0 ? (
-
                                     <tr>
-
                                         <td
                                             colSpan="3"
                                             className="bdp-details-empty"
@@ -948,88 +886,64 @@ function BatchDetailsPage() {
                                                 ? "No candidates are currently assigned to this batch."
                                                 : "No candidates match your search."}
                                         </td>
-
                                     </tr>
-
                                 ) : (
-
                                     filteredCandidates.map(
                                         (
                                             candidate
                                         ) => (
-
                                             <tr
                                                 key={
                                                     candidate.user_id
                                                 }
                                             >
-
                                                 <td>
-
                                                     <div className="bdp-candidate-table-name">
                                                         {
                                                             candidate.name
                                                         }
                                                     </div>
-
                                                 </td>
 
-
                                                 <td>
-
                                                     <span className="bdp-candidate-table-email">
                                                         {
                                                             candidate.email
                                                         }
                                                     </span>
-
                                                 </td>
 
-
                                                 <td>
+                                                    <button
+                                                        type="button"
+                                                        className="bdp-view-results-btn"
+                                                        onClick={() =>
+                                                            handleViewResults(
+                                                                candidate.user_id
+                                                            )
+                                                        }
+                                                    >
+                                                        <IoEyeOutline
+                                                            className="bdp-view-results-icon"
+                                                        />
 
-    <button
-    type="button"
-    className="bdp-view-results-btn"
-    onClick={() =>
-        handleViewResults(
-            candidate.user_id
-        )
-    }
->
-    <IoEyeOutline
-        className="bdp-view-results-icon"
-    />
-
-    <span>
-        View Results
-    </span>
-</button>
-
-</td>
-
+                                                        <span>
+                                                            View Results
+                                                        </span>
+                                                    </button>
+                                                </td>
                                             </tr>
-
                                         )
                                     )
-
                                 )}
-
                             </tbody>
-
                         </table>
-
                     </div>
-
                 </section>
 
-
                 <section className="bdp-report-section">
-
                     <div className="bdp-report-header">
-
                         <div>
-
                             <span className="bdp-section-eyebrow">
                                 Performance
                             </span>
@@ -1044,9 +958,7 @@ function BatchDetailsPage() {
                                 assessments conducted for
                                 this batch.
                             </p>
-
                         </div>
-
 
                         <button
                             type="button"
@@ -1066,32 +978,22 @@ function BatchDetailsPage() {
                                     ? "Preparing Report..."
                                     : "Download Report"}
                         </button>
-
                     </div>
 
-
                     {reportLoading ? (
-
                         <div className="bdp-report-loading">
                             Loading batch performance
                             report...
                         </div>
-
                     ) : !batchReport ? (
-
                         <div className="bdp-report-empty">
                             Unable to load batch
                             performance report.
                         </div>
-
                     ) : (
-
                         <>
-
                             <div className="bdp-report-summary">
-
                                 <div className="bdp-report-summary-card">
-
                                     <span>
                                         Candidates
                                     </span>
@@ -1102,12 +1004,9 @@ function BatchDetailsPage() {
                                                 .total_candidates
                                         }
                                     </strong>
-
                                 </div>
 
-
                                 <div className="bdp-report-summary-card">
-
                                     <span>
                                         Assessments
                                     </span>
@@ -1118,12 +1017,9 @@ function BatchDetailsPage() {
                                                 .total_assessments
                                         }
                                     </strong>
-
                                 </div>
 
-
                                 <div className="bdp-report-summary-card">
-
                                     <span>
                                         Submissions
                                     </span>
@@ -1134,12 +1030,9 @@ function BatchDetailsPage() {
                                                 .total_submissions
                                         }
                                     </strong>
-
                                 </div>
 
-
                                 <div className="bdp-report-summary-card">
-
                                     <span>
                                         Average Score
                                     </span>
@@ -1150,12 +1043,9 @@ function BatchDetailsPage() {
                                                 .average_score
                                         }%
                                     </strong>
-
                                 </div>
 
-
                                 <div className="bdp-report-summary-card">
-
                                     <span>
                                         Pass Percentage
                                     </span>
@@ -1166,12 +1056,9 @@ function BatchDetailsPage() {
                                                 .pass_percentage
                                         }%
                                     </strong>
-
                                 </div>
 
-
                                 <div className="bdp-report-summary-card">
-
                                     <span>
                                         Highest Score
                                     </span>
@@ -1182,18 +1069,12 @@ function BatchDetailsPage() {
                                                 .highest_score
                                         }%
                                     </strong>
-
                                 </div>
-
                             </div>
 
-
                             <div className="bdp-report-subsection">
-
                                 <div className="bdp-report-subsection-header">
-
                                     <div>
-
                                         <h3>
                                             Candidate Performance
                                         </h3>
@@ -1204,20 +1085,13 @@ function BatchDetailsPage() {
                                             on their assessment
                                             scores.
                                         </p>
-
                                     </div>
-
                                 </div>
 
-
                                 <div className="bdp-report-table-wrapper">
-
                                     <table className="bdp-report-table">
-
                                         <thead>
-
                                             <tr>
-
                                                 <th>
                                                     Rank
                                                 </th>
@@ -1249,19 +1123,13 @@ function BatchDetailsPage() {
                                                 <th>
                                                     Failed
                                                 </th>
-
                                             </tr>
-
                                         </thead>
 
-
                                         <tbody>
-
                                             {batchReport.candidates.length ===
                                             0 ? (
-
                                                 <tr>
-
                                                     <td
                                                         colSpan="8"
                                                         className="bdp-report-empty"
@@ -1270,44 +1138,33 @@ function BatchDetailsPage() {
                                                         performance
                                                         data available.
                                                     </td>
-
                                                 </tr>
-
                                             ) : (
-
                                                 batchReport.candidates.map(
                                                     (
                                                         candidate
                                                     ) => (
-
                                                         <tr
                                                             key={
                                                                 candidate.user_id
                                                             }
                                                         >
-
                                                             <td>
-
                                                                 <span className="bdp-rank-badge">
                                                                     #
                                                                     {
                                                                         candidate.rank
                                                                     }
                                                                 </span>
-
                                                             </td>
 
-
                                                             <td>
-
                                                                 <strong>
                                                                     {
                                                                         candidate.name
                                                                     }
                                                                 </strong>
-
                                                             </td>
-
 
                                                             <td>
                                                                 {
@@ -1315,13 +1172,11 @@ function BatchDetailsPage() {
                                                                 }
                                                             </td>
 
-
                                                             <td>
                                                                 {
                                                                     candidate.average_score
                                                                 }%
                                                             </td>
-
 
                                                             <td>
                                                                 {
@@ -1329,57 +1184,39 @@ function BatchDetailsPage() {
                                                                 }%
                                                             </td>
 
-
                                                             <td>
                                                                 {
                                                                     candidate.lowest_score
                                                                 }%
                                                             </td>
 
-
                                                             <td>
-
                                                                 <span className="bdp-pass-count">
                                                                     {
                                                                         candidate.pass_count
                                                                     }
                                                                 </span>
-
                                                             </td>
 
-
                                                             <td>
-
                                                                 <span className="bdp-fail-count">
                                                                     {
                                                                         candidate.fail_count
                                                                     }
                                                                 </span>
-
                                                             </td>
-
                                                         </tr>
-
                                                     )
                                                 )
-
                                             )}
-
                                         </tbody>
-
                                     </table>
-
                                 </div>
-
                             </div>
 
-
                             <div className="bdp-report-subsection">
-
                                 <div className="bdp-report-subsection-header">
-
                                     <div>
-
                                         <h3>
                                             Assessment Performance
                                         </h3>
@@ -1389,20 +1226,13 @@ function BatchDetailsPage() {
                                             performance across
                                             the batch.
                                         </p>
-
                                     </div>
-
                                 </div>
 
-
                                 <div className="bdp-report-table-wrapper">
-
                                     <table className="bdp-report-table">
-
                                         <thead>
-
                                             <tr>
-
                                                 <th>
                                                     Assessment
                                                 </th>
@@ -1434,19 +1264,13 @@ function BatchDetailsPage() {
                                                 <th>
                                                     Pass Rate
                                                 </th>
-
                                             </tr>
-
                                         </thead>
 
-
                                         <tbody>
-
                                             {batchReport.assessments.length ===
                                             0 ? (
-
                                                 <tr>
-
                                                     <td
                                                         colSpan="8"
                                                         className="bdp-report-empty"
@@ -1455,32 +1279,24 @@ function BatchDetailsPage() {
                                                         performance
                                                         data available.
                                                     </td>
-
                                                 </tr>
-
                                             ) : (
-
                                                 batchReport.assessments.map(
                                                     (
                                                         assessment
                                                     ) => (
-
                                                         <tr
                                                             key={
                                                                 assessment.exam_id
                                                             }
                                                         >
-
                                                             <td>
-
                                                                 <strong>
                                                                     {
                                                                         assessment.title
                                                                     }
                                                                 </strong>
-
                                                             </td>
-
 
                                                             <td>
                                                                 {
@@ -1488,13 +1304,11 @@ function BatchDetailsPage() {
                                                                 }
                                                             </td>
 
-
                                                             <td>
                                                                 {
                                                                     assessment.average_score
                                                                 }%
                                                             </td>
-
 
                                                             <td>
                                                                 {
@@ -1502,76 +1316,51 @@ function BatchDetailsPage() {
                                                                 }%
                                                             </td>
 
-
                                                             <td>
                                                                 {
                                                                     assessment.lowest_score
                                                                 }%
                                                             </td>
 
-
                                                             <td>
-
                                                                 <span className="bdp-pass-count">
                                                                     {
                                                                         assessment.pass_count
                                                                     }
                                                                 </span>
-
                                                             </td>
 
-
                                                             <td>
-
                                                                 <span className="bdp-fail-count">
                                                                     {
                                                                         assessment.fail_count
                                                                     }
                                                                 </span>
-
                                                             </td>
-
 
                                                             <td>
                                                                 {
                                                                     assessment.pass_percentage
                                                                 }%
                                                             </td>
-
                                                         </tr>
-
                                                     )
                                                 )
-
                                             )}
-
                                         </tbody>
-
                                     </table>
-
                                 </div>
-
                             </div>
-
                         </>
-
                     )}
-
                 </section>
-
             </main>
 
-
             {showAssignModal && (
-
                 <div className="bdp-modal-overlay">
-
                     <div className="bdp-modal">
-
                         <div className="bdp-modal-header">
-
                             <div>
-
                                 <span className="bdp-modal-eyebrow">
                                     Candidate Management
                                 </span>
@@ -1588,9 +1377,7 @@ function BatchDetailsPage() {
                                     </strong>
                                     .
                                 </p>
-
                             </div>
-
 
                             <button
                                 type="button"
@@ -1612,9 +1399,7 @@ function BatchDetailsPage() {
                             >
                                 ×
                             </button>
-
                         </div>
-
 
                         <input
                             type="text"
@@ -1629,17 +1414,13 @@ function BatchDetailsPage() {
                             disabled={assigning}
                         />
 
-
                         <div className="bdp-selection-toolbar">
-
                             <span className="bdp-selected-count">
                                 {selectedCandidates.length}{" "}
                                 selected
                             </span>
 
-
                             <label className="bdp-select-all-control">
-
                                 <input
                                     type="checkbox"
                                     checked={
@@ -1654,37 +1435,27 @@ function BatchDetailsPage() {
                                 <span>
                                     Select All
                                 </span>
-
                             </label>
-
                         </div>
 
-
                         <div className="bdp-candidate-list">
-
                             {availableCandidates.length ===
                             0 ? (
-
                                 <p className="bdp-no-candidates">
                                     No unassigned
                                     candidates available.
                                 </p>
-
                             ) : filteredAvailableCandidates.length ===
                               0 ? (
-
                                 <p className="bdp-no-candidates">
                                     No candidates match
                                     your search.
                                 </p>
-
                             ) : (
-
                                 filteredAvailableCandidates.map(
                                     (
                                         candidate
                                     ) => (
-
                                         <label
                                             key={
                                                 candidate.user_id
@@ -1697,7 +1468,6 @@ function BatchDetailsPage() {
                                                     : ""
                                             }`}
                                         >
-
                                             <input
                                                 type="checkbox"
                                                 checked={selectedCandidates.includes(
@@ -1711,9 +1481,7 @@ function BatchDetailsPage() {
                                                 disabled={assigning}
                                             />
 
-
                                             <div className="bdp-candidate-modal-info">
-
                                                 <strong>
                                                     {
                                                         candidate.name
@@ -1725,21 +1493,14 @@ function BatchDetailsPage() {
                                                         candidate.email
                                                     }
                                                 </span>
-
                                             </div>
-
                                         </label>
-
                                     )
                                 )
-
                             )}
-
                         </div>
 
-
                         <div className="bdp-modal-actions">
-
                             <button
                                 type="button"
                                 className="bdp-modal-cancel-btn"
@@ -1760,7 +1521,6 @@ function BatchDetailsPage() {
                             >
                                 Cancel
                             </button>
-
 
                             <button
                                 type="button"
@@ -1778,26 +1538,16 @@ function BatchDetailsPage() {
                                     ? "Assigning..."
                                     : "Assign Selected"}
                             </button>
-
                         </div>
-
                     </div>
-
                 </div>
-
             )}
 
-
             {showUnassignModal && (
-
                 <div className="bdp-modal-overlay">
-
                     <div className="bdp-modal">
-
                         <div className="bdp-modal-header">
-
                             <div>
-
                                 <span className="bdp-modal-eyebrow">
                                     Candidate Management
                                 </span>
@@ -1814,9 +1564,7 @@ function BatchDetailsPage() {
                                     </strong>
                                     .
                                 </p>
-
                             </div>
-
 
                             <button
                                 type="button"
@@ -1838,9 +1586,7 @@ function BatchDetailsPage() {
                             >
                                 ×
                             </button>
-
                         </div>
-
 
                         <input
                             type="text"
@@ -1855,9 +1601,7 @@ function BatchDetailsPage() {
                             disabled={unassigning}
                         />
 
-
                         <div className="bdp-selection-toolbar">
-
                             <span className="bdp-selected-count">
                                 {
                                     selectedUnassignCandidates.length
@@ -1865,9 +1609,7 @@ function BatchDetailsPage() {
                                 selected
                             </span>
 
-
                             <label className="bdp-select-all-control">
-
                                 <input
                                     type="checkbox"
                                     checked={
@@ -1882,37 +1624,27 @@ function BatchDetailsPage() {
                                 <span>
                                     Select All
                                 </span>
-
                             </label>
-
                         </div>
 
-
                         <div className="bdp-candidate-list">
-
                             {candidates.length ===
                             0 ? (
-
                                 <p className="bdp-no-candidates">
                                     No candidates assigned
                                     to this batch.
                                 </p>
-
                             ) : filteredAssignedCandidates.length ===
                               0 ? (
-
                                 <p className="bdp-no-candidates">
                                     No candidates match
                                     your search.
                                 </p>
-
                             ) : (
-
                                 filteredAssignedCandidates.map(
                                     (
                                         candidate
                                     ) => (
-
                                         <label
                                             key={
                                                 candidate.user_id
@@ -1925,7 +1657,6 @@ function BatchDetailsPage() {
                                                     : ""
                                             }`}
                                         >
-
                                             <input
                                                 type="checkbox"
                                                 checked={selectedUnassignCandidates.includes(
@@ -1939,9 +1670,7 @@ function BatchDetailsPage() {
                                                 disabled={unassigning}
                                             />
 
-
                                             <div className="bdp-candidate-modal-info">
-
                                                 <strong>
                                                     {
                                                         candidate.name
@@ -1953,21 +1682,14 @@ function BatchDetailsPage() {
                                                         candidate.email
                                                     }
                                                 </span>
-
                                             </div>
-
                                         </label>
-
                                     )
                                 )
-
                             )}
-
                         </div>
 
-
                         <div className="bdp-modal-actions">
-
                             <button
                                 type="button"
                                 className="bdp-modal-cancel-btn"
@@ -1989,7 +1711,6 @@ function BatchDetailsPage() {
                                 Cancel
                             </button>
 
-
                             <button
                                 type="button"
                                 className="bdp-modal-danger-btn"
@@ -2006,15 +1727,10 @@ function BatchDetailsPage() {
                                     ? "Unassigning..."
                                     : "Unassign Selected"}
                             </button>
-
                         </div>
-
                     </div>
-
                 </div>
-
             )}
-
         </div>
     );
 }

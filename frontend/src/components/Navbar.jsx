@@ -1,24 +1,18 @@
 import { useLocation, useNavigate } from "react-router-dom";
-
 import { useAuth } from "../context/AuthContext";
-
 import "../styles/Navbar.css";
 
 function Navbar() {
-
     const { role } = useAuth();
 
     const navigate = useNavigate();
     const location = useLocation();
 
     const handleNavigation = (path) => {
-
         navigate(path);
-
     };
 
     const isDashboardActive = () => {
-
         const dashboardPaths = [
             "/dashboard",
             "/users",
@@ -58,29 +52,23 @@ function Navbar() {
             isEditQuestionRoute ||
             isAddQuestionFromEditExam
         );
-
     };
 
     const isExamsActive = () => {
-
         return (
             location.pathname === "/exams" ||
             location.pathname.startsWith("/exam/")
         );
-
     };
 
     const isResultsActive = () => {
-
         return (
             location.pathname === "/results" ||
             location.pathname.startsWith("/result/")
         );
-
     };
 
     const isCreateExamActive = () => {
-
         return (
             location.pathname === "/create-exam" ||
             (
@@ -88,17 +76,14 @@ function Navbar() {
                 location.state?.from !== "edit-exam"
             )
         );
-
     };
 
     const navClass = (active) =>
-
         active
             ? "nb-nav-item nb-active"
             : "nb-nav-item";
 
     return (
-
         <nav className="nb-navbar">
 
             <div
@@ -110,11 +95,9 @@ function Navbar() {
                 Online Examination System
             </div>
 
-
             <div className="nb-nav-links">
 
                 {role === "Admin" && (
-
                     <button
                         type="button"
                         className={navClass(
@@ -126,9 +109,7 @@ function Navbar() {
                     >
                         Dashboard
                     </button>
-
                 )}
-
 
                 <button
                     type="button"
@@ -142,11 +123,9 @@ function Navbar() {
                     Exams
                 </button>
 
-
                 {(role === "Candidate" ||
                     role === "Admin" ||
                     role === "Examiner") && (
-
                     <button
                         type="button"
                         className={navClass(
@@ -158,13 +137,10 @@ function Navbar() {
                     >
                         Results
                     </button>
-
                 )}
-
 
                 {(role === "Examiner" ||
                     role === "Admin") && (
-
                     <button
                         type="button"
                         className={navClass(
@@ -178,12 +154,9 @@ function Navbar() {
                     >
                         Create Exam
                     </button>
-
                 )}
 
-
                 {role === "Admin" && (
-
                     <button
                         type="button"
                         className={navClass(
@@ -195,9 +168,7 @@ function Navbar() {
                     >
                         AI Assistant
                     </button>
-
                 )}
-
 
                 <button
                     type="button"
@@ -214,9 +185,7 @@ function Navbar() {
             </div>
 
         </nav>
-
     );
-
 }
 
 export default Navbar;

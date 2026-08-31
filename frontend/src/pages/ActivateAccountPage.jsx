@@ -1,51 +1,33 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-
 import API_BASE_URL from "../services/api";
-
 import "../styles/ActivateAccountPage.css";
 
 function ActivateAccountPage() {
+    const { activationToken } = useParams();
 
-    const { activationToken } =
-        useParams();
+    const navigate = useNavigate();
 
-    const navigate =
-        useNavigate();
+    const [account, setAccount] = useState(null);
 
-    const [account, setAccount] =
-        useState(null);
+    const [password, setPassword] = useState("");
 
-    const [password, setPassword] =
-        useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
 
-    const [confirmPassword, setConfirmPassword] =
-        useState("");
+    const [loading, setLoading] = useState(true);
 
-    const [loading, setLoading] =
-        useState(true);
+    const [activating, setActivating] = useState(false);
 
-    const [activating, setActivating] =
-        useState(false);
+    const [error, setError] = useState("");
 
-    const [error, setError] =
-        useState("");
-
-    const [success, setSuccess] =
-        useState("");
-
+    const [success, setSuccess] = useState("");
 
     useEffect(() => {
-
         verifyActivationToken();
-
     }, [activationToken]);
 
-
     const verifyActivationToken = async () => {
-
         if (!activationToken) {
-
             setError(
                 "Invalid activation link."
             );
@@ -56,23 +38,19 @@ function ActivateAccountPage() {
         }
 
         try {
-
             setLoading(true);
 
             setError("");
 
             setAccount(null);
 
-            const response =
-                await fetch(
-                    `${API_BASE_URL}/activate-account/${activationToken}`
-                );
+            const response = await fetch(
+                `${API_BASE_URL}/activate-account/${activationToken}`
+            );
 
-            const data =
-                await response.json();
+            const data = await response.json();
 
             if (!response.ok) {
-
                 setError(
                     data.message ||
                     "Invalid or expired activation link."
@@ -82,161 +60,121 @@ function ActivateAccountPage() {
             }
 
             setAccount(data);
-
         } catch (error) {
-
             console.error(error);
 
             setError(
                 "Unable to verify activation link."
             );
-
         } finally {
-
             setLoading(false);
-
         }
-
     };
 
+    const handleActivateAccount = async () => {
+        if (
+            activating ||
+            !account
+        ) {
+            return;
+        }
 
-    const handleActivateAccount =
-        async () => {
+        setError("");
 
-            if (
-                activating ||
-                !account
-            ) {
+        setSuccess("");
 
-                return;
+        if (
+            !password ||
+            !confirmPassword
+        ) {
+            setError(
+                "Please enter and confirm your password."
+            );
 
-            }
+            return;
+        }
 
-            setError("");
+        if (
+            password !==
+            confirmPassword
+        ) {
+            setError(
+                "Passwords do not match."
+            );
 
-            setSuccess("");
+            return;
+        }
 
+        if (
+            password.length < 8
+        ) {
+            setError(
+                "Password must be at least 8 characters long."
+            );
 
-            if (
-                !password ||
-                !confirmPassword
-            ) {
+            return;
+        }
 
-                setError(
-                    "Please enter and confirm your password."
-                );
+        try {
+            setActivating(true);
 
-                return;
+            const response = await fetch(
+                `${API_BASE_URL}/activate-account/${activationToken}`,
+                {
+                    method: "POST",
 
-            }
+                    headers: {
+                        "Content-Type":
+                            "application/json",
+                    },
 
-
-            if (
-                password !==
-                confirmPassword
-            ) {
-
-                setError(
-                    "Passwords do not match."
-                );
-
-                return;
-
-            }
-
-
-            if (
-                password.length < 8
-            ) {
-
-                setError(
-                    "Password must be at least 8 characters long."
-                );
-
-                return;
-
-            }
-
-
-            try {
-
-                setActivating(true);
-
-                const response =
-                    await fetch(
-                        `${API_BASE_URL}/activate-account/${activationToken}`,
-                        {
-                            method:
-                                "POST",
-
-                            headers: {
-                                "Content-Type":
-                                    "application/json",
-                            },
-
-                            body:
-                                JSON.stringify({
-                                    password:
-                                        password,
-                                }),
-                        }
-                    );
-
-                const data =
-                    await response.json();
-
-                if (!response.ok) {
-
-                    setError(
-                        data.message ||
-                        "Unable to activate account."
-                    );
-
-                    return;
-
+                    body: JSON.stringify({
+                        password:
+                            password,
+                    }),
                 }
+            );
 
-                setSuccess(
-                    data.message ||
-                    "Account activated successfully."
-                );
+            const data = await response.json();
 
-                setAccount((previousAccount) => ({
-    ...previousAccount,
-    account_status: "Active",
-}));
-
-                setPassword("");
-
-                setConfirmPassword("");
-
-            } catch (error) {
-
-                console.error(error);
-
+            if (!response.ok) {
                 setError(
+                    data.message ||
                     "Unable to activate account."
                 );
 
-            } finally {
-
-                setActivating(false);
-
+                return;
             }
 
-        };
+            setSuccess(
+                data.message ||
+                "Account activated successfully."
+            );
 
+            setAccount((previousAccount) => ({
+                ...previousAccount,
+                account_status: "Active",
+            }));
+
+            setPassword("");
+
+            setConfirmPassword("");
+        } catch (error) {
+            console.error(error);
+
+            setError(
+                "Unable to activate account."
+            );
+        } finally {
+            setActivating(false);
+        }
+    };
 
     if (loading) {
-
         return (
-
             <div className="aap-page">
-
                 <main className="aap-container">
-
                     <section className="aap-status-card">
-
                         <div className="aap-status-indicator">
                             <span></span>
                         </div>
@@ -253,31 +191,20 @@ function ActivateAccountPage() {
                             Please wait while we verify
                             your account activation link.
                         </p>
-
                     </section>
-
                 </main>
-
             </div>
-
         );
-
     }
-
 
     if (
         error &&
         !account
     ) {
-
         return (
-
             <div className="aap-page">
-
                 <main className="aap-container">
-
                     <section className="aap-status-card">
-
                         <div className="aap-error-icon">
                             !
                         </div>
@@ -303,26 +230,16 @@ function ActivateAccountPage() {
                         >
                             Return to Login
                         </button>
-
                     </section>
-
                 </main>
-
             </div>
-
         );
-
     }
 
-
     return (
-
         <div className="aap-page">
-
             <main className="aap-container">
-
                 <header className="aap-header">
-
                     <span className="aap-eyebrow">
                         ACCOUNT ACTIVATION
                     </span>
@@ -337,14 +254,10 @@ function ActivateAccountPage() {
                         your Online Examination System
                         account.
                     </p>
-
                 </header>
 
-
                 <section className="aap-card">
-
                     <div className="aap-section-heading">
-
                         <span className="aap-section-eyebrow">
                             ACCOUNT SETUP
                         </span>
@@ -359,14 +272,10 @@ function ActivateAccountPage() {
                             password below to complete
                             activation.
                         </p>
-
                     </div>
 
-
                     <div className="aap-account-details">
-
                         <div className="aap-account-detail">
-
                             <span className="aap-detail-label">
                                 EMAIL ADDRESS
                             </span>
@@ -374,12 +283,9 @@ function ActivateAccountPage() {
                             <span className="aap-detail-value">
                                 {account.email}
                             </span>
-
                         </div>
 
-
                         <div className="aap-account-detail">
-
                             <span className="aap-detail-label">
                                 USER ROLE
                             </span>
@@ -387,39 +293,30 @@ function ActivateAccountPage() {
                             <span className="aap-role-badge">
                                 {account.role}
                             </span>
-
                         </div>
 
-
                         <div className="aap-account-detail">
-
                             <span className="aap-detail-label">
                                 ACCOUNT STATUS
                             </span>
 
                             <span
-    className={
-        account.account_status === "Active"
-            ? "aap-active-badge"
-            : "aap-pending-badge"
-    }
->
-    {account.account_status === "Active"
-        ? "ACTIVE"
-        : "PENDING ACTIVATION"}
-</span>
-
+                                className={
+                                    account.account_status === "Active"
+                                        ? "aap-active-badge"
+                                        : "aap-pending-badge"
+                                }
+                            >
+                                {account.account_status === "Active"
+                                    ? "ACTIVE"
+                                    : "PENDING ACTIVATION"}
+                            </span>
                         </div>
-
                     </div>
 
-
                     {!success && (
-
                         <div className="aap-form">
-
                             <div className="aap-form-heading">
-
                                 <h3 className="aap-form-title">
                                     Create Password
                                 </h3>
@@ -428,12 +325,9 @@ function ActivateAccountPage() {
                                     Your password must contain
                                     at least 8 characters.
                                 </p>
-
                             </div>
 
-
                             <div className="aap-field">
-
                                 <label
                                     className="aap-field-label"
                                     htmlFor="aap-password"
@@ -457,12 +351,9 @@ function ActivateAccountPage() {
                                     }
                                     autoComplete="new-password"
                                 />
-
                             </div>
 
-
                             <div className="aap-field">
-
                                 <label
                                     className="aap-field-label"
                                     htmlFor="aap-confirm-password"
@@ -488,14 +379,10 @@ function ActivateAccountPage() {
                                     }
                                     autoComplete="new-password"
                                 />
-
                             </div>
 
-
                             {error && (
-
                                 <div className="aap-error-message">
-
                                     <span className="aap-error-message-icon">
                                         !
                                     </span>
@@ -503,11 +390,8 @@ function ActivateAccountPage() {
                                     <span>
                                         {error}
                                     </span>
-
                                 </div>
-
                             )}
-
 
                             <button
                                 type="button"
@@ -523,16 +407,11 @@ function ActivateAccountPage() {
                                     ? "Activating Account..."
                                     : "Activate Account"}
                             </button>
-
                         </div>
-
                     )}
 
-
                     {success && (
-
                         <div className="aap-success-section">
-
                             <div className="aap-success-icon">
                                 ✓
                             </div>
@@ -558,19 +437,12 @@ function ActivateAccountPage() {
                             >
                                 Go to Login
                             </button>
-
                         </div>
-
                     )}
-
                 </section>
-
             </main>
-
         </div>
-
     );
-
 }
 
 export default ActivateAccountPage;

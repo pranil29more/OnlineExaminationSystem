@@ -1,8 +1,8 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-
 from extensions import mysql
 from utils.decorators import role_required
+
 
 exam_bp = Blueprint("exam", __name__)
 
@@ -828,12 +828,6 @@ def get_exam(exam_id):
                             str(scheduled_end),
                     }
                 ), 403
-
-        # ======================================
-        # Active Attempt
-        #
-        # No schedule-end validation happens.
-        # ======================================
 
     # ==========================================
     # Fetch Questions

@@ -1,16 +1,11 @@
 import pandas as pd
-
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required
-
 from extensions import mysql
 from utils.decorators import role_required
 
 
-bulk_question_bp = Blueprint(
-    "bulk_question",
-    __name__,
-)
+bulk_question_bp = Blueprint("bulk_question", __name__)
 
 
 @bulk_question_bp.route(

@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-
 import API_BASE_URL from "../services/api";
 import Navbar from "../components/Navbar";
-
 import "../styles/EditQuestionPage.css";
 
 function EditQuestionPage() {
@@ -42,7 +40,6 @@ function EditQuestionPage() {
 
     const [updating, setUpdating] =
         useState(false);
-
 
     // =========================================================
     // Fetch Question
@@ -110,7 +107,6 @@ function EditQuestionPage() {
 
         }
     };
-
 
     // =========================================================
     // Update Question
@@ -264,7 +260,6 @@ function EditQuestionPage() {
         }
     };
 
-
     return (
 
         <div className="eqp-page">
@@ -294,7 +289,6 @@ function EditQuestionPage() {
                     </p>
 
                 </header>
-
 
                 {/* =================================================
                     Main Form Card
@@ -327,7 +321,6 @@ function EditQuestionPage() {
 
                         </div>
 
-
                         {/* Question */}
 
                         <label
@@ -350,7 +343,6 @@ function EditQuestionPage() {
                             }
                             disabled={updating}
                         />
-
 
                         {/* Difficulty */}
 
@@ -387,7 +379,6 @@ function EditQuestionPage() {
 
                         </select>
 
-
                         {/* Marks */}
 
                         <label
@@ -414,7 +405,6 @@ function EditQuestionPage() {
                         />
 
                     </div>
-
 
                     {/* =================================================
                         Answer Options
@@ -453,7 +443,6 @@ function EditQuestionPage() {
 
                             </div>
 
-
                             <div className="eqp-option-field">
 
                                 <label
@@ -479,7 +468,6 @@ function EditQuestionPage() {
 
                             </div>
 
-
                             <div className="eqp-option-field">
 
                                 <label
@@ -504,7 +492,6 @@ function EditQuestionPage() {
                                 />
 
                             </div>
-
 
                             <div className="eqp-option-field">
 
@@ -534,7 +521,6 @@ function EditQuestionPage() {
                         </div>
 
                     </div>
-
 
                     {/* =================================================
                         Correct Answer
@@ -570,7 +556,6 @@ function EditQuestionPage() {
                         </p>
 
                     </div>
-
 
                     {/* =================================================
                         Update Button

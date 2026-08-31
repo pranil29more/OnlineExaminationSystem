@@ -1,15 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import { IoEyeOutline } from "react-icons/io5";
-
 import API_BASE_URL from "../services/api";
 import Navbar from "../components/Navbar";
-
 import "../styles/UsersPage.css";
 
 function UsersPage() {
-
     const [users, setUsers] =
         useState([]);
 
@@ -24,18 +20,12 @@ function UsersPage() {
 
     const navigate = useNavigate();
 
-
     useEffect(() => {
-
         fetchUsers();
-
     }, []);
 
-
     const fetchUsers = async () => {
-
         try {
-
             const token =
                 localStorage.getItem("token");
 
@@ -53,52 +43,39 @@ function UsersPage() {
                 await response.json();
 
             if (!response.ok) {
-
                 alert(
                     data.message ||
-                    "Unable to load users."
+                        "Unable to load users."
                 );
 
                 return;
             }
 
             setUsers(data);
-
         } catch (error) {
-
             console.error(error);
 
             alert(
                 "Unable to load users."
             );
-
         }
-
     };
-
 
     const handleCreateUser = () => {
-
         navigate("/create-user");
-
     };
-
 
     const handleViewHistory = (
         userId
     ) => {
-
         navigate(
             `/candidate-results/${userId}`
         );
-
     };
-
 
     const handleToggleStatus = async (
         userId
     ) => {
-
         const selectedUser =
             users.find(
                 (user) =>
@@ -110,9 +87,7 @@ function UsersPage() {
             selectedUser.account_status ===
                 "Pending"
         ) {
-
             return;
-
         }
 
         setLoadingAction(
@@ -120,7 +95,6 @@ function UsersPage() {
         );
 
         try {
-
             const token =
                 localStorage.getItem("token");
 
@@ -140,10 +114,9 @@ function UsersPage() {
                 await response.json();
 
             if (!response.ok) {
-
                 alert(
                     data.message ||
-                    "Unable to update user status."
+                        "Unable to update user status."
                 );
 
                 return;
@@ -151,41 +124,31 @@ function UsersPage() {
 
             alert(
                 data.message ||
-                "User status updated successfully."
+                    "User status updated successfully."
             );
 
             await fetchUsers();
-
         } catch (error) {
-
             console.error(error);
 
             alert(
                 "Unable to update user status."
             );
-
         } finally {
-
             setLoadingAction(null);
-
         }
-
     };
-
 
     const handleCancelActivation = async (
         userId
     ) => {
-
         const confirmCancel =
             window.confirm(
                 "Are you sure you want to cancel this account activation?"
             );
 
         if (!confirmCancel) {
-
             return;
-
         }
 
         setLoadingAction(
@@ -193,7 +156,6 @@ function UsersPage() {
         );
 
         try {
-
             const token =
                 localStorage.getItem("token");
 
@@ -213,10 +175,9 @@ function UsersPage() {
                 await response.json();
 
             if (!response.ok) {
-
                 alert(
                     data.message ||
-                    "Unable to cancel account activation."
+                        "Unable to cancel account activation."
                 );
 
                 return;
@@ -227,37 +188,27 @@ function UsersPage() {
             );
 
             await fetchUsers();
-
         } catch (error) {
-
             console.error(error);
 
             alert(
                 "Unable to cancel account activation."
             );
-
         } finally {
-
             setLoadingAction(null);
-
         }
-
     };
-
 
     const handleDeleteUser = async (
         userId
     ) => {
-
         const confirmDelete =
             window.confirm(
                 "Are you sure you want to delete this user?"
             );
 
         if (!confirmDelete) {
-
             return;
-
         }
 
         setLoadingAction(
@@ -265,7 +216,6 @@ function UsersPage() {
         );
 
         try {
-
             const token =
                 localStorage.getItem("token");
 
@@ -285,10 +235,9 @@ function UsersPage() {
                 await response.json();
 
             if (!response.ok) {
-
                 alert(
                     data.message ||
-                    "Unable to delete user."
+                        "Unable to delete user."
                 );
 
                 return;
@@ -296,27 +245,20 @@ function UsersPage() {
 
             alert(
                 data.message ||
-                "User deleted successfully."
+                    "User deleted successfully."
             );
 
             await fetchUsers();
-
         } catch (error) {
-
             console.error(error);
 
             alert(
                 "Unable to delete user."
             );
-
         } finally {
-
             setLoadingAction(null);
-
         }
-
     };
-
 
     const examiners =
         users.filter(
@@ -324,29 +266,24 @@ function UsersPage() {
                 user.role === "Examiner"
         );
 
-
     const candidates =
         users.filter(
             (user) =>
                 user.role === "Candidate"
         );
 
-
     const examinerSearchTerm =
         examinerSearch
             .toLowerCase()
             .trim();
-
 
     const candidateSearchTerm =
         candidateSearch
             .toLowerCase()
             .trim();
 
-
     const filteredExaminers =
         examiners.filter((user) => {
-
             const userName =
                 (user.name || "")
                     .toLowerCase();
@@ -363,13 +300,10 @@ function UsersPage() {
                     examinerSearchTerm
                 )
             );
-
         });
-
 
     const filteredCandidates =
         candidates.filter((user) => {
-
             const userName =
                 (user.name || "")
                     .toLowerCase();
@@ -386,9 +320,7 @@ function UsersPage() {
                     candidateSearchTerm
                 )
             );
-
         });
-
 
     const activeExaminers =
         filteredExaminers.filter(
@@ -397,14 +329,12 @@ function UsersPage() {
                 "Active"
         );
 
-
     const pendingExaminers =
         filteredExaminers.filter(
             (user) =>
                 user.account_status ===
                 "Pending"
         );
-
 
     const activeCandidates =
         filteredCandidates.filter(
@@ -413,7 +343,6 @@ function UsersPage() {
                 "Active"
         );
 
-
     const pendingCandidates =
         filteredCandidates.filter(
             (user) =>
@@ -421,18 +350,14 @@ function UsersPage() {
                 "Pending"
         );
 
-
     const getStatusClass = (
         user
     ) => {
-
         if (
             user.account_status ===
             "Pending"
         ) {
-
             return "pending";
-
         }
 
         if (
@@ -440,27 +365,20 @@ function UsersPage() {
                 "Active" &&
             Boolean(user.is_active)
         ) {
-
             return "active";
-
         }
 
         return "inactive";
-
     };
-
 
     const getStatusLabel = (
         user
     ) => {
-
         if (
             user.account_status ===
             "Pending"
         ) {
-
             return "PENDING";
-
         }
 
         if (
@@ -468,21 +386,16 @@ function UsersPage() {
                 "Active" &&
             Boolean(user.is_active)
         ) {
-
             return "ACTIVE";
-
         }
 
         return "DEACTIVATED";
-
     };
-
 
     const renderUserTable = (
         userList,
         type
     ) => {
-
         const isPendingTable =
             type === "pending";
 
@@ -492,15 +405,10 @@ function UsersPage() {
                 : "No active accounts found.";
 
         return (
-
             <div className="ump-table-wrapper">
-
                 <table className="ump-table">
-
                     <thead>
-
                         <tr>
-
                             <th>
                                 Name
                             </th>
@@ -516,32 +424,22 @@ function UsersPage() {
                             <th>
                                 Actions
                             </th>
-
                         </tr>
-
                     </thead>
 
-
                     <tbody>
-
                         {userList.length === 0 ? (
-
                             <tr>
-
                                 <td
                                     colSpan="4"
                                     className="ump-table-empty"
                                 >
                                     {emptyMessage}
                                 </td>
-
                             </tr>
-
                         ) : (
-
                             userList.map(
                                 (user) => {
-
                                     const statusLoading =
                                         loadingAction ===
                                         `status-${user.user_id}`;
@@ -560,37 +458,28 @@ function UsersPage() {
                                         );
 
                                     return (
-
                                         <tr
                                             key={
                                                 user.user_id
                                             }
                                         >
-
                                             <td>
-
                                                 <strong className="ump-user-name">
                                                     {
                                                         user.name
                                                     }
                                                 </strong>
-
                                             </td>
 
-
                                             <td>
-
                                                 <span className="ump-user-email">
                                                     {
                                                         user.email
                                                     }
                                                 </span>
-
                                             </td>
 
-
                                             <td>
-
                                                 <span
                                                     className={`ump-status-badge ${getStatusClass(
                                                         user
@@ -600,16 +489,11 @@ function UsersPage() {
                                                         user
                                                     )}
                                                 </span>
-
                                             </td>
 
-
                                             <td>
-
                                                 <div className="ump-table-actions">
-
                                                     {isPendingTable ? (
-
                                                         <button
                                                             type="button"
                                                             className="ump-cancel-activation-btn"
@@ -626,14 +510,10 @@ function UsersPage() {
                                                                 ? "Cancelling..."
                                                                 : "Cancel Activation"}
                                                         </button>
-
                                                     ) : (
-
                                                         <>
-
                                                             {user.role ===
                                                                 "Candidate" && (
-
                                                                 <button
                                                                     type="button"
                                                                     className="ump-history-btn"
@@ -647,7 +527,6 @@ function UsersPage() {
                                                                         deleteLoading
                                                                     }
                                                                 >
-
                                                                     <IoEyeOutline
                                                                         className="ump-history-icon"
                                                                     />
@@ -655,11 +534,8 @@ function UsersPage() {
                                                                     <span>
                                                                         View History
                                                                     </span>
-
                                                                 </button>
-
                                                             )}
-
 
                                                             <button
                                                                 type="button"
@@ -687,7 +563,6 @@ function UsersPage() {
                                                                         : "Activate"}
                                                             </button>
 
-
                                                             <button
                                                                 type="button"
                                                                 className="ump-delete-btn"
@@ -705,49 +580,29 @@ function UsersPage() {
                                                                     ? "Deleting..."
                                                                     : "Delete"}
                                                             </button>
-
                                                         </>
-
                                                     )}
-
                                                 </div>
-
                                             </td>
-
                                         </tr>
-
                                     );
-
                                 }
                             )
-
                         )}
-
                     </tbody>
-
                 </table>
-
             </div>
-
         );
-
     };
 
-
     return (
-
         <div className="ump-page">
-
             <Navbar />
-
 
             <main className="ump-page-container">
 
-
                 <div className="ump-page-header">
-
                     <div>
-
                         <span className="ump-page-eyebrow">
                             ACCESS CONTROL
                         </span>
@@ -763,9 +618,7 @@ function UsersPage() {
                             review candidate
                             assessment history.
                         </p>
-
                     </div>
-
 
                     <button
                         type="button"
@@ -776,16 +629,11 @@ function UsersPage() {
                     >
                         + Create User
                     </button>
-
                 </div>
 
-
                 <section className="ump-section">
-
                     <div className="ump-section-header">
-
                         <div>
-
                             <h2 className="ump-section-title">
                                 Examiners
                             </h2>
@@ -796,9 +644,7 @@ function UsersPage() {
                                 account activation
                                 status.
                             </p>
-
                         </div>
-
 
                         <span className="ump-count-badge">
                             {examiners.length}{" "}
@@ -806,12 +652,9 @@ function UsersPage() {
                                 ? "Examiner"
                                 : "Examiners"}
                         </span>
-
                     </div>
 
-
                     <div className="ump-table-controls">
-
                         <input
                             type="text"
                             className="ump-search"
@@ -825,16 +668,11 @@ function UsersPage() {
                                 )
                             }
                         />
-
                     </div>
 
-
                     <div className="ump-subsection">
-
                         <div className="ump-subsection-header">
-
                             <div>
-
                                 <span className="ump-subsection-eyebrow">
                                     ACCOUNT STATUS
                                 </span>
@@ -849,30 +687,22 @@ function UsersPage() {
                                     available in the
                                     system.
                                 </p>
-
                             </div>
 
                             <span className="ump-subsection-count active">
                                 {activeExaminers.length}
                             </span>
-
                         </div>
-
 
                         {renderUserTable(
                             activeExaminers,
                             "active"
                         )}
-
                     </div>
 
-
                     <div className="ump-subsection">
-
                         <div className="ump-subsection-header">
-
                             <div>
-
                                 <span className="ump-subsection-eyebrow pending">
                                     ACCOUNT ACTIVATION
                                 </span>
@@ -886,32 +716,23 @@ function UsersPage() {
                                     waiting for email
                                     activation.
                                 </p>
-
                             </div>
 
                             <span className="ump-subsection-count pending">
                                 {pendingExaminers.length}
                             </span>
-
                         </div>
-
 
                         {renderUserTable(
                             pendingExaminers,
                             "pending"
                         )}
-
                     </div>
-
                 </section>
 
-
                 <section className="ump-section">
-
                     <div className="ump-section-header">
-
                         <div>
-
                             <h2 className="ump-section-title">
                                 Candidates
                             </h2>
@@ -923,9 +744,7 @@ function UsersPage() {
                                 complete
                                 assessment history.
                             </p>
-
                         </div>
-
 
                         <span className="ump-count-badge">
                             {candidates.length}{" "}
@@ -933,12 +752,9 @@ function UsersPage() {
                                 ? "Candidate"
                                 : "Candidates"}
                         </span>
-
                     </div>
 
-
                     <div className="ump-table-controls">
-
                         <input
                             type="text"
                             className="ump-search"
@@ -952,16 +768,11 @@ function UsersPage() {
                                 )
                             }
                         />
-
                     </div>
 
-
                     <div className="ump-subsection">
-
                         <div className="ump-subsection-header">
-
                             <div>
-
                                 <span className="ump-subsection-eyebrow">
                                     ACCOUNT STATUS
                                 </span>
@@ -976,30 +787,22 @@ function UsersPage() {
                                     available in the
                                     system.
                                 </p>
-
                             </div>
 
                             <span className="ump-subsection-count active">
                                 {activeCandidates.length}
                             </span>
-
                         </div>
-
 
                         {renderUserTable(
                             activeCandidates,
                             "active"
                         )}
-
                     </div>
 
-
                     <div className="ump-subsection">
-
                         <div className="ump-subsection-header">
-
                             <div>
-
                                 <span className="ump-subsection-eyebrow pending">
                                     ACCOUNT ACTIVATION
                                 </span>
@@ -1013,31 +816,23 @@ function UsersPage() {
                                     waiting for email
                                     activation.
                                 </p>
-
                             </div>
 
                             <span className="ump-subsection-count pending">
                                 {pendingCandidates.length}
                             </span>
-
                         </div>
-
 
                         {renderUserTable(
                             pendingCandidates,
                             "pending"
                         )}
-
                     </div>
-
                 </section>
 
             </main>
-
         </div>
-
     );
-
 }
 
 export default UsersPage;

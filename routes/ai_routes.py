@@ -1,9 +1,7 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-
 from extensions import mysql
 from utils.decorators import role_required
-
 import os
 import re
 from google import genai

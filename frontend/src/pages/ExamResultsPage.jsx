@@ -1,26 +1,19 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-
 import { IoEyeOutline } from "react-icons/io5";
-
 import API_BASE_URL from "../services/api";
 import Navbar from "../components/Navbar";
 import PageLoader from "../components/PageLoader";
-
 import "../styles/ExamResultsPage.css";
 
-
 function ExamResultsPage() {
-
     const { examId } = useParams();
-
 
     const [exam, setExam] =
         useState(null);
 
     const [results, setResults] =
         useState([]);
-
 
     // =========================================================
     // Fetch Exam Results
@@ -30,14 +23,10 @@ function ExamResultsPage() {
         fetchResults();
     }, []);
 
-
     const fetchResults = async () => {
-
         try {
-
             const token =
                 localStorage.getItem("token");
-
 
             const response = await fetch(
                 `${API_BASE_URL}/exam-results/${examId}`,
@@ -49,71 +38,51 @@ function ExamResultsPage() {
                 }
             );
 
-
             const data =
                 await response.json();
-
 
             setExam(data.exam);
 
             setResults(
                 data.results || []
             );
-
         } catch (error) {
-
             console.error(error);
-
         }
-
     };
-
 
     // =========================================================
     // Loading
     // =========================================================
 
     if (!exam) {
-
         return (
-
             <div className="erp-page">
-
                 <Navbar />
 
                 <PageLoader
                     message="Loading Exam Results..."
                 />
-
             </div>
-
         );
-
     }
-
 
     // =========================================================
     // Render
     // =========================================================
 
     return (
-
         <div className="erp-page">
-
             <Navbar />
 
-
             <main className="erp-page-container">
-
 
                 {/* =================================================
                     Page Header
                 ================================================= */}
 
                 <div className="erp-page-header">
-
                     <div>
-
                         <span className="erp-page-eyebrow">
                             Examination Analytics
                         </span>
@@ -128,22 +97,16 @@ function ExamResultsPage() {
                             performance status, and
                             detailed result information.
                         </p>
-
                     </div>
-
                 </div>
-
 
                 {/* =================================================
                     Exam Information
                 ================================================= */}
 
                 <section className="erp-exam-section">
-
                     <div className="erp-section-header">
-
                         <div>
-
                             <span className="erp-section-eyebrow">
                                 Examination
                             </span>
@@ -157,17 +120,11 @@ function ExamResultsPage() {
                                 associated with these
                                 submissions.
                             </p>
-
                         </div>
-
                     </div>
 
-
                     <div className="erp-exam-profile">
-
-
                         <div className="erp-exam-name-block">
-
                             <span className="erp-info-label">
                                 Assessment
                             </span>
@@ -175,15 +132,10 @@ function ExamResultsPage() {
                             <h2 className="erp-exam-name">
                                 {exam.title}
                             </h2>
-
                         </div>
 
-
                         <div className="erp-exam-grid">
-
-
                             <div className="erp-info-card">
-
                                 <span className="erp-info-label">
                                     Total Marks
                                 </span>
@@ -191,12 +143,9 @@ function ExamResultsPage() {
                                 <strong>
                                     {exam.total_marks}
                                 </strong>
-
                             </div>
 
-
                             <div className="erp-info-card">
-
                                 <span className="erp-info-label">
                                     Passing Marks
                                 </span>
@@ -204,12 +153,9 @@ function ExamResultsPage() {
                                 <strong>
                                     {exam.passing_marks}
                                 </strong>
-
                             </div>
 
-
                             <div className="erp-info-card">
-
                                 <span className="erp-info-label">
                                     Submissions
                                 </span>
@@ -217,28 +163,18 @@ function ExamResultsPage() {
                                 <strong>
                                     {results.length}
                                 </strong>
-
                             </div>
-
-
                         </div>
-
                     </div>
-
                 </section>
-
 
                 {/* =================================================
                     Student Results
                 ================================================= */}
 
                 <section className="erp-results-section">
-
-
                     <div className="erp-section-header">
-
                         <div>
-
                             <span className="erp-section-eyebrow">
                                 Performance History
                             </span>
@@ -252,35 +188,25 @@ function ExamResultsPage() {
                                 submission and open
                                 detailed result information.
                             </p>
-
                         </div>
 
-
                         <span className="erp-results-count">
-
                             {results.length}{" "}
 
                             {results.length === 1
                                 ? "Submission"
                                 : "Submissions"}
-
                         </span>
-
                     </div>
-
 
                     {/* =================================================
                         Results Table
                     ================================================= */}
 
                     <div className="erp-table-wrapper">
-
                         <table className="erp-results-table">
-
                             <thead>
-
                                 <tr>
-
                                     <th>
                                         Candidate
                                     </th>
@@ -304,18 +230,12 @@ function ExamResultsPage() {
                                     <th>
                                         Action
                                     </th>
-
                                 </tr>
-
                             </thead>
 
-
                             <tbody>
-
                                 {results.length === 0 ? (
-
                                     <tr>
-
                                         <td
                                             colSpan="6"
                                             className="erp-table-empty"
@@ -324,14 +244,10 @@ function ExamResultsPage() {
                                             submitted this
                                             examination yet.
                                         </td>
-
                                     </tr>
-
                                 ) : (
-
                                     results.map(
                                         (result) => {
-
                                             const status =
                                                 Number(
                                                     result.score
@@ -341,7 +257,6 @@ function ExamResultsPage() {
                                                 )
                                                     ? "Pass"
                                                     : "Fail";
-
 
                                             const percentage =
                                                 Number(
@@ -358,7 +273,6 @@ function ExamResultsPage() {
                                                     100
                                                     : 0;
 
-
                                             const submittedDate =
                                                 new Date(
                                                     result.submitted_at
@@ -366,31 +280,22 @@ function ExamResultsPage() {
                                                     "en-GB"
                                                 );
 
-
                                             return (
-
                                                 <tr
                                                     key={
                                                         result.submission_id
                                                     }
                                                 >
-
-
                                                     <td>
-
                                                         <strong className="erp-candidate-name">
                                                             {
                                                                 result.candidate_name
                                                             }
                                                         </strong>
-
                                                     </td>
 
-
                                                     <td>
-
                                                         <span className="erp-score">
-
                                                             {
                                                                 result.score
                                                             }
@@ -404,29 +309,20 @@ function ExamResultsPage() {
                                                             {
                                                                 exam.total_marks
                                                             }
-
                                                         </span>
-
                                                     </td>
 
-
                                                     <td>
-
                                                         <strong className="erp-percentage">
-
                                                             {
                                                                 percentage.toFixed(
                                                                     2
                                                                 )
                                                             }%
-
                                                         </strong>
-
                                                     </td>
 
-
                                                     <td>
-
                                                         <span
                                                             className={
                                                                 status ===
@@ -439,28 +335,21 @@ function ExamResultsPage() {
                                                                 status
                                                             }
                                                         </span>
-
                                                     </td>
 
-
                                                     <td>
-
                                                         <span className="erp-submitted-date">
                                                             {
                                                                 submittedDate
                                                             }
                                                         </span>
-
                                                     </td>
 
-
                                                     <td>
-
                                                         <Link
                                                             className="erp-view-details-btn"
                                                             to={`/result/${result.submission_id}`}
                                                         >
-
                                                             <IoEyeOutline
                                                                 className="erp-view-details-icon"
                                                             />
@@ -468,38 +357,20 @@ function ExamResultsPage() {
                                                             <span>
                                                                 View Details
                                                             </span>
-
                                                         </Link>
-
                                                     </td>
-
-
                                                 </tr>
-
                                             );
-
                                         }
                                     )
-
                                 )}
-
                             </tbody>
-
                         </table>
-
                     </div>
-
-
                 </section>
-
-
             </main>
-
         </div>
-
     );
-
 }
-
 
 export default ExamResultsPage;

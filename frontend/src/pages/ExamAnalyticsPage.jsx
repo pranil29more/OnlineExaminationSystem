@@ -1,21 +1,16 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
 import API_BASE_URL from "../services/api";
 import Navbar from "../components/Navbar";
 import PageLoader from "../components/PageLoader";
-
 import "../styles/ExamAnalyticsPage.css";
 
-
 function ExamAnalyticsPage() {
-
     const [analytics, setAnalytics] = useState(null);
     const [schedules, setSchedules] = useState([]);
 
     const [batches, setBatches] = useState([]);
     const [candidates, setCandidates] = useState([]);
-
 
     const [showScheduleModal, setShowScheduleModal] =
         useState(false);
@@ -40,7 +35,6 @@ function ExamAnalyticsPage() {
 
     const [scheduling, setScheduling] =
         useState(false);
-
 
     const [showEditModal, setShowEditModal] =
         useState(false);
@@ -75,10 +69,8 @@ function ExamAnalyticsPage() {
     const [removingScheduleId, setRemovingScheduleId] =
         useState(null);
 
-
     const [deletingExamId, setDeletingExamId] =
         useState(null);
-
 
     useEffect(() => {
         fetchAnalytics();
@@ -87,11 +79,8 @@ function ExamAnalyticsPage() {
         fetchCandidates();
     }, []);
 
-
     const fetchAnalytics = async () => {
-
         try {
-
             const token =
                 localStorage.getItem("token");
 
@@ -108,7 +97,6 @@ function ExamAnalyticsPage() {
             const data = await response.json();
 
             if (!response.ok) {
-
                 console.error(
                     data.message ||
                         "Unable to load exam analytics."
@@ -118,18 +106,13 @@ function ExamAnalyticsPage() {
             }
 
             setAnalytics(data);
-
         } catch (error) {
-
             console.error(error);
         }
     };
 
-
     const fetchSchedules = async () => {
-
         try {
-
             const token =
                 localStorage.getItem("token");
 
@@ -146,7 +129,6 @@ function ExamAnalyticsPage() {
             const data = await response.json();
 
             if (!response.ok) {
-
                 console.error(
                     data.message ||
                         "Unable to load assessment schedules."
@@ -158,18 +140,13 @@ function ExamAnalyticsPage() {
             setSchedules(
                 data.schedules || []
             );
-
         } catch (error) {
-
             console.error(error);
         }
     };
 
-
     const fetchBatches = async () => {
-
         try {
-
             const token =
                 localStorage.getItem("token");
 
@@ -186,7 +163,6 @@ function ExamAnalyticsPage() {
             const data = await response.json();
 
             if (!response.ok) {
-
                 console.error(
                     data.message ||
                         "Unable to load batches."
@@ -196,18 +172,13 @@ function ExamAnalyticsPage() {
             }
 
             setBatches(data || []);
-
         } catch (error) {
-
             console.error(error);
         }
     };
 
-
     const fetchCandidates = async () => {
-
         try {
-
             const token =
                 localStorage.getItem("token");
 
@@ -224,7 +195,6 @@ function ExamAnalyticsPage() {
             const data = await response.json();
 
             if (!response.ok) {
-
                 console.error(
                     data.message ||
                         "Unable to load candidates."
@@ -234,16 +204,12 @@ function ExamAnalyticsPage() {
             }
 
             setCandidates(data || []);
-
         } catch (error) {
-
             console.error(error);
         }
     };
 
-
     const handleDeleteExam = async (exam) => {
-
         const confirmed = window.confirm(
             `Are you sure you want to delete "${exam.title}"?\n\nThis action cannot be undone.`
         );
@@ -253,7 +219,6 @@ function ExamAnalyticsPage() {
         }
 
         try {
-
             setDeletingExamId(
                 exam.exam_id
             );
@@ -276,7 +241,6 @@ function ExamAnalyticsPage() {
             const data = await response.json();
 
             if (!response.ok) {
-
                 alert(
                     data.message ||
                         "Unable to delete exam."
@@ -291,24 +255,18 @@ function ExamAnalyticsPage() {
             );
 
             await fetchAnalytics();
-
         } catch (error) {
-
             console.error(error);
 
             alert(
                 "Unable to delete exam."
             );
-
         } finally {
-
             setDeletingExamId(null);
         }
     };
 
-
     const openScheduleModal = () => {
-
         setSelectedExamId("");
         setAssignmentType("Batch");
         setSelectedBatchId("");
@@ -319,9 +277,7 @@ function ExamAnalyticsPage() {
         setShowScheduleModal(true);
     };
 
-
     const closeScheduleModal = () => {
-
         if (scheduling) {
             return;
         }
@@ -336,24 +292,19 @@ function ExamAnalyticsPage() {
         setScheduledEnd("");
     };
 
-
     const handleAssignmentTypeChange = (type) => {
-
         setAssignmentType(type);
 
         setSelectedBatchId("");
         setSelectedCandidateId("");
     };
 
-
     const handleScheduleAssessment = async (
         event
     ) => {
-
         event.preventDefault();
 
         if (!selectedExamId) {
-
             alert(
                 "Please select an assessment."
             );
@@ -365,7 +316,6 @@ function ExamAnalyticsPage() {
             assignmentType === "Batch" &&
             !selectedBatchId
         ) {
-
             alert(
                 "Please select a batch."
             );
@@ -377,7 +327,6 @@ function ExamAnalyticsPage() {
             assignmentType === "Candidate" &&
             !selectedCandidateId
         ) {
-
             alert(
                 "Please select a candidate."
             );
@@ -389,7 +338,6 @@ function ExamAnalyticsPage() {
             !scheduledStart ||
             !scheduledEnd
         ) {
-
             alert(
                 "Please select the scheduled start and end time."
             );
@@ -404,7 +352,6 @@ function ExamAnalyticsPage() {
             new Date(scheduledEnd);
 
         if (endDate <= startDate) {
-
             alert(
                 "Scheduled end must be after the scheduled start."
             );
@@ -413,14 +360,12 @@ function ExamAnalyticsPage() {
         }
 
         try {
-
             setScheduling(true);
 
             const token =
                 localStorage.getItem("token");
 
             const requestBody = {
-
                 exam_id:
                     Number(selectedExamId),
 
@@ -465,7 +410,6 @@ function ExamAnalyticsPage() {
                 await response.json();
 
             if (!response.ok) {
-
                 alert(
                     data.message ||
                         "Unable to schedule assessment."
@@ -483,24 +427,18 @@ function ExamAnalyticsPage() {
 
             await fetchSchedules();
             await fetchAnalytics();
-
         } catch (error) {
-
             console.error(error);
 
             alert(
                 "Unable to schedule assessment."
             );
-
         } finally {
-
             setScheduling(false);
         }
     };
 
-
     const formatDateTimeLocal = (value) => {
-
         if (!value) {
             return "";
         }
@@ -510,11 +448,9 @@ function ExamAnalyticsPage() {
             .slice(0, 16);
     };
 
-
     const openEditScheduleModal = (
         schedule
     ) => {
-
         setEditingScheduleId(
             schedule.schedule_id
         );
@@ -554,9 +490,7 @@ function ExamAnalyticsPage() {
         setShowEditModal(true);
     };
 
-
     const closeEditScheduleModal = () => {
-
         if (updatingSchedule) {
             return;
         }
@@ -571,22 +505,18 @@ function ExamAnalyticsPage() {
         setEditScheduledEnd("");
     };
 
-
     const handleEditAssignmentTypeChange = (
         type
     ) => {
-
         setEditAssignmentType(type);
 
         setEditBatchId("");
         setEditCandidateId("");
     };
 
-
     const handleUpdateSchedule = async (
         event
     ) => {
-
         event.preventDefault();
 
         if (!editingScheduleId) {
@@ -597,7 +527,6 @@ function ExamAnalyticsPage() {
             editAssignmentType === "Batch" &&
             !editBatchId
         ) {
-
             alert(
                 "Please select a batch."
             );
@@ -609,7 +538,6 @@ function ExamAnalyticsPage() {
             editAssignmentType === "Candidate" &&
             !editCandidateId
         ) {
-
             alert(
                 "Please select a candidate."
             );
@@ -621,7 +549,6 @@ function ExamAnalyticsPage() {
             !editScheduledStart ||
             !editScheduledEnd
         ) {
-
             alert(
                 "Please select the scheduled start and end time."
             );
@@ -636,7 +563,6 @@ function ExamAnalyticsPage() {
             new Date(editScheduledEnd);
 
         if (endDate <= startDate) {
-
             alert(
                 "Scheduled end must be after the scheduled start."
             );
@@ -645,14 +571,12 @@ function ExamAnalyticsPage() {
         }
 
         try {
-
             setUpdatingSchedule(true);
 
             const token =
                 localStorage.getItem("token");
 
             const requestBody = {
-
                 batch_id:
                     editAssignmentType === "Batch"
                         ? Number(editBatchId)
@@ -694,7 +618,6 @@ function ExamAnalyticsPage() {
                 await response.json();
 
             if (!response.ok) {
-
                 alert(
                     data.message ||
                         "Unable to update assessment schedule."
@@ -712,26 +635,20 @@ function ExamAnalyticsPage() {
             setEditingScheduleId(null);
 
             await fetchSchedules();
-
         } catch (error) {
-
             console.error(error);
 
             alert(
                 "Unable to update assessment schedule."
             );
-
         } finally {
-
             setUpdatingSchedule(false);
         }
     };
 
-
     const handleCancelSchedule = async (
         schedule
     ) => {
-
         const confirmed = window.confirm(
             `Are you sure you want to cancel the schedule for "${schedule.exam_title}"?`
         );
@@ -741,7 +658,6 @@ function ExamAnalyticsPage() {
         }
 
         try {
-
             setCancellingScheduleId(
                 schedule.schedule_id
             );
@@ -765,7 +681,6 @@ function ExamAnalyticsPage() {
                 await response.json();
 
             if (!response.ok) {
-
                 alert(
                     data.message ||
                         "Unable to cancel assessment schedule."
@@ -781,26 +696,20 @@ function ExamAnalyticsPage() {
 
             await fetchSchedules();
             await fetchAnalytics();
-
         } catch (error) {
-
             console.error(error);
 
             alert(
                 "Unable to cancel assessment schedule."
             );
-
         } finally {
-
             setCancellingScheduleId(null);
         }
     };
 
-
     const handleRemoveSchedule = async (
         schedule
     ) => {
-
         const confirmed = window.confirm(
             `Remove the ended schedule for "${schedule.exam_title}"?\n\nThis will only remove the scheduling record. Exam submissions and results will not be deleted.`
         );
@@ -810,7 +719,6 @@ function ExamAnalyticsPage() {
         }
 
         try {
-
             setRemovingScheduleId(
                 schedule.schedule_id
             );
@@ -834,7 +742,6 @@ function ExamAnalyticsPage() {
                 await response.json();
 
             if (!response.ok) {
-
                 alert(
                     data.message ||
                         "Unable to remove ended assessment schedule."
@@ -850,21 +757,16 @@ function ExamAnalyticsPage() {
 
             await fetchSchedules();
             await fetchAnalytics();
-
         } catch (error) {
-
             console.error(error);
 
             alert(
                 "Unable to remove ended assessment schedule."
             );
-
         } finally {
-
             setRemovingScheduleId(null);
         }
     };
-
 
     const actualExams =
         analytics?.exam_wise?.filter(
@@ -872,34 +774,25 @@ function ExamAnalyticsPage() {
                 exam.exam_type === "Actual"
         ) || [];
 
-
     if (!analytics) {
-
         return (
             <div className="eap-page">
-
                 <Navbar />
 
                 <PageLoader
                     message="Loading Exam Analytics..."
                 />
-
             </div>
         );
     }
 
-
     return (
         <div className="eap-page">
-
             <Navbar />
 
             <main className="eap-page-container">
-
                 <header className="eap-page-header">
-
                     <div>
-
                         <span className="eap-page-eyebrow">
                             ASSESSMENT MANAGEMENT
                         </span>
@@ -914,18 +807,12 @@ function ExamAnalyticsPage() {
                             examination readiness from
                             one place.
                         </p>
-
                     </div>
-
                 </header>
 
-
                 <section className="eap-summary-card">
-
                     <div className="eap-summary-header">
-
                         <div className="eap-summary-icon">
-
                             <svg
                                 viewBox="0 0 24 24"
                                 aria-hidden="true"
@@ -946,12 +833,9 @@ function ExamAnalyticsPage() {
 
                                 <path d="M9 17h4" />
                             </svg>
-
                         </div>
 
-
                         <div className="eap-summary-total">
-
                             <strong className="eap-summary-total-number">
                                 {analytics.total_exams}
                             </strong>
@@ -959,16 +843,11 @@ function ExamAnalyticsPage() {
                             <span className="eap-summary-total-label">
                                 TOTAL ASSESSMENTS &amp; EXAMS
                             </span>
-
                         </div>
-
                     </div>
 
-
                     <div className="eap-summary-breakdown">
-
                         <div className="eap-summary-metric eap-summary-actual">
-
                             <strong className="eap-summary-metric-value">
                                 {
                                     analytics.exam_wise.filter(
@@ -988,15 +867,11 @@ function ExamAnalyticsPage() {
                                         : "Actual Assessments"
                                 }
                             </span>
-
                         </div>
-
 
                         <div className="eap-summary-divider"></div>
 
-
                         <div className="eap-summary-metric eap-summary-practice">
-
                             <strong className="eap-summary-metric-value">
                                 {
                                     analytics.exam_wise.filter(
@@ -1016,20 +891,13 @@ function ExamAnalyticsPage() {
                                         : "Practice Exams"
                                 }
                             </span>
-
                         </div>
-
                     </div>
-
                 </section>
 
-
                 <section className="eap-section">
-
                     <div className="eap-section-header">
-
                         <div>
-
                             <span className="eap-section-kicker">
                                 SCHEDULING
                             </span>
@@ -1043,7 +911,6 @@ function ExamAnalyticsPage() {
                                 assessments and their
                                 assignments.
                             </p>
-
                         </div>
 
                         <button
@@ -1057,14 +924,10 @@ function ExamAnalyticsPage() {
 
                             Schedule Assessment
                         </button>
-
                     </div>
 
-
                     {schedules.length === 0 ? (
-
                         <div className="eap-empty-state">
-
                             <div className="eap-empty-icon">
                                 —
                             </div>
@@ -1079,25 +942,17 @@ function ExamAnalyticsPage() {
                                 assessment to a batch
                                 or individual candidate.
                             </p>
-
                         </div>
-
                     ) : (
-
                         <div className="eap-schedule-list">
-
                             {schedules.map(
                                 (schedule) => (
-
                                     <article
                                         key={schedule.schedule_id}
                                         className="eap-schedule-card"
                                     >
-
                                         <div className="eap-schedule-header">
-
                                             <div className="eap-schedule-heading">
-
                                                 <span className="eap-schedule-category">
                                                     ACTUAL ASSESSMENT
                                                 </span>
@@ -1105,7 +960,6 @@ function ExamAnalyticsPage() {
                                                 <h3 className="eap-schedule-title">
                                                     {schedule.exam_title}
                                                 </h3>
-
                                             </div>
 
                                             <span
@@ -1121,16 +975,11 @@ function ExamAnalyticsPage() {
                                                 <span className="eap-status-dot"></span>
 
                                                 {schedule.status}
-
                                             </span>
-
                                         </div>
 
-
                                         <div className="eap-schedule-details">
-
                                             <div className="eap-detail-item">
-
                                                 <span className="eap-detail-label">
                                                     Assigned To
                                                 </span>
@@ -1138,12 +987,9 @@ function ExamAnalyticsPage() {
                                                 <strong>
                                                     {schedule.assigned_to}
                                                 </strong>
-
                                             </div>
 
-
                                             <div className="eap-detail-item">
-
                                                 <span className="eap-detail-label">
                                                     Assignment Type
                                                 </span>
@@ -1151,12 +997,9 @@ function ExamAnalyticsPage() {
                                                 <strong>
                                                     {schedule.assignment_type}
                                                 </strong>
-
                                             </div>
 
-
                                             <div className="eap-detail-item">
-
                                                 <span className="eap-detail-label">
                                                     Scheduled Start
                                                 </span>
@@ -1164,12 +1007,9 @@ function ExamAnalyticsPage() {
                                                 <strong>
                                                     {schedule.scheduled_start}
                                                 </strong>
-
                                             </div>
 
-
                                             <div className="eap-detail-item">
-
                                                 <span className="eap-detail-label">
                                                     Scheduled End
                                                 </span>
@@ -1177,12 +1017,9 @@ function ExamAnalyticsPage() {
                                                 <strong>
                                                     {schedule.scheduled_end}
                                                 </strong>
-
                                             </div>
 
-
                                             <div className="eap-detail-item">
-
                                                 <span className="eap-detail-label">
                                                     Scheduled By
                                                 </span>
@@ -1198,25 +1035,18 @@ function ExamAnalyticsPage() {
                                                         ? schedule.scheduled_by_name
                                                         : "*Examiner account has been deleted*"}
                                                 </strong>
-
                                             </div>
-
                                         </div>
 
-
                                         <div className="eap-schedule-footer">
-
                                             <span className="eap-schedule-id">
                                                 Schedule ID:{" "}
                                                 {schedule.schedule_id}
                                             </span>
 
-
                                             <div className="eap-schedule-actions">
-
                                                 {schedule.status === "Upcoming" && (
                                                     <>
-
                                                         <button
                                                             type="button"
                                                             className="eap-secondary-btn eap-edit-btn"
@@ -1228,7 +1058,6 @@ function ExamAnalyticsPage() {
                                                         >
                                                             Edit Schedule
                                                         </button>
-
 
                                                         <button
                                                             type="button"
@@ -1248,13 +1077,10 @@ function ExamAnalyticsPage() {
                                                                 ? "Cancelling..."
                                                                 : "Cancel Schedule"}
                                                         </button>
-
                                                     </>
                                                 )}
 
-
                                                 {schedule.status === "Ended" && (
-
                                                     <button
                                                         type="button"
                                                         className="eap-secondary-btn"
@@ -1273,31 +1099,19 @@ function ExamAnalyticsPage() {
                                                             ? "Removing..."
                                                             : "Remove Schedule"}
                                                     </button>
-
                                                 )}
-
                                             </div>
-
                                         </div>
-
                                     </article>
-
                                 )
                             )}
-
                         </div>
-
                     )}
-
                 </section>
 
-
                 <section className="eap-section eap-library-section">
-
                     <div className="eap-section-header">
-
                         <div>
-
                             <span className="eap-section-kicker">
                                 EXAMINATION MANAGEMENT
                             </span>
@@ -1312,7 +1126,6 @@ function ExamAnalyticsPage() {
                                 assessment scheduling
                                 status.
                             </p>
-
                         </div>
 
                         <span className="eap-count-badge">
@@ -1321,14 +1134,10 @@ function ExamAnalyticsPage() {
                                 ? "Exam"
                                 : "Exams"}
                         </span>
-
                     </div>
 
-
                     {analytics.exam_wise.length === 0 ? (
-
                         <div className="eap-empty-state">
-
                             <div className="eap-empty-icon">
                                 —
                             </div>
@@ -1341,16 +1150,11 @@ function ExamAnalyticsPage() {
                                 Exams will appear here
                                 once they are created.
                             </p>
-
                         </div>
-
                     ) : (
-
                         <div className="eap-exam-grid">
-
                             {analytics.exam_wise.map(
                                 (exam) => (
-
                                     <article
                                         key={exam.exam_id}
                                         className={`eap-exam-card ${
@@ -1359,11 +1163,8 @@ function ExamAnalyticsPage() {
                                                 : "eap-practice"
                                         }`}
                                     >
-
                                         <div className="eap-exam-header">
-
                                             <div className="eap-exam-heading">
-
                                                 <span className="eap-exam-id">
                                                     EXAM #{exam.exam_id}
                                                 </span>
@@ -1371,9 +1172,7 @@ function ExamAnalyticsPage() {
                                                 <h3 className="eap-exam-title">
                                                     {exam.title}
                                                 </h3>
-
                                             </div>
-
 
                                             <span
                                                 className={`eap-type-badge ${
@@ -1384,14 +1183,10 @@ function ExamAnalyticsPage() {
                                             >
                                                 {exam.exam_type}
                                             </span>
-
                                         </div>
 
-
                                         <div className="eap-config-grid">
-
                                             <div className="eap-config-item">
-
                                                 <span>
                                                     Duration
                                                 </span>
@@ -1399,12 +1194,9 @@ function ExamAnalyticsPage() {
                                                 <strong>
                                                     {exam.duration} mins
                                                 </strong>
-
                                             </div>
 
-
                                             <div className="eap-config-item">
-
                                                 <span>
                                                     Total Marks
                                                 </span>
@@ -1412,12 +1204,9 @@ function ExamAnalyticsPage() {
                                                 <strong>
                                                     {exam.total_marks}
                                                 </strong>
-
                                             </div>
 
-
                                             <div className="eap-config-item">
-
                                                 <span>
                                                     Passing Marks
                                                 </span>
@@ -1425,12 +1214,9 @@ function ExamAnalyticsPage() {
                                                 <strong>
                                                     {exam.passing_marks}
                                                 </strong>
-
                                             </div>
 
-
                                             <div className="eap-config-item">
-
                                                 <span>
                                                     Questions
                                                 </span>
@@ -1438,20 +1224,13 @@ function ExamAnalyticsPage() {
                                                 <strong>
                                                     {exam.questions}
                                                 </strong>
-
                                             </div>
-
                                         </div>
 
-
                                         <div className="eap-exam-status">
-
                                             {exam.exam_type === "Actual" ? (
-
                                                 <>
-
                                                     <div className="eap-status-heading">
-
                                                         <span>
                                                             Assessment Scheduling
                                                         </span>
@@ -1467,11 +1246,8 @@ function ExamAnalyticsPage() {
                                                             <span className="eap-status-dot"></span>
 
                                                             {exam.schedule_status}
-
                                                         </span>
-
                                                     </div>
-
 
                                                     <p>
                                                         {exam.schedule_status ===
@@ -1484,45 +1260,31 @@ function ExamAnalyticsPage() {
                                                               } created for this assessment.`
                                                             : "This assessment has not been scheduled yet."}
                                                     </p>
-
                                                 </>
-
                                             ) : (
-
                                                 <>
-
                                                     <div className="eap-status-heading">
-
                                                         <span>
                                                             Practice Availability
                                                         </span>
 
                                                         <span className="eap-library-status eap-status-practice">
-
                                                             <span className="eap-status-dot"></span>
 
                                                             Available
-
                                                         </span>
-
                                                     </div>
-
 
                                                     <p>
                                                         Available to
                                                         candidates for
                                                         practice attempts.
                                                     </p>
-
                                                 </>
-
                                             )}
-
                                         </div>
 
-
                                         <div className="eap-exam-footer">
-
                                             <span className="eap-created-by">
                                                 Created by:{" "}
 
@@ -1531,9 +1293,7 @@ function ExamAnalyticsPage() {
                                                 </strong>
                                             </span>
 
-
                                             <div className="eap-exam-actions">
-
                                                 <Link
                                                     className="eap-edit-link"
                                                     to={`/edit-exam/${exam.exam_id}`}
@@ -1544,16 +1304,13 @@ function ExamAnalyticsPage() {
                                                     Edit Exam
                                                 </Link>
 
-
                                                 <button
                                                     type="button"
                                                     className="eap-delete-link"
                                                     onClick={(event) => {
-
                                                         event.stopPropagation();
 
                                                         handleDeleteExam(exam);
-
                                                     }}
                                                     disabled={
                                                         deletingExamId ===
@@ -1565,33 +1322,20 @@ function ExamAnalyticsPage() {
                                                         ? "Deleting..."
                                                         : "Delete"}
                                                 </button>
-
                                             </div>
-
                                         </div>
-
                                     </article>
-
                                 )
                             )}
-
                         </div>
-
                     )}
-
                 </section>
 
-
                 {showScheduleModal && (
-
                     <div className="eap-modal-overlay">
-
                         <div className="eap-modal">
-
                             <div className="eap-modal-header">
-
                                 <div>
-
                                     <span className="eap-modal-kicker">
                                         SCHEDULING
                                     </span>
@@ -1606,9 +1350,7 @@ function ExamAnalyticsPage() {
                                         batch or individual
                                         candidate.
                                     </p>
-
                                 </div>
-
 
                                 <button
                                     type="button"
@@ -1618,16 +1360,12 @@ function ExamAnalyticsPage() {
                                 >
                                     ×
                                 </button>
-
                             </div>
-
 
                             <form
                                 onSubmit={handleScheduleAssessment}
                             >
-
                                 <div className="eap-form-group">
-
                                     <label>
                                         Assessment
                                     </label>
@@ -1641,49 +1379,38 @@ function ExamAnalyticsPage() {
                                         }
                                         required
                                     >
-
                                         <option value="">
                                             Select Actual Assessment
                                         </option>
 
                                         {actualExams.map(
                                             (exam) => (
-
                                                 <option
                                                     key={exam.exam_id}
                                                     value={exam.exam_id}
                                                 >
                                                     {exam.title}
                                                 </option>
-
                                             )
                                         )}
-
                                     </select>
 
-
                                     {actualExams.length === 0 && (
-
                                         <p className="eap-form-hint eap-warning">
                                             No Actual assessments
                                             are currently
                                             available in the
                                             Exam Library.
                                         </p>
-
                                     )}
-
                                 </div>
 
-
                                 <div className="eap-form-group">
-
                                     <label>
                                         Assign To
                                     </label>
 
                                     <div className="eap-assignment-options">
-
                                         <label
                                             className={`eap-assignment-option ${
                                                 assignmentType === "Batch"
@@ -1691,7 +1418,6 @@ function ExamAnalyticsPage() {
                                                     : ""
                                             }`}
                                         >
-
                                             <input
                                                 type="radio"
                                                 name="assignmentType"
@@ -1710,9 +1436,7 @@ function ExamAnalyticsPage() {
                                             <span>
                                                 Batch
                                             </span>
-
                                         </label>
-
 
                                         <label
                                             className={`eap-assignment-option ${
@@ -1722,7 +1446,6 @@ function ExamAnalyticsPage() {
                                                     : ""
                                             }`}
                                         >
-
                                             <input
                                                 type="radio"
                                                 name="assignmentType"
@@ -1741,18 +1464,12 @@ function ExamAnalyticsPage() {
                                             <span>
                                                 Individual Candidate
                                             </span>
-
                                         </label>
-
                                     </div>
-
                                 </div>
 
-
                                 {assignmentType === "Batch" ? (
-
                                     <div className="eap-form-group">
-
                                         <label>
                                             Batch
                                         </label>
@@ -1766,14 +1483,12 @@ function ExamAnalyticsPage() {
                                             }
                                             required
                                         >
-
                                             <option value="">
                                                 Select Batch
                                             </option>
 
                                             {batches.map(
                                                 (batch) => (
-
                                                     <option
                                                         key={
                                                             batch.batch_id
@@ -1790,18 +1505,12 @@ function ExamAnalyticsPage() {
                                                         {" "}
                                                         candidate(s)
                                                     </option>
-
                                                 )
                                             )}
-
                                         </select>
-
                                     </div>
-
                                 ) : (
-
                                     <div className="eap-form-group">
-
                                         <label>
                                             Candidate
                                         </label>
@@ -1817,14 +1526,12 @@ function ExamAnalyticsPage() {
                                             }
                                             required
                                         >
-
                                             <option value="">
                                                 Select Candidate
                                             </option>
 
                                             {candidates.map(
                                                 (candidate) => (
-
                                                     <option
                                                         key={
                                                             candidate.user_id
@@ -1842,21 +1549,14 @@ function ExamAnalyticsPage() {
                                                             ? ` (${candidate.batch_name})`
                                                             : " (No Batch)"}
                                                     </option>
-
                                                 )
                                             )}
-
                                         </select>
-
                                     </div>
-
                                 )}
 
-
                                 <div className="eap-time-grid">
-
                                     <div className="eap-form-group">
-
                                         <label>
                                             Scheduled Start
                                         </label>
@@ -1873,12 +1573,9 @@ function ExamAnalyticsPage() {
                                             }
                                             required
                                         />
-
                                     </div>
 
-
                                     <div className="eap-form-group">
-
                                         <label>
                                             Scheduled End
                                         </label>
@@ -1895,11 +1592,8 @@ function ExamAnalyticsPage() {
                                             }
                                             required
                                         />
-
                                     </div>
-
                                 </div>
-
 
                                 <div className="eap-form-note">
                                     The assessment will only
@@ -1909,9 +1603,7 @@ function ExamAnalyticsPage() {
                                     scheduled time window.
                                 </div>
 
-
                                 <div className="eap-modal-actions">
-
                                     <button
                                         type="button"
                                         className="eap-modal-cancel"
@@ -1920,7 +1612,6 @@ function ExamAnalyticsPage() {
                                     >
                                         Cancel
                                     </button>
-
 
                                     <button
                                         type="submit"
@@ -1934,28 +1625,17 @@ function ExamAnalyticsPage() {
                                             ? "Scheduling..."
                                             : "Schedule Assessment"}
                                     </button>
-
                                 </div>
-
                             </form>
-
                         </div>
-
                     </div>
-
                 )}
 
-
                 {showEditModal && (
-
                     <div className="eap-modal-overlay">
-
                         <div className="eap-modal">
-
                             <div className="eap-modal-header">
-
                                 <div>
-
                                     <span className="eap-modal-kicker">
                                         SCHEDULE MANAGEMENT
                                     </span>
@@ -1970,9 +1650,7 @@ function ExamAnalyticsPage() {
                                         this upcoming
                                         assessment.
                                     </p>
-
                                 </div>
-
 
                                 <button
                                     type="button"
@@ -1982,16 +1660,12 @@ function ExamAnalyticsPage() {
                                 >
                                     ×
                                 </button>
-
                             </div>
-
 
                             <form
                                 onSubmit={handleUpdateSchedule}
                             >
-
                                 <div className="eap-form-group">
-
                                     <label>
                                         Assessment
                                     </label>
@@ -2001,18 +1675,14 @@ function ExamAnalyticsPage() {
                                         value={editExamTitle}
                                         disabled
                                     />
-
                                 </div>
 
-
                                 <div className="eap-form-group">
-
                                     <label>
                                         Assign To
                                     </label>
 
                                     <div className="eap-assignment-options">
-
                                         <label
                                             className={`eap-assignment-option ${
                                                 editAssignmentType ===
@@ -2021,7 +1691,6 @@ function ExamAnalyticsPage() {
                                                     : ""
                                             }`}
                                         >
-
                                             <input
                                                 type="radio"
                                                 name="editAssignmentType"
@@ -2039,9 +1708,7 @@ function ExamAnalyticsPage() {
                                             <span>
                                                 Batch
                                             </span>
-
                                         </label>
-
 
                                         <label
                                             className={`eap-assignment-option ${
@@ -2051,7 +1718,6 @@ function ExamAnalyticsPage() {
                                                     : ""
                                             }`}
                                         >
-
                                             <input
                                                 type="radio"
                                                 name="editAssignmentType"
@@ -2069,18 +1735,12 @@ function ExamAnalyticsPage() {
                                             <span>
                                                 Individual Candidate
                                             </span>
-
                                         </label>
-
                                     </div>
-
                                 </div>
 
-
                                 {editAssignmentType === "Batch" ? (
-
                                     <div className="eap-form-group">
-
                                         <label>
                                             Batch
                                         </label>
@@ -2094,14 +1754,12 @@ function ExamAnalyticsPage() {
                                             }
                                             required
                                         >
-
                                             <option value="">
                                                 Select Batch
                                             </option>
 
                                             {batches.map(
                                                 (batch) => (
-
                                                     <option
                                                         key={
                                                             batch.batch_id
@@ -2118,18 +1776,12 @@ function ExamAnalyticsPage() {
                                                         {" "}
                                                         candidate(s)
                                                     </option>
-
                                                 )
                                             )}
-
                                         </select>
-
                                     </div>
-
                                 ) : (
-
                                     <div className="eap-form-group">
-
                                         <label>
                                             Candidate
                                         </label>
@@ -2145,14 +1797,12 @@ function ExamAnalyticsPage() {
                                             }
                                             required
                                         >
-
                                             <option value="">
                                                 Select Candidate
                                             </option>
 
                                             {candidates.map(
                                                 (candidate) => (
-
                                                     <option
                                                         key={
                                                             candidate.user_id
@@ -2170,21 +1820,14 @@ function ExamAnalyticsPage() {
                                                             ? ` (${candidate.batch_name})`
                                                             : " (No Batch)"}
                                                     </option>
-
                                                 )
                                             )}
-
                                         </select>
-
                                     </div>
-
                                 )}
 
-
                                 <div className="eap-time-grid">
-
                                     <div className="eap-form-group">
-
                                         <label>
                                             Scheduled Start
                                         </label>
@@ -2201,12 +1844,9 @@ function ExamAnalyticsPage() {
                                             }
                                             required
                                         />
-
                                     </div>
 
-
                                     <div className="eap-form-group">
-
                                         <label>
                                             Scheduled End
                                         </label>
@@ -2223,11 +1863,8 @@ function ExamAnalyticsPage() {
                                             }
                                             required
                                         />
-
                                     </div>
-
                                 </div>
-
 
                                 <div className="eap-form-note">
                                     Only Upcoming assessment
@@ -2235,9 +1872,7 @@ function ExamAnalyticsPage() {
                                     modified.
                                 </div>
 
-
                                 <div className="eap-modal-actions">
-
                                     <button
                                         type="button"
                                         className="eap-modal-cancel"
@@ -2248,7 +1883,6 @@ function ExamAnalyticsPage() {
                                     >
                                         Cancel
                                     </button>
-
 
                                     <button
                                         type="submit"
@@ -2261,22 +1895,14 @@ function ExamAnalyticsPage() {
                                             ? "Updating..."
                                             : "Update Schedule"}
                                     </button>
-
                                 </div>
-
                             </form>
-
                         </div>
-
                     </div>
-
                 )}
-
             </main>
-
         </div>
     );
 }
-
 
 export default ExamAnalyticsPage;

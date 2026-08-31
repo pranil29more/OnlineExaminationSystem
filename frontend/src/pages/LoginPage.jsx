@@ -1,13 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import { useAuth } from "../context/AuthContext";
 import API_BASE_URL from "../services/api";
-
 import "../styles/LoginPage.css";
 
 function LoginPage() {
-
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -22,9 +19,7 @@ function LoginPage() {
     const { login } = useAuth();
 
     const handleLogin = async () => {
-
         try {
-
             setLoginLoading(true);
 
             const response = await fetch(
@@ -48,7 +43,6 @@ function LoginPage() {
                 await response.json();
 
             if (response.ok) {
-
                 login(
                     data.token,
                     data.user
@@ -57,51 +51,31 @@ function LoginPage() {
                 if (
                     data.user.role === "Admin"
                 ) {
-
                     navigate("/dashboard");
-
                 } else {
-
                     navigate("/exams");
-
                 }
-
             } else {
-
                 alert(data.message);
-
             }
-
         } catch (error) {
-
             console.error(error);
-
         } finally {
-
             setLoginLoading(false);
-
         }
-
     };
 
     const handleRegister = () => {
-
         setRegisterLoading(true);
 
         navigate("/register");
-
     };
 
     return (
-
         <div className="lpg-page">
-
             <main className="lpg-container">
-
                 <section className="lpg-card">
-
                     <div className="lpg-header">
-
                         <span className="lpg-eyebrow">
                             Online Examination System
                         </span>
@@ -113,14 +87,10 @@ function LoginPage() {
                         <p className="lpg-subtitle">
                             Login to continue to your account.
                         </p>
-
                     </div>
 
-
                     <div className="lpg-form">
-
                         <div className="lpg-field">
-
                             <label
                                 htmlFor="lpg-email"
                                 className="lpg-label"
@@ -141,12 +111,9 @@ function LoginPage() {
                                 }
                                 disabled={loginLoading}
                             />
-
                         </div>
 
-
                         <div className="lpg-field">
-
                             <label
                                 htmlFor="lpg-password"
                                 className="lpg-label"
@@ -167,9 +134,7 @@ function LoginPage() {
                                 }
                                 disabled={loginLoading}
                             />
-
                         </div>
-
 
                         <button
                             type="button"
@@ -184,38 +149,10 @@ function LoginPage() {
                                 ? "Logging in..."
                                 : "Login"}
                         </button>
-
                     </div>
-
-
-                    {/* <div className="lpg-register-section">
-
-                        <p className="lpg-register-text">
-                            Don't have an account?
-                        </p>
-
-                        <button
-                            type="button"
-                            className="lpg-register-link"
-                            onClick={handleRegister}
-                            disabled={
-                                loginLoading ||
-                                registerLoading
-                            }
-                        >
-                            {registerLoading
-                                ? "Loading..."
-                                : "Create New Account"}
-                        </button>
-
-                    </div> */}
-
                 </section>
-
             </main>
-
         </div>
-
     );
 }
 

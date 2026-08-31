@@ -1,6 +1,5 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-
 from extensions import mysql
 from utils.decorators import role_required
 
@@ -581,9 +580,6 @@ def save_answer():
 
     # ==========================================
     # Verify Active Submission
-    #
-    # Also fetch the actual server-side
-    # attempt deadline information.
     # ==========================================
 
     submission_query = """
@@ -623,21 +619,6 @@ def save_answer():
 
     # ==========================================
     # Server-Side Deadline Validation
-    #
-    # The frontend timer is NOT trusted.
-    #
-    # The actual deadline is:
-    #
-    # start_time + exam duration
-    #
-    # IMPORTANT:
-    #
-    # Both the deadline and current time are
-    # calculated inside MySQL so they remain
-    # compatible with the existing IST handling.
-    #
-    # This avoids Python comparing a datetime
-    # object against a string returned by MySQL.
     # ==========================================
 
     deadline_query = """
@@ -722,9 +703,6 @@ def save_answer():
 
     # ==========================================
     # Verify Submitted Option
-    #
-    # Prevent arbitrary text from being stored
-    # as an MCQ answer.
     # ==========================================
 
     option_query = """
@@ -884,13 +862,6 @@ def submit_exam():
 
     # ==========================================
     # Fetch Active Submission
-    #
-    # The candidate can submit manually before
-    # the deadline or through the frontend
-    # auto-submit when the timer expires.
-    #
-    # The backend calculates the actual deadline
-    # independently of the frontend.
     # ==========================================
 
     submission_query = """

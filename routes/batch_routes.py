@@ -4,20 +4,14 @@ from flask import (
     jsonify,
     send_file,
 )
-
 from flask_jwt_extended import jwt_required
-
 import io
 import pandas as pd
-
 from extensions import mysql
 from utils.decorators import role_required
 
 
-batch_bp = Blueprint(
-    "batch",
-    __name__
-)
+batch_bp = Blueprint("batch", __name__)
 
 
 @batch_bp.route(

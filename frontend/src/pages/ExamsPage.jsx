@@ -1,16 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import API_BASE_URL from "../services/api";
 import Navbar from "../components/Navbar";
 import PageLoader from "../components/PageLoader";
 import { useAuth } from "../context/AuthContext";
-
 import "../styles/ExamsPage.css";
 
-
 function ExamsPage() {
-
     const [exams, setExams] = useState([]);
 
     const [practiceExams, setPracticeExams] =
@@ -44,22 +40,16 @@ function ExamsPage() {
 
     const navigate = useNavigate();
 
-
     // ==========================================
     // Fetch Exams
     // ==========================================
 
     useEffect(() => {
-
         fetchExams();
-
     }, [role]);
 
-
     const fetchExams = async () => {
-
         try {
-
             setLoading(true);
 
             const token =
@@ -84,7 +74,6 @@ function ExamsPage() {
                 await response.json();
 
             if (!response.ok) {
-
                 alert(
                     data.message ||
                         "Unable to load exams."
@@ -93,13 +82,11 @@ function ExamsPage() {
                 return;
             }
 
-
             // ==========================================
             // Candidate Exams
             // ==========================================
 
             if (role === "Candidate") {
-
                 setPracticeExams(
                     data.practice_exams || []
                 );
@@ -110,7 +97,6 @@ function ExamsPage() {
 
                 return;
             }
-
 
             // ==========================================
             // Admin / Examiner Exams
@@ -139,21 +125,16 @@ function ExamsPage() {
             setActualAssessments(
                 actual
             );
-
         } catch (error) {
-
             console.error(error);
 
             alert(
                 "Unable to load exams."
             );
-
         } finally {
-
             setLoading(false);
         }
     };
-
 
     // ==========================================
     // Filter Exams
@@ -173,7 +154,6 @@ function ExamsPage() {
                     .includes(searchText)
         );
 
-
     const filteredPracticeExams =
         practiceExams.filter(
             (exam) =>
@@ -185,17 +165,14 @@ function ExamsPage() {
                     .includes(searchText)
         );
 
-
     // ==========================================
     // Handle Exam Click
     // ==========================================
 
     const handleExamClick = async (exam) => {
-
         if (loadingExamId !== null) {
             return;
         }
-
 
         // ==========================================
         // Admin / Examiner
@@ -205,7 +182,6 @@ function ExamsPage() {
             role === "Admin" ||
             role === "Examiner"
         ) {
-
             setLoadingExamId(
                 exam.exam_id
             );
@@ -216,7 +192,6 @@ function ExamsPage() {
 
             return;
         }
-
 
         // ==========================================
         // Candidate
@@ -233,7 +208,6 @@ function ExamsPage() {
         // ==========================================
 
         try {
-
             setLoadingExamId(
                 exam.exam_id
             );
@@ -255,7 +229,6 @@ function ExamsPage() {
                 await response.json();
 
             if (!response.ok) {
-
                 alert(
                     session.message ||
                         "Unable to load exam session."
@@ -265,7 +238,6 @@ function ExamsPage() {
             }
 
             setSelectedExam(exam);
-
 
             // ==========================================
             // IN PROGRESS
@@ -282,7 +254,6 @@ function ExamsPage() {
                 session.status ===
                 "In Progress"
             ) {
-
                 setModalMode(
                     "resume"
                 );
@@ -292,7 +263,6 @@ function ExamsPage() {
                 return;
             }
 
-
             // ==========================================
             // NOT STARTED
             // ==========================================
@@ -301,7 +271,6 @@ function ExamsPage() {
                 session.status ===
                 "Not Started"
             ) {
-
                 // ==========================================
                 // Actual Assessment - Upcoming
                 // ==========================================
@@ -312,7 +281,6 @@ function ExamsPage() {
                     exam.availability_status ===
                         "Upcoming"
                 ) {
-
                     alert(
                         `This assessment has not started yet.\n\nScheduled Start: ${exam.scheduled_start}`
                     );
@@ -321,7 +289,6 @@ function ExamsPage() {
 
                     return;
                 }
-
 
                 // ==========================================
                 // Actual Assessment - Ended
@@ -336,7 +303,6 @@ function ExamsPage() {
                     exam.availability_status ===
                         "Ended"
                 ) {
-
                     alert(
                         `This assessment has ended.\n\nScheduled End: ${exam.scheduled_end}`
                     );
@@ -345,7 +311,6 @@ function ExamsPage() {
 
                     return;
                 }
-
 
                 // ==========================================
                 // Available / Practice
@@ -360,7 +325,6 @@ function ExamsPage() {
                 return;
             }
 
-
             // ==========================================
             // Practice Completed
             // ==========================================
@@ -369,7 +333,6 @@ function ExamsPage() {
                 session.status ===
                 "Practice Completed"
             ) {
-
                 setModalMode(
                     "practice-completed"
                 );
@@ -378,7 +341,6 @@ function ExamsPage() {
 
                 return;
             }
-
 
             // ==========================================
             // Completed / Auto Submitted
@@ -390,7 +352,6 @@ function ExamsPage() {
                 session.status ===
                     "Auto Submitted"
             ) {
-
                 setModalMode(
                     "completed"
                 );
@@ -399,28 +360,22 @@ function ExamsPage() {
 
                 return;
             }
-
         } catch (error) {
-
             console.error(error);
 
             alert(
                 "Unable to load exam session."
             );
-
         } finally {
-
             setLoadingExamId(null);
         }
     };
-
 
     // ==========================================
     // Start Exam
     // ==========================================
 
     const handleStartExam = async () => {
-
         if (
             actionLoading ||
             !selectedExam
@@ -429,7 +384,6 @@ function ExamsPage() {
         }
 
         try {
-
             setActionLoading(true);
 
             const token =
@@ -459,7 +413,6 @@ function ExamsPage() {
                 await response.json();
 
             if (response.ok) {
-
                 setShowModal(false);
 
                 navigate(
@@ -475,9 +428,7 @@ function ExamsPage() {
             );
 
             setActionLoading(false);
-
         } catch (error) {
-
             console.error(error);
 
             alert(
@@ -488,13 +439,11 @@ function ExamsPage() {
         }
     };
 
-
     // ==========================================
     // Resume Exam
     // ==========================================
 
     const handleResumeExam = () => {
-
         if (
             actionLoading ||
             !selectedExam
@@ -505,23 +454,19 @@ function ExamsPage() {
         setActionLoading(true);
 
         setTimeout(() => {
-
             setShowModal(false);
 
             navigate(
                 `/exam/${selectedExam.exam_id}`
             );
-
         }, 250);
     };
-
 
     // ==========================================
     // Close Modal
     // ==========================================
 
     const closeModal = () => {
-
         if (actionLoading) {
             return;
         }
@@ -533,7 +478,6 @@ function ExamsPage() {
         setActionLoading(false);
     };
 
-
     // ==========================================
     // Candidate Exam Card
     // ==========================================
@@ -541,11 +485,9 @@ function ExamsPage() {
     const renderCandidateExamCard = (
         exam
     ) => {
-
         const isActual =
             exam.exam_type ===
             "Actual";
-
 
         // ==========================================
         // IMPORTANT
@@ -571,9 +513,7 @@ function ExamsPage() {
             loadingExamId ===
             exam.exam_id;
 
-
         return (
-
             <div
                 key={exam.exam_id}
                 className={`ep-exam-card ${
@@ -592,11 +532,8 @@ function ExamsPage() {
                     isCardLoading
                 }
             >
-
                 <div className="ep-exam-card-header">
-
                     <div className="ep-exam-heading">
-
                         <span className="ep-exam-number">
                             EXAM #
                             {exam.exam_id}
@@ -605,12 +542,9 @@ function ExamsPage() {
                         <h3 className="ep-exam-title">
                             {exam.title}
                         </h3>
-
                     </div>
 
-
                     {isActual && (
-
                         <span
                             className={`ep-availability-badge ${exam.availability_status
                                 .toLowerCase()
@@ -623,16 +557,11 @@ function ExamsPage() {
                                 exam.availability_status
                             }
                         </span>
-
                     )}
-
                 </div>
 
-
                 <div className="ep-exam-details">
-
                     <div className="ep-exam-detail">
-
                         <span className="ep-detail-label">
                             Type
                         </span>
@@ -640,12 +569,9 @@ function ExamsPage() {
                         <strong>
                             {exam.exam_type}
                         </strong>
-
                     </div>
 
-
                     <div className="ep-exam-detail">
-
                         <span className="ep-detail-label">
                             Duration
                         </span>
@@ -653,12 +579,9 @@ function ExamsPage() {
                         <strong>
                             {exam.duration} mins
                         </strong>
-
                     </div>
 
-
                     <div className="ep-exam-detail">
-
                         <span className="ep-detail-label">
                             Total Marks
                         </span>
@@ -666,12 +589,9 @@ function ExamsPage() {
                         <strong>
                             {exam.total_marks}
                         </strong>
-
                     </div>
 
-
                     <div className="ep-exam-detail">
-
                         <span className="ep-detail-label">
                             Passing Marks
                         </span>
@@ -679,25 +599,17 @@ function ExamsPage() {
                         <strong>
                             {exam.passing_marks}
                         </strong>
-
                     </div>
-
                 </div>
 
-
                 {isActual && (
-
                     <div className="ep-schedule-area">
-
                         <div className="ep-schedule-heading">
                             Assessment Schedule
                         </div>
 
-
                         <div className="ep-schedule-details">
-
                             <div>
-
                                 <span>
                                     Starts
                                 </span>
@@ -707,12 +619,9 @@ function ExamsPage() {
                                         exam.scheduled_start
                                     }
                                 </strong>
-
                             </div>
 
-
                             <div>
-
                                 <span>
                                     Ends
                                 </span>
@@ -722,19 +631,13 @@ function ExamsPage() {
                                         exam.scheduled_end
                                     }
                                 </strong>
-
                             </div>
-
                         </div>
-
                     </div>
-
                 )}
-
             </div>
         );
     };
-
 
     // ==========================================
     // Management Exam Card
@@ -743,7 +646,6 @@ function ExamsPage() {
     const renderManagementExamCard = (
         exam
     ) => {
-
         const isActual =
             exam.exam_type ===
             "Actual";
@@ -757,7 +659,6 @@ function ExamsPage() {
             exam.exam_id;
 
         return (
-
             <div
                 key={exam.exam_id}
                 className={`ep-exam-card ${
@@ -772,11 +673,8 @@ function ExamsPage() {
                     isCardLoading
                 }
             >
-
                 <div className="ep-exam-card-header">
-
                     <div className="ep-exam-heading">
-
                         <span className="ep-exam-number">
                             EXAM #
                             {exam.exam_id}
@@ -785,12 +683,9 @@ function ExamsPage() {
                         <h3 className="ep-exam-title">
                             {exam.title}
                         </h3>
-
                     </div>
 
-
                     {isActual && (
-
                         <span
                             className={`ep-availability-badge ${
                                 isScheduled
@@ -802,16 +697,11 @@ function ExamsPage() {
                                 ? "Scheduled"
                                 : "Not Scheduled"}
                         </span>
-
                     )}
-
                 </div>
 
-
                 <div className="ep-exam-details">
-
                     <div className="ep-exam-detail">
-
                         <span className="ep-detail-label">
                             Type
                         </span>
@@ -819,12 +709,9 @@ function ExamsPage() {
                         <strong>
                             {exam.exam_type}
                         </strong>
-
                     </div>
 
-
                     <div className="ep-exam-detail">
-
                         <span className="ep-detail-label">
                             Duration
                         </span>
@@ -832,12 +719,9 @@ function ExamsPage() {
                         <strong>
                             {exam.duration} mins
                         </strong>
-
                     </div>
 
-
                     <div className="ep-exam-detail">
-
                         <span className="ep-detail-label">
                             Total Marks
                         </span>
@@ -845,12 +729,9 @@ function ExamsPage() {
                         <strong>
                             {exam.total_marks}
                         </strong>
-
                     </div>
 
-
                     <div className="ep-exam-detail">
-
                         <span className="ep-detail-label">
                             Passing Marks
                         </span>
@@ -858,27 +739,18 @@ function ExamsPage() {
                         <strong>
                             {exam.passing_marks}
                         </strong>
-
                     </div>
-
                 </div>
 
-
                 {isActual && (
-
                     <div className="ep-schedule-area">
-
                         <div className="ep-schedule-heading">
                             Assessment Schedule
                         </div>
 
-
                         {isScheduled ? (
-
                             <div className="ep-schedule-details">
-
                                 <div>
-
                                     <span>
                                         Starts
                                     </span>
@@ -888,12 +760,9 @@ function ExamsPage() {
                                             exam.scheduled_start
                                         }
                                     </strong>
-
                                 </div>
 
-
                                 <div>
-
                                     <span>
                                         Ends
                                     </span>
@@ -903,72 +772,52 @@ function ExamsPage() {
                                             exam.scheduled_end
                                         }
                                     </strong>
-
                                 </div>
-
                             </div>
-
                         ) : (
-
                             <p className="ep-schedule-empty">
                                 This assessment has
                                 not been scheduled yet.
                             </p>
-
                         )}
-
                     </div>
-
                 )}
-
             </div>
         );
     };
-
 
     // ==========================================
     // Loading
     // ==========================================
 
     if (loading) {
-
         return (
-
             <div className="ep-page">
-
                 <Navbar />
 
                 <PageLoader
                     message="Loading Exams..."
                 />
-
             </div>
         );
     }
-
 
     // ==========================================
     // Render
     // ==========================================
 
     return (
-
         <div className="ep-page">
-
             <Navbar />
 
-
             <main className="ep-page-container">
-
 
                 {/* ==========================================
                     Page Header
                 ========================================== */}
 
                 <header className="ep-page-header">
-
                     <div>
-
                         <span className="ep-page-eyebrow">
                             {role === "Candidate"
                                 ? "ASSESSMENTS"
@@ -984,20 +833,15 @@ function ExamsPage() {
                                 ? "View your available assessments and practice examinations."
                                 : "Review examination details and assessment schedules."}
                         </p>
-
                     </div>
-
                 </header>
-
 
                 {/* ==========================================
                     Search
                 ========================================== */}
 
                 <section className="ep-search-section">
-
                     <div className="ep-search-wrapper">
-
                         <input
                             id="exam-search"
                             type="text"
@@ -1010,14 +854,10 @@ function ExamsPage() {
                                 )
                             }
                         />
-
                     </div>
 
-
                     {search.trim() && (
-
                         <p className="ep-search-summary">
-
                             Showing{" "}
 
                             <strong>
@@ -1036,24 +876,17 @@ function ExamsPage() {
                                     ? "exam"
                                     : "exams"
                             }
-
                         </p>
-
                     )}
-
                 </section>
-
 
                 {/* ==========================================
                     Actual Assessments
                 ========================================== */}
 
                 <section className="ep-section">
-
                     <div className="ep-section-header">
-
                         <div>
-
                             <span className="ep-section-kicker">
                                 ACTUAL
                             </span>
@@ -1068,12 +901,9 @@ function ExamsPage() {
                                     ? "Assessments assigned to you with their current availability."
                                     : "Formal assessments created for candidate evaluation."}
                             </p>
-
                         </div>
 
-
                         <span className="ep-count-badge">
-
                             {
                                 filteredActualAssessments.length
                             }{" "}
@@ -1084,21 +914,16 @@ function ExamsPage() {
                                     ? "Assessment"
                                     : "Assessments"
                             }
-
                         </span>
-
                     </div>
-
 
                     {
                         filteredActualAssessments.length ===
                         0 ? (
-
                             <div
                                 key="actual-empty"
                                 className="ep-empty-state"
                             >
-
                                 <div className="ep-empty-icon">
                                     —
                                 </div>
@@ -1111,16 +936,12 @@ function ExamsPage() {
                                           ? "No actual assessments have been scheduled for you."
                                           : "No actual assessments have been created."}
                                 </strong>
-
                             </div>
-
                         ) : (
-
                             <div
                                 key="actual-results"
                                 className="ep-exam-grid"
                             >
-
                                 {
                                     filteredActualAssessments.map(
                                         (exam) =>
@@ -1134,25 +955,18 @@ function ExamsPage() {
                                                   )
                                     )
                                 }
-
                             </div>
-
                         )
                     }
-
                 </section>
-
 
                 {/* ==========================================
                     Practice Exams
                 ========================================== */}
 
                 <section className="ep-section">
-
                     <div className="ep-section-header">
-
                         <div>
-
                             <span className="ep-section-kicker">
                                 PRACTICE
                             </span>
@@ -1167,12 +981,9 @@ function ExamsPage() {
                                     ? "Practice examinations available for preparation and revision."
                                     : "Practice examinations available for training and evaluation."}
                             </p>
-
                         </div>
 
-
                         <span className="ep-count-badge">
-
                             {
                                 filteredPracticeExams.length
                             }{" "}
@@ -1183,21 +994,16 @@ function ExamsPage() {
                                     ? "Exam"
                                     : "Exams"
                             }
-
                         </span>
-
                     </div>
-
 
                     {
                         filteredPracticeExams.length ===
                         0 ? (
-
                             <div
                                 key="practice-empty"
                                 className="ep-empty-state"
                             >
-
                                 <div className="ep-empty-icon">
                                     —
                                 </div>
@@ -1210,16 +1016,12 @@ function ExamsPage() {
                                           ? "No practice exams are currently available."
                                           : "No practice exams have been created."}
                                 </strong>
-
                             </div>
-
                         ) : (
-
                             <div
                                 key="practice-results"
                                 className="ep-exam-grid"
                             >
-
                                 {
                                     filteredPracticeExams.map(
                                         (exam) =>
@@ -1233,14 +1035,10 @@ function ExamsPage() {
                                                   )
                                     )
                                 }
-
                             </div>
-
                         )
                     }
-
                 </section>
-
 
                 {/* ==========================================
                     Candidate Exam Modal
@@ -1249,23 +1047,18 @@ function ExamsPage() {
                 {
                     showModal &&
                     selectedExam && (
-
                         <div
                             className="ep-modal-overlay"
                             onClick={closeModal}
                         >
-
                             <div
                                 className="ep-exam-modal"
                                 onClick={(event) =>
                                     event.stopPropagation()
                                 }
                             >
-
                                 <div className="ep-modal-header">
-
                                     <span className="ep-modal-label">
-
                                         {
                                             modalMode ===
                                             "start"
@@ -1278,12 +1071,9 @@ function ExamsPage() {
                                                     ? "Practice Completed"
                                                     : "Already Attempted"
                                         }
-
                                     </span>
 
-
                                     <h2>
-
                                         {
                                             modalMode ===
                                             "start"
@@ -1296,23 +1086,17 @@ function ExamsPage() {
                                                     ? "Practice Exam Completed"
                                                     : "Exam Already Attempted"
                                         }
-
                                     </h2>
-
 
                                     <p>
                                         {
                                             selectedExam.title
                                         }
                                     </p>
-
                                 </div>
 
-
                                 <div className="ep-modal-details">
-
                                     <div className="ep-modal-detail">
-
                                         <span>
                                             Duration
                                         </span>
@@ -1323,12 +1107,9 @@ function ExamsPage() {
                                             }{" "}
                                             mins
                                         </strong>
-
                                     </div>
 
-
                                     <div className="ep-modal-detail">
-
                                         <span>
                                             Total Marks
                                         </span>
@@ -1338,12 +1119,9 @@ function ExamsPage() {
                                                 selectedExam.total_marks
                                             }
                                         </strong>
-
                                     </div>
 
-
                                     <div className="ep-modal-detail">
-
                                         <span>
                                             Passing Marks
                                         </span>
@@ -1353,11 +1131,8 @@ function ExamsPage() {
                                                 selectedExam.passing_marks
                                             }
                                         </strong>
-
                                     </div>
-
                                 </div>
-
 
                                 <div
                                     className={`ep-modal-warning ${
@@ -1370,13 +1145,10 @@ function ExamsPage() {
                                               : ""
                                     }`}
                                 >
-
                                     {
                                         modalMode ===
                                             "start" && (
-
                                             <>
-
                                                 <strong>
                                                     Before
                                                     you begin
@@ -1401,19 +1173,14 @@ function ExamsPage() {
                                                     once it has
                                                     started.
                                                 </p>
-
                                             </>
-
                                         )
                                     }
-
 
                                     {
                                         modalMode ===
                                             "resume" && (
-
                                             <>
-
                                                 <strong>
                                                     Your exam
                                                     is already
@@ -1435,19 +1202,14 @@ function ExamsPage() {
                                                     </strong>{" "}
                                                     to continue.
                                                 </p>
-
                                             </>
-
                                         )
                                     }
-
 
                                     {
                                         modalMode ===
                                             "practice-completed" && (
-
                                             <>
-
                                                 <strong>
                                                     Practice
                                                     attempt
@@ -1470,19 +1232,14 @@ function ExamsPage() {
                                                     further
                                                     practice.
                                                 </p>
-
                                             </>
-
                                         )
                                     }
-
 
                                     {
                                         modalMode ===
                                             "completed" && (
-
                                             <>
-
                                                 <strong>
                                                     This
                                                     assessment
@@ -1498,17 +1255,12 @@ function ExamsPage() {
                                                     for actual
                                                     assessments.
                                                 </p>
-
                                             </>
-
                                         )
                                     }
-
                                 </div>
 
-
                                 <div className="ep-modal-actions">
-
                                     <button
                                         type="button"
                                         className="ep-modal-cancel"
@@ -1522,11 +1274,9 @@ function ExamsPage() {
                                         Close
                                     </button>
 
-
                                     {
                                         modalMode ===
                                             "start" && (
-
                                             <button
                                                 type="button"
                                                 className={`ep-modal-start ${
@@ -1547,15 +1297,12 @@ function ExamsPage() {
                                                         : "Start Exam"
                                                 }
                                             </button>
-
                                         )
                                     }
-
 
                                     {
                                         modalMode ===
                                             "resume" && (
-
                                             <button
                                                 type="button"
                                                 className={`ep-modal-start ${
@@ -1576,15 +1323,12 @@ function ExamsPage() {
                                                         : "Resume Exam"
                                                 }
                                             </button>
-
                                         )
                                     }
-
 
                                     {
                                         modalMode ===
                                             "practice-completed" && (
-
                                             <button
                                                 type="button"
                                                 className={`ep-modal-start ${
@@ -1605,24 +1349,16 @@ function ExamsPage() {
                                                         : "Attempt Again"
                                                 }
                                             </button>
-
                                         )
                                     }
-
                                 </div>
-
                             </div>
-
                         </div>
-
                     )
                 }
-
             </main>
-
         </div>
     );
 }
-
 
 export default ExamsPage;

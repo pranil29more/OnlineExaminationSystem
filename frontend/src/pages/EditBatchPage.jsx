@@ -3,10 +3,8 @@ import {
     useNavigate,
     useParams,
 } from "react-router-dom";
-
 import API_BASE_URL from "../services/api";
 import Navbar from "../components/Navbar";
-
 import "../styles/EditBatchPage.css";
 
 function EditBatchPage() {
@@ -35,7 +33,6 @@ function EditBatchPage() {
     const [batchUpdating, setBatchUpdating] =
         useState(false);
 
-
     // =========================================================
     // Fetch Batch
     // =========================================================
@@ -44,11 +41,8 @@ function EditBatchPage() {
         fetchBatch();
     }, []);
 
-
     const fetchBatch = async () => {
-
         try {
-
             const token =
                 localStorage.getItem("token");
 
@@ -66,7 +60,6 @@ function EditBatchPage() {
                 await response.json();
 
             if (!response.ok) {
-
                 alert(
                     data.message ||
                         "Unable to load batch."
@@ -98,22 +91,16 @@ function EditBatchPage() {
             setEndDate(
                 data.end_date || ""
             );
-
         } catch (error) {
-
             console.error(error);
-
         }
-
     };
-
 
     // =========================================================
     // Update Batch
     // =========================================================
 
     const handleUpdateBatch = async (e) => {
-
         e.preventDefault();
 
         if (batchUpdating) {
@@ -121,7 +108,6 @@ function EditBatchPage() {
         }
 
         if (endDate < startDate) {
-
             alert(
                 "End date cannot be before the start date."
             );
@@ -130,7 +116,6 @@ function EditBatchPage() {
         }
 
         try {
-
             setBatchUpdating(true);
 
             const token =
@@ -173,7 +158,6 @@ function EditBatchPage() {
                 await response.json();
 
             if (response.ok) {
-
                 alert(
                     "Batch updated successfully!"
                 );
@@ -181,43 +165,29 @@ function EditBatchPage() {
                 navigate(
                     "/batch-management"
                 );
-
             } else {
-
                 alert(
                     data.message ||
                         "Unable to update batch."
                 );
-
             }
-
         } catch (error) {
-
             console.error(error);
 
             alert(
                 "Unable to update batch."
             );
-
         } finally {
-
             setBatchUpdating(false);
-
         }
-
     };
 
-
     return (
-
         <div className="ebp-page">
-
             <Navbar />
 
             <main className="ebp-container">
-
                 <header className="ebp-header">
-
                     <span className="ebp-eyebrow">
                         BATCH MANAGEMENT
                     </span>
@@ -231,19 +201,14 @@ function EditBatchPage() {
                         trainer information, technology,
                         and training schedule.
                     </p>
-
                 </header>
-
 
                 <form
                     className="ebp-form-card"
                     onSubmit={handleUpdateBatch}
                 >
-
                     <div className="ebp-form-section">
-
                         <div className="ebp-section-heading">
-
                             <span className="ebp-section-eyebrow">
                                 BATCH CONFIGURATION
                             </span>
@@ -257,16 +222,13 @@ function EditBatchPage() {
                                 configured for this
                                 training batch.
                             </p>
-
                         </div>
-
 
                         {/* =================================================
                             Batch Name
                         ================================================= */}
 
                         <div className="ebp-field">
-
                             <label
                                 className="ebp-field-label"
                                 htmlFor="edit-batch-name"
@@ -290,16 +252,13 @@ function EditBatchPage() {
                                 }
                                 required
                             />
-
                         </div>
-
 
                         {/* =================================================
                             Technology
                         ================================================= */}
 
                         <div className="ebp-field">
-
                             <label
                                 className="ebp-field-label"
                                 htmlFor="edit-technology"
@@ -323,16 +282,13 @@ function EditBatchPage() {
                                 }
                                 required
                             />
-
                         </div>
-
 
                         {/* =================================================
                             Trainer Name
                         ================================================= */}
 
                         <div className="ebp-field">
-
                             <label
                                 className="ebp-field-label"
                                 htmlFor="edit-trainer-name"
@@ -356,16 +312,13 @@ function EditBatchPage() {
                                 }
                                 required
                             />
-
                         </div>
-
 
                         {/* =================================================
                             Description
                         ================================================= */}
 
                         <div className="ebp-field">
-
                             <label
                                 className="ebp-field-label"
                                 htmlFor="edit-description"
@@ -389,9 +342,7 @@ function EditBatchPage() {
                                 }
                                 required
                             />
-
                         </div>
-
 
                         {/* =================================================
                             Training Schedule
@@ -402,9 +353,7 @@ function EditBatchPage() {
                         </div>
 
                         <div className="ebp-date-grid">
-
                             <div className="ebp-field">
-
                                 <label
                                     className="ebp-field-label"
                                     htmlFor="edit-start-date"
@@ -418,7 +367,6 @@ function EditBatchPage() {
                                     type="date"
                                     value={startDate}
                                     onChange={(e) => {
-
                                         const newStartDate =
                                             e.target.value;
 
@@ -431,23 +379,17 @@ function EditBatchPage() {
                                             newStartDate >
                                                 endDate
                                         ) {
-
                                             setEndDate("");
-
                                         }
-
                                     }}
                                     disabled={
                                         batchUpdating
                                     }
                                     required
                                 />
-
                             </div>
 
-
                             <div className="ebp-field">
-
                                 <label
                                     className="ebp-field-label"
                                     htmlFor="edit-end-date"
@@ -474,11 +416,8 @@ function EditBatchPage() {
                                     }
                                     required
                                 />
-
                             </div>
-
                         </div>
-
 
                         {/* =================================================
                             Update Button
@@ -495,15 +434,10 @@ function EditBatchPage() {
                                 ? "Updating Batch..."
                                 : "Update Batch"}
                         </button>
-
                     </div>
-
                 </form>
-
             </main>
-
         </div>
-
     );
 }
 

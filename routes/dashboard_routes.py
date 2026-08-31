@@ -1,6 +1,5 @@
 from flask import Blueprint, jsonify
 from flask_jwt_extended import jwt_required
-
 from extensions import mysql
 from utils.decorators import role_required
 

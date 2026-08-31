@@ -1,18 +1,10 @@
 from dotenv import load_dotenv
-
 load_dotenv(dotenv_path=".env")
-
-
 from flask import Flask
-
 from flask_jwt_extended import JWTManager
-
 from flask_cors import CORS
-
 from config import Config
-
 from extensions import mysql, bcrypt
-
 from datetime import timedelta
 
 

@@ -4,20 +4,16 @@ import {
     useNavigate,
     useSearchParams,
 } from "react-router-dom";
-
 import API_BASE_URL from "../services/api";
 import Navbar from "../components/Navbar";
-
 import "../styles/AddQuestionPage.css";
 
 function AddQuestionPage() {
-
     const navigate = useNavigate();
 
     const location = useLocation();
 
-    const [searchParams] =
-        useSearchParams();
+    const [searchParams] = useSearchParams();
 
     const [examId, setExamId] = useState(
         searchParams.get("examId") || ""
@@ -65,18 +61,15 @@ function AddQuestionPage() {
     const [doneProcessing, setDoneProcessing] =
         useState(false);
 
-
     // =========================================================
     // Navigation Destination
     // =========================================================
 
     const handleFinishNavigation = () => {
-
         const from =
             location.state?.from;
 
         if (from === "edit-exam") {
-
             navigate(
                 `/edit-exam/${examId}`
             );
@@ -89,15 +82,12 @@ function AddQuestionPage() {
         );
     };
 
-
     // =========================================================
     // Manual Add Question
     // =========================================================
 
     const handleAddQuestion = async () => {
-
         if (!examId) {
-
             alert(
                 "Please enter the Exam ID."
             );
@@ -106,7 +96,6 @@ function AddQuestionPage() {
         }
 
         if (!questionText.trim()) {
-
             alert(
                 "Please enter the question."
             );
@@ -118,7 +107,6 @@ function AddQuestionPage() {
             !marks ||
             Number(marks) <= 0
         ) {
-
             alert(
                 "Please enter valid marks."
             );
@@ -132,7 +120,6 @@ function AddQuestionPage() {
             !option3.trim() ||
             !option4.trim()
         ) {
-
             alert(
                 "Please enter all four options."
             );
@@ -141,7 +128,6 @@ function AddQuestionPage() {
         }
 
         if (!correctOption.trim()) {
-
             alert(
                 "Please enter the correct option."
             );
@@ -166,7 +152,6 @@ function AddQuestionPage() {
             );
 
         if (!matchingCorrectOption) {
-
             alert(
                 "Correct option must match one of the four options."
             );
@@ -175,7 +160,6 @@ function AddQuestionPage() {
         }
 
         try {
-
             const token =
                 localStorage.getItem("token");
 
@@ -216,7 +200,6 @@ function AddQuestionPage() {
                 await response.json();
 
             if (response.ok) {
-
                 alert(
                     "Question Added Successfully"
                 );
@@ -238,9 +221,7 @@ function AddQuestionPage() {
                 setCorrectOption("");
 
                 return true;
-
             } else {
-
                 alert(
                     data.message ||
                         "Unable to add question."
@@ -248,9 +229,7 @@ function AddQuestionPage() {
 
                 return false;
             }
-
         } catch (error) {
-
             console.error(error);
 
             alert(
@@ -261,13 +240,11 @@ function AddQuestionPage() {
         }
     };
 
-
     // =========================================================
     // Add Question Button
     // =========================================================
 
     const handleAddQuestionClick = async () => {
-
         if (
             questionAdding ||
             doneProcessing ||
@@ -279,22 +256,17 @@ function AddQuestionPage() {
         setQuestionAdding(true);
 
         try {
-
             await handleAddQuestion();
-
         } finally {
-
             setQuestionAdding(false);
         }
     };
-
 
     // =========================================================
     // Done
     // =========================================================
 
     const handleDone = () => {
-
         if (
             questionAdding ||
             bulkUploading
@@ -303,7 +275,6 @@ function AddQuestionPage() {
         }
 
         if (!examId) {
-
             alert(
                 "Please enter the Exam ID."
             );
@@ -314,7 +285,6 @@ function AddQuestionPage() {
         handleFinishNavigation();
     };
 
-
     // =========================================================
     // Bulk File Selection
     // =========================================================
@@ -322,12 +292,10 @@ function AddQuestionPage() {
     const handleBulkFileChange = (
         event
     ) => {
-
         const selectedFile =
             event.target.files[0];
 
         if (!selectedFile) {
-
             setBulkFile(null);
 
             return;
@@ -339,7 +307,6 @@ function AddQuestionPage() {
         if (
             !fileName.endsWith(".xlsx")
         ) {
-
             alert(
                 "Please select an .xlsx Excel file."
             );
@@ -354,13 +321,11 @@ function AddQuestionPage() {
         setBulkFile(selectedFile);
     };
 
-
     // =========================================================
     // Bulk Upload Questions
     // =========================================================
 
     const handleBulkUpload = async () => {
-
         if (
             bulkUploading ||
             questionAdding ||
@@ -370,7 +335,6 @@ function AddQuestionPage() {
         }
 
         if (!examId) {
-
             alert(
                 "Please enter the Exam ID."
             );
@@ -382,7 +346,6 @@ function AddQuestionPage() {
             !bulkMarks ||
             Number(bulkMarks) <= 0
         ) {
-
             alert(
                 "Please enter valid marks per question."
             );
@@ -391,7 +354,6 @@ function AddQuestionPage() {
         }
 
         if (!bulkFile) {
-
             alert(
                 "Please select an Excel file."
             );
@@ -400,7 +362,6 @@ function AddQuestionPage() {
         }
 
         try {
-
             setBulkUploading(true);
 
             const token =
@@ -442,7 +403,6 @@ function AddQuestionPage() {
                 await response.json();
 
             if (!response.ok) {
-
                 alert(
                     data.message ||
                         "Unable to upload questions."
@@ -466,37 +426,27 @@ function AddQuestionPage() {
                 );
 
             if (fileInput) {
-
                 fileInput.value = "";
             }
 
             handleFinishNavigation();
-
         } catch (error) {
-
             console.error(error);
 
             alert(
                 "Unable to upload questions."
             );
-
         } finally {
-
             setBulkUploading(false);
         }
     };
 
-
     return (
-
         <div className="aqp-page">
-
             <Navbar />
 
             <div className="aqp-container">
-
                 <div className="aqp-header">
-
                     <span className="aqp-eyebrow">
                         Examination Management
                     </span>
@@ -510,18 +460,14 @@ function AddQuestionPage() {
                         multiple MCQ questions using the
                         prescribed Excel format.
                     </p>
-
                 </div>
 
-
                 <div className="aqp-form-card">
-
                     {/* =================================================
                         Exam ID
                     ================================================= */}
 
                     <div className="aqp-exam-section">
-
                         <label className="aqp-field-label">
                             Exam ID
                         </label>
@@ -542,16 +488,13 @@ function AddQuestionPage() {
                                 bulkUploading
                             }
                         />
-
                     </div>
-
 
                     {/* =================================================
                         Entry Mode
                     ================================================= */}
 
                     <div className="aqp-mode-switch">
-
                         <button
                             type="button"
                             className={`aqp-mode-btn ${
@@ -593,20 +536,15 @@ function AddQuestionPage() {
                         >
                             Bulk Upload
                         </button>
-
                     </div>
-
 
                     {/* =================================================
                         Manual Entry
                     ================================================= */}
 
                     {entryMode === "manual" && (
-
                         <div className="aqp-mode-content">
-
                             <div className="aqp-section-heading">
-
                                 <span className="aqp-section-eyebrow">
                                     Question Entry
                                 </span>
@@ -620,9 +558,7 @@ function AddQuestionPage() {
                                     question for the
                                     selected examination.
                                 </p>
-
                             </div>
-
 
                             <label className="aqp-field-label">
                                 Question
@@ -645,7 +581,6 @@ function AddQuestionPage() {
                                 }
                             />
 
-
                             <label className="aqp-field-label">
                                 Difficulty
                             </label>
@@ -664,7 +599,6 @@ function AddQuestionPage() {
                                     bulkUploading
                                 }
                             >
-
                                 <option value="Easy">
                                     Easy
                                 </option>
@@ -676,9 +610,7 @@ function AddQuestionPage() {
                                 <option value="Hard">
                                     Hard
                                 </option>
-
                             </select>
-
 
                             <label className="aqp-field-label">
                                 Marks
@@ -703,13 +635,11 @@ function AddQuestionPage() {
                                 }
                             />
 
-
                             <div className="aqp-subheading">
                                 Answer Options
                             </div>
 
                             <div className="aqp-options-grid">
-
                                 <input
                                     className="aqp-form-input"
                                     type="text"
@@ -777,9 +707,7 @@ function AddQuestionPage() {
                                         bulkUploading
                                     }
                                 />
-
                             </div>
-
 
                             <label className="aqp-field-label">
                                 Correct Answer
@@ -808,13 +736,11 @@ function AddQuestionPage() {
                                 options.
                             </p>
 
-
                             {/* =================================================
                                 Add Question + Done
                             ================================================= */}
 
                             <div className="aqp-question-actions">
-
                                 <button
                                     type="button"
                                     className="aqp-submit-btn"
@@ -833,34 +759,27 @@ function AddQuestionPage() {
                                 </button>
 
                                 <button
-    type="button"
-    className="aqp-done-btn"
-    onClick={handleDone}
-    disabled={
-        questionAdding ||
-        bulkUploading
-    }
->
-    Done
-</button>
-
+                                    type="button"
+                                    className="aqp-done-btn"
+                                    onClick={handleDone}
+                                    disabled={
+                                        questionAdding ||
+                                        bulkUploading
+                                    }
+                                >
+                                    Done
+                                </button>
                             </div>
-
                         </div>
-
                     )}
-
 
                     {/* =================================================
                         Bulk Upload
                     ================================================= */}
 
                     {entryMode === "bulk" && (
-
                         <div className="aqp-mode-content">
-
                             <div className="aqp-section-heading">
-
                                 <span className="aqp-section-eyebrow">
                                     Question Import
                                 </span>
@@ -875,18 +794,14 @@ function AddQuestionPage() {
                                     prescribed Excel
                                     format.
                                 </p>
-
                             </div>
 
-
                             <div className="aqp-format-card">
-
                                 <div className="aqp-format-title">
                                     Required Excel Columns
                                 </div>
 
                                 <div className="aqp-column-list">
-
                                     <span>
                                         Question Difficulty
                                     </span>
@@ -914,7 +829,6 @@ function AddQuestionPage() {
                                     <span>
                                         Correct Answer
                                     </span>
-
                                 </div>
 
                                 <p className="aqp-format-note">
@@ -924,9 +838,7 @@ function AddQuestionPage() {
                                     match one of Option A,
                                     B, C, or D.
                                 </p>
-
                             </div>
-
 
                             <label className="aqp-field-label">
                                 Marks Per Question
@@ -957,13 +869,11 @@ function AddQuestionPage() {
                                 uploaded file.
                             </p>
 
-
                             <label className="aqp-field-label">
                                 Questions Excel File
                             </label>
 
                             <div className="aqp-upload-box">
-
                                 <input
                                     id="bulk-question-file"
                                     className="aqp-file-input"
@@ -987,9 +897,7 @@ function AddQuestionPage() {
                                 </label>
 
                                 <div className="aqp-file-info">
-
                                     {bulkFile ? (
-
                                         <>
                                             <strong>
                                                 {
@@ -1003,9 +911,7 @@ function AddQuestionPage() {
                                                 upload
                                             </span>
                                         </>
-
                                     ) : (
-
                                         <>
                                             <strong>
                                                 No file
@@ -1018,13 +924,9 @@ function AddQuestionPage() {
                                                 supported
                                             </span>
                                         </>
-
                                     )}
-
                                 </div>
-
                             </div>
-
 
                             <button
                                 type="button"
@@ -1042,15 +944,10 @@ function AddQuestionPage() {
                                     ? "Uploading Questions..."
                                     : "Upload Questions"}
                             </button>
-
                         </div>
-
                     )}
-
                 </div>
-
             </div>
-
         </div>
     );
 }

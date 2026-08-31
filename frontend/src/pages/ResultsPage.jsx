@@ -1,20 +1,15 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
 import API_BASE_URL from "../services/api";
 import Navbar from "../components/Navbar";
-
 import "../styles/ResultsPage.css";
 
-
 function ResultsPage() {
-
     const [results, setResults] =
         useState([]);
 
     const [search, setSearch] =
         useState("");
-
 
     // ==========================================
     // Fetch Results
@@ -24,11 +19,8 @@ function ResultsPage() {
         fetchResults();
     }, []);
 
-
     const fetchResults = async () => {
-
         try {
-
             const token =
                 localStorage.getItem("token");
 
@@ -46,13 +38,10 @@ function ResultsPage() {
                 await response.json();
 
             setResults(data);
-
         } catch (error) {
-
             console.error(error);
         }
     };
-
 
     // ==========================================
     // Filter Results
@@ -64,9 +53,7 @@ function ResultsPage() {
     const filteredResults =
         results.filter(
             (result) => {
-
                 return (
-
                     String(
                         result.submission_id
                     )
@@ -84,11 +71,9 @@ function ResultsPage() {
                     (result.candidate_name || "")
                         .toLowerCase()
                         .includes(searchText)
-
                 );
             }
         );
-
 
     const hasCandidateNames =
         results.some(
@@ -96,29 +81,22 @@ function ResultsPage() {
                 result.candidate_name
         );
 
-
     // ==========================================
     // Render
     // ==========================================
 
     return (
-
         <div className="rp-page">
-
             <Navbar />
 
-
             <main className="rp-page-container">
-
 
                 {/* ==========================================
                     Page Header
                 ========================================== */}
 
                 <header className="rp-page-header">
-
                     <div>
-
                         <span className="rp-page-eyebrow">
                             RESULT OVERVIEW
                         </span>
@@ -132,20 +110,15 @@ function ResultsPage() {
                             submissions, scores, and
                             performance results.
                         </p>
-
                     </div>
-
                 </header>
-
 
                 {/* ==========================================
                     Search
                 ========================================== */}
 
                 <section className="rp-search-section">
-
                     <div className="rp-search-wrapper">
-
                         <input
                             id="result-search"
                             type="text"
@@ -162,14 +135,10 @@ function ResultsPage() {
                                 )
                             }
                         />
-
                     </div>
 
-
                     {search.trim() && (
-
                         <p className="rp-search-summary">
-
                             Showing{" "}
 
                             <strong>
@@ -186,25 +155,17 @@ function ResultsPage() {
                                     ? "result"
                                     : "results"
                             }
-
                         </p>
-
                     )}
-
                 </section>
-
 
                 {/* ==========================================
                     Results Section
                 ========================================== */}
 
                 <section className="rp-section">
-
-
                     <div className="rp-section-header">
-
                         <div>
-
                             <span className="rp-section-kicker">
                                 SUBMISSIONS
                             </span>
@@ -219,12 +180,9 @@ function ResultsPage() {
                                 their performance
                                 details.
                             </p>
-
                         </div>
 
-
                         <span className="rp-count-badge">
-
                             {
                                 filteredResults.length
                             }{" "}
@@ -235,11 +193,8 @@ function ResultsPage() {
                                     ? "Submission"
                                     : "Submissions"
                             }
-
                         </span>
-
                     </div>
-
 
                     {/* ==========================================
                         Results Grid
@@ -247,18 +202,14 @@ function ResultsPage() {
 
                     {filteredResults.length >
                     0 ? (
-
                         <div className="rp-results-grid">
-
                             {filteredResults.map(
                                 (result) => {
-
                                     const isPassed =
                                         result.score >=
                                         result.passing_marks;
 
                                     return (
-
                                         <article
                                             key={
                                                 result.submission_id
@@ -270,15 +221,12 @@ function ResultsPage() {
                                             }`}
                                         >
 
-
                                             {/* ==================================
                                                 Card Header
                                             ================================== */}
 
                                             <div className="rp-card-header">
-
                                                 <div className="rp-card-heading">
-
                                                     <span className="rp-submission-label">
                                                         Submission
                                                     </span>
@@ -289,9 +237,7 @@ function ResultsPage() {
                                                             result.submission_id
                                                         }
                                                     </h3>
-
                                                 </div>
-
 
                                                 <span
                                                     className={
@@ -306,21 +252,15 @@ function ResultsPage() {
                                                             : "Fail"
                                                     }
                                                 </span>
-
                                             </div>
-
 
                                             {/* ==================================
                                                 Result Details
                                             ================================== */}
 
                                             <div className="rp-result-details">
-
-
                                                 {result.candidate_name && (
-
                                                     <div className="rp-result-detail">
-
                                                         <span className="rp-detail-label">
                                                             Candidate
                                                         </span>
@@ -330,14 +270,10 @@ function ResultsPage() {
                                                                 result.candidate_name
                                                             }
                                                         </strong>
-
                                                     </div>
-
                                                 )}
 
-
                                                 <div className="rp-result-detail">
-
                                                     <span className="rp-detail-label">
                                                         Exam
                                                     </span>
@@ -349,18 +285,14 @@ function ResultsPage() {
                                                                 : `Exam #${result.exam_id}`
                                                         }
                                                     </strong>
-
                                                 </div>
 
-
                                                 <div className="rp-result-detail">
-
                                                     <span className="rp-detail-label">
                                                         Score
                                                     </span>
 
                                                     <strong className="rp-score-value">
-
                                                         {
                                                             result.score
                                                         }
@@ -373,14 +305,10 @@ function ResultsPage() {
                                                                 result.total_marks
                                                             }
                                                         </span>
-
                                                     </strong>
-
                                                 </div>
 
-
                                                 <div className="rp-result-detail">
-
                                                     <span className="rp-detail-label">
                                                         Passing Marks
                                                     </span>
@@ -390,19 +318,14 @@ function ResultsPage() {
                                                             result.passing_marks
                                                         }
                                                     </strong>
-
                                                 </div>
-
-
                                             </div>
-
 
                                             {/* ==================================
                                                 Submission Information
                                             ================================== */}
 
                                             <div className="rp-submission-info">
-
                                                 <span>
                                                     Submitted
                                                 </span>
@@ -412,52 +335,44 @@ function ResultsPage() {
                                                         result.submitted_at
                                                     }
                                                 </strong>
-
                                             </div>
-
 
                                             {/* ==================================
                                                 Card Footer
                                             ================================== */}
 
                                             <div className="rp-card-footer">
-
                                                 <Link
-    className="rp-view-result"
-    to={`/result/${result.submission_id}`}
->
-    <svg
-        className="rp-eye-icon"
-        viewBox="0 0 24 24"
-        aria-hidden="true"
-    >
-        <path
-            d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"
-        />
+                                                    className="rp-view-result"
+                                                    to={`/result/${result.submission_id}`}
+                                                >
+                                                    <svg
+                                                        className="rp-eye-icon"
+                                                        viewBox="0 0 24 24"
+                                                        aria-hidden="true"
+                                                    >
+                                                        <path
+                                                            d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"
+                                                        />
 
-        <circle
-            cx="12"
-            cy="12"
-            r="2.5"
-        />
-    </svg>
+                                                        <circle
+                                                            cx="12"
+                                                            cy="12"
+                                                            r="2.5"
+                                                        />
+                                                    </svg>
 
-    <span>
-        View Result
-    </span>
-</Link>
-
+                                                    <span>
+                                                        View Result
+                                                    </span>
+                                                </Link>
                                             </div>
 
-
                                         </article>
-
                                     );
                                 }
                             )}
-
                         </div>
-
                     ) : (
 
                         /* ==========================================
@@ -465,7 +380,6 @@ function ResultsPage() {
                         ========================================== */
 
                         <div className="rp-empty-state">
-
                             <div className="rp-empty-icon">
                                 —
                             </div>
@@ -485,19 +399,13 @@ function ResultsPage() {
                                         : "There are currently no examination submissions to display."
                                 }
                             </p>
-
                         </div>
-
                     )}
-
                 </section>
 
-
             </main>
-
         </div>
     );
 }
-
 
 export default ResultsPage;
