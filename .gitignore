@@ -1,0 +1,25 @@
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Node
+node_modules/
+frontend/node_modules/
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# Build files
+frontend/dist/
+frontend/dist-ssr/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
