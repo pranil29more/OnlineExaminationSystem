@@ -1,441 +1,306 @@
 import { useState } from "react";
-import {
-    useLocation,
-    useNavigate,
-    useSearchParams,
-} from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import API_BASE_URL from "../services/api";
 import Navbar from "../components/Navbar";
 import "../styles/AddQuestionPage.css";
 
+const emptyTestCase = () => ({
+    input_data: "",
+    expected_output: "",
+    is_hidden: false,
+});
+
 function AddQuestionPage() {
     const navigate = useNavigate();
-
     const location = useLocation();
-
     const [searchParams] = useSearchParams();
 
-    const [examId, setExamId] = useState(
-        searchParams.get("examId") || ""
-    );
+    const [examId, setExamId] = useState(searchParams.get("examId") || "");
+    const [entryMode, setEntryMode] = useState("manual");
+    const [questionType, setQuestionType] = useState("mcq");
+    const [bulkType, setBulkType] = useState("mcq");
 
-    const [entryMode, setEntryMode] =
-        useState("manual");
+    const [questionText, setQuestionText] = useState("");
+    const [difficulty, setDifficulty] = useState("Easy");
+    const [marks, setMarks] = useState("");
+    const [option1, setOption1] = useState("");
+    const [option2, setOption2] = useState("");
+    const [option3, setOption3] = useState("");
+    const [option4, setOption4] = useState("");
+    const [correctOption, setCorrectOption] = useState("");
 
-    const [questionText, setQuestionText] =
-        useState("");
+    const [starterCode, setStarterCode] = useState("");
+    const [testCases, setTestCases] = useState([emptyTestCase()]);
 
-    const [difficulty, setDifficulty] =
-        useState("Easy");
+    const [bulkMcqMarks, setBulkMcqMarks] = useState("");
+    const [bulkMcqFile, setBulkMcqFile] = useState(null);
+    const [bulkQuestionsFile, setBulkQuestionsFile] = useState(null);
+    const [bulkTestCasesFile, setBulkTestCasesFile] = useState(null);
 
-    const [marks, setMarks] =
-        useState("");
+    const [questionAdding, setQuestionAdding] = useState(false);
+    const [bulkUploading, setBulkUploading] = useState(false);
+    const [doneProcessing, setDoneProcessing] = useState(false);
 
-    const [option1, setOption1] =
-        useState("");
+    const isBusy = questionAdding || bulkUploading || doneProcessing;
 
-    const [option2, setOption2] =
-        useState("");
-
-    const [option3, setOption3] =
-        useState("");
-
-    const [option4, setOption4] =
-        useState("");
-
-    const [correctOption, setCorrectOption] =
-        useState("");
-
-    const [bulkMarks, setBulkMarks] =
-        useState("");
-
-    const [bulkFile, setBulkFile] =
-        useState(null);
-
-    const [bulkUploading, setBulkUploading] =
-        useState(false);
-
-    const [questionAdding, setQuestionAdding] =
-        useState(false);
-
-    const [doneProcessing, setDoneProcessing] =
-        useState(false);
-
-    // =========================================================
-    // Navigation Destination
-    // =========================================================
+    const token = () => localStorage.getItem("token");
 
     const handleFinishNavigation = () => {
-        const from =
-            location.state?.from;
-
-        if (from === "edit-exam") {
-            navigate(
-                `/edit-exam/${examId}`
-            );
-
-            return;
+        if (location.state?.from === "edit-exam") {
+            navigate(`/edit-exam/${examId}`);
+        } else {
+            navigate(`/exam/${examId}`);
         }
-
-        navigate(
-            `/exam/${examId}`
-        );
     };
 
-    // =========================================================
-    // Manual Add Question
-    // =========================================================
-
-    const handleAddQuestion = async () => {
-        if (!examId) {
-            alert(
-                "Please enter the Exam ID."
-            );
-
+    const validateCommon = () => {
+        if (!examId || Number(examId) <= 0) {
+            alert("Please enter a valid Exam ID.");
             return false;
         }
-
         if (!questionText.trim()) {
-            alert(
-                "Please enter the question."
-            );
-
+            alert("Please enter the question.");
             return false;
         }
-
-        if (
-            !marks ||
-            Number(marks) <= 0
-        ) {
-            alert(
-                "Please enter valid marks."
-            );
-
+        if (!marks || Number(marks) <= 0) {
+            alert("Please enter valid marks.");
             return false;
         }
+        return true;
+    };
 
-        if (
-            !option1.trim() ||
-            !option2.trim() ||
-            !option3.trim() ||
-            !option4.trim()
-        ) {
-            alert(
-                "Please enter all four options."
-            );
-
+    const handleAddMCQ = async () => {
+        if (!validateCommon()) return false;
+        const options = [option1.trim(), option2.trim(), option3.trim(), option4.trim()];
+        if (options.some((option) => !option)) {
+            alert("Please enter all four options.");
             return false;
         }
-
         if (!correctOption.trim()) {
-            alert(
-                "Please enter the correct option."
-            );
-
+            alert("Please enter the correct option.");
             return false;
         }
-
-        const options = [
-            option1.trim(),
-            option2.trim(),
-            option3.trim(),
-            option4.trim(),
-        ];
-
-        const matchingCorrectOption =
-            options.find(
-                (option) =>
-                    option.toLowerCase() ===
-                    correctOption
-                        .trim()
-                        .toLowerCase()
-            );
-
-        if (!matchingCorrectOption) {
-            alert(
-                "Correct option must match one of the four options."
-            );
-
+        const correct = options.find(
+            (option) => option.toLowerCase() === correctOption.trim().toLowerCase()
+        );
+        if (!correct) {
+            alert("Correct option must match one of the four options.");
             return false;
         }
 
         try {
-            const token =
-                localStorage.getItem("token");
-
-            const response = await fetch(
-                `${API_BASE_URL}/add-question`,
-                {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type":
-                            "application/json",
-
-                        Authorization:
-                            `Bearer ${token}`,
-                    },
-
-                    body: JSON.stringify({
-                        exam_id:
-                            Number(examId),
-
-                        question_text:
-                            questionText.trim(),
-
-                        difficulty,
-
-                        marks:
-                            Number(marks),
-
-                        options,
-
-                        correct_option:
-                            matchingCorrectOption,
-                    }),
-                }
-            );
-
-            const data =
-                await response.json();
-
-            if (response.ok) {
-                alert(
-                    "Question Added Successfully"
-                );
-
-                setQuestionText("");
-
-                setDifficulty("Easy");
-
-                setMarks("");
-
-                setOption1("");
-
-                setOption2("");
-
-                setOption3("");
-
-                setOption4("");
-
-                setCorrectOption("");
-
-                return true;
-            } else {
-                alert(
-                    data.message ||
-                        "Unable to add question."
-                );
-
+            const response = await fetch(`${API_BASE_URL}/add-question`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token()}`,
+                },
+                body: JSON.stringify({
+                    exam_id: Number(examId),
+                    question_text: questionText.trim(),
+                    difficulty,
+                    marks: Number(marks),
+                    options,
+                    correct_option: correct,
+                }),
+            });
+            const data = await response.json();
+            if (!response.ok) {
+                alert(data.message || "Unable to add question.");
                 return false;
             }
+            alert(data.message || "Question added successfully.");
+            setQuestionText("");
+            setDifficulty("Easy");
+            setMarks("");
+            setOption1("");
+            setOption2("");
+            setOption3("");
+            setOption4("");
+            setCorrectOption("");
+            return true;
         } catch (error) {
             console.error(error);
-
-            alert(
-                "Unable to add question."
-            );
-
+            alert("Unable to add question.");
             return false;
         }
     };
 
-    // =========================================================
-    // Add Question Button
-    // =========================================================
-
-    const handleAddQuestionClick = async () => {
-        if (
-            questionAdding ||
-            doneProcessing ||
-            bulkUploading
-        ) {
-            return;
+    const handleAddCoding = async () => {
+        if (!validateCommon()) return false;
+        if (!starterCode.trim()) {
+            alert("Please enter the starter code.");
+            return false;
+        }
+        if (!testCases.length) {
+            alert("At least one test case is required.");
+            return false;
+        }
+        for (let i = 0; i < testCases.length; i += 1) {
+            if (!testCases[i].expected_output.trim()) {
+                alert(`Please enter expected output for Test Case ${i + 1}.`);
+                return false;
+            }
         }
 
-        setQuestionAdding(true);
-
         try {
-            await handleAddQuestion();
+            const response = await fetch(`${API_BASE_URL}/add-coding-question`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token()}`,
+                },
+                body: JSON.stringify({
+                    exam_id: Number(examId),
+                    question_text: questionText.trim(),
+                    difficulty,
+                    marks: Number(marks),
+                    starter_code: starterCode,
+                    language: "python",
+                    test_cases: testCases.map((item) => ({
+                        input_data: item.input_data,
+                        expected_output: item.expected_output.trim(),
+                        is_hidden: Boolean(item.is_hidden),
+                    })),
+                }),
+            });
+            const data = await response.json();
+            if (!response.ok) {
+                alert(data.message || "Unable to add coding question.");
+                return false;
+            }
+            alert(data.message || "Coding question added successfully.");
+            setQuestionText("");
+            setDifficulty("Easy");
+            setMarks("");
+            setStarterCode("");
+            setTestCases([emptyTestCase()]);
+            return true;
+        } catch (error) {
+            console.error(error);
+            alert("Unable to add coding question.");
+            return false;
+        }
+    };
+
+    const handleAddQuestion = async () => {
+        if (isBusy) return;
+        setQuestionAdding(true);
+        try {
+            if (questionType === "mcq") await handleAddMCQ();
+            else await handleAddCoding();
         } finally {
             setQuestionAdding(false);
         }
     };
 
-    // =========================================================
-    // Done
-    // =========================================================
-
     const handleDone = () => {
-        if (
-            questionAdding ||
-            bulkUploading
-        ) {
+        if (questionAdding || bulkUploading) return;
+        if (!examId || Number(examId) <= 0) {
+            alert("Please enter a valid Exam ID.");
             return;
         }
-
-        if (!examId) {
-            alert(
-                "Please enter the Exam ID."
-            );
-
-            return;
-        }
-
+        setDoneProcessing(true);
         handleFinishNavigation();
     };
 
-    // =========================================================
-    // Bulk File Selection
-    // =========================================================
-
-    const handleBulkFileChange = (
-        event
-    ) => {
-        const selectedFile =
-            event.target.files[0];
-
-        if (!selectedFile) {
-            setBulkFile(null);
-
-            return;
-        }
-
-        const fileName =
-            selectedFile.name.toLowerCase();
-
-        if (
-            !fileName.endsWith(".xlsx")
-        ) {
-            alert(
-                "Please select an .xlsx Excel file."
-            );
-
-            event.target.value = "";
-
-            setBulkFile(null);
-
-            return;
-        }
-
-        setBulkFile(selectedFile);
+    const updateTestCase = (index, field, value) => {
+        if (isBusy) return;
+        setTestCases((current) => current.map((item, i) => (i === index ? { ...item, [field]: value } : item)));
     };
 
-    // =========================================================
-    // Bulk Upload Questions
-    // =========================================================
+    const addTestCase = () => {
+        if (!isBusy) setTestCases((current) => [...current, emptyTestCase()]);
+    };
+
+    const removeTestCase = (index) => {
+        if (isBusy) return;
+        if (testCases.length === 1) {
+            alert("At least one test case is required.");
+            return;
+        }
+        setTestCases((current) => current.filter((_, i) => i !== index));
+    };
+
+    const toggleTestCase = (index) => {
+        if (isBusy) return;
+        setTestCases((current) => current.map((item, i) => (
+            i === index ? { ...item, is_hidden: !item.is_hidden } : item
+        )));
+    };
+
+    const selectXlsx = (event, setter, label) => {
+        const file = event.target.files?.[0];
+        if (!file) {
+            setter(null);
+            return;
+        }
+        if (!file.name.toLowerCase().endsWith(".xlsx")) {
+            alert(`Please select an .xlsx ${label} file.`);
+            event.target.value = "";
+            setter(null);
+            return;
+        }
+        setter(file);
+    };
 
     const handleBulkUpload = async () => {
-        if (
-            bulkUploading ||
-            questionAdding ||
-            doneProcessing
-        ) {
+        if (isBusy) return;
+        if (!examId || Number(examId) <= 0) {
+            alert("Please enter a valid Exam ID.");
             return;
         }
 
-        if (!examId) {
-            alert(
-                "Please enter the Exam ID."
-            );
+        const formData = new FormData();
+        formData.append("exam_id", examId);
 
-            return;
-        }
-
-        if (
-            !bulkMarks ||
-            Number(bulkMarks) <= 0
-        ) {
-            alert(
-                "Please enter valid marks per question."
-            );
-
-            return;
-        }
-
-        if (!bulkFile) {
-            alert(
-                "Please select an Excel file."
-            );
-
-            return;
+        if (bulkType === "mcq") {
+            if (!bulkMcqMarks || Number(bulkMcqMarks) <= 0) {
+                alert("Please enter valid marks per MCQ question.");
+                return;
+            }
+            if (!bulkMcqFile) {
+                alert("Please select the MCQ Excel file.");
+                return;
+            }
+            formData.append("marks", bulkMcqMarks);
+            formData.append("file", bulkMcqFile);
+        } else {
+            if (!bulkQuestionsFile || !bulkTestCasesFile) {
+                alert("Please select both Coding Questions and Test Cases Excel files.");
+                return;
+            }
+            formData.append("questions_file", bulkQuestionsFile);
+            formData.append("test_cases_file", bulkTestCasesFile);
         }
 
         try {
             setBulkUploading(true);
-
-            const token =
-                localStorage.getItem("token");
-
-            const formData =
-                new FormData();
-
-            formData.append(
-                "exam_id",
-                examId
-            );
-
-            formData.append(
-                "marks",
-                bulkMarks
-            );
-
-            formData.append(
-                "file",
-                bulkFile
-            );
-
-            const response = await fetch(
-                `${API_BASE_URL}/bulk-upload-questions`,
-                {
-                    method: "POST",
-
-                    headers: {
-                        Authorization:
-                            `Bearer ${token}`,
-                    },
-
-                    body: formData,
-                }
-            );
-
-            const data =
-                await response.json();
-
+            const endpoint = bulkType === "mcq"
+                ? "/bulk-upload-mcq-questions"
+                : "/bulk-upload-coding-questions";
+            const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+                method: "POST",
+                headers: { Authorization: `Bearer ${token()}` },
+                body: formData,
+            });
+            const data = await response.json();
             if (!response.ok) {
-                alert(
-                    data.message ||
-                        "Unable to upload questions."
-                );
-
+                alert(data.message || "Unable to upload questions.");
                 return;
             }
-
-            alert(
-                data.message ||
-                    "Questions uploaded successfully."
-            );
-
-            setBulkMarks("");
-
-            setBulkFile(null);
-
-            const fileInput =
-                document.getElementById(
-                    "bulk-question-file"
-                );
-
-            if (fileInput) {
-                fileInput.value = "";
-            }
-
+            alert(data.message || "Questions uploaded successfully.");
+            setBulkMcqFile(null);
+            setBulkQuestionsFile(null);
+            setBulkTestCasesFile(null);
+            ["bulk-mcq-file", "bulk-coding-questions-file", "bulk-coding-test-cases-file"].forEach((id) => {
+                const input = document.getElementById(id);
+                if (input) input.value = "";
+            });
             handleFinishNavigation();
         } catch (error) {
             console.error(error);
-
-            alert(
-                "Unable to upload questions."
-            );
+            alert("Unable to upload questions.");
         } finally {
             setBulkUploading(false);
         }
@@ -444,506 +309,198 @@ function AddQuestionPage() {
     return (
         <div className="aqp-page">
             <Navbar />
-
             <div className="aqp-container">
                 <div className="aqp-header">
-                    <span className="aqp-eyebrow">
-                        Examination Management
-                    </span>
-
-                    <h1 className="aqp-title">
-                        Add Questions
-                    </h1>
-
+                    <span className="aqp-eyebrow">Examination Management</span>
+                    <h1 className="aqp-title">Add Questions</h1>
                     <p className="aqp-description">
-                        Add questions manually or upload
-                        multiple MCQ questions using the
-                        prescribed Excel format.
+                        Add MCQ or Python coding questions manually, or bulk import MCQs and coding questions using their prescribed Excel templates.
                     </p>
                 </div>
 
                 <div className="aqp-form-card">
-                    {/* =================================================
-                        Exam ID
-                    ================================================= */}
-
                     <div className="aqp-exam-section">
-                        <label className="aqp-field-label">
-                            Exam ID
-                        </label>
-
+                        <label className="aqp-field-label">Exam ID</label>
                         <input
                             className="aqp-form-input"
                             type="number"
+                            min="1"
                             placeholder="Exam ID"
                             value={examId}
-                            onChange={(event) =>
-                                setExamId(
-                                    event.target.value
-                                )
-                            }
-                            disabled={
-                                questionAdding ||
-                                doneProcessing ||
-                                bulkUploading
-                            }
+                            onChange={(e) => setExamId(e.target.value)}
+                            disabled={isBusy}
                         />
                     </div>
 
-                    {/* =================================================
-                        Entry Mode
-                    ================================================= */}
-
+                    <div className="aqp-mode-label">Question Entry Method</div>
                     <div className="aqp-mode-switch">
-                        <button
-                            type="button"
-                            className={`aqp-mode-btn ${
-                                entryMode === "manual"
-                                    ? "active"
-                                    : ""
-                            }`}
-                            onClick={() =>
-                                setEntryMode(
-                                    "manual"
-                                )
-                            }
-                            disabled={
-                                questionAdding ||
-                                doneProcessing ||
-                                bulkUploading
-                            }
-                        >
-                            Manual Entry
-                        </button>
-
-                        <button
-                            type="button"
-                            className={`aqp-mode-btn ${
-                                entryMode === "bulk"
-                                    ? "active"
-                                    : ""
-                            }`}
-                            onClick={() =>
-                                setEntryMode(
-                                    "bulk"
-                                )
-                            }
-                            disabled={
-                                questionAdding ||
-                                doneProcessing ||
-                                bulkUploading
-                            }
-                        >
-                            Bulk Upload
-                        </button>
+                        <button type="button" className={`aqp-mode-btn ${entryMode === "manual" ? "active" : ""}`} onClick={() => setEntryMode("manual")} disabled={isBusy}>Manual Entry</button>
+                        <button type="button" className={`aqp-mode-btn ${entryMode === "bulk" ? "active" : ""}`} onClick={() => setEntryMode("bulk")} disabled={isBusy}>Bulk Upload</button>
                     </div>
-
-                    {/* =================================================
-                        Manual Entry
-                    ================================================= */}
 
                     {entryMode === "manual" && (
                         <div className="aqp-mode-content">
                             <div className="aqp-section-heading">
-                                <span className="aqp-section-eyebrow">
-                                    Question Entry
-                                </span>
-
-                                <h2 className="aqp-section-title">
-                                    Add Question Manually
-                                </h2>
-
-                                <p className="aqp-section-description">
-                                    Create a single MCQ
-                                    question for the
-                                    selected examination.
-                                </p>
+                                <span className="aqp-section-eyebrow">Question Entry</span>
+                                <h2 className="aqp-section-title">Create Question</h2>
+                                <p className="aqp-section-description">Choose the question type and enter the required details.</p>
                             </div>
 
-                            <label className="aqp-field-label">
-                                Question
-                            </label>
+                            <label className="aqp-field-label">Question Type</label>
+                            <div className="aqp-question-type-switch">
+                                <button type="button" className={`aqp-question-type-btn ${questionType === "mcq" ? "active" : ""}`} onClick={() => setQuestionType("mcq")} disabled={isBusy}>MCQ</button>
+                                <button type="button" className={`aqp-question-type-btn ${questionType === "coding" ? "active" : ""}`} onClick={() => setQuestionType("coding")} disabled={isBusy}>Coding</button>
+                            </div>
 
-                            <input
-                                className="aqp-form-input"
-                                type="text"
-                                placeholder="Enter question"
-                                value={questionText}
-                                onChange={(event) =>
-                                    setQuestionText(
-                                        event.target.value
-                                    )
-                                }
-                                disabled={
-                                    questionAdding ||
-                                    doneProcessing ||
-                                    bulkUploading
-                                }
-                            />
+                            <label className="aqp-field-label">{questionType === "coding" ? "Coding Question" : "Question"}</label>
+                            <textarea className="aqp-form-textarea aqp-question-textarea" placeholder={questionType === "coding" ? "Enter the coding problem statement" : "Enter question"} value={questionText} onChange={(e) => setQuestionText(e.target.value)} disabled={isBusy} />
 
-                            <label className="aqp-field-label">
-                                Difficulty
-                            </label>
-
-                            <select
-                                className="aqp-form-select"
-                                value={difficulty}
-                                onChange={(event) =>
-                                    setDifficulty(
-                                        event.target.value
-                                    )
-                                }
-                                disabled={
-                                    questionAdding ||
-                                    doneProcessing ||
-                                    bulkUploading
-                                }
-                            >
-                                <option value="Easy">
-                                    Easy
-                                </option>
-
-                                <option value="Medium">
-                                    Medium
-                                </option>
-
-                                <option value="Hard">
-                                    Hard
-                                </option>
+                            <label className="aqp-field-label">Difficulty</label>
+                            <select className="aqp-form-select" value={difficulty} onChange={(e) => setDifficulty(e.target.value)} disabled={isBusy}>
+                                <option value="Easy">Easy</option>
+                                <option value="Medium">Medium</option>
+                                <option value="Hard">Hard</option>
                             </select>
 
-                            <label className="aqp-field-label">
-                                Marks
-                            </label>
+                            <label className="aqp-field-label">Marks</label>
+                            <input className="aqp-form-input" type="number" min="0.01" step="0.01" placeholder="Marks" value={marks} onChange={(e) => setMarks(e.target.value)} disabled={isBusy} />
 
-                            <input
-                                className="aqp-form-input"
-                                type="number"
-                                min="0.01"
-                                step="0.01"
-                                placeholder="Marks"
-                                value={marks}
-                                onChange={(event) =>
-                                    setMarks(
-                                        event.target.value
-                                    )
-                                }
-                                disabled={
-                                    questionAdding ||
-                                    doneProcessing ||
-                                    bulkUploading
-                                }
-                            />
+                            {questionType === "mcq" ? (
+                                <>
+                                    <div className="aqp-subheading">Answer Options</div>
+                                    <div className="aqp-options-grid">
+                                        {[option1, option2, option3, option4].map((value, index) => {
+                                            const setters = [setOption1, setOption2, setOption3, setOption4];
+                                            return <input key={index} className="aqp-form-input" type="text" placeholder={`Option ${index + 1}`} value={value} onChange={(e) => setters[index](e.target.value)} disabled={isBusy} />;
+                                        })}
+                                    </div>
+                                    <label className="aqp-field-label">Correct Answer</label>
+                                    <input className="aqp-form-input" type="text" placeholder="Enter the exact correct option" value={correctOption} onChange={(e) => setCorrectOption(e.target.value)} disabled={isBusy} />
+                                    <p className="aqp-form-hint">The correct answer must match one of the four options.</p>
+                                </>
+                            ) : (
+                                <div className="aqp-coding-section">
+                                    <div className="aqp-coding-info-card">
+                                        <div className="aqp-coding-info-item"><span className="aqp-coding-info-label">Language</span><strong>Python</strong></div>
+                                        <div className="aqp-coding-info-item"><span className="aqp-coding-info-label">Evaluation</span><strong>Full Marks / Zero</strong></div>
+                                    </div>
+                                    <label className="aqp-field-label">Programming Language</label>
+                                    <select className="aqp-form-select" value="python" disabled><option value="python">Python</option></select>
+                                    <p className="aqp-form-hint">Python is currently the supported coding language.</p>
+                                    <label className="aqp-field-label">Starter Code</label>
+                                    <textarea className="aqp-form-textarea aqp-code-textarea" placeholder="Enter starter Python code" value={starterCode} onChange={(e) => setStarterCode(e.target.value)} disabled={isBusy} spellCheck="false" />
+                                    <p className="aqp-form-hint">Candidates receive this code as their starting point.</p>
 
-                            <div className="aqp-subheading">
-                                Answer Options
-                            </div>
+                                    <div className="aqp-test-case-header">
+                                        <div><div className="aqp-subheading aqp-no-margin">Test Cases</div><p className="aqp-test-case-description">Add visible and hidden tests used to evaluate the submitted Python code.</p></div>
+                                        <button type="button" className="aqp-add-test-btn" onClick={addTestCase} disabled={isBusy}>+ Add Test Case</button>
+                                    </div>
 
-                            <div className="aqp-options-grid">
-                                <input
-                                    className="aqp-form-input"
-                                    type="text"
-                                    placeholder="Option 1"
-                                    value={option1}
-                                    onChange={(event) =>
-                                        setOption1(
-                                            event.target.value
-                                        )
-                                    }
-                                    disabled={
-                                        questionAdding ||
-                                        doneProcessing ||
-                                        bulkUploading
-                                    }
-                                />
-
-                                <input
-                                    className="aqp-form-input"
-                                    type="text"
-                                    placeholder="Option 2"
-                                    value={option2}
-                                    onChange={(event) =>
-                                        setOption2(
-                                            event.target.value
-                                        )
-                                    }
-                                    disabled={
-                                        questionAdding ||
-                                        doneProcessing ||
-                                        bulkUploading
-                                    }
-                                />
-
-                                <input
-                                    className="aqp-form-input"
-                                    type="text"
-                                    placeholder="Option 3"
-                                    value={option3}
-                                    onChange={(event) =>
-                                        setOption3(
-                                            event.target.value
-                                        )
-                                    }
-                                    disabled={
-                                        questionAdding ||
-                                        doneProcessing ||
-                                        bulkUploading
-                                    }
-                                />
-
-                                <input
-                                    className="aqp-form-input"
-                                    type="text"
-                                    placeholder="Option 4"
-                                    value={option4}
-                                    onChange={(event) =>
-                                        setOption4(
-                                            event.target.value
-                                        )
-                                    }
-                                    disabled={
-                                        questionAdding ||
-                                        doneProcessing ||
-                                        bulkUploading
-                                    }
-                                />
-                            </div>
-
-                            <label className="aqp-field-label">
-                                Correct Answer
-                            </label>
-
-                            <input
-                                className="aqp-form-input"
-                                type="text"
-                                placeholder="Enter the exact correct option"
-                                value={correctOption}
-                                onChange={(event) =>
-                                    setCorrectOption(
-                                        event.target.value
-                                    )
-                                }
-                                disabled={
-                                    questionAdding ||
-                                    doneProcessing ||
-                                    bulkUploading
-                                }
-                            />
-
-                            <p className="aqp-form-hint">
-                                The correct answer must
-                                match one of the four
-                                options.
-                            </p>
-
-                            {/* =================================================
-                                Add Question + Done
-                            ================================================= */}
+                                    <div className="aqp-test-cases">
+                                        {testCases.map((testCase, index) => (
+                                            <div className="aqp-test-case-card" key={index}>
+                                                <div className="aqp-test-case-top">
+                                                    <div className="aqp-test-case-number">Test Case {index + 1}</div>
+                                                    <div className="aqp-test-case-actions">
+                                                        <button type="button" className={`aqp-visibility-btn ${testCase.is_hidden ? "hidden-test" : "visible-test"}`} onClick={() => toggleTestCase(index)} disabled={isBusy}>{testCase.is_hidden ? "Hidden" : "Visible"}</button>
+                                                        <button type="button" className="aqp-remove-test-btn" onClick={() => removeTestCase(index)} disabled={isBusy || testCases.length === 1}>Remove</button>
+                                                    </div>
+                                                </div>
+                                                <div className="aqp-test-case-grid">
+                                                    <div className="aqp-test-case-field"><label className="aqp-field-label">Input</label><textarea className="aqp-form-textarea aqp-test-textarea" placeholder="Input passed to the program" value={testCase.input_data} onChange={(e) => updateTestCase(index, "input_data", e.target.value)} disabled={isBusy} spellCheck="false" /></div>
+                                                    <div className="aqp-test-case-field"><label className="aqp-field-label">Expected Output</label><textarea className="aqp-form-textarea aqp-test-textarea" placeholder="Expected program output" value={testCase.expected_output} onChange={(e) => updateTestCase(index, "expected_output", e.target.value)} disabled={isBusy} spellCheck="false" /></div>
+                                                </div>
+                                                <div className="aqp-test-case-bottom"><div className="aqp-test-case-status"><span className={`aqp-status-dot ${testCase.is_hidden ? "hidden" : "visible"}`} />{testCase.is_hidden ? "Hidden test case" : "Visible test case"}</div></div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <p className="aqp-coding-note">Hidden test cases are never shown to candidates. Coding evaluation is full marks or zero; partial marking is not used.</p>
+                                </div>
+                            )}
 
                             <div className="aqp-question-actions">
-                                <button
-                                    type="button"
-                                    className="aqp-submit-btn"
-                                    onClick={
-                                        handleAddQuestionClick
-                                    }
-                                    disabled={
-                                        questionAdding ||
-                                        doneProcessing ||
-                                        bulkUploading
-                                    }
-                                >
-                                    {questionAdding
-                                        ? "Adding Question..."
-                                        : "Add Question"}
-                                </button>
-
-                                <button
-                                    type="button"
-                                    className="aqp-done-btn"
-                                    onClick={handleDone}
-                                    disabled={
-                                        questionAdding ||
-                                        bulkUploading
-                                    }
-                                >
-                                    Done
-                                </button>
+                                <button type="button" className="aqp-submit-btn" onClick={handleAddQuestion} disabled={isBusy}>{questionAdding ? "Adding Question..." : questionType === "coding" ? "Add Coding Question" : "Add Question"}</button>
+                                <button type="button" className="aqp-done-btn" onClick={handleDone} disabled={questionAdding || bulkUploading}>Done</button>
                             </div>
                         </div>
                     )}
 
-                    {/* =================================================
-                        Bulk Upload
-                    ================================================= */}
-
                     {entryMode === "bulk" && (
                         <div className="aqp-mode-content">
                             <div className="aqp-section-heading">
-                                <span className="aqp-section-eyebrow">
-                                    Question Import
-                                </span>
-
-                                <h2 className="aqp-section-title">
-                                    Bulk Upload Questions
-                                </h2>
-
-                                <p className="aqp-section-description">
-                                    Upload multiple MCQ
-                                    questions using the
-                                    prescribed Excel
-                                    format.
-                                </p>
+                                <span className="aqp-section-eyebrow">Excel Import</span>
+                                <h2 className="aqp-section-title">Bulk Upload</h2>
+                                <p className="aqp-section-description">Choose MCQ bulk upload or the two-file Python coding-question import.</p>
                             </div>
 
-                            <div className="aqp-format-card">
-                                <div className="aqp-format-title">
-                                    Required Excel Columns
-                                </div>
-
-                                <div className="aqp-column-list">
-                                    <span>
-                                        Question Difficulty
-                                    </span>
-
-                                    <span>
-                                        Question
-                                    </span>
-
-                                    <span>
-                                        Option A
-                                    </span>
-
-                                    <span>
-                                        Option B
-                                    </span>
-
-                                    <span>
-                                        Option C
-                                    </span>
-
-                                    <span>
-                                        Option D
-                                    </span>
-
-                                    <span>
-                                        Correct Answer
-                                    </span>
-                                </div>
-
-                                <p className="aqp-format-note">
-                                    Correct Answer should
-                                    contain the actual
-                                    answer text and must
-                                    match one of Option A,
-                                    B, C, or D.
-                                </p>
+                            <div className="aqp-question-type-switch">
+                                <button type="button" className={`aqp-question-type-btn ${bulkType === "mcq" ? "active" : ""}`} onClick={() => setBulkType("mcq")} disabled={isBusy}>MCQ Bulk Upload</button>
+                                <button type="button" className={`aqp-question-type-btn ${bulkType === "coding" ? "active" : ""}`} onClick={() => setBulkType("coding")} disabled={isBusy}>Coding Bulk Upload</button>
                             </div>
 
-                            <label className="aqp-field-label">
-                                Marks Per Question
-                            </label>
+                            {bulkType === "mcq" ? (
+                                <>
+                                    <div className="aqp-format-card">
+                                        <div className="aqp-format-title">MCQ Excel Columns</div>
+                                        <div className="aqp-column-list">
+                                            {['Question Difficulty', 'Question', 'Option A', 'Option B', 'Option C', 'Option D', 'Correct Answer'].map((column) => <span key={column}>{column}</span>)}
+                                        </div>
+                                        <p className="aqp-format-note">Correct Answer must match one of Option A, B, C, or D. Marks are supplied once for the whole upload.</p>
+                                    </div>
 
-                            <input
-                                className="aqp-form-input"
-                                type="number"
-                                min="0.01"
-                                step="0.01"
-                                placeholder="Enter marks per question"
-                                value={bulkMarks}
-                                onChange={(event) =>
-                                    setBulkMarks(
-                                        event.target.value
-                                    )
-                                }
-                                disabled={
-                                    bulkUploading ||
-                                    questionAdding ||
-                                    doneProcessing
-                                }
-                            />
+                                    <label className="aqp-field-label">Marks Per Question</label>
+                                    <input className="aqp-form-input" type="number" min="0.01" step="0.01" placeholder="Enter marks per question" value={bulkMcqMarks} onChange={(e) => setBulkMcqMarks(e.target.value)} disabled={isBusy} />
 
-                            <p className="aqp-form-hint">
-                                These marks will be applied
-                                to every question in the
-                                uploaded file.
-                            </p>
+                                    <label className="aqp-field-label">MCQ Questions Excel File</label>
+                                    <div className="aqp-upload-box">
+                                        <input id="bulk-mcq-file" className="aqp-file-input" type="file" accept=".xlsx" onChange={(e) => selectXlsx(e, setBulkMcqFile, "MCQ")} disabled={isBusy} />
+                                        <label htmlFor="bulk-mcq-file" className="aqp-file-label">Choose MCQ Excel File</label>
+                                        <div className="aqp-file-info"><strong>{bulkMcqFile ? bulkMcqFile.name : "No MCQ file selected"}</strong><span>{bulkMcqFile ? "Excel file ready for upload" : "Only .xlsx files are supported"}</span></div>
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+                                    <div className="aqp-format-card">
+                                        <div className="aqp-format-title">Coding Questions.xlsx Columns</div>
+                                        <div className="aqp-column-list">
+                                            {['Question Key', 'Language', 'Question Difficulty', 'Question', 'Marks', 'Starter Code'].map((column) => <span key={column}>{column}</span>)}
+                                        </div>
+                                        <p className="aqp-format-note">Question Key uniquely identifies each coding question. Language is currently Python.</p>
+                                    </div>
+                                    <div className="aqp-format-card">
+                                        <div className="aqp-format-title">Coding Test Cases.xlsx Columns</div>
+                                        <div className="aqp-column-list">
+                                            {['Question Key', 'Language', 'Test Case Order', 'Input Data', 'Expected Output', 'Hidden'].map((column) => <span key={column}>{column}</span>)}
+                                        </div>
+                                        <p className="aqp-format-note">Use the same Question Key in both files. Hidden accepts TRUE/FALSE, YES/NO, or 1/0.</p>
+                                    </div>
+                                    <div className="aqp-bulk-rules-card">
+                                        <div className="aqp-bulk-rules-title">Coding Bulk Upload Rules</div>
+                                        <ul className="aqp-bulk-rules-list">
+                                            <li>Both Excel files are required.</li>
+                                            <li>Every test-case Question Key must exist in the Questions file.</li>
+                                            <li>Every coding question must have at least one test case.</li>
+                                            <li>Test Case Order must be unique within a Question Key.</li>
+                                            <li>Language must match in both files and is currently Python.</li>
+                                            <li>Marks are read from Coding Questions.xlsx.</li>
+                                        </ul>
+                                    </div>
+                                    <label className="aqp-field-label">Coding Questions Excel File</label>
+                                    <div className="aqp-upload-box">
+                                        <input id="bulk-coding-questions-file" className="aqp-file-input" type="file" accept=".xlsx" onChange={(e) => selectXlsx(e, setBulkQuestionsFile, "Coding Questions")} disabled={isBusy} />
+                                        <label htmlFor="bulk-coding-questions-file" className="aqp-file-label">Choose Questions File</label>
+                                        <div className="aqp-file-info"><strong>{bulkQuestionsFile ? bulkQuestionsFile.name : "No questions file selected"}</strong><span>{bulkQuestionsFile ? "Coding Questions.xlsx selected" : "Select the coding questions file"}</span></div>
+                                    </div>
+                                    <label className="aqp-field-label">Coding Test Cases Excel File</label>
+                                    <div className="aqp-upload-box">
+                                        <input id="bulk-coding-test-cases-file" className="aqp-file-input" type="file" accept=".xlsx" onChange={(e) => selectXlsx(e, setBulkTestCasesFile, "Coding Test Cases")} disabled={isBusy} />
+                                        <label htmlFor="bulk-coding-test-cases-file" className="aqp-file-label">Choose Test Cases File</label>
+                                        <div className="aqp-file-info"><strong>{bulkTestCasesFile ? bulkTestCasesFile.name : "No test cases file selected"}</strong><span>{bulkTestCasesFile ? "Coding Test Cases.xlsx selected" : "Select the test cases file"}</span></div>
+                                    </div>
+                                </>
+                            )}
 
-                            <label className="aqp-field-label">
-                                Questions Excel File
-                            </label>
-
-                            <div className="aqp-upload-box">
-                                <input
-                                    id="bulk-question-file"
-                                    className="aqp-file-input"
-                                    type="file"
-                                    accept=".xlsx"
-                                    onChange={
-                                        handleBulkFileChange
-                                    }
-                                    disabled={
-                                        bulkUploading ||
-                                        questionAdding ||
-                                        doneProcessing
-                                    }
-                                />
-
-                                <label
-                                    htmlFor="bulk-question-file"
-                                    className="aqp-file-label"
-                                >
-                                    Choose Excel File
-                                </label>
-
-                                <div className="aqp-file-info">
-                                    {bulkFile ? (
-                                        <>
-                                            <strong>
-                                                {
-                                                    bulkFile.name
-                                                }
-                                            </strong>
-
-                                            <span>
-                                                Excel file
-                                                ready for
-                                                upload
-                                            </span>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <strong>
-                                                No file
-                                                selected
-                                            </strong>
-
-                                            <span>
-                                                Only .xlsx
-                                                files are
-                                                supported
-                                            </span>
-                                        </>
-                                    )}
-                                </div>
-                            </div>
-
-                            <button
-                                type="button"
-                                className="aqp-upload-btn"
-                                onClick={
-                                    handleBulkUpload
-                                }
-                                disabled={
-                                    bulkUploading ||
-                                    questionAdding ||
-                                    doneProcessing
-                                }
-                            >
-                                {bulkUploading
-                                    ? "Uploading Questions..."
-                                    : "Upload Questions"}
-                            </button>
+                            <button type="button" className="aqp-upload-btn" onClick={handleBulkUpload} disabled={isBusy}>{bulkUploading ? "Uploading Questions..." : bulkType === "mcq" ? "Upload MCQ Questions" : "Upload Coding Questions & Test Cases"}</button>
                         </div>
                     )}
                 </div>

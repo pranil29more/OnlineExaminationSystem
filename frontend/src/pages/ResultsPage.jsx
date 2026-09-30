@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import API_BASE_URL from "../services/api";
 import Navbar from "../components/Navbar";
+import PageLoader from "../components/PageLoader";
 import "../styles/ResultsPage.css";
 
 function ResultsPage() {
@@ -9,6 +10,12 @@ function ResultsPage() {
         useState([]);
 
     const [search, setSearch] =
+        useState("");
+
+    const [loading, setLoading] =
+        useState(true);
+
+    const [error, setError] =
         useState("");
 
     // ==========================================
@@ -21,25 +28,63 @@ function ResultsPage() {
 
     const fetchResults = async () => {
         try {
+            setLoading(true);
+            setError("");
+
             const token =
                 localStorage.getItem("token");
 
-            const response = await fetch(
-                `${API_BASE_URL}/results`,
-                {
-                    headers: {
-                        Authorization:
-                            `Bearer ${token}`,
-                    },
-                }
-            );
+            if (!token) {
+                setError(
+                    "Your session has expired. Please log in again."
+                );
+
+                return;
+            }
+
+            const response =
+                await fetch(
+                    `${API_BASE_URL}/results`,
+                    {
+                        headers: {
+                            Authorization:
+                                `Bearer ${token}`,
+                        },
+                    }
+                );
 
             const data =
                 await response.json();
 
+            if (!response.ok) {
+                setError(
+                    data.message ||
+                        "Unable to load examination results."
+                );
+
+                return;
+            }
+
+            if (!Array.isArray(data)) {
+                setError(
+                    "Invalid results data received from the server."
+                );
+
+                return;
+            }
+
             setResults(data);
         } catch (error) {
-            console.error(error);
+            console.error(
+                "Error fetching results:",
+                error
+            );
+
+            setError(
+                "Unable to load examination results. Please check your connection."
+            );
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -55,20 +100,24 @@ function ResultsPage() {
             (result) => {
                 return (
                     String(
-                        result.submission_id
+                        result.submission_id ?? ""
                     )
                         .toLowerCase()
                         .includes(searchText)
 
                     ||
 
-                    (result.exam_title || "")
+                    String(
+                        result.exam_title ?? ""
+                    )
                         .toLowerCase()
                         .includes(searchText)
 
                     ||
 
-                    (result.candidate_name || "")
+                    String(
+                        result.candidate_name ?? ""
+                    )
                         .toLowerCase()
                         .includes(searchText)
                 );
@@ -80,6 +129,22 @@ function ResultsPage() {
             (result) =>
                 result.candidate_name
         );
+
+    // ==========================================
+    // Loading
+    // ==========================================
+
+    if (loading) {
+        return (
+            <div>
+                <Navbar />
+
+                <PageLoader
+                    message="Loading Results..."
+                />
+            </div>
+        );
+    }
 
     // ==========================================
     // Render
@@ -114,294 +179,346 @@ function ResultsPage() {
                 </header>
 
                 {/* ==========================================
-                    Search
+                    Error State
                 ========================================== */}
 
-                <section className="rp-search-section">
-                    <div className="rp-search-wrapper">
-                        <input
-                            id="result-search"
-                            type="text"
-                            className="rp-search-input"
-                            placeholder={
-                                hasCandidateNames
-                                    ? "🔍 Search by candidate, exam or submission ID..."
-                                    : "🔍 Search by exam or submission ID..."
-                            }
-                            value={search}
-                            onChange={(event) =>
-                                setSearch(
-                                    event.target.value
-                                )
-                            }
-                        />
-                    </div>
-
-                    {search.trim() && (
-                        <p className="rp-search-summary">
-                            Showing{" "}
+                {error && (
+                    <section className="rp-section">
+                        <div className="rp-empty-state">
+                            <div className="rp-empty-icon">
+                                !
+                            </div>
 
                             <strong>
-                                {
-                                    filteredResults.length
-                                }
-                            </strong>{" "}
+                                Unable to Load Results
+                            </strong>
 
-                            matching{" "}
-
-                            {
-                                filteredResults.length ===
-                                1
-                                    ? "result"
-                                    : "results"
-                            }
-                        </p>
-                    )}
-                </section>
-
-                {/* ==========================================
-                    Results Section
-                ========================================== */}
-
-                <section className="rp-section">
-                    <div className="rp-section-header">
-                        <div>
-                            <span className="rp-section-kicker">
-                                SUBMISSIONS
-                            </span>
-
-                            <h2 className="rp-section-title">
-                                Examination Results
-                            </h2>
-
-                            <p className="rp-section-description">
-                                View submitted
-                                examinations and
-                                their performance
-                                details.
+                            <p>
+                                {error}
                             </p>
+
+                            <button
+                                type="button"
+                                className="rp-view-result"
+                                onClick={
+                                    fetchResults
+                                }
+                            >
+                                Try Again
+                            </button>
                         </div>
+                    </section>
+                )}
 
-                        <span className="rp-count-badge">
-                            {
-                                filteredResults.length
-                            }{" "}
+                {!error && (
+                    <>
+                        {/* ==========================================
+                            Search
+                        ========================================== */}
 
-                            {
-                                filteredResults.length ===
-                                1
-                                    ? "Submission"
-                                    : "Submissions"
-                            }
-                        </span>
-                    </div>
+                        <section className="rp-search-section">
+                            <div className="rp-search-wrapper">
+                                <input
+                                    id="result-search"
+                                    type="text"
+                                    className="rp-search-input"
+                                    placeholder={
+                                        hasCandidateNames
+                                            ? "🔍 Search by candidate, exam or submission ID..."
+                                            : "🔍 Search by exam or submission ID..."
+                                    }
+                                    value={search}
+                                    onChange={(
+                                        event
+                                    ) =>
+                                        setSearch(
+                                            event.target.value
+                                        )
+                                    }
+                                />
+                            </div>
 
-                    {/* ==========================================
-                        Results Grid
-                    ========================================== */}
+                            {search.trim() && (
+                                <p className="rp-search-summary">
+                                    Showing{" "}
 
-                    {filteredResults.length >
-                    0 ? (
-                        <div className="rp-results-grid">
-                            {filteredResults.map(
-                                (result) => {
-                                    const isPassed =
-                                        result.score >=
-                                        result.passing_marks;
+                                    <strong>
+                                        {
+                                            filteredResults.length
+                                        }
+                                    </strong>{" "}
 
-                                    return (
-                                        <article
-                                            key={
-                                                result.submission_id
-                                            }
-                                            className={`rp-result-card ${
-                                                isPassed
-                                                    ? "rp-result-card-pass"
-                                                    : "rp-result-card-fail"
-                                            }`}
-                                        >
+                                    matching{" "}
 
-                                            {/* ==================================
-                                                Card Header
-                                            ================================== */}
+                                    {
+                                        filteredResults.length ===
+                                        1
+                                            ? "result"
+                                            : "results"
+                                    }
+                                </p>
+                            )}
+                        </section>
 
-                                            <div className="rp-card-header">
-                                                <div className="rp-card-heading">
-                                                    <span className="rp-submission-label">
-                                                        Submission
-                                                    </span>
+                        {/* ==========================================
+                            Results Section
+                        ========================================== */}
 
-                                                    <h3 className="rp-result-title">
-                                                        #
-                                                        {
-                                                            result.submission_id
-                                                        }
-                                                    </h3>
-                                                </div>
+                        <section className="rp-section">
+                            <div className="rp-section-header">
+                                <div>
+                                    <span className="rp-section-kicker">
+                                        SUBMISSIONS
+                                    </span>
 
-                                                <span
-                                                    className={
-                                                        isPassed
-                                                            ? "rp-status-badge rp-status-pass"
-                                                            : "rp-status-badge rp-status-fail"
+                                    <h2 className="rp-section-title">
+                                        Examination Results
+                                    </h2>
+
+                                    <p className="rp-section-description">
+                                        View submitted
+                                        examinations and
+                                        their performance
+                                        details.
+                                    </p>
+                                </div>
+
+                                <span className="rp-count-badge">
+                                    {
+                                        filteredResults.length
+                                    }{" "}
+
+                                    {
+                                        filteredResults.length ===
+                                        1
+                                            ? "Submission"
+                                            : "Submissions"
+                                    }
+                                </span>
+                            </div>
+
+                            {/* ==========================================
+                                Results Grid
+                            ========================================== */}
+
+                            {filteredResults.length >
+                            0 ? (
+                                <div className="rp-results-grid">
+                                    {filteredResults.map(
+                                        (
+                                            result
+                                        ) => {
+                                            const score =
+                                                Number(
+                                                    result.score
+                                                ) || 0;
+
+                                            const passingMarks =
+                                                Number(
+                                                    result.passing_marks
+                                                ) || 0;
+
+                                            const isPassed =
+                                                score >=
+                                                passingMarks;
+
+                                            return (
+                                                <article
+                                                    key={
+                                                        result.submission_id
                                                     }
+                                                    className={`rp-result-card ${
+                                                        isPassed
+                                                            ? "rp-result-card-pass"
+                                                            : "rp-result-card-fail"
+                                                    }`}
                                                 >
-                                                    {
-                                                        isPassed
-                                                            ? "Pass"
-                                                            : "Fail"
-                                                    }
-                                                </span>
-                                            </div>
 
-                                            {/* ==================================
-                                                Result Details
-                                            ================================== */}
+                                                    {/* ==================================
+                                                        Card Header
+                                                    ================================== */}
 
-                                            <div className="rp-result-details">
-                                                {result.candidate_name && (
-                                                    <div className="rp-result-detail">
-                                                        <span className="rp-detail-label">
-                                                            Candidate
+                                                    <div className="rp-card-header">
+                                                        <div className="rp-card-heading">
+                                                            <span className="rp-submission-label">
+                                                                Submission
+                                                            </span>
+
+                                                            <h3 className="rp-result-title">
+                                                                #
+                                                                {
+                                                                    result.submission_id
+                                                                }
+                                                            </h3>
+                                                        </div>
+
+                                                        <span
+                                                            className={
+                                                                isPassed
+                                                                    ? "rp-status-badge rp-status-pass"
+                                                                    : "rp-status-badge rp-status-fail"
+                                                            }
+                                                        >
+                                                            {
+                                                                isPassed
+                                                                    ? "Pass"
+                                                                    : "Fail"
+                                                            }
+                                                        </span>
+                                                    </div>
+
+                                                    {/* ==================================
+                                                        Result Details
+                                                    ================================== */}
+
+                                                    <div className="rp-result-details">
+
+                                                        {result.candidate_name && (
+                                                            <div className="rp-result-detail">
+                                                                <span className="rp-detail-label">
+                                                                    Candidate
+                                                                </span>
+
+                                                                <strong>
+                                                                    {
+                                                                        result.candidate_name
+                                                                    }
+                                                                </strong>
+                                                            </div>
+                                                        )}
+
+                                                        <div className="rp-result-detail">
+                                                            <span className="rp-detail-label">
+                                                                Exam
+                                                            </span>
+
+                                                            <strong>
+                                                                {
+                                                                    result.exam_title
+                                                                        ? result.exam_title
+                                                                        : `Exam #${result.exam_id}`
+                                                                }
+                                                            </strong>
+                                                        </div>
+
+                                                        <div className="rp-result-detail">
+                                                            <span className="rp-detail-label">
+                                                                Score
+                                                            </span>
+
+                                                            <strong className="rp-score-value">
+                                                                {
+                                                                    result.score
+                                                                }
+
+                                                                <span>
+                                                                    {" "}
+                                                                    /
+                                                                    {" "}
+                                                                    {
+                                                                        result.total_marks
+                                                                    }
+                                                                </span>
+                                                            </strong>
+                                                        </div>
+
+                                                        <div className="rp-result-detail">
+                                                            <span className="rp-detail-label">
+                                                                Passing Marks
+                                                            </span>
+
+                                                            <strong>
+                                                                {
+                                                                    result.passing_marks
+                                                                }
+                                                            </strong>
+                                                        </div>
+
+                                                    </div>
+
+                                                    {/* ==================================
+                                                        Submission Information
+                                                    ================================== */}
+
+                                                    <div className="rp-submission-info">
+                                                        <span>
+                                                            Submitted
                                                         </span>
 
                                                         <strong>
                                                             {
-                                                                result.candidate_name
+                                                                result.submitted_at
                                                             }
                                                         </strong>
                                                     </div>
-                                                )}
 
-                                                <div className="rp-result-detail">
-                                                    <span className="rp-detail-label">
-                                                        Exam
-                                                    </span>
+                                                    {/* ==================================
+                                                        Card Footer
+                                                    ================================== */}
 
-                                                    <strong>
-                                                        {
-                                                            result.exam_title
-                                                                ? result.exam_title
-                                                                : `Exam #${result.exam_id}`
-                                                        }
-                                                    </strong>
-                                                </div>
+                                                    <div className="rp-card-footer">
+                                                        <Link
+                                                            className="rp-view-result"
+                                                            to={`/result/${result.submission_id}`}
+                                                        >
+                                                            <svg
+                                                                className="rp-eye-icon"
+                                                                viewBox="0 0 24 24"
+                                                                aria-hidden="true"
+                                                            >
+                                                                <path
+                                                                    d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"
+                                                                />
 
-                                                <div className="rp-result-detail">
-                                                    <span className="rp-detail-label">
-                                                        Score
-                                                    </span>
+                                                                <circle
+                                                                    cx="12"
+                                                                    cy="12"
+                                                                    r="2.5"
+                                                                />
+                                                            </svg>
 
-                                                    <strong className="rp-score-value">
-                                                        {
-                                                            result.score
-                                                        }
+                                                            <span>
+                                                                View Result
+                                                            </span>
+                                                        </Link>
+                                                    </div>
 
-                                                        <span>
-                                                            {" "}
-                                                            /
-                                                            {" "}
-                                                            {
-                                                                result.total_marks
-                                                            }
-                                                        </span>
-                                                    </strong>
-                                                </div>
+                                                </article>
+                                            );
+                                        }
+                                    )}
+                                </div>
+                            ) : (
 
-                                                <div className="rp-result-detail">
-                                                    <span className="rp-detail-label">
-                                                        Passing Marks
-                                                    </span>
+                                /* ==========================================
+                                   Empty / Search State
+                                ========================================== */
 
-                                                    <strong>
-                                                        {
-                                                            result.passing_marks
-                                                        }
-                                                    </strong>
-                                                </div>
-                                            </div>
+                                <div className="rp-empty-state">
+                                    <div className="rp-empty-icon">
+                                        —
+                                    </div>
 
-                                            {/* ==================================
-                                                Submission Information
-                                            ================================== */}
+                                    <strong>
+                                        {
+                                            search.trim()
+                                                ? "No Matching Results"
+                                                : "No Results Available"
+                                        }
+                                    </strong>
 
-                                            <div className="rp-submission-info">
-                                                <span>
-                                                    Submitted
-                                                </span>
-
-                                                <strong>
-                                                    {
-                                                        result.submitted_at
-                                                    }
-                                                </strong>
-                                            </div>
-
-                                            {/* ==================================
-                                                Card Footer
-                                            ================================== */}
-
-                                            <div className="rp-card-footer">
-                                                <Link
-                                                    className="rp-view-result"
-                                                    to={`/result/${result.submission_id}`}
-                                                >
-                                                    <svg
-                                                        className="rp-eye-icon"
-                                                        viewBox="0 0 24 24"
-                                                        aria-hidden="true"
-                                                    >
-                                                        <path
-                                                            d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"
-                                                        />
-
-                                                        <circle
-                                                            cx="12"
-                                                            cy="12"
-                                                            r="2.5"
-                                                        />
-                                                    </svg>
-
-                                                    <span>
-                                                        View Result
-                                                    </span>
-                                                </Link>
-                                            </div>
-
-                                        </article>
-                                    );
-                                }
+                                    <p>
+                                        {
+                                            search.trim()
+                                                ? "No examination results match your current search."
+                                                : "There are currently no examination submissions to display."
+                                        }
+                                    </p>
+                                </div>
                             )}
-                        </div>
-                    ) : (
-
-                        /* ==========================================
-                           Empty / Search State
-                        ========================================== */
-
-                        <div className="rp-empty-state">
-                            <div className="rp-empty-icon">
-                                —
-                            </div>
-
-                            <strong>
-                                {
-                                    search.trim()
-                                        ? "No Matching Results"
-                                        : "No Results Available"
-                                }
-                            </strong>
-
-                            <p>
-                                {
-                                    search.trim()
-                                        ? "No examination results match your current search."
-                                        : "There are currently no examination submissions to display."
-                                }
-                            </p>
-                        </div>
-                    )}
-                </section>
+                        </section>
+                    </>
+                )}
 
             </main>
         </div>

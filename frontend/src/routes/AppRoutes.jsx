@@ -20,6 +20,7 @@ import AdminRoute from "./AdminRoute";
 import RoleRoute from "./RoleRoute";
 import EditExamPage from "../pages/EditExamPage";
 import EditQuestionPage from "../pages/EditQuestionPage";
+import EditCodingQuestionPage from "../pages/EditCodingQuestionPage";
 import ExamResultsPage from "../pages/ExamResultsPage";
 import SubmissionAnalyticsPage from "../pages/SubmissionAnalyticsPage";
 import BatchManagementPage from "../pages/BatchManagementPage";
@@ -226,6 +227,15 @@ function AppRoutes() {
                     element={
                         <AdminRoute>
                             <EditQuestionPage />
+                        </AdminRoute>
+                    }
+                />
+
+                <Route
+                    path="/edit-coding-question/:codingQuestionId"
+                    element={
+                        <AdminRoute>
+                            <EditCodingQuestionPage />
                         </AdminRoute>
                     }
                 />

@@ -391,19 +391,16 @@ function CandidateResultsPage() {
                                                     </td>
 
                                                     <td>
-                                                        <span
-                                                            className={
-                                                                item.status ===
-                                                                "Pass"
-                                                                    ? "crp-status-badge crp-status-pass"
-                                                                    : "crp-status-badge crp-status-fail"
-                                                            }
-                                                        >
-                                                            {
-                                                                item.status
-                                                            }
-                                                        </span>
-                                                    </td>
+    <span
+        className={
+            item.result === "Pass"
+                ? "crp-status-badge crp-status-pass"
+                : "crp-status-badge crp-status-fail"
+        }
+    >
+        {item.result}
+    </span>
+</td>
 
                                                     <td>
                                                         <span className="crp-submitted-date">

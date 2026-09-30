@@ -5,7 +5,7 @@
 
 
 /* =========================================================
-   Page Scope
+   PAGE
 ========================================================= */
 
 .rdp-page {
@@ -31,18 +31,19 @@
     --rdp-danger: #ef4444;
     --rdp-danger-soft: #fca5a5;
 
+    --rdp-warning: #f59e0b;
+
     --rdp-radius-sm: 8px;
     --rdp-radius-md: 12px;
     --rdp-radius-lg: 16px;
 
     --rdp-shadow-sm:
-        0 6px 16px
-        rgba(0, 0, 0, 0.18);
+        0 6px 16px rgba(0, 0, 0, 0.18);
 
     --rdp-shadow-md:
-        0 12px 28px
-        rgba(0, 0, 0, 0.24);
+        0 12px 28px rgba(0, 0, 0, 0.24);
 
+    width: 100%;
     min-height: 100vh;
 
     background:
@@ -50,11 +51,24 @@
 
     color:
         var(--rdp-text);
+
+    box-sizing: border-box;
 }
 
 
 /* =========================================================
-   Page Container
+   BOX SIZING
+========================================================= */
+
+.rdp-page *,
+.rdp-page *::before,
+.rdp-page *::after {
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   PAGE CONTAINER
 ========================================================= */
 
 .rdp-page-container {
@@ -76,7 +90,7 @@
 
 
 /* =========================================================
-   Page Header
+   PAGE HEADER
 ========================================================= */
 
 .rdp-page-header {
@@ -108,6 +122,9 @@
 
     letter-spacing:
         1.4px;
+
+    text-transform:
+        uppercase;
 }
 
 
@@ -143,9 +160,7 @@
         700px;
 
     margin:
-        10px
-        0
-        0;
+        10px 0 0;
 
     color:
         var(--rdp-text-muted);
@@ -159,16 +174,132 @@
 
 
 /* =========================================================
-   Result Summary
+   ERROR STATE
+========================================================= */
+
+.rdp-error-state {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    min-height:
+        360px;
+
+    padding:
+        40px;
+
+    background:
+        var(--rdp-surface);
+
+    border:
+        1px solid var(--rdp-border);
+
+    border-radius:
+        var(--rdp-radius-lg);
+
+    box-shadow:
+        var(--rdp-shadow-md);
+
+    text-align:
+        center;
+}
+
+
+.rdp-error-icon {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    width:
+        52px;
+
+    height:
+        52px;
+
+    margin-bottom:
+        18px;
+
+    color:
+        #fecaca;
+
+    background:
+        rgba(239, 68, 68, 0.10);
+
+    border:
+        1px solid rgba(239, 68, 68, 0.45);
+
+    border-radius:
+        50%;
+
+    font-size:
+        25px;
+
+    font-weight:
+        800;
+}
+
+
+.rdp-error-state h2 {
+
+    margin:
+        0 0 8px;
+
+    color:
+        var(--rdp-text);
+
+    font-size:
+        22px;
+
+    font-weight:
+        800;
+}
+
+
+.rdp-error-state p {
+
+    max-width:
+        600px;
+
+    margin:
+        0;
+
+    color:
+        var(--rdp-text-muted);
+
+    font-size:
+        14px;
+
+    line-height:
+        1.6;
+
+    overflow-wrap:
+        anywhere;
+}
+
+
+/* =========================================================
+   SUMMARY CARD
 ========================================================= */
 
 .rdp-summary-card {
 
     width:
         100%;
-
-    box-sizing:
-        border-box;
 
     margin-bottom:
         54px;
@@ -180,8 +311,7 @@
         var(--rdp-surface);
 
     border:
-        1px solid
-        var(--rdp-border);
+        1px solid var(--rdp-border);
 
     border-radius:
         var(--rdp-radius-lg);
@@ -192,7 +322,7 @@
 
 
 /* =========================================================
-   Summary Header
+   SUMMARY HEADER
 ========================================================= */
 
 .rdp-summary-header {
@@ -200,11 +330,11 @@
     display:
         flex;
 
-    justify-content:
-        space-between;
-
     align-items:
         flex-start;
+
+    justify-content:
+        space-between;
 
     gap:
         22px;
@@ -213,12 +343,11 @@
         21px;
 
     border-bottom:
-        1px solid
-        var(--rdp-border);
+        1px solid var(--rdp-border);
 }
 
 
-.rdp-summary-header > div {
+.rdp-summary-heading {
 
     min-width:
         0;
@@ -244,15 +373,16 @@
 
     letter-spacing:
         1px;
+
+    text-transform:
+        uppercase;
 }
 
 
 .rdp-summary-title {
 
     margin:
-        0
-        0
-        7px;
+        0 0 7px;
 
     color:
         var(--rdp-text);
@@ -288,7 +418,7 @@
 
 
 /* =========================================================
-   Pass / Fail Status
+   STATUS BADGES
 ========================================================= */
 
 .rdp-status-badge {
@@ -309,8 +439,7 @@
         29px;
 
     padding:
-        0
-        11px;
+        0 12px;
 
     border-radius:
         999px;
@@ -326,6 +455,9 @@
 
     letter-spacing:
         0.6px;
+
+    white-space:
+        nowrap;
 }
 
 
@@ -335,21 +467,10 @@
         #bbf7d0;
 
     background:
-        rgba(
-            34,
-            197,
-            94,
-            0.10
-        );
+        rgba(34, 197, 94, 0.10);
 
     border:
-        1px solid
-        rgba(
-            34,
-            197,
-            94,
-            0.45
-        );
+        1px solid rgba(34, 197, 94, 0.45);
 }
 
 
@@ -359,26 +480,15 @@
         #fecaca;
 
     background:
-        rgba(
-            239,
-            68,
-            68,
-            0.10
-        );
+        rgba(239, 68, 68, 0.10);
 
     border:
-        1px solid
-        rgba(
-            239,
-            68,
-            68,
-            0.45
-        );
+        1px solid rgba(239, 68, 68, 0.45);
 }
 
 
 /* =========================================================
-   Score Overview
+   SCORE OVERVIEW
 ========================================================= */
 
 .rdp-score-overview {
@@ -387,10 +497,7 @@
         grid;
 
     grid-template-columns:
-        repeat(
-            2,
-            minmax(0, 1fr)
-        );
+        repeat(2, minmax(0, 1fr));
 
     margin-top:
         20px;
@@ -399,8 +506,7 @@
         hidden;
 
     border:
-        1px solid
-        var(--rdp-border);
+        1px solid var(--rdp-border);
 
     border-radius:
         var(--rdp-radius-md);
@@ -418,24 +524,21 @@
     gap:
         7px;
 
+    min-width:
+        0;
+
     padding:
         19px;
 
     background:
-        rgba(
-            15,
-            23,
-            42,
-            0.32
-        );
+        rgba(15, 23, 42, 0.32);
 }
 
 
 .rdp-score-main:first-child {
 
     border-right:
-        1px solid
-        var(--rdp-border);
+        1px solid var(--rdp-border);
 }
 
 
@@ -472,6 +575,9 @@
 
     line-height:
         1.2;
+
+    overflow-wrap:
+        anywhere;
 }
 
 
@@ -488,15 +594,8 @@
 }
 
 
-.rdp-percentage-value {
-
-    color:
-        var(--rdp-text);
-}
-
-
 /* =========================================================
-   Summary Details
+   SUMMARY DETAILS
 ========================================================= */
 
 .rdp-summary-details {
@@ -505,13 +604,19 @@
         grid;
 
     grid-template-columns:
-        repeat(
-            2,
-            minmax(0, 1fr)
-        );
+        repeat(2, minmax(0, 1fr));
 
     margin-top:
         20px;
+
+    overflow:
+        hidden;
+
+    border:
+        1px solid var(--rdp-border);
+
+    border-radius:
+        var(--rdp-radius-md);
 }
 
 
@@ -523,31 +628,37 @@
     flex-direction:
         column;
 
+    justify-content:
+        center;
+
     gap:
         6px;
 
     min-width:
         0;
 
+    min-height:
+        82px;
+
     padding:
-        16px
-        19px;
+        16px 19px;
+
+    background:
+        rgba(15, 23, 42, 0.18);
 }
 
 
 .rdp-summary-detail:nth-child(odd) {
 
     border-right:
-        1px solid
-        var(--rdp-border);
+        1px solid var(--rdp-border);
 }
 
 
 .rdp-summary-detail:nth-child(-n + 2) {
 
     border-bottom:
-        1px solid
-        var(--rdp-border);
+        1px solid var(--rdp-border);
 }
 
 
@@ -571,7 +682,7 @@
 
 
 /* =========================================================
-   Detail Label
+   DETAIL LABEL
 ========================================================= */
 
 .rdp-detail-label {
@@ -594,18 +705,19 @@
 
 
 /* =========================================================
-   Answers Section
+   SECTIONS
 ========================================================= */
 
-.rdp-answers-section {
+.rdp-answers-section,
+.rdp-coding-section {
 
     margin-bottom:
-        50px;
+        54px;
 }
 
 
 /* =========================================================
-   Answers Header
+   SECTION HEADER
 ========================================================= */
 
 .rdp-answers-header {
@@ -613,11 +725,11 @@
     display:
         flex;
 
-    justify-content:
-        space-between;
-
     align-items:
         flex-end;
+
+    justify-content:
+        space-between;
 
     gap:
         24px;
@@ -646,6 +758,9 @@
 
     letter-spacing:
         1.2px;
+
+    text-transform:
+        uppercase;
 }
 
 
@@ -674,9 +789,7 @@
         700px;
 
     margin:
-        7px
-        0
-        0;
+        7px 0 0;
 
     color:
         var(--rdp-text-muted);
@@ -690,7 +803,7 @@
 
 
 /* =========================================================
-   Answer Count
+   ANSWER COUNT
 ========================================================= */
 
 .rdp-answer-count {
@@ -711,29 +824,28 @@
         30px;
 
     padding:
-        0
-        11px;
+        0 11px;
 
     border:
-        1px solid
-        var(--rdp-border-light);
+        1px solid var(--rdp-border-light);
 
     border-radius:
         999px;
 
     background:
-        rgba(
-            71,
-            85,
-            105,
-            0.12
-        );
+        rgba(71, 85, 105, 0.12);
+
+    color:
+        var(--rdp-text-soft);
 
     font-size:
         11px;
 
     font-weight:
         750;
+
+    white-space:
+        nowrap;
 }
 
 
@@ -766,7 +878,120 @@
 
 
 /* =========================================================
-   Answers Grid
+   EMPTY STATE
+========================================================= */
+
+.rdp-empty-state {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    min-height:
+        220px;
+
+    padding:
+        35px;
+
+    background:
+        var(--rdp-surface);
+
+    border:
+        1px solid var(--rdp-border);
+
+    border-radius:
+        var(--rdp-radius-lg);
+
+    text-align:
+        center;
+}
+
+
+.rdp-empty-icon {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    width:
+        48px;
+
+    height:
+        48px;
+
+    margin-bottom:
+        14px;
+
+    color:
+        var(--rdp-text-muted);
+
+    background:
+        rgba(100, 116, 139, 0.10);
+
+    border:
+        1px solid var(--rdp-border);
+
+    border-radius:
+        50%;
+
+    font-size:
+        20px;
+
+    font-weight:
+        700;
+}
+
+
+.rdp-empty-state strong {
+
+    margin-bottom:
+        7px;
+
+    color:
+        var(--rdp-text);
+
+    font-size:
+        16px;
+
+    font-weight:
+        750;
+}
+
+
+.rdp-empty-state p {
+
+    max-width:
+        500px;
+
+    margin:
+        0;
+
+    color:
+        var(--rdp-text-muted);
+
+    font-size:
+        13px;
+
+    line-height:
+        1.6;
+}
+
+
+/* =========================================================
+   MCQ ANSWERS GRID
 ========================================================= */
 
 .rdp-answers-grid {
@@ -783,7 +1008,7 @@
 
 
 /* =========================================================
-   Answer Card
+   MCQ ANSWER CARD
 ========================================================= */
 
 .rdp-answer-card {
@@ -804,8 +1029,7 @@
         var(--rdp-surface);
 
     border:
-        1px solid
-        var(--rdp-border);
+        1px solid var(--rdp-border);
 
     border-radius:
         var(--rdp-radius-lg);
@@ -826,90 +1050,33 @@
         translateY(-2px);
 
     box-shadow:
-        0 13px 28px
-        rgba(
-            0,
-            0,
-            0,
-            0.28
-        );
+        0 13px 28px rgba(0, 0, 0, 0.28);
 }
 
-
-/* =========================================================
-   Correct Answer Card
-========================================================= */
 
 .rdp-answer-card.rdp-answer-correct {
 
     border-left:
-        3px solid
-        #22c55e;
+        3px solid #22c55e;
 }
 
-
-.rdp-answer-card.rdp-answer-correct:hover {
-
-    border-color:
-        rgba(
-            34,
-            197,
-            94,
-            0.75
-        );
-}
-
-
-/* =========================================================
-   Incorrect Answer Card
-========================================================= */
 
 .rdp-answer-card.rdp-answer-incorrect {
 
     border-left:
-        3px solid
-        #ef4444;
+        3px solid #ef4444;
 }
 
-
-.rdp-answer-card.rdp-answer-incorrect:hover {
-
-    border-color:
-        rgba(
-            239,
-            68,
-            68,
-            0.75
-        );
-}
-
-
-/* =========================================================
-   Unanswered Answer Card
-========================================================= */
 
 .rdp-answer-card.rdp-answer-unanswered {
 
     border-left:
-        3px solid
-        #64748b;
-}
-
-
-.rdp-answer-card.rdp-answer-unanswered:hover {
-
-    border-color:
-        rgba(
-            100,
-            116,
-            139,
-            0.75
-        );
+        3px solid #64748b;
 }
 
 
 /* =========================================================
-   Answer Card Header
+   MCQ HEADER
 ========================================================= */
 
 .rdp-answer-card-header {
@@ -917,22 +1084,20 @@
     display:
         flex;
 
-    justify-content:
-        space-between;
-
     align-items:
         flex-start;
+
+    justify-content:
+        space-between;
 
     gap:
         18px;
 
     padding:
-        20px
-        22px;
+        20px 22px;
 
     border-bottom:
-        1px solid
-        var(--rdp-border);
+        1px solid var(--rdp-border);
 }
 
 
@@ -991,7 +1156,7 @@
 
 
 /* =========================================================
-   Answer Status
+   MCQ STATUS
 ========================================================= */
 
 .rdp-answer-status {
@@ -1012,8 +1177,7 @@
         27px;
 
     padding:
-        0
-        10px;
+        0 10px;
 
     border-radius:
         999px;
@@ -1029,6 +1193,9 @@
 
     letter-spacing:
         0.6px;
+
+    white-space:
+        nowrap;
 }
 
 
@@ -1038,21 +1205,10 @@
         #bbf7d0;
 
     background:
-        rgba(
-            34,
-            197,
-            94,
-            0.10
-        );
+        rgba(34, 197, 94, 0.10);
 
     border:
-        1px solid
-        rgba(
-            34,
-            197,
-            94,
-            0.45
-        );
+        1px solid rgba(34, 197, 94, 0.45);
 }
 
 
@@ -1062,27 +1218,12 @@
         #fecaca;
 
     background:
-        rgba(
-            239,
-            68,
-            68,
-            0.10
-        );
+        rgba(239, 68, 68, 0.10);
 
     border:
-        1px solid
-        rgba(
-            239,
-            68,
-            68,
-            0.45
-        );
+        1px solid rgba(239, 68, 68, 0.45);
 }
 
-
-/* =========================================================
-   Unanswered Answer Status
-========================================================= */
 
 .rdp-answer-status.rdp-unanswered {
 
@@ -1090,53 +1231,37 @@
         #cbd5e1;
 
     background:
-        rgba(
-            100,
-            116,
-            139,
-            0.12
-        );
+        rgba(100, 116, 139, 0.12);
 
     border:
-        1px solid
-        rgba(
-            100,
-            116,
-            139,
-            0.45
-        );
+        1px solid rgba(100, 116, 139, 0.45);
 }
 
 
 /* =========================================================
-   Answer Content
+   MCQ ANSWER CONTENT
 ========================================================= */
 
 .rdp-answer-content {
 
     padding:
-        19px
-        22px;
+        19px 22px;
 }
 
 
 .rdp-answer-text {
 
     margin:
-        10px
-        0
-        0;
+        10px 0 0;
 
     padding:
-        13px
-        15px;
+        13px 15px;
 
     background:
         #0f172a;
 
     border:
-        1px solid
-        var(--rdp-border);
+        1px solid var(--rdp-border);
 
     border-radius:
         10px;
@@ -1152,11 +1277,14 @@
 
     overflow-wrap:
         anywhere;
+
+    white-space:
+        pre-wrap;
 }
 
 
 /* =========================================================
-   Answer Footer
+   MCQ FOOTER
 ========================================================= */
 
 .rdp-answer-footer {
@@ -1171,12 +1299,10 @@
         48px;
 
     padding:
-        0
-        22px;
+        0 22px;
 
     border-top:
-        1px solid
-        var(--rdp-border);
+        1px solid var(--rdp-border);
 }
 
 
@@ -1204,10 +1330,6 @@
 }
 
 
-/* =========================================================
-   Unanswered Answer Result
-========================================================= */
-
 .rdp-unanswered-result {
 
     color:
@@ -1216,7 +1338,403 @@
 
 
 /* =========================================================
-   Responsive — Tablet
+   CODING RESULTS GRID
+========================================================= */
+
+.rdp-coding-results-grid {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        1fr;
+
+    gap:
+        18px;
+}
+
+
+/* =========================================================
+   CODING RESULT CARD
+========================================================= */
+
+.rdp-coding-result-card {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    min-width:
+        0;
+
+    overflow:
+        hidden;
+
+    background:
+        var(--rdp-surface);
+
+    border:
+        1px solid var(--rdp-border);
+
+    border-radius:
+        var(--rdp-radius-lg);
+
+    box-shadow:
+        var(--rdp-shadow-sm);
+
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.rdp-coding-result-card:hover {
+
+    transform:
+        translateY(-2px);
+
+    border-color:
+        var(--rdp-border-light);
+
+    box-shadow:
+        var(--rdp-shadow-md);
+}
+
+
+/*
+ * Subtle overall coding result indication.
+ */
+
+.rdp-coding-result-card.rdp-coding-passed {
+
+    border-color:
+        rgba(34, 197, 94, 0.28);
+}
+
+
+.rdp-coding-result-card.rdp-coding-failed {
+
+    border-color:
+        rgba(239, 68, 68, 0.28);
+}
+
+
+.rdp-coding-result-card.rdp-coding-unanswered {
+
+    border-color:
+        rgba(100, 116, 139, 0.45);
+}
+
+
+/* =========================================================
+   CODING HEADER
+========================================================= */
+
+.rdp-coding-result-header {
+
+    display:
+        flex;
+
+    align-items:
+        flex-start;
+
+    justify-content:
+        space-between;
+
+    gap:
+        18px;
+
+    padding:
+        20px 22px;
+
+    border-bottom:
+        1px solid var(--rdp-border);
+}
+
+
+.rdp-coding-result-header > div {
+
+    min-width:
+        0;
+}
+
+
+/* =========================================================
+   CODING STATUS
+========================================================= */
+
+.rdp-coding-status {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    flex-shrink:
+        0;
+
+    min-height:
+        28px;
+
+    padding:
+        0 11px;
+
+    border-radius:
+        999px;
+
+    font-size:
+        10px;
+
+    font-weight:
+        850;
+
+    text-transform:
+        uppercase;
+
+    letter-spacing:
+        0.6px;
+
+    white-space:
+        nowrap;
+}
+
+
+.rdp-coding-status-success {
+
+    color:
+        #bbf7d0;
+
+    background:
+        rgba(34, 197, 94, 0.10);
+
+    border:
+        1px solid rgba(34, 197, 94, 0.45);
+}
+
+
+.rdp-coding-status-failed {
+
+    color:
+        #fecaca;
+
+    background:
+        rgba(239, 68, 68, 0.10);
+
+    border:
+        1px solid rgba(239, 68, 68, 0.45);
+}
+
+
+/*
+ * Coding unanswered status.
+ *
+ * This intentionally matches the visual treatment
+ * used by the MCQ unanswered badge.
+ */
+
+.rdp-coding-status-unanswered {
+
+    color:
+        #cbd5e1;
+
+    background:
+        rgba(100, 116, 139, 0.12);
+
+    border:
+        1px solid rgba(100, 116, 139, 0.45);
+}
+
+
+/* =========================================================
+   CODING DETAILS
+========================================================= */
+
+.rdp-coding-result-details {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    border-bottom:
+        1px solid var(--rdp-border);
+}
+
+
+.rdp-coding-result-detail {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    justify-content:
+        center;
+
+    gap:
+        6px;
+
+    min-width:
+        0;
+
+    min-height:
+        82px;
+
+    padding:
+        16px 20px;
+
+    background:
+        rgba(15, 23, 42, 0.18);
+}
+
+
+.rdp-coding-result-detail:nth-child(odd) {
+
+    border-right:
+        1px solid var(--rdp-border);
+}
+
+
+.rdp-coding-result-detail:nth-child(-n + 2) {
+
+    border-bottom:
+        1px solid var(--rdp-border);
+}
+
+
+.rdp-coding-result-detail strong {
+
+    color:
+        var(--rdp-text-soft);
+
+    font-size:
+        14px;
+
+    font-weight:
+        750;
+
+    line-height:
+        1.45;
+
+    overflow-wrap:
+        anywhere;
+}
+
+
+/* =========================================================
+   CODING FOOTER
+========================================================= */
+
+.rdp-coding-result-footer {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    min-height:
+        54px;
+
+    padding:
+        12px 22px;
+
+    font-size:
+        12px;
+
+    font-weight:
+        700;
+
+    line-height:
+        1.5;
+}
+
+
+.rdp-coding-result-success {
+
+    color:
+        #86efac;
+
+    background:
+        rgba(34, 197, 94, 0.055);
+
+    border-top:
+        1px solid rgba(34, 197, 94, 0.15);
+}
+
+
+.rdp-coding-result-failed {
+
+    color:
+        #fca5a5;
+
+    background:
+        rgba(239, 68, 68, 0.055);
+
+    border-top:
+        1px solid rgba(239, 68, 68, 0.15);
+}
+
+
+.rdp-coding-result-unanswered {
+
+    color:
+        #94a3b8;
+
+    background:
+        rgba(100, 116, 139, 0.055);
+
+    border-top:
+        1px solid rgba(100, 116, 139, 0.15);
+}
+
+
+/* =========================================================
+   EMPTY GRID SAFETY
+========================================================= */
+
+.rdp-answers-grid:empty::after {
+
+    content:
+        "No answer details available.";
+
+    display:
+        block;
+
+    padding:
+        30px;
+
+    color:
+        var(--rdp-text-muted);
+
+    background:
+        var(--rdp-surface);
+
+    border:
+        1px solid var(--rdp-border);
+
+    border-radius:
+        var(--rdp-radius-lg);
+
+    text-align:
+        center;
+
+    font-size:
+        14px;
+}
+
+
+/* =========================================================
+   TABLET
 ========================================================= */
 
 @media (max-width: 800px) {
@@ -1232,12 +1750,11 @@
         padding-top:
             32px;
     }
-
 }
 
 
 /* =========================================================
-   Responsive — Mobile
+   MOBILE
 ========================================================= */
 
 @media (max-width: 700px) {
@@ -1248,9 +1765,7 @@
             calc(100% - 24px);
 
         padding:
-            25px
-            0
-            50px;
+            25px 0 50px;
     }
 
 
@@ -1260,6 +1775,13 @@
             column;
 
         align-items:
+            flex-start;
+    }
+
+
+    .rdp-status-badge {
+
+        align-self:
             flex-start;
     }
 
@@ -1279,12 +1801,11 @@
         align-self:
             flex-start;
     }
-
 }
 
 
 /* =========================================================
-   Responsive — Small Mobile
+   SMALL MOBILE
 ========================================================= */
 
 @media (max-width: 600px) {
@@ -1316,8 +1837,7 @@
             none;
 
         border-bottom:
-            1px solid
-            var(--rdp-border);
+            1px solid var(--rdp-border);
     }
 
 
@@ -1345,54 +1865,183 @@
     .rdp-summary-detail:not(:last-child) {
 
         border-bottom:
-            1px solid
-            var(--rdp-border);
+            1px solid var(--rdp-border);
     }
 
+
+    .rdp-coding-result-details {
+
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .rdp-coding-result-detail:nth-child(odd) {
+
+        border-right:
+            none;
+    }
+
+
+    .rdp-coding-result-detail:nth-child(-n + 2) {
+
+        border-bottom:
+            none;
+    }
+
+
+    .rdp-coding-result-detail:not(:last-child) {
+
+        border-bottom:
+            1px solid var(--rdp-border);
+    }
 }
 
 
 /* =========================================================
-   Responsive — Very Small Mobile
+   VERY SMALL MOBILE
 ========================================================= */
 
 @media (max-width: 480px) {
 
-    .rdp-answer-card-header {
+    .rdp-page-container {
+
+        width:
+            calc(100% - 18px);
+
+        padding-top:
+            22px;
+    }
+
+
+    .rdp-page-title {
+
+        font-size:
+            27px;
+    }
+
+
+    .rdp-page-description {
+
+        font-size:
+            14px;
+    }
+
+
+    .rdp-summary-card {
+
+        padding:
+            18px;
+    }
+
+
+    .rdp-summary-title {
+
+        font-size:
+            20px;
+    }
+
+
+    .rdp-score-value,
+    .rdp-percentage-value {
+
+        font-size:
+            25px;
+    }
+
+
+    .rdp-answer-card-header,
+    .rdp-coding-result-header {
 
         flex-direction:
             column;
 
         gap:
             12px;
+
+        padding:
+            17px;
     }
 
 
-    .rdp-answer-status {
+    .rdp-answer-status,
+    .rdp-coding-status {
 
         align-self:
             flex-start;
     }
 
 
-    .rdp-answer-card-header,
     .rdp-answer-content {
 
-        padding-left:
-            17px;
-
-        padding-right:
+        padding:
             17px;
     }
 
 
     .rdp-answer-footer {
 
-        padding-left:
-            17px;
-
-        padding-right:
-            17px;
+        padding:
+            0 17px;
     }
 
+
+    .rdp-coding-result-footer {
+
+        padding:
+            12px 17px;
+    }
+
+
+    .rdp-coding-result-detail {
+
+        padding:
+            15px 17px;
+    }
+
+
+    .rdp-question-title {
+
+        font-size:
+            16px;
+    }
+
+
+    .rdp-answer-count {
+
+        max-width:
+            100%;
+
+        flex-wrap:
+            wrap;
+
+        border-radius:
+            12px;
+
+        padding:
+            8px 11px;
+
+        white-space:
+            normal;
+    }
+
+
+    .rdp-error-state {
+
+        min-height:
+            300px;
+
+        padding:
+            28px 20px;
+    }
+
+
+    .rdp-empty-state {
+
+        min-height:
+            190px;
+
+        padding:
+            28px 18px;
+    }
 }

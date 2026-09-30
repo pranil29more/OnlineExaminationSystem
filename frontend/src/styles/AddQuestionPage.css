@@ -22,7 +22,7 @@
 .aqp-container {
     width: 100%;
 
-    max-width: 850px;
+    max-width: 900px;
 
     margin: 0 auto;
 
@@ -77,7 +77,7 @@
 
 
 .aqp-description {
-    max-width: 700px;
+    max-width: 720px;
 
     margin: 0;
 
@@ -100,15 +100,13 @@
 
     padding: 30px;
 
-    background:
-        #1e293b;
+    background: #1e293b;
 
     border:
         1px solid
         #334155;
 
-    border-radius:
-        16px;
+    border-radius: 16px;
 
     box-shadow:
         0 10px 24px
@@ -121,14 +119,14 @@
 ========================================================= */
 
 .aqp-exam-section {
-    margin-bottom: 6px;
+    margin-bottom: 20px;
 
     padding-bottom: 5px;
 }
 
 
 /* =========================================================
-   Form Labels
+   Labels
 ========================================================= */
 
 .aqp-field-label {
@@ -136,17 +134,24 @@
 
     margin-bottom: 9px;
 
-    color:
-        #e2e8f0;
+    color: #e2e8f0;
 
-    font-size:
-        13px;
+    font-size: 13px;
 
-    font-weight:
-        750;
+    font-weight: 750;
 
-    line-height:
-        1.4;
+    line-height: 1.4;
+}
+
+
+.aqp-mode-label {
+    margin-bottom: 9px;
+
+    color: #e2e8f0;
+
+    font-size: 13px;
+
+    font-weight: 750;
 }
 
 
@@ -155,39 +160,33 @@
 ========================================================= */
 
 .aqp-form-input,
-.aqp-form-select {
+.aqp-form-select,
+.aqp-form-textarea {
     width: 100%;
-
-    min-height: 46px;
 
     box-sizing: border-box;
 
     margin-bottom: 18px;
 
     padding:
-        0
+        12px
         14px;
 
     border:
         1px solid
         #475569;
 
-    border-radius:
-        9px;
+    border-radius: 9px;
 
     outline: none;
 
-    background:
-        #0f172a;
+    background: #0f172a;
 
-    color:
-        #f8fafc;
+    color: #f8fafc;
 
-    font-family:
-        inherit;
+    font-family: inherit;
 
-    font-size:
-        13px;
+    font-size: 13px;
 
     transition:
         border-color 0.2s ease,
@@ -196,30 +195,62 @@
 }
 
 
-.aqp-form-input::placeholder {
-    color:
-        #64748b;
+.aqp-form-input,
+.aqp-form-select {
+    min-height: 46px;
+}
+
+
+.aqp-form-textarea {
+    min-height: 105px;
+
+    resize: vertical;
+
+    line-height: 1.55;
+}
+
+
+.aqp-form-input::placeholder,
+.aqp-form-textarea::placeholder {
+    color: #64748b;
 }
 
 
 .aqp-form-input:hover,
-.aqp-form-select:hover {
-    border-color:
-        #64748b;
+.aqp-form-select:hover,
+.aqp-form-textarea:hover {
+    border-color: #64748b;
 }
 
 
 .aqp-form-input:focus,
-.aqp-form-select:focus {
-    border-color:
-        #3b82f6;
+.aqp-form-select:focus,
+.aqp-form-textarea:focus {
+    border-color: #3b82f6;
 
-    background:
-        #101a2c;
+    background: #101a2c;
 
     box-shadow:
         0 0 0 3px
         rgba(59, 130, 246, 0.12);
+}
+
+
+.aqp-form-input:disabled,
+.aqp-form-select:disabled,
+.aqp-form-textarea:disabled {
+    opacity: 0.65;
+
+    cursor: not-allowed;
+}
+
+
+/* =========================================================
+   Question Textarea
+========================================================= */
+
+.aqp-question-textarea {
+    min-height: 115px;
 }
 
 
@@ -228,35 +259,27 @@
 ========================================================= */
 
 .aqp-form-select {
-    appearance:
-        none;
+    appearance: none;
 
-    -webkit-appearance:
-        none;
+    -webkit-appearance: none;
 
-    -moz-appearance:
-        none;
+    -moz-appearance: none;
 
-    cursor:
-        pointer;
+    cursor: pointer;
 
-    background-image:
-        none;
+    background-image: none;
 }
 
 
 .aqp-form-select::-ms-expand {
-    display:
-        none;
+    display: none;
 }
 
 
 .aqp-form-select option {
-    background:
-        #0f172a;
+    background: #0f172a;
 
-    color:
-        #f8fafc;
+    color: #f8fafc;
 }
 
 
@@ -265,67 +288,60 @@
 ========================================================= */
 
 .aqp-form-input[type="number"] {
-    appearance:
-        textfield;
+    appearance: textfield;
 
-    -moz-appearance:
-        textfield;
+    -moz-appearance: textfield;
 }
 
 
 .aqp-form-input[type="number"]::-webkit-inner-spin-button,
 .aqp-form-input[type="number"]::-webkit-outer-spin-button {
-    appearance:
-        none;
+    appearance: none;
 
-    -webkit-appearance:
-        none;
+    -webkit-appearance: none;
 
-    margin:
-        0;
+    margin: 0;
 }
 
 
 /* =========================================================
-   Mode Switch
+   Entry Mode Switch
 ========================================================= */
 
 .aqp-mode-switch {
     display: grid;
 
     grid-template-columns:
-        repeat(2, minmax(0, 1fr));
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
 
-    gap:
-        8px;
+    gap: 8px;
 
     margin:
-        8px
+        0
         0
         30px;
 
-    padding:
-        5px;
+    padding: 5px;
 
-    background:
-        #0f172a;
+    background: #0f172a;
 
     border:
         1px solid
         #334155;
 
-    border-radius:
-        10px;
+    border-radius: 10px;
 }
 
 
 /* =========================================================
-   Mode Buttons
+   Entry Mode Buttons
 ========================================================= */
 
 .aqp-mode-btn {
-    min-height:
-        40px;
+    min-height: 40px;
 
     padding:
         0
@@ -335,26 +351,19 @@
         1px solid
         transparent;
 
-    border-radius:
-        8px;
+    border-radius: 8px;
 
-    background:
-        transparent;
+    background: transparent;
 
-    color:
-        #94a3b8;
+    color: #94a3b8;
 
-    font-family:
-        inherit;
+    font-family: inherit;
 
-    font-size:
-        12px;
+    font-size: 12px;
 
-    font-weight:
-        750;
+    font-weight: 750;
 
-    cursor:
-        pointer;
+    cursor: pointer;
 
     transition:
         background 0.2s ease,
@@ -365,24 +374,19 @@
 }
 
 
-.aqp-mode-btn:hover {
-    color:
-        #e2e8f0;
+.aqp-mode-btn:hover:not(:disabled) {
+    color: #e2e8f0;
 
-    background:
-        #1e293b;
+    background: #1e293b;
 }
 
 
 .aqp-mode-btn.active {
-    background:
-        #2563eb;
+    background: #2563eb;
 
-    border-color:
-        #3b82f6;
+    border-color: #3b82f6;
 
-    color:
-        #ffffff;
+    color: #ffffff;
 
     box-shadow:
         0 5px 12px
@@ -390,12 +394,103 @@
 }
 
 
-.aqp-mode-btn.active:hover {
-    background:
-        #3b82f6;
+.aqp-mode-btn.active:hover:not(:disabled) {
+    background: #3b82f6;
 
-    border-color:
-        #60a5fa;
+    border-color: #60a5fa;
+}
+
+
+/* =========================================================
+   Question Type Switch
+========================================================= */
+
+.aqp-question-type-switch {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap: 8px;
+
+    margin:
+        0
+        0
+        24px;
+
+    padding: 5px;
+
+    background: #0f172a;
+
+    border:
+        1px solid
+        #334155;
+
+    border-radius: 10px;
+}
+
+
+.aqp-question-type-btn {
+    min-height: 42px;
+
+    padding:
+        0
+        14px;
+
+    border:
+        1px solid
+        transparent;
+
+    border-radius: 8px;
+
+    background: transparent;
+
+    color: #94a3b8;
+
+    font-family: inherit;
+
+    font-size: 12px;
+
+    font-weight: 750;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.aqp-question-type-btn:hover:not(:disabled) {
+    color: #e2e8f0;
+
+    background: #1e293b;
+}
+
+
+.aqp-question-type-btn.active {
+    background: #0ea5e9;
+
+    border-color: #38bdf8;
+
+    color: #ffffff;
+
+    box-shadow:
+        0 5px 12px
+        rgba(14, 165, 233, 0.20);
+}
+
+
+.aqp-question-type-btn.active:hover:not(:disabled) {
+    background: #38bdf8;
+
+    border-color: #7dd3fc;
 }
 
 
@@ -414,16 +509,14 @@
 @keyframes aqpFadeIn {
 
     from {
-        opacity:
-            0;
+        opacity: 0;
 
         transform:
             translateY(4px);
     }
 
     to {
-        opacity:
-            1;
+        opacity: 1;
 
         transform:
             translateY(0);
@@ -437,11 +530,9 @@
 ========================================================= */
 
 .aqp-section-heading {
-    margin-bottom:
-        25px;
+    margin-bottom: 25px;
 
-    padding-bottom:
-        20px;
+    padding-bottom: 20px;
 
     border-bottom:
         1px solid
@@ -450,79 +541,58 @@
 
 
 .aqp-section-eyebrow {
-    display:
-        block;
+    display: block;
 
-    margin-bottom:
-        7px;
+    margin-bottom: 7px;
 
-    color:
-        #60a5fa;
+    color: #60a5fa;
 
-    font-size:
-        10px;
+    font-size: 10px;
 
-    font-weight:
-        800;
+    font-weight: 800;
 
-    text-transform:
-        uppercase;
+    text-transform: uppercase;
 
-    letter-spacing:
-        1px;
+    letter-spacing: 1px;
 }
 
 
 .aqp-section-title {
-    display:
-        block;
+    display: block;
 
-    width:
-        100%;
+    width: 100%;
 
     margin:
         0
         0
         7px;
 
-    padding:
-        0;
+    padding: 0;
 
-    box-sizing:
-        border-box;
+    box-sizing: border-box;
 
-    color:
-        #f8fafc;
+    color: #f8fafc;
 
-    font-size:
-        22px;
+    font-size: 22px;
 
-    font-weight:
-        800;
+    font-weight: 800;
 
-    line-height:
-        1.3;
+    line-height: 1.3;
 
-    text-align:
-        left;
+    text-align: left;
 
-    letter-spacing:
-        -0.2px;
+    letter-spacing: -0.2px;
 }
 
 
 .aqp-section-description {
-    margin:
-        0;
+    margin: 0;
 
-    color:
-        #94a3b8;
+    color: #94a3b8;
 
-    font-size:
-        13px;
+    font-size: 13px;
 
-    line-height:
-        1.6;
+    line-height: 1.6;
 }
 
 
@@ -536,14 +606,16 @@
         0
         12px;
 
-    color:
-        #e2e8f0;
+    color: #e2e8f0;
 
-    font-size:
-        13px;
+    font-size: 13px;
 
-    font-weight:
-        750;
+    font-weight: 750;
+}
+
+
+.aqp-no-margin {
+    margin: 0;
 }
 
 
@@ -552,8 +624,7 @@
 ========================================================= */
 
 .aqp-options-grid {
-    display:
-        grid;
+    display: grid;
 
     grid-template-columns:
         repeat(
@@ -577,14 +648,561 @@
         0
         18px;
 
-    color:
-        #94a3b8;
+    color: #94a3b8;
 
-    font-size:
-        12px;
+    font-size: 12px;
 
-    line-height:
-        1.55;
+    line-height: 1.55;
+}
+
+
+/* =========================================================
+   Coding Section
+========================================================= */
+
+.aqp-coding-section {
+    margin-top: 4px;
+}
+
+
+/* =========================================================
+   Coding Information Card
+========================================================= */
+
+.aqp-coding-info-card {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap: 10px;
+
+    margin-bottom: 22px;
+
+    padding: 14px;
+
+    background:
+        rgba(
+            14,
+            165,
+            233,
+            0.06
+        );
+
+    border:
+        1px solid
+        rgba(
+            56,
+            189,
+            248,
+            0.22
+        );
+
+    border-radius: 11px;
+}
+
+
+.aqp-coding-info-item {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+}
+
+
+.aqp-coding-info-label {
+    color: #64748b;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.8px;
+}
+
+
+.aqp-coding-info-item strong {
+    color: #bae6fd;
+
+    font-size: 12px;
+
+    font-weight: 750;
+}
+
+
+/* =========================================================
+   Code Textarea
+========================================================= */
+
+.aqp-code-textarea {
+    min-height: 230px;
+
+    padding: 14px;
+
+    border-color: #475569;
+
+    font-family:
+        "Consolas",
+        "Monaco",
+        "Courier New",
+        monospace;
+
+    font-size: 12px;
+
+    line-height: 1.6;
+
+    tab-size: 4;
+
+    resize: vertical;
+}
+
+
+/* =========================================================
+   Test Case Header
+========================================================= */
+
+.aqp-test-case-header {
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin:
+        30px
+        0
+        15px;
+
+    padding-top: 22px;
+
+    border-top:
+        1px solid
+        #334155;
+}
+
+
+.aqp-test-case-description {
+    max-width: 530px;
+
+    margin:
+        6px
+        0
+        0;
+
+    color: #94a3b8;
+
+    font-size: 11px;
+
+    line-height: 1.55;
+}
+
+
+/* =========================================================
+   Add Test Case Button
+========================================================= */
+
+.aqp-add-test-btn {
+    flex-shrink: 0;
+
+    min-height: 38px;
+
+    padding:
+        0
+        13px;
+
+    border:
+        1px solid
+        #3b82f6;
+
+    border-radius: 8px;
+
+    background:
+        rgba(
+            37,
+            99,
+            235,
+            0.14
+        );
+
+    color: #93c5fd;
+
+    font-family: inherit;
+
+    font-size: 11px;
+
+    font-weight: 750;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.aqp-add-test-btn:hover:not(:disabled) {
+    background: #2563eb;
+
+    border-color: #60a5fa;
+
+    color: #ffffff;
+
+    transform:
+        translateY(-1px);
+}
+
+
+/* =========================================================
+   Test Case Card
+========================================================= */
+
+.aqp-test-cases {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 14px;
+}
+
+
+.aqp-test-case-card {
+    padding: 17px;
+
+    background:
+        rgba(
+            15,
+            23,
+            42,
+            0.68
+        );
+
+    border:
+        1px solid
+        #334155;
+
+    border-radius: 12px;
+}
+
+
+.aqp-test-case-card:hover {
+    border-color: #475569;
+}
+
+
+/* =========================================================
+   Test Case Top
+========================================================= */
+
+.aqp-test-case-top {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 12px;
+
+    margin-bottom: 15px;
+
+    padding-bottom: 12px;
+
+    border-bottom:
+        1px solid
+        #334155;
+}
+
+
+.aqp-test-case-number {
+    color: #f8fafc;
+
+    font-size: 12px;
+
+    font-weight: 800;
+}
+
+
+.aqp-test-case-actions {
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+}
+
+
+/* =========================================================
+   Test Case Action Buttons
+========================================================= */
+
+.aqp-visibility-btn,
+.aqp-remove-test-btn {
+    min-height: 31px;
+
+    padding:
+        0
+        10px;
+
+    border-radius: 7px;
+
+    font-family: inherit;
+
+    font-size: 10px;
+
+    font-weight: 750;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease;
+}
+
+
+.aqp-visibility-btn.visible-test {
+    background:
+        rgba(
+            34,
+            197,
+            94,
+            0.10
+        );
+
+    border:
+        1px solid
+        rgba(
+            34,
+            197,
+            94,
+            0.45
+        );
+
+    color: #86efac;
+}
+
+
+.aqp-visibility-btn.hidden-test {
+    background:
+        rgba(
+            168,
+            85,
+            247,
+            0.10
+        );
+
+    border:
+        1px solid
+        rgba(
+            168,
+            85,
+            247,
+            0.45
+        );
+
+    color: #d8b4fe;
+}
+
+
+.aqp-visibility-btn:hover:not(:disabled) {
+    filter: brightness(1.15);
+}
+
+
+.aqp-remove-test-btn {
+    background:
+        rgba(
+            239,
+            68,
+            68,
+            0.08
+        );
+
+    border:
+        1px solid
+        rgba(
+            239,
+            68,
+            68,
+            0.35
+        );
+
+    color: #fca5a5;
+}
+
+
+.aqp-remove-test-btn:hover:not(:disabled) {
+    background:
+        rgba(
+            239,
+            68,
+            68,
+            0.16
+        );
+
+    border-color: #ef4444;
+}
+
+
+/* =========================================================
+   Test Case Grid
+========================================================= */
+
+.aqp-test-case-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap: 14px;
+}
+
+
+.aqp-test-case-field .aqp-form-textarea {
+    margin-bottom: 0;
+}
+
+
+.aqp-test-textarea {
+    min-height: 105px;
+
+    font-family:
+        "Consolas",
+        "Monaco",
+        "Courier New",
+        monospace;
+
+    font-size: 12px;
+
+    line-height: 1.55;
+}
+
+
+/* =========================================================
+   Test Case Bottom
+========================================================= */
+
+.aqp-test-case-bottom {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: flex-start;
+
+    gap: 20px;
+
+    margin-top: 15px;
+
+    padding-top: 14px;
+
+    border-top:
+        1px solid
+        #334155;
+}
+
+
+.aqp-test-case-status {
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    color: #94a3b8;
+
+    font-size: 11px;
+
+    font-weight: 650;
+}
+
+
+.aqp-status-dot {
+    width: 7px;
+
+    height: 7px;
+
+    border-radius: 50%;
+}
+
+
+.aqp-status-dot.visible {
+    background: #22c55e;
+
+    box-shadow:
+        0 0 8px
+        rgba(
+            34,
+            197,
+            94,
+            0.45
+        );
+}
+
+
+.aqp-status-dot.hidden {
+    background: #a855f7;
+
+    box-shadow:
+        0 0 8px
+        rgba(
+            168,
+            85,
+            247,
+            0.45
+        );
+}
+
+
+/* =========================================================
+   Coding Note
+========================================================= */
+
+.aqp-coding-note {
+    margin:
+        16px
+        0
+        0;
+
+    padding:
+        12px
+        14px;
+
+    background:
+        rgba(
+            245,
+            158,
+            11,
+            0.06
+        );
+
+    border:
+        1px solid
+        rgba(
+            245,
+            158,
+            11,
+            0.24
+        );
+
+    border-radius: 9px;
+
+    color: #cbd5e1;
+
+    font-size: 11px;
+
+    line-height: 1.6;
 }
 
 
@@ -593,20 +1211,15 @@
 ========================================================= */
 
 .aqp-question-actions {
-    display:
-        flex;
+    display: flex;
 
-    align-items:
-        center;
+    align-items: center;
 
-    justify-content:
-        center;
+    justify-content: center;
 
-    gap:
-        10px;
+    gap: 10px;
 
-    width:
-        100%;
+    width: 100%;
 
     margin:
         30px
@@ -622,45 +1235,33 @@
 .aqp-submit-btn,
 .aqp-upload-btn,
 .aqp-done-btn {
-    display:
-        inline-flex;
+    display: inline-flex;
 
-    align-items:
-        center;
+    align-items: center;
 
-    justify-content:
-        center;
+    justify-content: center;
 
-    min-height:
-        40px;
+    min-height: 40px;
 
-    box-sizing:
-        border-box;
+    box-sizing: border-box;
 
     padding:
         0
         17px;
 
-    border-radius:
-        9px;
+    border-radius: 9px;
 
-    color:
-        #ffffff;
+    color: #ffffff;
 
-    font-family:
-        inherit;
+    font-family: inherit;
 
-    font-size:
-        12px;
+    font-size: 12px;
 
-    font-weight:
-        750;
+    font-weight: 750;
 
-    line-height:
-        1;
+    line-height: 1;
 
-    cursor:
-        pointer;
+    cursor: pointer;
 
     transition:
         background 0.2s ease,
@@ -677,35 +1278,41 @@
 ========================================================= */
 
 .aqp-submit-btn {
-    width:
-        220px;
+    width: 220px;
 
     border:
         1px solid
         #3b82f6;
 
-    background:
-        #2563eb;
+    background: #2563eb;
 
     box-shadow:
         0 5px 12px
-        rgba(37, 99, 235, 0.20);
+        rgba(
+            37,
+            99,
+            235,
+            0.20
+        );
 }
 
 
 .aqp-submit-btn:hover:not(:disabled) {
-    background:
-        #3b82f6;
+    background: #3b82f6;
 
-    border-color:
-        #60a5fa;
+    border-color: #60a5fa;
 
     transform:
         translateY(-1px);
 
     box-shadow:
         0 8px 18px
-        rgba(37, 99, 235, 0.30);
+        rgba(
+            37,
+            99,
+            235,
+            0.30
+        );
 }
 
 
@@ -714,35 +1321,41 @@
 ========================================================= */
 
 .aqp-done-btn {
-    width:
-        110px;
+    width: 110px;
 
     border:
         1px solid
         #22c55e;
 
-    background:
-        #16a34a;
+    background: #16a34a;
 
     box-shadow:
         0 5px 12px
-        rgba(34, 197, 94, 0.20);
+        rgba(
+            34,
+            197,
+            94,
+            0.20
+        );
 }
 
 
 .aqp-done-btn:hover:not(:disabled) {
-    background:
-        #22c55e;
+    background: #22c55e;
 
-    border-color:
-        #4ade80;
+    border-color: #4ade80;
 
     transform:
         translateY(-1px);
 
     box-shadow:
         0 8px 18px
-        rgba(34, 197, 94, 0.30);
+        rgba(
+            34,
+            197,
+            94,
+            0.30
+        );
 }
 
 
@@ -751,11 +1364,9 @@
 ========================================================= */
 
 .aqp-upload-btn {
-    display:
-        flex;
+    display: flex;
 
-    width:
-        240px;
+    width: 300px;
 
     margin:
         30px
@@ -766,28 +1377,35 @@
         1px solid
         #22c55e;
 
-    background:
-        #16a34a;
+    background: #16a34a;
 
     box-shadow:
         0 5px 12px
-        rgba(34, 197, 94, 0.20);
+        rgba(
+            34,
+            197,
+            94,
+            0.20
+        );
 }
 
 
 .aqp-upload-btn:hover:not(:disabled) {
-    background:
-        #22c55e;
+    background: #22c55e;
 
-    border-color:
-        #4ade80;
+    border-color: #4ade80;
 
     transform:
         translateY(-1px);
 
     box-shadow:
         0 8px 18px
-        rgba(34, 197, 94, 0.30);
+        rgba(
+            34,
+            197,
+            94,
+            0.30
+        );
 }
 
 
@@ -797,18 +1415,145 @@
 
 .aqp-submit-btn:disabled,
 .aqp-upload-btn:disabled,
-.aqp-done-btn:disabled {
-    opacity:
-        0.5;
+.aqp-done-btn:disabled,
+.aqp-mode-btn:disabled,
+.aqp-question-type-btn:disabled,
+.aqp-add-test-btn:disabled,
+.aqp-visibility-btn:disabled,
+.aqp-remove-test-btn:disabled {
+    opacity: 0.5;
 
-    cursor:
-        not-allowed;
+    cursor: not-allowed;
 
-    transform:
-        none;
+    transform: none;
 
-    box-shadow:
-        none;
+    box-shadow: none;
+}
+
+
+/* =========================================================
+   Bulk Linking Card
+========================================================= */
+
+.aqp-linking-card {
+    margin-bottom: 22px;
+
+    padding: 18px;
+
+    background:
+        rgba(
+            37,
+            99,
+            235,
+            0.06
+        );
+
+    border:
+        1px solid
+        rgba(
+            96,
+            165,
+            250,
+            0.28
+        );
+
+    border-radius: 12px;
+}
+
+
+.aqp-linking-title {
+    margin-bottom: 16px;
+
+    color: #f8fafc;
+
+    font-size: 13px;
+
+    font-weight: 800;
+}
+
+
+.aqp-linking-flow {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        auto
+        minmax(0, 1fr)
+        auto
+        minmax(0, 1fr);
+
+    align-items: center;
+
+    gap: 12px;
+}
+
+
+.aqp-linking-step {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 10px;
+
+    min-width: 0;
+}
+
+
+.aqp-linking-number {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    width: 24px;
+
+    height: 24px;
+
+    border-radius: 50%;
+
+    background: #2563eb;
+
+    color: #ffffff;
+
+    font-size: 10px;
+
+    font-weight: 800;
+}
+
+
+.aqp-linking-step strong {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #bfdbfe;
+
+    font-size: 11px;
+
+    font-weight: 800;
+}
+
+
+.aqp-linking-step p {
+    margin: 0;
+
+    color: #94a3b8;
+
+    font-size: 10px;
+
+    line-height: 1.5;
+}
+
+
+.aqp-linking-arrow {
+    color: #60a5fa;
+
+    font-size: 18px;
+
+    font-weight: 800;
 }
 
 
@@ -817,36 +1562,34 @@
 ========================================================= */
 
 .aqp-format-card {
-    margin-bottom:
-        25px;
+    margin-bottom: 22px;
 
-    padding:
-        18px;
+    padding: 18px;
 
     background:
-        rgba(15, 23, 42, 0.65);
+        rgba(
+            15,
+            23,
+            42,
+            0.65
+        );
 
     border:
         1px solid
         #334155;
 
-    border-radius:
-        12px;
+    border-radius: 12px;
 }
 
 
 .aqp-format-title {
-    margin-bottom:
-        14px;
+    margin-bottom: 14px;
 
-    color:
-        #f8fafc;
+    color: #f8fafc;
 
-    font-size:
-        14px;
+    font-size: 14px;
 
-    font-weight:
-        750;
+    font-weight: 750;
 }
 
 
@@ -855,66 +1598,62 @@
 ========================================================= */
 
 .aqp-column-list {
-    display:
-        flex;
+    display: flex;
 
-    flex-wrap:
-        wrap;
+    flex-wrap: wrap;
 
-    gap:
-        8px;
+    gap: 8px;
 }
 
 
 .aqp-column-list span {
-    display:
-        inline-flex;
+    display: inline-flex;
 
-    align-items:
-        center;
+    align-items: center;
 
-    justify-content:
-        center;
+    justify-content: center;
 
-    min-height:
-        32px;
+    min-height: 32px;
 
     padding:
         0
         11px;
 
     background:
-        rgba(59, 130, 246, 0.10);
+        rgba(
+            59,
+            130,
+            246,
+            0.10
+        );
 
     border:
         1px solid
-        rgba(96, 165, 250, 0.50);
+        rgba(
+            96,
+            165,
+            250,
+            0.50
+        );
 
-    border-radius:
-        8px;
+    border-radius: 8px;
 
-    color:
-        #93c5fd;
+    color: #93c5fd;
 
-    font-size:
-        11px;
+    font-size: 11px;
 
-    font-weight:
-        750;
+    font-weight: 750;
 
-    letter-spacing:
-        0.1px;
+    letter-spacing: 0.1px;
 
     box-shadow:
         0 4px 10px
-        rgba(37, 99, 235, 0.08);
-
-    transition:
-        background 0.2s ease,
-        border-color 0.2s ease,
-        color 0.2s ease,
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
+        rgba(
+            37,
+            99,
+            235,
+            0.08
+        );
 }
 
 
@@ -928,21 +1667,76 @@
         0
         0;
 
-    padding-top:
-        14px;
+    padding-top: 14px;
 
     border-top:
         1px solid
         #334155;
 
-    color:
-        #94a3b8;
+    color: #94a3b8;
 
-    font-size:
-        12px;
+    font-size: 12px;
 
-    line-height:
-        1.6;
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   Bulk Rules Card
+========================================================= */
+
+.aqp-bulk-rules-card {
+    margin-bottom: 25px;
+
+    padding: 18px;
+
+    background:
+        rgba(
+            245,
+            158,
+            11,
+            0.05
+        );
+
+    border:
+        1px solid
+        rgba(
+            245,
+            158,
+            11,
+            0.24
+        );
+
+    border-radius: 12px;
+}
+
+
+.aqp-bulk-rules-title {
+    margin-bottom: 11px;
+
+    color: #fde68a;
+
+    font-size: 13px;
+
+    font-weight: 800;
+}
+
+
+.aqp-bulk-rules-list {
+    margin: 0;
+
+    padding-left: 19px;
+
+    color: #cbd5e1;
+
+    font-size: 11px;
+
+    line-height: 1.7;
+}
+
+
+.aqp-bulk-rules-list li {
+    padding-left: 3px;
 }
 
 
@@ -951,36 +1745,27 @@
 ========================================================= */
 
 .aqp-upload-box {
-    display:
-        flex;
+    display: flex;
 
-    align-items:
-        center;
+    align-items: center;
 
-    gap:
-        16px;
+    gap: 16px;
 
-    min-height:
-        88px;
+    min-height: 88px;
 
-    box-sizing:
-        border-box;
+    box-sizing: border-box;
 
-    margin-bottom:
-        25px;
+    margin-bottom: 22px;
 
-    padding:
-        16px;
+    padding: 16px;
 
-    background:
-        #0f172a;
+    background: #0f172a;
 
     border:
         1px dashed
         #475569;
 
-    border-radius:
-        12px;
+    border-radius: 12px;
 
     transition:
         border-color 0.2s ease,
@@ -990,72 +1775,73 @@
 
 
 .aqp-upload-box:hover {
-    border-color:
-        #3b82f6;
+    border-color: #3b82f6;
 
     background:
-        rgba(59, 130, 246, 0.04);
+        rgba(
+            59,
+            130,
+            246,
+            0.04
+        );
 
     box-shadow:
         0 0 0 3px
-        rgba(59, 130, 246, 0.06);
+        rgba(
+            59,
+            130,
+            246,
+            0.06
+        );
 }
 
 
 .aqp-file-input {
-    display:
-        none;
+    display: none;
 }
 
 
 .aqp-file-label {
-    display:
-        inline-flex;
+    display: inline-flex;
 
-    align-items:
-        center;
+    align-items: center;
 
-    justify-content:
-        center;
+    justify-content: center;
 
-    flex-shrink:
-        0;
+    flex-shrink: 0;
 
-    min-height:
-        38px;
+    min-height: 38px;
 
     padding:
         0
         14px;
 
-    background:
-        #2563eb;
+    background: #2563eb;
 
     border:
         1px solid
         #3b82f6;
 
-    border-radius:
-        8px;
+    border-radius: 8px;
 
-    color:
-        #ffffff;
+    color: #ffffff;
 
-    font-family:
-        inherit;
+    font-family: inherit;
 
-    font-size:
-        11px;
+    font-size: 11px;
 
-    font-weight:
-        750;
+    font-weight: 750;
 
-    cursor:
-        pointer;
+    cursor: pointer;
 
     box-shadow:
         0 5px 12px
-        rgba(37, 99, 235, 0.18);
+        rgba(
+            37,
+            99,
+            235,
+            0.18
+        );
 
     transition:
         background 0.2s ease,
@@ -1066,69 +1852,58 @@
 
 
 .aqp-file-label:hover {
-    background:
-        #3b82f6;
+    background: #3b82f6;
 
-    border-color:
-        #60a5fa;
+    border-color: #60a5fa;
 
     transform:
         translateY(-1px);
 
     box-shadow:
         0 8px 18px
-        rgba(37, 99, 235, 0.28);
+        rgba(
+            37,
+            99,
+            235,
+            0.28
+        );
 }
 
 
 .aqp-file-info {
-    display:
-        flex;
+    display: flex;
 
-    flex-direction:
-        column;
+    flex-direction: column;
 
-    gap:
-        5px;
+    gap: 5px;
 
-    min-width:
-        0;
+    min-width: 0;
 }
 
 
 .aqp-file-info strong {
-    max-width:
-        100%;
+    max-width: 100%;
 
-    overflow:
-        hidden;
+    overflow: hidden;
 
-    text-overflow:
-        ellipsis;
+    text-overflow: ellipsis;
 
-    white-space:
-        nowrap;
+    white-space: nowrap;
 
-    color:
-        #e2e8f0;
+    color: #e2e8f0;
 
-    font-size:
-        13px;
+    font-size: 13px;
 
-    font-weight:
-        700;
+    font-weight: 700;
 }
 
 
 .aqp-file-info span {
-    color:
-        #94a3b8;
+    color: #94a3b8;
 
-    font-size:
-        11px;
+    font-size: 11px;
 
-    line-height:
-        1.4;
+    line-height: 1.4;
 }
 
 
@@ -1138,13 +1913,18 @@
 
 .aqp-page button:focus-visible,
 .aqp-page input:focus-visible,
-.aqp-page select:focus-visible {
+.aqp-page select:focus-visible,
+.aqp-page textarea:focus-visible {
     outline:
         2px solid
-        rgba(96, 165, 250, 0.8);
+        rgba(
+            96,
+            165,
+            250,
+            0.8
+        );
 
-    outline-offset:
-        2px;
+    outline-offset: 2px;
 }
 
 
@@ -1163,20 +1943,27 @@
 
 
     .aqp-header {
-        margin-bottom:
-            28px;
+        margin-bottom: 28px;
     }
 
 
     .aqp-title {
-        font-size:
-            36px;
+        font-size: 36px;
     }
 
 
     .aqp-form-card {
-        padding:
-            25px;
+        padding: 25px;
+    }
+
+
+    .aqp-linking-flow {
+        grid-template-columns: 1fr;
+    }
+
+
+    .aqp-linking-arrow {
+        display: none;
     }
 
 }
@@ -1197,76 +1984,101 @@
 
 
     .aqp-title {
-        font-size:
-            32px;
+        font-size: 32px;
     }
 
 
     .aqp-description {
-        font-size:
-            13px;
+        font-size: 13px;
     }
 
 
     .aqp-form-card {
-        padding:
-            20px;
+        padding: 20px;
     }
 
 
-    .aqp-mode-switch {
-        grid-template-columns:
-            1fr;
+    .aqp-mode-switch,
+    .aqp-question-type-switch {
+        grid-template-columns: 1fr;
     }
 
 
-    .aqp-options-grid {
-        grid-template-columns:
-            1fr;
-
-        gap:
-            0;
+    .aqp-options-grid,
+    .aqp-test-case-grid,
+    .aqp-coding-info-card {
+        grid-template-columns: 1fr;
     }
 
 
     .aqp-upload-box {
-        align-items:
-            stretch;
+        align-items: stretch;
 
-        flex-direction:
-            column;
+        flex-direction: column;
     }
 
 
     .aqp-file-label {
-        width:
-            100%;
+        width: 100%;
 
-        box-sizing:
-            border-box;
+        box-sizing: border-box;
     }
 
 
     .aqp-file-info {
-        text-align:
-            center;
+        text-align: center;
     }
 
 
     .aqp-question-actions {
-        flex-direction:
-            column;
+        flex-direction: column;
 
-        gap:
-            10px;
+        gap: 10px;
     }
 
 
     .aqp-submit-btn,
     .aqp-done-btn,
     .aqp-upload-btn {
-        width:
-            100%;
+        width: 100%;
+    }
+
+
+    .aqp-test-case-header {
+        align-items: stretch;
+
+        flex-direction: column;
+
+        gap: 12px;
+    }
+
+
+    .aqp-add-test-btn {
+        width: 100%;
+    }
+
+
+    .aqp-test-case-bottom {
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 10px;
+    }
+
+
+    .aqp-test-case-actions {
+        flex-wrap: wrap;
+    }
+
+
+    .aqp-linking-card {
+        padding: 15px;
+    }
+
+
+    .aqp-bulk-rules-card {
+        padding: 15px;
     }
 
 }
@@ -1287,38 +2099,54 @@
 
 
     .aqp-title {
-        font-size:
-            29px;
+        font-size: 29px;
     }
 
 
     .aqp-form-card {
-        padding:
-            17px;
+        padding: 17px;
 
-        border-radius:
-            14px;
+        border-radius: 14px;
     }
 
 
     .aqp-section-title {
-        font-size:
-            20px;
+        font-size: 20px;
     }
 
 
     .aqp-column-list {
-        flex-direction:
-            column;
+        flex-direction: column;
     }
 
 
     .aqp-column-list span {
-        width:
-            100%;
+        width: 100%;
 
-        box-sizing:
-            border-box;
+        box-sizing: border-box;
+    }
+
+
+    .aqp-test-case-top {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+
+    .aqp-test-case-actions {
+        width: 100%;
+    }
+
+
+    .aqp-visibility-btn,
+    .aqp-remove-test-btn {
+        flex: 1;
+    }
+
+
+    .aqp-linking-step {
+        gap: 8px;
     }
 
 }

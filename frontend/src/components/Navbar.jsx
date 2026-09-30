@@ -42,6 +42,12 @@ function Navbar() {
                 "/edit-question/"
             );
 
+        // Edit Coding Question belongs to Dashboard
+        const isEditCodingQuestionRoute =
+            location.pathname.startsWith(
+                "/edit-coding-question/"
+            );
+
         const isAddQuestionFromEditExam =
             location.pathname === "/add-question" &&
             location.state?.from === "edit-exam";
@@ -50,6 +56,7 @@ function Navbar() {
             isDashboardRoute ||
             isEditExamRoute ||
             isEditQuestionRoute ||
+            isEditCodingQuestionRoute ||
             isAddQuestionFromEditExam
         );
     };
